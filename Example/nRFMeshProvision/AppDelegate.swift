@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             meshNetworkDidChange()
         }
-        
+        createDefaultApplicationKey()
         return true
     }
     
@@ -152,6 +152,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         connection!.logger = self
         meshNetworkManager.transmitter = connection
         connection!.open()
+    }
+    
+    func createDefaultApplicationKey() {
+        let network = meshNetworkManager.meshNetwork!
+        let keys = network.applicationKeys
+        guard keys.isEmpty else { return }
+        let keyName = "App Key 1"
+        let keyIndex: KeyIndex = 0
+        let newKey = Data.random128BitKey()
+        let key = try! network.add(applicationKey: newKey, withIndex: keyIndex, name: keyName)
+        if let netowrkKey = network.networkKeys.first {
+            try? key.bind(to: netowrkKey)
+        }
+        let _ = meshNetworkManager.save()
     }
 }
 

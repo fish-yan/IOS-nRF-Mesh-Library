@@ -71,6 +71,8 @@ class ConfigurationViewController: ProgressViewController {
         
         MeshNetworkManager.instance.delegate = self
         
+        addDefaultApplicationKey()
+        
         // Check if the local Provisioner has configuration capabilities.
         let localProvisioner = MeshNetworkManager.instance.meshNetwork?.localProvisioner
         guard localProvisioner?.hasConfigurationCapabilities ?? false else {
@@ -398,6 +400,20 @@ private extension ConfigurationViewController {
         alert.popoverPresentationController?.sourceView = cell?.button ?? cell
         alert.popoverPresentationController?.permittedArrowDirections = [.down, .up, .right]
         present(alert, animated: true)
+    }
+    
+    func addDefaultApplicationKey() {
+        guard node.applicationKeys.isEmpty else { return }
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        let applicationKey = meshNetwork.applicationKeys.notKnownTo(node: node).filter{
+            node.knows(networkKey: $0.boundNetworkKey)
+        }.first
+        guard let applicationKey else { return }
+        start("Adding Application Key...") { [weak self] in
+            guard let self = self else { return nil }
+            let message = ConfigAppKeyAdd(applicationKey: applicationKey)
+            return try MeshNetworkManager.instance.send(message, to: self.node)
+        }
     }
     
     /// Method called whenever any switch value changes. The tag contains the row number.
