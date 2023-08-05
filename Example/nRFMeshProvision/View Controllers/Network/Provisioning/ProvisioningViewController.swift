@@ -330,6 +330,22 @@ extension ProvisioningViewController: GattBearerDelegate {
                     self.presentAlert(title: "Error", message: "Mesh configuration could not be saved.")
                 }
             }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if MeshNetworkManager.instance.save() {
+                    self.dismiss(animated: true) { [weak self] in
+                        self?.dismiss(animated: true) { [weak self] in
+                            guard let self = self else { return }
+                            let network = MeshNetworkManager.instance.meshNetwork!
+                            if let node = network.node(for: self.unprovisionedDevice) {
+                                self.delegate?.provisionerDidProvisionNewDevice(node)
+                            }
+                        }
+                    }
+                } else {
+                    self.presentAlert(title: "Error", message: "Mesh configuration could not be saved.")
+                }
+            }
         }
     }
     
@@ -364,8 +380,8 @@ extension ProvisioningViewController: ProvisioningDelegate {
                 self.unicastAddressLabel.text = self.provisioningManager.unicastAddress?.asString() ?? "No address available"
                 self.actionProvision.isEnabled = addressValid
                 
-                let capabilitiesWereAlreadyReceived = self.capabilitiesReceived
                 self.capabilitiesReceived = true
+                let capabilitiesWereAlreadyReceived = self.capabilitiesReceived
                 
                 let deviceSupported = self.provisioningManager.isDeviceSupported == true
                 
