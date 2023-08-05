@@ -72,6 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             meshNetworkDidChange()
         }
         createDefaultApplicationKey()
+        createDefaultGroup()
         return true
     }
     
@@ -81,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // TODO: Implement creator
         let provisioner = Provisioner(name: UIDevice.current.name,
                                       allocatedUnicastRange: [AddressRange(0x0001...0x199A)],
-                                      allocatedGroupRange:   [AddressRange(0xC000...0xCC9A)],
+                                      allocatedGroupRange:   [AddressRange(0xD000...0xDC9A)],
                                       allocatedSceneRange:   [SceneRange(0x0001...0x3333)])
         _ = meshNetworkManager.createNewMeshNetwork(withName: "nRF Mesh Network", by: provisioner)
         _ = meshNetworkManager.save()
@@ -165,6 +166,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let netowrkKey = network.networkKeys.first {
             try? key.bind(to: netowrkKey)
         }
+        let _ = meshNetworkManager.save()
+    }
+    
+    func createDefaultGroup() {
+        let network = meshNetworkManager.meshNetwork!
+        
+        guard network.groups.isEmpty else { return }
+        guard let localProvisioner = network.localProvisioner,
+        let automaticAddress = network.nextAvailableGroupAddress(for: localProvisioner) else {
+            return
+        }
+        let address = MeshAddress(automaticAddress)
+        let group = try! Group(name: "Juer", address: address)
+        try? network.add(group: group)
         let _ = meshNetworkManager.save()
     }
 }
