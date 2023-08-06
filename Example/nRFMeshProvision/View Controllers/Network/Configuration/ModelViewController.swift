@@ -108,7 +108,6 @@ class ModelViewController: ProgressViewController {
         
         MeshNetworkManager.instance.delegate = self
         
-        bindDefaultPrivateKey()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -581,7 +580,12 @@ extension ModelViewController: ModelViewCellDelegate {
         guard let model = model else {
             return
         }
-        start(description) {
+        
+        start("Binding Application Key...") { [weak self] in
+            guard let self = self else { return nil }
+            return try self.bindApplicationKeyIfNeed()
+        }
+        .then(description) {
             return try MeshNetworkManager.instance.send(message, to: model)
         }
     }
@@ -590,7 +594,11 @@ extension ModelViewController: ModelViewCellDelegate {
         guard let node = model?.parentElement?.parentNode else {
             return
         }
-        start(description) {
+        start("Binding Application Key...") { [weak self] in
+            guard let self = self else { return nil }
+            return try self.bindApplicationKeyIfNeed()
+        }
+        .then(description) {
             return try MeshNetworkManager.instance.send(message, to: node)
         }
     }
@@ -618,17 +626,17 @@ private extension ModelViewController {
         }
     }
     
-    func bindDefaultPrivateKey() {
-        guard model.boundApplicationKeys.isEmpty,
-              let node = model.parentElement?.parentNode,
-              let key = node.applicationKeysAvailableFor(model).first
-        else { return }
-        
-        start("Binding Application Key...") { [weak self] in
-            guard let self = self else { return nil }
-            let message = ConfigModelAppBind(applicationKey: key, to: self.model)!
-            return try MeshNetworkManager.instance.send(message, to: node)
+    func bindApplicationKeyIfNeed() throws -> MessageHandle? {
+        guard model.boundApplicationKeys.isEmpty else {
+            self.done()
+            return nil
         }
+        guard let node = model.parentElement?.parentNode,
+              let key = node.applicationKeysAvailableFor(model).first else {
+            throw MeshNetworkError.noApplicationKey
+        }
+        let message = ConfigModelAppBind(applicationKey: key, to: model)!
+        return try MeshNetworkManager.instance.send(message, to: node)
     }
     
     func reloadBindings() {
