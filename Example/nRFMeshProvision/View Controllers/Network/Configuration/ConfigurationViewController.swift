@@ -244,7 +244,10 @@ class ConfigurationViewController: ProgressViewController {
                 } else {
                     cell.textLabel?.textColor = .darkText
                 }
-                cell.detailTextLabel?.text = "\(element.models.count) models"
+                let filterIds: [UInt16] = [.genericOnOffServerModelId, .genericOnOffClientModelId, .genericLevelServerModelId, .genericLevelClientModelId]
+                let count = element.models.filter({ filterIds.contains($0.modelIdentifier) }).count
+                let vendorCount = element.models.filter({!$0.isBluetoothSIGAssigned}).count
+                cell.detailTextLabel?.text = "\(count + vendorCount) models"
                 cell.accessoryType = .disclosureIndicator
                 cell.selectionStyle = .default
             } else {
@@ -544,18 +547,18 @@ private extension IndexPath {
     static let nameSection = 0
     static let nodeSection = 1
     static let keysSection = 2
-    static let scenesSection = 3
-    static let elementsSection = 4
-    static let compositionDataSection = 5
-    static let switchesSection = 6
-    static let actionsSection = 7
+    static let scenesSection = -1 // 隐藏:2023-8-8
+    static let elementsSection = 3
+    static let compositionDataSection = 4
+    static let switchesSection = -1 // 隐藏:2023-8-8
+    static let actionsSection = 5 // 7
     static let numberOfSections = IndexPath.actionsSection + 1
     
     static let titles = [
         "Name"
     ]
     static let nodeTitles = [
-        "Unicast Address", "Default TTL", "Device Key"
+        "Unicast Address", "Default TTL"//, "Device Key"
     ]
     static let keysTitles = [
         "Network Keys", "Application Keys"
@@ -565,7 +568,7 @@ private extension IndexPath {
     ]
     static let detailsTitles = [
         "Company Identifier", "Product Identifier", "Product Version",
-        "Replay Protection Count", nil // Node Features is using its own cell.
+        // "Replay Protection Count", nil // Node Features is using its own cell.
     ]
     static let switchesTitles = [
         "Configured", "Excluded"

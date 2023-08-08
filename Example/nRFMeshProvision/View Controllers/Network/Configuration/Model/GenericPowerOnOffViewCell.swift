@@ -73,13 +73,6 @@ class GenericPowerOnOffViewCell: ModelViewCell {
 private extension GenericPowerOnOffViewCell {
         
     func readGenericOnPowerUpState() {
-        guard !model.boundApplicationKeys.isEmpty else {
-            parentViewController?.presentAlert(
-                title: "Bound key required",
-                message: "Bind at least one Application Key before sending the message.")
-            return
-        }
-
         
         delegate?.send(GenericOnPowerUpGet(), description: "Reading state...")
     }

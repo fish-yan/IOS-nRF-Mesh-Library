@@ -171,15 +171,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func createDefaultGroup() {
         let network = meshNetworkManager.meshNetwork!
-        
-        guard network.groups.isEmpty else { return }
-        guard let localProvisioner = network.localProvisioner,
-        let automaticAddress = network.nextAvailableGroupAddress(for: localProvisioner) else {
-            return
+        let defaultAddress: [UInt16] = [0xD000, 0xD001, 0xD002, 0xD003, 0xD004, 0xD005]
+        let unAddaddress = defaultAddress.filter { add in !network.groups.contains(where: { $0.address.address == add })}
+        if unAddaddress.isEmpty { return }
+        unAddaddress.forEach {
+            let group = try! Group(name: String($0, radix: 16, uppercase: true), address: $0)
+            try? network.add(group: group)
         }
-        let address = MeshAddress(automaticAddress)
-        let group = try! Group(name: "Juer", address: address)
-        try? network.add(group: group)
         let _ = meshNetworkManager.save()
     }
 }

@@ -380,8 +380,8 @@ extension ProvisioningViewController: ProvisioningDelegate {
                 self.unicastAddressLabel.text = self.provisioningManager.unicastAddress?.asString() ?? "No address available"
                 self.actionProvision.isEnabled = addressValid
                 
-                self.capabilitiesReceived = true
                 let capabilitiesWereAlreadyReceived = self.capabilitiesReceived
+                self.capabilitiesReceived = true
                 
                 let deviceSupported = self.provisioningManager.isDeviceSupported == true
                 
