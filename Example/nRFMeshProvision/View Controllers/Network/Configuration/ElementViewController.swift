@@ -47,11 +47,7 @@ class ElementViewController: UITableViewController {
         
         title = element.name ?? "Element \(element.index + 1)"
         
-        let filterIds: [UInt16] = [.genericOnOffServerModelId, .genericOnOffClientModelId, .genericLevelServerModelId, .genericLevelClientModelId]
-        
-        filterModels = element.models.filter { filterIds.contains($0.modelIdentifier) }
-        let vendorModels = element.models.filter({!$0.isBluetoothSIGAssigned})
-        filterModels.append(contentsOf: vendorModels)
+        filterModels = element.filteredModels()
     }
     
     override func viewDidAppear(_ animated: Bool) {

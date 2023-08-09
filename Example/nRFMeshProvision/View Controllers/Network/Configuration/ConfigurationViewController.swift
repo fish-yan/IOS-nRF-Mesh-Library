@@ -244,10 +244,7 @@ class ConfigurationViewController: ProgressViewController {
                 } else {
                     cell.textLabel?.textColor = .darkText
                 }
-                let filterIds: [UInt16] = [.genericOnOffServerModelId, .genericOnOffClientModelId, .genericLevelServerModelId, .genericLevelClientModelId]
-                let count = element.models.filter({ filterIds.contains($0.modelIdentifier) }).count
-                let vendorCount = element.models.filter({!$0.isBluetoothSIGAssigned}).count
-                cell.detailTextLabel?.text = "\(count + vendorCount) models"
+                cell.detailTextLabel?.text = "\(element.filteredModels().count) models"
                 cell.accessoryType = .disclosureIndicator
                 cell.selectionStyle = .default
             } else {
