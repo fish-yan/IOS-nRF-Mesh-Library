@@ -208,7 +208,12 @@ extension MeshNetworkManager {
 
 extension Element {
     func filteredModels() -> [Model] {
-        let filterIds: [UInt16] = [.genericOnOffServerModelId, .genericOnOffClientModelId, .genericLevelServerModelId, .genericLevelClientModelId]
+        let filterIds: [UInt16] = [.configurationServerModelId,
+                                   .configurationClientModelId,
+                                   .genericOnOffServerModelId,
+                                   .genericOnOffClientModelId,
+                                   .genericLevelServerModelId,
+                                   .genericLevelClientModelId]
         return self.models.filter { filterIds.contains($0.modelIdentifier) || !$0.isBluetoothSIGAssigned}
     }
 }
