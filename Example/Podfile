@@ -1,11 +1,10 @@
 use_frameworks!
 
-platform :ios, '10.0'
+platform :ios, '13.0'
 
-target 'nRFMeshProvision_Example' do
+target 'nRF Mesh' do
   pod 'nRFMeshProvision', :path => '../'
-  pod 'LookinServer', :configurations => ['Debug']
-  target 'nRFMeshProvision_Tests' do
+  target 'nRF Mesh Tests' do
     inherit! :search_paths
   end
 end
