@@ -119,7 +119,7 @@ class ElementViewController: UITableViewController {
             }
         }
         if indexPath.isModelsSection {
-            let model = filterModels.models[indexPath.row]
+            let model = filterModels[indexPath.row]
             cell.textLabel?.text = model.modelName
             cell.detailTextLabel?.text = model.companyName
         }

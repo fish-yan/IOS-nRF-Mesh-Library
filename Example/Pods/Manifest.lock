@@ -1,14 +1,19 @@
 PODS:
   - CryptoSwift (1.7.0)
+  - LookinServer (1.1.7):
+    - LookinServer/Core (= 1.1.7)
+  - LookinServer/Core (1.1.7)
   - nRFMeshProvision (3.2.0):
     - CryptoSwift (= 1.7.0)
 
 DEPENDENCIES:
+  - LookinServer
   - nRFMeshProvision (from `../`)
 
 SPEC REPOS:
   trunk:
     - CryptoSwift
+    - LookinServer
 
 EXTERNAL SOURCES:
   nRFMeshProvision:
@@ -16,8 +21,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   CryptoSwift: e71dbe5bbb7a945e365d4b9034dbccf28d033a8f
-  nRFMeshProvision: 35de69e8d997c53ab152121ac37039fa0cf49185
+  LookinServer: 4ce0469b066871525611d009d8d16a7a50c23491
+  nRFMeshProvision: 3027d1445ce73eeff174811c76cb1c46d47c1b85
 
-PODFILE CHECKSUM: b5810cea48017ce9ac8bc2af007396af58d9becd
+PODFILE CHECKSUM: 9cb3532583456af1f016209c1df39e8e7fcfe553
 
 COCOAPODS: 1.12.1

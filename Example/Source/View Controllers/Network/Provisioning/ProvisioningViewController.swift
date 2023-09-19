@@ -410,7 +410,7 @@ extension ProvisioningViewController: GattBearerDelegate {
                             guard let self = self else { return }
                             let network = MeshNetworkManager.instance.meshNetwork!
                             if let node = network.node(for: self.unprovisionedDevice) {
-                                self.delegate?.provisionerDidProvisionNewDevice(node)
+                                self.delegate?.provisionerDidProvisionNewDevice(node, whichReplaced: self.previousNode)
                             }
                         }
                     }

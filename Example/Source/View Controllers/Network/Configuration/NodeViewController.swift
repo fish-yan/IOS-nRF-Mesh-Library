@@ -79,9 +79,7 @@ class NodeViewController: ProgressViewController {
         super.viewDidAppear(animated)
         
         MeshNetworkManager.instance.delegate = self
-        
-        addDefaultApplicationKey()
-        
+                
         // Check if the local Provisioner has configuration capabilities.
         let localProvisioner = MeshNetworkManager.instance.meshNetwork?.localProvisioner
         guard localProvisioner?.hasConfigurationCapabilities ?? false else {
@@ -431,20 +429,6 @@ private extension NodeViewController {
         present(alert, animated: true)
     }
     
-    func addDefaultApplicationKey() {
-        guard node.applicationKeys.isEmpty else { return }
-        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-        let applicationKey = meshNetwork.applicationKeys.notKnownTo(node: node).filter{
-            node.knows(networkKey: $0.boundNetworkKey)
-        }.first
-        guard let applicationKey else { return }
-        start("Adding Application Key...") { [weak self] in
-            guard let self = self else { return nil }
-            let message = ConfigAppKeyAdd(applicationKey: applicationKey)
-            return try MeshNetworkManager.instance.send(message, to: self.node)
-        }
-    }
-    
     /// Method called whenever any switch value changes. The tag contains the row number.
     @objc func switchDidChangeValue(switch: UISwitch) {
         switch `switch`.tag {
@@ -464,10 +448,49 @@ private extension NodeViewController {
         guard let node = node else {
             return
         }
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        let applicationKey = meshNetwork.applicationKeys.notKnownTo(node: node).filter{ [weak self] in
+            guard let self = self else { return false }
+            return self.node.knows(networkKey: $0.boundNetworkKey)
+        }.first
         start("Requesting Composition Data...") {
             let message = ConfigCompositionDataGet()
             return try MeshNetworkManager.instance.send(message, to: node)
         }
+        .then("Adding Application Key...", completion: { [weak self] in
+            self?.addDefaultApplicationKey(applicationKey)
+        })
+        .then("Bind Application Key...") { [weak self] in
+            self?.bindApplicationKey(applicationKey)
+        }
+    }
+    
+    func addDefaultApplicationKey(_ key: ApplicationKey?) {
+        guard let key else {
+            done()
+            return
+        }
+        let message = ConfigAppKeyAdd(applicationKey: key)
+        let _ = try? MeshNetworkManager.instance.send(message, to: node)
+    }
+    
+    func bindApplicationKey(_ key: ApplicationKey?)  {
+        guard let key else {
+            done()
+            return
+        }
+            
+        for element in node.elements {
+            element.models.forEach { model in
+                if let message = ConfigModelAppBind(applicationKey: key, to: model) {
+                    then("Bind Application Key...") { [weak self] in
+                        guard let self = self else { return nil }
+                        return try MeshNetworkManager.instance.send(message, to: self.node.primaryUnicastAddress)
+                    }
+                }
+            }
+        }
+        done()
     }
     
     func getTtl() {
@@ -565,8 +588,8 @@ extension NodeViewController: MeshNetworkDelegate {
             done {
                 self.navigationController?.popViewController(animated: true)
             }
-            
         default:
+            done()
             break
         }
     }
