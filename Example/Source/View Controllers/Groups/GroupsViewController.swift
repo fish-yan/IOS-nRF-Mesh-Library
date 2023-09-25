@@ -30,14 +30,15 @@
 
 import UIKit
 import nRFMeshProvision
+import SwiftUI
 
 class GroupsViewController: UITableViewController, Editable, UISearchBarDelegate {
-    private var groups: [Group] = []
+    private var groups: [nRFMeshProvision.Group] = []
         
     // MARK: - Search Bar
     
     private var searchController: UISearchController!
-    private var filteredGroups: [Group] = []
+    private var filteredGroups: [nRFMeshProvision.Group] = []
     
     // MARK: - Implementation
     
@@ -52,6 +53,11 @@ class GroupsViewController: UITableViewController, Editable, UISearchBarDelegate
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadData()
+    }
+    
+    @IBAction func groupManagerAction(_ sender: UIBarButtonItem) {
+        let hostingVc = UIHostingController(rootView: GroupsManagerView())
+        navigationController?.pushViewController(hostingVc, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -182,7 +188,7 @@ private extension GroupsViewController {
 
 extension GroupsViewController: GroupDelegate {
     
-    func groupChanged(_ group: Group) {
+    func groupChanged(_ group: nRFMeshProvision.Group) {
         groups.append(group)
         filteredGroups.append(group)
         tableView.insertRows(at: [IndexPath(row: groups.count - 1, section: 0)], with: .automatic)

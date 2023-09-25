@@ -445,7 +445,8 @@ private extension NodeViewController {
     }
     
     @objc func getCompositionData() {
-        guard let node = node else {
+        guard let node = node, MeshNetworkManager.bearer.isOpen else {
+            refreshControl?.endRefreshing()
             return
         }
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!

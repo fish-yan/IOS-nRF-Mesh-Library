@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C1459892ABB221200351A40 /* LightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1459882ABB221200351A40 /* LightsView.swift */; };
+		2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C798F152ABDD85600156CAA /* LightsManagerView.swift */; };
+		2C8C0C262ABF0FC100BC0156 /* GroupsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */; };
+		2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C292ABF132800BC0156 /* ItemView.swift */; };
+		2C8C0C2C2AC06DC600BC0156 /* GroupElementManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C2B2AC06DC600BC0156 /* GroupElementManagerView.swift */; };
+		2C8C0C2E2AC06DFF00BC0156 /* LightSelectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C2D2AC06DFF00BC0156 /* LightSelectedView.swift */; };
+		2CA1A4D22ABB28DD00BB135A /* LightHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */; };
+		2CA1A50B2ABBC12D00BB135A /* LightDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */; };
+		2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50C2ABBC23100BB135A /* SliderView.swift */; };
+		2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */; };
 		3089BCA02099CA4900E30192 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3089BC9E2099CA4900E30192 /* LaunchScreen.storyboard */; };
 		3D36811A8B855EBEF53DC65E /* Pods_nRF_Mesh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5BC55AD7EC505D9963593EF /* Pods_nRF_Mesh.framework */; };
 		520A7D6724F3E05A00BF370A /* RightActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520A7D6624F3E05A00BF370A /* RightActionCell.swift */; };
@@ -198,6 +208,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C1459882ABB221200351A40 /* LightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsView.swift; sourceTree = "<group>"; };
+		2C798F152ABDD85600156CAA /* LightsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsManagerView.swift; sourceTree = "<group>"; };
+		2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsManagerView.swift; sourceTree = "<group>"; };
+		2C8C0C292ABF132800BC0156 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
+		2C8C0C2B2AC06DC600BC0156 /* GroupElementManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupElementManagerView.swift; sourceTree = "<group>"; };
+		2C8C0C2D2AC06DFF00BC0156 /* LightSelectedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightSelectedView.swift; sourceTree = "<group>"; };
+		2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightHostViewController.swift; sourceTree = "<group>"; };
+		2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightDetailView.swift; sourceTree = "<group>"; };
+		2CA1A50C2ABBC23100BB135A /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlView.swift; sourceTree = "<group>"; };
 		3089BC9F2099CA4900E30192 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3BBB0FDA725BBFCE56A95D77 /* Pods-nRF Mesh Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nRF Mesh Tests.release.xcconfig"; path = "Target Support Files/Pods-nRF Mesh Tests/Pods-nRF Mesh Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4973E9CDA09CE2398E5C269A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -411,6 +431,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C1459872ABB215000351A40 /* Ligits */ = {
+			isa = PBXGroup;
+			children = (
+				2C1459882ABB221200351A40 /* LightsView.swift */,
+				2C798F152ABDD85600156CAA /* LightsManagerView.swift */,
+				2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */,
+				2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */,
+				2CA1A50C2ABBC23100BB135A /* SliderView.swift */,
+				2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */,
+				2C8C0C2D2AC06DFF00BC0156 /* LightSelectedView.swift */,
+			);
+			path = Ligits;
+			sourceTree = "<group>";
+		};
 		3B91DB027C0AE9896666D139 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -449,6 +483,7 @@
 				522AFFDB22BBA34900521EDC /* ActionCell.swift */,
 				523F776322C4EDD90030EA6A /* SwitchCell.swift */,
 				520A7D6624F3E05A00BF370A /* RightActionCell.swift */,
+				2C8C0C292ABF132800BC0156 /* ItemView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -473,14 +508,15 @@
 				3089BC9E2099CA4900E30192 /* LaunchScreen.storyboard */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				52E54CD92343878B00478F05 /* Control.storyboard */,
+				52CD0A562330BDE500A9A181 /* Groups.storyboard */,
 				52CD0A5C2330C04700A9A181 /* Network.storyboard */,
 				523F778B22CCEA900030EA6A /* SetPublication.storyboard */,
 				52A8EA8924E6A371004C14C7 /* SetHeartbeatPublication.storyboard */,
 				52A8EA9024ED35F4004C14C7 /* SetHeartbeatSubscription.storyboard */,
 				F085CA0029D1E0B900C2DF89 /* Subscribe.storyboard */,
-				52CD0A562330BDE500A9A181 /* Groups.storyboard */,
 				52CD0A592330BF4800A9A181 /* Proxy.storyboard */,
 				5283524E227887970097B949 /* Settings.storyboard */,
+				52835255227AED0A0097B949 /* Settings */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -520,6 +556,8 @@
 				52121524231528400059FB3D /* Model */,
 				52121527231528E60059FB3D /* Cells */,
 				52518B3022E0B18400A1FD1E /* GroupsViewController.swift */,
+				2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */,
+				2C8C0C2B2AC06DC600BC0156 /* GroupElementManagerView.swift */,
 				5251498022E0E36600CBF1E3 /* AddGroupViewController.swift */,
 				521215282315290F0059FB3D /* GroupControlViewController.swift */,
 				52547EF82317ECA70002AA7B /* DialogSegue.swift */,
@@ -594,12 +632,12 @@
 				529B756C223FE7F1008F1CE7 /* RootViewController.swift */,
 				523F776B22C6324A0030EA6A /* ProgressViewController.swift */,
 				5212152E231554190059FB3D /* ProgressCollectionViewController.swift */,
+				2C1459872ABB215000351A40 /* Ligits */,
 				52248CDF2523369700B10250 /* Common */,
 				526021F4234365E100E88F06 /* Control */,
 				52835256227AED670097B949 /* Network */,
 				52518B2F22E0B14500A1FD1E /* Groups */,
 				52CD0A4E232F92E100A9A181 /* Proxy */,
-				52835255227AED0A0097B949 /* Settings */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -1169,11 +1207,13 @@
 				52DF5D8F229691BD00C297C1 /* NetworkConnection.swift in Sources */,
 				52547F27232A3F470002AA7B /* EditRangesViewController.swift in Sources */,
 				52B7FD6D2525B40300308673 /* NodeSceneRecallViewController.swift in Sources */,
+				2C1459892ABB221200351A40 /* LightsView.swift in Sources */,
 				F09DE4D129E5A2180073969A /* MeshTaskStatus.swift in Sources */,
 				521215312316C36B0059FB3D /* GenericLevelGroupCell.swift in Sources */,
 				52E54CDD23438B2E00478F05 /* GenericOnOffClientDelegate.swift in Sources */,
 				52DF5D8C228DAA0500C297C1 /* NodeViewCell.swift in Sources */,
 				52CD0A50232FA6CD00A9A181 /* ProxyViewController.swift in Sources */,
+				2C8C0C2E2AC06DFF00BC0156 /* LightSelectedView.swift in Sources */,
 				528AB9FA228D856C000BE9DC /* ProvisioningViewDelegate.swift in Sources */,
 				5288C2162371BC1300321ED3 /* SimpleOnOffClientCell.swift in Sources */,
 				5288C20423704EF300321ED3 /* ConnectionModeCell.swift in Sources */,
@@ -1187,6 +1227,7 @@
 				52E54CE32344978300478F05 /* GenericLevelServerDelegate.swift in Sources */,
 				5215600929FBFD230048B2D2 /* WizardViewController.swift in Sources */,
 				528AB9F8228D847C000BE9DC /* NetworkViewController.swift in Sources */,
+				2C8C0C2C2AC06DC600BC0156 /* GroupElementManagerView.swift in Sources */,
 				523F778722CCDE250030EA6A /* SetPublicationViewController.swift in Sources */,
 				52CD0A622330DCFF00A9A181 /* CustomAddressCell.swift in Sources */,
 				52A8EA8F24EBF099004C14C7 /* SetHeartbeatPublicationDestinationsViewController.swift in Sources */,
@@ -1202,6 +1243,7 @@
 				529B7575224107A5008F1CE7 /* AppInfo.swift in Sources */,
 				52121526231528AC0059FB3D /* GenericOnOffGroupCell.swift in Sources */,
 				527596322A138F0600B04C6F /* SelectModelsForPublicationViewController.swift in Sources */,
+				2C8C0C262ABF0FC100BC0156 /* GroupsManagerView.swift in Sources */,
 				A7A59BD92773218C0045A8ED /* GenericPowerOnOffClientDelegate.swift in Sources */,
 				523F776622C609D90030EA6A /* NodeNetworkKeysViewController.swift in Sources */,
 				5211EAD5250777E100089FF2 /* SceneServerDelegate.swift in Sources */,
@@ -1230,11 +1272,13 @@
 				5217D2E5250F90D8004FDE79 /* GenericDefaultTransitionTimeViewCell.swift in Sources */,
 				528445C924EEA765002168A1 /* HeartbeatSubscriptionCell.swift in Sources */,
 				5231403F2301761C0074325A /* ConfigurationServerViewCell.swift in Sources */,
+				2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */,
 				52A8EA9624EE704A004C14C7 /* SetHeartbeatSubscriptionViewController.swift in Sources */,
 				52547EFB231800F30002AA7B /* GroupTargetModelsViewController.swift in Sources */,
 				5217D2E0250F522A004FDE79 /* GenericDefaultTransitionTimeServerDelegate.swift in Sources */,
 				F09DE4C729D771F20073969A /* Model+Name.swift in Sources */,
 				52E54CD42343874000478F05 /* GenericOnOffServerCell.swift in Sources */,
+				2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */,
 				52547F24232A3F470002AA7B /* RangeCell.swift in Sources */,
 				5231404D230AC4680074325A /* VendorModelViewCell.swift in Sources */,
 				529B758622428A45008F1CE7 /* UIViewController+Alert.swift in Sources */,
@@ -1245,6 +1289,7 @@
 				52E54CCD23437B9700478F05 /* ElementSectionView.swift in Sources */,
 				5288C2142371B32200321ED3 /* SimpleOnOffStatus.swift in Sources */,
 				5251498122E0E36600CBF1E3 /* AddGroupViewController.swift in Sources */,
+				2CA1A4D22ABB28DD00BB135A /* LightHostViewController.swift in Sources */,
 				F09DE4D329E99A360073969A /* SelectGroupsViewController.swift in Sources */,
 				5211EADB25090DB000089FF2 /* SceneSetupServerDelegate.swift in Sources */,
 				F063C01D29C27EAB00A445A9 /* IntroViewController.swift in Sources */,
@@ -1256,6 +1301,7 @@
 				5212152D231545D40059FB3D /* ModelGroupCell.swift in Sources */,
 				F09DE4CA29DC68900073969A /* MulticolorProgressView.swift in Sources */,
 				52A8EA8D24E6A470004C14C7 /* SetHeartbeatPublicationViewController.swift in Sources */,
+				2CA1A50B2ABBC12D00BB135A /* LightDetailView.swift in Sources */,
 				A7A59BD7277225E70045A8ED /* GenericPowerOnOffViewCell.swift in Sources */,
 				F085CA0829D70ACB00C2DF89 /* ConfigurationViewController.swift in Sources */,
 				52547F26232A3F470002AA7B /* ProvisionersViewController.swift in Sources */,
@@ -1265,6 +1311,7 @@
 				529B7570223FF1AE008F1CE7 /* SettingsViewController.swift in Sources */,
 				5292F8A1250137DC00EA0F2A /* NodeScenesViewController.swift in Sources */,
 				526021F62343660200E88F06 /* ControlViewController.swift in Sources */,
+				2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */,
 				5245737B2500E10800CF8500 /* ScenesViewController.swift in Sources */,
 				F085C9FB29C496AB00C2DF89 /* SelectModelsForBindingViewController.swift in Sources */,
 				52A9C1C52313D7D80036792A /* GenericLevelViewCell.swift in Sources */,
@@ -1273,6 +1320,7 @@
 				521599D525E91F9300F602FA /* SensorValueCell.swift in Sources */,
 				52518B3122E0B18400A1FD1E /* GroupsViewController.swift in Sources */,
 				52A8EA9424EE6D18004C14C7 /* HeartbeatSubscriptionPeriodCell.swift in Sources */,
+				2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */,
 				5283528222806D7C0097B949 /* NetworkKeySelectionViewController.swift in Sources */,
 				522AFFDE22BBBC6400521EDC /* NodeFeaturesCell.swift in Sources */,
 				523F776E22C63EAD0030EA6A /* NodeAddAppKeyViewController.swift in Sources */,
@@ -1538,7 +1586,7 @@
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Source/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1568,7 +1616,7 @@
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Source/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

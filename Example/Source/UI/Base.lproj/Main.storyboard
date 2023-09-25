@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYb-mK-mH5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYb-mK-mH5">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Tab Bar Controller-->
         <scene sceneID="zJB-dB-C0K">
             <objects>
-                <tabBarController title="Tab Bar Controller" id="BYb-mK-mH5" customClass="RootTabBarController" customModule="nRFMeshProvision_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController title="Tab Bar Controller" id="BYb-mK-mH5" customClass="RootTabBarController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="uit-TO-OCn"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ig6-ap-aTu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="selectedImageTintColor" red="0.0" green="0.46666666670000001" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="Jgl-7d-w1f" kind="relationship" relationship="viewControllers" id="64k-O6-vI9"/>
-                        <segue destination="zgn-Sh-bkR" kind="relationship" relationship="viewControllers" id="bML-n5-Lan"/>
+                        <segue destination="W6Q-vA-YUh" kind="relationship" relationship="viewControllers" id="clg-4z-1uo"/>
                         <segue destination="Ns0-BW-mnp" kind="relationship" relationship="viewControllers" id="P5t-ai-VdT"/>
                         <segue destination="bcv-6V-ztb" kind="relationship" relationship="viewControllers" id="Ld5-du-qiy"/>
+                        <segue destination="zgn-Sh-bkR" kind="relationship" relationship="viewControllers" id="bML-n5-Lan"/>
+                        <segue destination="Jgl-7d-w1f" kind="relationship" relationship="viewControllers" id="64k-O6-vI9"/>
+                        <segue destination="z61-cg-pzs" kind="relationship" relationship="viewControllers" id="iOB-SD-m7V"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oC9-24-ooo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -38,6 +40,23 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YTc-kw-XOJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="140" y="140"/>
+        </scene>
+        <!--Light-->
+        <scene sceneID="IAL-eD-dR7">
+            <objects>
+                <viewController id="W6Q-vA-YUh" customClass="LightHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
+                    <containerView key="view" opaque="NO" contentMode="scaleToFill" id="6vb-95-LSQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <segue destination="Ql6-UC-4GU" kind="embed" destinationCreationSelector="showLightsView:" id="sKv-7B-q2f"/>
+                        </connections>
+                    </containerView>
+                    <tabBarItem key="tabBarItem" title="Light" image="tab_control_outline_black_24pt" id="5eQ-mw-WFR"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n2Z-5D-6p3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="430" y="531"/>
         </scene>
         <!--Groups-->
         <scene sceneID="0BM-mh-7CO">
@@ -79,6 +98,21 @@
             </objects>
             <point key="canvasLocation" x="169" y="-256"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="gXY-i3-V6d">
+            <objects>
+                <viewController id="Ql6-UC-4GU" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="og8-ed-HOp">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="0tb-3q-95E"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QAg-8h-s2p" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="431" y="1270"/>
+        </scene>
     </scenes>
     <color key="tintColor" red="0.0" green="0.46666666670000001" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
     <resources>
@@ -87,5 +121,8 @@
         <image name="tab_groups_outline_black_24pt" width="24" height="24"/>
         <image name="tab_network_outline_black_24pt" width="24" height="24"/>
         <image name="tab_settings_outline_black_24pt" width="24" height="24"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
