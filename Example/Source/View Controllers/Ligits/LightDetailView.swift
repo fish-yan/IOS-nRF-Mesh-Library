@@ -9,8 +9,9 @@
 import SwiftUI
 
 struct LightDetailView: View {
-
+    var title = "Light"
     @State private var isOn = false
+    @State private var level: Double = 0
     var body: some View {
         List {
             Section {
@@ -45,7 +46,7 @@ struct LightDetailView: View {
             }
         }
         .buttonStyle(.borderless)
-        .navigationTitle("Light")
+        .navigationTitle(title)
     }
 }
 

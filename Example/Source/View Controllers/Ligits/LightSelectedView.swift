@@ -10,23 +10,29 @@ import SwiftUI
 import nRFMeshProvision
 
 struct LightSelectedView: View {
-    @State var editMode: EditMode = .active
-    @State var multiSelected: Set<Node> = []
+    @Binding var isPushed: Bool
+    
+    @State private var editMode: EditMode = .active
+    @State private var multiSelected: Set<Node> = []
     var nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
+    
     var body: some View {
         List(nodes, id: \.self, selection: $multiSelected) { node in
-            HStack {
-                Image(systemName: multiSelected.contains(node) ? "checkmark.circle" : "circle")
-                    .tint(.accentColor)
+            VStack(alignment: .leading) {
                 Text(node.name ?? "Unknow")
+                    .font(.headline)
+                Text("Address: 0x\(node.primaryUnicastAddress.hex)")
+                    .font(.subheadline)
+                    .foregroundColor(Color(UIColor.secondaryLabel))
             }
         }
         .navigationTitle("Select Lights")
         .toolbar {
-            EditButton()
-                .onTapGesture {
-                    
-                }
+            Button {
+                isPushed = false
+            } label: {
+                Text("Done")
+            }
         }
         .environment(\.editMode, $editMode)
     }
@@ -39,6 +45,3 @@ extension Node: Identifiable, Hashable {
     }
 }
 
-#Preview {
-    LightSelectedView()
-}

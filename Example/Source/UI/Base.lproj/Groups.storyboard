@@ -64,7 +64,6 @@
                                 <connections>
                                     <outlet property="addressLabel" destination="gza-hl-jDH" id="06O-4M-4gh"/>
                                     <outlet property="nameLabel" destination="wi4-gM-J5Z" id="Qzx-IV-bmX"/>
-                                    <segue destination="NiG-9S-OVX" kind="show" identifier="show" id="ngu-mC-e6u"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
