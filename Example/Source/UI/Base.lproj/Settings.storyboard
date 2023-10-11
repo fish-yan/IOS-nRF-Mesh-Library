@@ -690,18 +690,18 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="switch" id="5oi-GJ-525" customClass="SwitchCell" customModule="nRF_Mesh" customModuleProvider="target">
-                                <rect key="frame" x="20" y="125" width="374" height="43"/>
+                                <rect key="frame" x="20" y="125" width="374" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5oi-GJ-525" id="bcE-xW-TPS">
-                                    <rect key="frame" x="0.0" y="0.0" width="374" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4PU-Hv-Lxf">
-                                            <rect key="frame" x="305" y="6" width="51" height="31"/>
+                                            <rect key="frame" x="305" y="6.5" width="51" height="31"/>
                                             <color key="onTintColor" red="0.0" green="0.46666666670000001" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
                                         </switch>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YDJ-38-lWR">
-                                            <rect key="frame" x="20" y="11" width="33" height="21"/>
+                                            <rect key="frame" x="20" y="11" width="33" height="21.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -862,7 +862,7 @@
         <!--Edit Scene-->
         <scene sceneID="HDn-6o-wiQ">
             <objects>
-                <tableViewController id="6pB-yE-iXh" customClass="EditSceneViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="EditSceneViewController" id="6pB-yE-iXh" customClass="EditSceneViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="vd7-OH-9gd">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="886"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

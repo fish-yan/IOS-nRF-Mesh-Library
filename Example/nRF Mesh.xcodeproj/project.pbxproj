@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2C1459892ABB221200351A40 /* LightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1459882ABB221200351A40 /* LightsView.swift */; };
+		2C2276FE2AD6D8760062CACD /* SettingsHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2276FD2AD6D8760062CACD /* SettingsHostViewController.swift */; };
+		2C2277002AD6D9890062CACD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2276FF2AD6D9890062CACD /* SettingsView.swift */; };
+		2C2277022AD6DD6E0062CACD /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277012AD6DD6E0062CACD /* UserSettingsView.swift */; };
 		2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C798F152ABDD85600156CAA /* LightsManagerView.swift */; };
 		2C8C0C262ABF0FC100BC0156 /* GroupsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */; };
 		2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C292ABF132800BC0156 /* ItemView.swift */; };
@@ -16,7 +19,12 @@
 		2CA1A4D22ABB28DD00BB135A /* LightHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */; };
 		2CA1A50B2ABBC12D00BB135A /* LightDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */; };
 		2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50C2ABBC23100BB135A /* SliderView.swift */; };
+		2CC0DA672AD583C30031DC9D /* SceneLightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */; };
 		2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */; };
+		2CF32E422AD43C6200D254F2 /* ScenesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E412AD43C6200D254F2 /* ScenesListView.swift */; };
+		2CF32E442AD43DBE00D254F2 /* ScenesHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */; };
+		2CF32E462AD445BF00D254F2 /* SceneDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */; };
+		2CF32E482AD446AC00D254F2 /* ScenesManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */; };
 		3089BCA02099CA4900E30192 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3089BC9E2099CA4900E30192 /* LaunchScreen.storyboard */; };
 		3D36811A8B855EBEF53DC65E /* Pods_nRF_Mesh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5BC55AD7EC505D9963593EF /* Pods_nRF_Mesh.framework */; };
 		520A7D6724F3E05A00BF370A /* RightActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520A7D6624F3E05A00BF370A /* RightActionCell.swift */; };
@@ -209,6 +217,9 @@
 
 /* Begin PBXFileReference section */
 		2C1459882ABB221200351A40 /* LightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsView.swift; sourceTree = "<group>"; };
+		2C2276FD2AD6D8760062CACD /* SettingsHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHostViewController.swift; sourceTree = "<group>"; };
+		2C2276FF2AD6D9890062CACD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2C2277012AD6DD6E0062CACD /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
 		2C798F152ABDD85600156CAA /* LightsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsManagerView.swift; sourceTree = "<group>"; };
 		2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsManagerView.swift; sourceTree = "<group>"; };
 		2C8C0C292ABF132800BC0156 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
@@ -217,7 +228,12 @@
 		2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightHostViewController.swift; sourceTree = "<group>"; };
 		2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightDetailView.swift; sourceTree = "<group>"; };
 		2CA1A50C2ABBC23100BB135A /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLightsView.swift; sourceTree = "<group>"; };
 		2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlView.swift; sourceTree = "<group>"; };
+		2CF32E412AD43C6200D254F2 /* ScenesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesListView.swift; sourceTree = "<group>"; };
+		2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesHostViewController.swift; sourceTree = "<group>"; };
+		2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDetailView.swift; sourceTree = "<group>"; };
+		2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesManagerView.swift; sourceTree = "<group>"; };
 		3089BC9F2099CA4900E30192 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3BBB0FDA725BBFCE56A95D77 /* Pods-nRF Mesh Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nRF Mesh Tests.release.xcconfig"; path = "Target Support Files/Pods-nRF Mesh Tests/Pods-nRF Mesh Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4973E9CDA09CE2398E5C269A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -445,6 +461,18 @@
 			path = Ligits;
 			sourceTree = "<group>";
 		};
+		2CF32E402AD43C3100D254F2 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				2CF32E412AD43C6200D254F2 /* ScenesListView.swift */,
+				2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */,
+				2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */,
+				2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */,
+				2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
 		3B91DB027C0AE9896666D139 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,7 +544,6 @@
 				F085CA0029D1E0B900C2DF89 /* Subscribe.storyboard */,
 				52CD0A592330BF4800A9A181 /* Proxy.storyboard */,
 				5283524E227887970097B949 /* Settings.storyboard */,
-				52835255227AED0A0097B949 /* Settings */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -632,12 +659,14 @@
 				529B756C223FE7F1008F1CE7 /* RootViewController.swift */,
 				523F776B22C6324A0030EA6A /* ProgressViewController.swift */,
 				5212152E231554190059FB3D /* ProgressCollectionViewController.swift */,
+				2CF32E402AD43C3100D254F2 /* Scenes */,
 				2C1459872ABB215000351A40 /* Ligits */,
 				52248CDF2523369700B10250 /* Common */,
 				526021F4234365E100E88F06 /* Control */,
 				52835256227AED670097B949 /* Network */,
 				52518B2F22E0B14500A1FD1E /* Groups */,
 				52CD0A4E232F92E100A9A181 /* Proxy */,
+				52835255227AED0A0097B949 /* Settings */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -647,6 +676,9 @@
 			children = (
 				5267FDCB2A02935D00ECD38B /* Wizard */,
 				52547F1B232A3F470002AA7B /* Provisioners */,
+				2C2276FD2AD6D8760062CACD /* SettingsHostViewController.swift */,
+				2C2276FF2AD6D9890062CACD /* SettingsView.swift */,
+				2C2277012AD6DD6E0062CACD /* UserSettingsView.swift */,
 				529B756F223FF1AE008F1CE7 /* SettingsViewController.swift */,
 				529B759B2243BA10008F1CE7 /* NetworkKeysViewController.swift */,
 				529B7571223FFC39008F1CE7 /* AppKeysViewController.swift */,
@@ -1211,6 +1243,7 @@
 				F09DE4D129E5A2180073969A /* MeshTaskStatus.swift in Sources */,
 				521215312316C36B0059FB3D /* GenericLevelGroupCell.swift in Sources */,
 				52E54CDD23438B2E00478F05 /* GenericOnOffClientDelegate.swift in Sources */,
+				2C2276FE2AD6D8760062CACD /* SettingsHostViewController.swift in Sources */,
 				52DF5D8C228DAA0500C297C1 /* NodeViewCell.swift in Sources */,
 				52CD0A50232FA6CD00A9A181 /* ProxyViewController.swift in Sources */,
 				2C8C0C2E2AC06DFF00BC0156 /* LightSelectedView.swift in Sources */,
@@ -1244,6 +1277,8 @@
 				52121526231528AC0059FB3D /* GenericOnOffGroupCell.swift in Sources */,
 				527596322A138F0600B04C6F /* SelectModelsForPublicationViewController.swift in Sources */,
 				2C8C0C262ABF0FC100BC0156 /* GroupsManagerView.swift in Sources */,
+				2CF32E482AD446AC00D254F2 /* ScenesManagerView.swift in Sources */,
+				2CF32E462AD445BF00D254F2 /* SceneDetailView.swift in Sources */,
 				A7A59BD92773218C0045A8ED /* GenericPowerOnOffClientDelegate.swift in Sources */,
 				523F776622C609D90030EA6A /* NodeNetworkKeysViewController.swift in Sources */,
 				5211EAD5250777E100089FF2 /* SceneServerDelegate.swift in Sources */,
@@ -1258,6 +1293,7 @@
 				523F777922CB57190030EA6A /* ModelViewController.swift in Sources */,
 				522AFFE022C2376C00521EDC /* ElementViewController.swift in Sources */,
 				5288C20E2371A91900321ED3 /* SimpleOnOffSet.swift in Sources */,
+				2CF32E442AD43DBE00D254F2 /* ScenesHostViewController.swift in Sources */,
 				523F779722CE2BF60030EA6A /* SetPublicationDestinationsViewController.swift in Sources */,
 				52E54CD023437D3D00478F05 /* ModelControlCell.swift in Sources */,
 				523F776422C4EDD90030EA6A /* SwitchCell.swift in Sources */,
@@ -1271,6 +1307,7 @@
 				52F6AD7622BA612900F0D7DF /* UIViewController+Toast.swift in Sources */,
 				5217D2E5250F90D8004FDE79 /* GenericDefaultTransitionTimeViewCell.swift in Sources */,
 				528445C924EEA765002168A1 /* HeartbeatSubscriptionCell.swift in Sources */,
+				2CC0DA672AD583C30031DC9D /* SceneLightsView.swift in Sources */,
 				5231403F2301761C0074325A /* ConfigurationServerViewCell.swift in Sources */,
 				2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */,
 				52A8EA9624EE704A004C14C7 /* SetHeartbeatSubscriptionViewController.swift in Sources */,
@@ -1282,6 +1319,7 @@
 				52547F24232A3F470002AA7B /* RangeCell.swift in Sources */,
 				5231404D230AC4680074325A /* VendorModelViewCell.swift in Sources */,
 				529B758622428A45008F1CE7 /* UIViewController+Alert.swift in Sources */,
+				2CF32E422AD43C6200D254F2 /* ScenesListView.swift in Sources */,
 				F09DE4CF29E5A0BF0073969A /* MeshTask.swift in Sources */,
 				529B7572223FFC39008F1CE7 /* AppKeysViewController.swift in Sources */,
 				52E54CD22343871E00478F05 /* GenericOnOffClientCell.swift in Sources */,
@@ -1317,6 +1355,7 @@
 				52A9C1C52313D7D80036792A /* GenericLevelViewCell.swift in Sources */,
 				5288C20A2371A89900321ED3 /* SimpleOnOffClientDelegate.swift in Sources */,
 				529B759C2243BA10008F1CE7 /* NetworkKeysViewController.swift in Sources */,
+				2C2277002AD6D9890062CACD /* SettingsView.swift in Sources */,
 				521599D525E91F9300F602FA /* SensorValueCell.swift in Sources */,
 				52518B3122E0B18400A1FD1E /* GroupsViewController.swift in Sources */,
 				52A8EA9424EE6D18004C14C7 /* HeartbeatSubscriptionPeriodCell.swift in Sources */,
@@ -1324,6 +1363,7 @@
 				5283528222806D7C0097B949 /* NetworkKeySelectionViewController.swift in Sources */,
 				522AFFDE22BBBC6400521EDC /* NodeFeaturesCell.swift in Sources */,
 				523F776E22C63EAD0030EA6A /* NodeAddAppKeyViewController.swift in Sources */,
+				2C2277022AD6DD6E0062CACD /* UserSettingsView.swift in Sources */,
 				529B7643225222E8008F1CE7 /* Address+String.swift in Sources */,
 				52248CDC251E21F000B10250 /* ExportViewController.swift in Sources */,
 				5288C2062370571100321ED3 /* ProxySelectorViewController.swift in Sources */,

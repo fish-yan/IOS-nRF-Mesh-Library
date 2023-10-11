@@ -20,7 +20,9 @@
                     </tabBar>
                     <connections>
                         <segue destination="W6Q-vA-YUh" kind="relationship" relationship="viewControllers" id="clg-4z-1uo"/>
+                        <segue destination="V9C-H5-0cM" kind="relationship" relationship="viewControllers" id="929-bf-JFE"/>
                         <segue destination="Ns0-BW-mnp" kind="relationship" relationship="viewControllers" id="P5t-ai-VdT"/>
+                        <segue destination="yRV-vY-cAo" kind="relationship" relationship="viewControllers" id="VUP-40-dgT"/>
                         <segue destination="bcv-6V-ztb" kind="relationship" relationship="viewControllers" id="Ld5-du-qiy"/>
                         <segue destination="zgn-Sh-bkR" kind="relationship" relationship="viewControllers" id="bML-n5-Lan"/>
                         <segue destination="Jgl-7d-w1f" kind="relationship" relationship="viewControllers" id="64k-O6-vI9"/>
@@ -113,9 +115,74 @@
             </objects>
             <point key="canvasLocation" x="431" y="1270"/>
         </scene>
+        <!--Scene-->
+        <scene sceneID="6Ie-es-WDS">
+            <objects>
+                <viewController id="V9C-H5-0cM" customClass="ScenesHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
+                    <containerView key="view" opaque="NO" contentMode="scaleToFill" id="kEM-r8-s7D">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <segue destination="bXY-Rz-Hwi" kind="embed" destinationCreationSelector="showLightsView:" id="0VD-T1-UOb"/>
+                        </connections>
+                    </containerView>
+                    <tabBarItem key="tabBarItem" title="Scene" image="ic_scenes_24pt" id="kK1-m1-dCz"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bAE-Fu-Y1b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1362" y="531"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="kZe-0b-NOP">
+            <objects>
+                <viewController id="bXY-Rz-Hwi" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Zgc-tW-jbk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Sby-q9-Y5A"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qoc-1N-eR5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1362" y="1269"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="cgS-8d-492">
+            <objects>
+                <viewController id="yRV-vY-cAo" customClass="SettingsHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
+                    <containerView key="view" opaque="NO" contentMode="scaleToFill" id="Udk-uI-NOg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <segue destination="6da-ec-RDE" kind="embed" destinationCreationSelector="showLightsView:" id="Mbt-Ye-XFA"/>
+                        </connections>
+                    </containerView>
+                    <tabBarItem key="tabBarItem" title="Settings" image="tab_settings_outline_black_24pt" id="RuF-mn-xPb"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZTI-AD-ST5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2324" y="531"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="59S-gE-D09">
+            <objects>
+                <viewController id="6da-ec-RDE" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6Gm-G0-a0e">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="QWI-aZ-Xc8"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Yu9-Ns-axY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2324" y="1269"/>
+        </scene>
     </scenes>
     <color key="tintColor" red="0.0" green="0.46666666670000001" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
     <resources>
+        <image name="ic_scenes_24pt" width="24" height="24"/>
         <image name="tab_control_outline_black_24pt" width="24" height="24"/>
         <image name="tab_filter_outline_black_24pt" width="24" height="24"/>
         <image name="tab_groups_outline_black_24pt" width="24" height="24"/>

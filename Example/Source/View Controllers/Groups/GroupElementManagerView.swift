@@ -26,16 +26,14 @@ struct GroupElementManagerView: View {
                 Image(systemName: "pencil.line")
             }
         }
-    }
-    
-    
+    }    
 }
 
 struct ElementView: View {
     @State private var isActive: Bool = false
     var type: ElementType
     var body: some View {
-        NavigationLink(destination: LightSelectedView(isPushed: $isActive), isActive: $isActive) {
+        NavigationLink(destination: LightSelectedView(), isActive: $isActive) {
             HStack {
                 Image(systemName: type.image)
                     .foregroundColor(.white)

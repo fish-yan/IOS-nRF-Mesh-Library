@@ -14,20 +14,16 @@ struct LightsView: View {
     var body: some View {
         NavigationView {
             List {
-                Section {
-                    ForEach(nodes, id: \.primaryUnicastAddress.hex) { node in
-                        NavigationLink(destination: LightDetailView()) {
-                            ItemView(resource: .meshIcon, title: node.name ?? "Unknow", detail: "Address: 0x\(node.primaryUnicastAddress.hex)")
-                        }
+                ForEach(nodes, id: \.primaryUnicastAddress.hex) { node in
+                    NavigationLink(destination: LightDetailView()) {
+                        ItemView(resource: .meshIcon, title: node.name ?? "Unknow", detail: "Address: 0x\(node.primaryUnicastAddress.hex)")
                     }
-                } header: {
-                    Spacer()
                 }
             }
             .navigationTitle("Lights")
             .toolbar {
                 NavigationLink(destination: LightsManagerView()) {
-                    Image(systemName: "oar.2.crossed")
+                    Image(systemName: "gearshape")
                 }
             }
         }

@@ -54,6 +54,10 @@ class EditSceneViewController: UITableViewController {
     @IBOutlet weak var nameCell: UITableViewCell!
     @IBOutlet weak var sceneNumberCell: UITableViewCell!
     
+    func doneSave() {
+        saveScene()
+    }
+    
     // MARK: - Public members
     
     /// The IndexPath that is modified, or `nil` if a new Scene is being added.
@@ -189,7 +193,11 @@ private extension EditSceneViewController {
         }
             
         if MeshNetworkManager.instance.save() {
-            dismiss(animated: true)
+            if presentingViewController != nil {
+                dismiss(animated: true)
+            } else {
+                navigationController?.popViewController(animated: true)
+            }
             
             // Finally, notify the parent view controller.
             if let indexPath = indexPath {

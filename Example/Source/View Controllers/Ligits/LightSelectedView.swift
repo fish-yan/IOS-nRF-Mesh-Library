@@ -10,7 +10,8 @@ import SwiftUI
 import nRFMeshProvision
 
 struct LightSelectedView: View {
-    @Binding var isPushed: Bool
+    
+    @Environment(\.presentationMode) var mode
     
     @State private var editMode: EditMode = .active
     @State private var multiSelected: Set<Node> = []
@@ -29,7 +30,7 @@ struct LightSelectedView: View {
         .navigationTitle("Select Lights")
         .toolbar {
             Button {
-                isPushed = false
+                mode.wrappedValue.dismiss()
             } label: {
                 Text("Done")
             }

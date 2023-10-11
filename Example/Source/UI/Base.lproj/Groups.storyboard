@@ -73,7 +73,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Groups" id="xfS-oj-bM8">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="oar.2.crossed" catalog="system" id="mZj-wo-ZsG">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="gearshape" catalog="system" id="mZj-wo-ZsG">
                             <connections>
                                 <action selector="groupManagerAction:" destination="GWa-8U-U7m" id="pn6-4G-s7V"/>
                             </connections>
@@ -601,12 +601,12 @@
     </scenes>
     <color key="tintColor" red="0.0" green="0.46666666670000001" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
     <resources>
+        <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="group_scene_outline" width="50" height="50"/>
         <image name="groups_generic_level_outline" width="50" height="50"/>
         <image name="groups_generic_onoff_outline" width="50" height="50"/>
         <image name="ic_flag_24pt" width="24" height="24"/>
         <image name="mesh-group" width="48" height="48"/>
-        <image name="oar.2.crossed" catalog="system" width="128" height="104"/>
         <image name="tab_groups_outline_black_24pt" width="24" height="24"/>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

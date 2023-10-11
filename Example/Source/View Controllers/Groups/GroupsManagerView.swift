@@ -13,29 +13,46 @@ struct GroupsManagerView: View {
     @State private var groups = MeshNetworkManager.instance.meshNetwork?.groups ?? []
     @State private var addDone: Bool = false
     var body: some View {
-        List(groups, id: \.address) { group in
-            NavigationLink(destination: GroupElementManagerView(group: group)) {
-                ItemView(resource: .meshGroup, title: group.name, detail: "Address: 0x\(group.address.hex)")
+        List {
+            ForEach(groups, id: \.address) { group in
+                NavigationLink(destination: GroupElementManagerView(group: group)) {
+                    ItemView(resource: .meshGroup, title: group.name, detail: "Address: 0x\(group.address.hex)")
+                }
             }
+            .onDelete(perform: delete)
+            
         }
         .navigationTitle("Groups Manager")
-        .toolbar {
-            NavigationLink {
-                AddGroupView(isDone: $addDone)
-                    .navigationTitle("Add Group")
-                    .toolbar {
-                        Button("Done") {
-                            addDone = true
-                        }
-                    }
-                    
-            } label: {
-                Image(systemName: "plus")
-            }
-        }
+        .toolbar { addItem }
         .onAppear {
             groups = MeshNetworkManager.instance.meshNetwork?.groups ?? []
         }
+    }
+    
+    var addItem: some View {
+        NavigationLink {
+            AddGroupView(isDone: $addDone)
+                .navigationTitle("Add Group")
+                .toolbar {
+                    Button("Done") {
+                        addDone = true
+                    }
+                }
+                
+        } label: {
+            Image(systemName: "plus")
+        }
+    }
+    
+    func delete(indexSet: IndexSet) {
+        guard let index = indexSet.min() else {
+            return
+        }
+        let group = groups[index]
+        
+        groups.remove(atOffsets: indexSet)
+        
+        try? MeshNetworkManager.instance.meshNetwork?.remove(group: group)
     }
 }
 
