@@ -21,12 +21,13 @@
                     <connections>
                         <segue destination="W6Q-vA-YUh" kind="relationship" relationship="viewControllers" id="clg-4z-1uo"/>
                         <segue destination="V9C-H5-0cM" kind="relationship" relationship="viewControllers" id="929-bf-JFE"/>
-                        <segue destination="Ns0-BW-mnp" kind="relationship" relationship="viewControllers" id="P5t-ai-VdT"/>
+                        <segue destination="EAb-g1-fOy" kind="relationship" relationship="viewControllers" id="afy-Kc-reT"/>
                         <segue destination="yRV-vY-cAo" kind="relationship" relationship="viewControllers" id="VUP-40-dgT"/>
-                        <segue destination="bcv-6V-ztb" kind="relationship" relationship="viewControllers" id="Ld5-du-qiy"/>
-                        <segue destination="zgn-Sh-bkR" kind="relationship" relationship="viewControllers" id="bML-n5-Lan"/>
                         <segue destination="Jgl-7d-w1f" kind="relationship" relationship="viewControllers" id="64k-O6-vI9"/>
+                        <segue destination="zgn-Sh-bkR" kind="relationship" relationship="viewControllers" id="bML-n5-Lan"/>
+                        <segue destination="Ns0-BW-mnp" kind="relationship" relationship="viewControllers" id="P5t-ai-VdT"/>
                         <segue destination="z61-cg-pzs" kind="relationship" relationship="viewControllers" id="iOB-SD-m7V"/>
+                        <segue destination="bcv-6V-ztb" kind="relationship" relationship="viewControllers" id="Ld5-du-qiy"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oC9-24-ooo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -178,6 +179,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yu9-Ns-axY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2324" y="1269"/>
+        </scene>
+        <!--Groups-->
+        <scene sceneID="Dym-Ve-krs">
+            <objects>
+                <viewController id="EAb-g1-fOy" customClass="GroupsHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
+                    <containerView key="view" opaque="NO" contentMode="scaleToFill" id="rIS-zE-E5X">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <segue destination="tpt-Ck-wxN" kind="embed" destinationCreationSelector="showLightsView:" id="nzS-S1-wTF"/>
+                        </connections>
+                    </containerView>
+                    <tabBarItem key="tabBarItem" title="Groups" image="tab_groups_outline_black_24pt" id="hih-t1-fxC"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H4O-4f-Zdo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3254" y="531"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="u1u-Oq-rqK">
+            <objects>
+                <viewController id="tpt-Ck-wxN" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yU7-Uu-DrY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="975-Or-e4D"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KVk-FE-bWr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3254" y="1269"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.0" green="0.46666666670000001" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>

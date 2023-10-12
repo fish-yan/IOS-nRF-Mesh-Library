@@ -19,7 +19,7 @@ struct ScenesListView: View {
                     NavigationLink {
                         SceneDetailView()
                     } label: {
-                        ItemView(resource: .icScenes24Pt, title: scene.name, detail: "Number: \(scene.number)")
+                        ItemView(resource: .groupSceneOutline, title: scene.name, detail: "Number: \(scene.number)")
                     }
                 }
             }

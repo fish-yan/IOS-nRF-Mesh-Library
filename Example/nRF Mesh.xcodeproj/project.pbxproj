@@ -11,6 +11,8 @@
 		2C2276FE2AD6D8760062CACD /* SettingsHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2276FD2AD6D8760062CACD /* SettingsHostViewController.swift */; };
 		2C2277002AD6D9890062CACD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2276FF2AD6D9890062CACD /* SettingsView.swift */; };
 		2C2277022AD6DD6E0062CACD /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277012AD6DD6E0062CACD /* UserSettingsView.swift */; };
+		2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277032AD794920062CACD /* GroupsHostViewController.swift */; };
+		2C2277062AD794C10062CACD /* GroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277052AD794C10062CACD /* GroupsView.swift */; };
 		2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C798F152ABDD85600156CAA /* LightsManagerView.swift */; };
 		2C8C0C262ABF0FC100BC0156 /* GroupsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */; };
 		2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C292ABF132800BC0156 /* ItemView.swift */; };
@@ -220,6 +222,8 @@
 		2C2276FD2AD6D8760062CACD /* SettingsHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHostViewController.swift; sourceTree = "<group>"; };
 		2C2276FF2AD6D9890062CACD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2C2277012AD6DD6E0062CACD /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
+		2C2277032AD794920062CACD /* GroupsHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsHostViewController.swift; sourceTree = "<group>"; };
+		2C2277052AD794C10062CACD /* GroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsView.swift; sourceTree = "<group>"; };
 		2C798F152ABDD85600156CAA /* LightsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsManagerView.swift; sourceTree = "<group>"; };
 		2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsManagerView.swift; sourceTree = "<group>"; };
 		2C8C0C292ABF132800BC0156 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
@@ -583,6 +587,8 @@
 				52121524231528400059FB3D /* Model */,
 				52121527231528E60059FB3D /* Cells */,
 				52518B3022E0B18400A1FD1E /* GroupsViewController.swift */,
+				2C2277032AD794920062CACD /* GroupsHostViewController.swift */,
+				2C2277052AD794C10062CACD /* GroupsView.swift */,
 				2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */,
 				2C8C0C2B2AC06DC600BC0156 /* GroupElementManagerView.swift */,
 				5251498022E0E36600CBF1E3 /* AddGroupViewController.swift */,
@@ -1283,6 +1289,7 @@
 				523F776622C609D90030EA6A /* NodeNetworkKeysViewController.swift in Sources */,
 				5211EAD5250777E100089FF2 /* SceneServerDelegate.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				2C2277062AD794C10062CACD /* GroupsView.swift in Sources */,
 				523F776C22C6324A0030EA6A /* ProgressViewController.swift in Sources */,
 				52547F25232A3F470002AA7B /* EditProvisionerViewController.swift in Sources */,
 				5245737D2500E12600CF8500 /* EditSceneViewController.swift in Sources */,
@@ -1367,6 +1374,7 @@
 				529B7643225222E8008F1CE7 /* Address+String.swift in Sources */,
 				52248CDC251E21F000B10250 /* ExportViewController.swift in Sources */,
 				5288C2062370571100321ED3 /* ProxySelectorViewController.swift in Sources */,
+				2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
