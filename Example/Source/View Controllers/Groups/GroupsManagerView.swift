@@ -53,6 +53,7 @@ struct GroupsManagerView: View {
         groups.remove(atOffsets: indexSet)
         
         try? MeshNetworkManager.instance.meshNetwork?.remove(group: group)
+        let _ = MeshNetworkManager.instance.save()
     }
 }
 

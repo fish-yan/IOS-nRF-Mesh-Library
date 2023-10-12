@@ -64,6 +64,7 @@
                                 <connections>
                                     <outlet property="addressLabel" destination="gza-hl-jDH" id="06O-4M-4gh"/>
                                     <outlet property="nameLabel" destination="wi4-gM-J5Z" id="Qzx-IV-bmX"/>
+                                    <segue destination="NiG-9S-OVX" kind="show" identifier="show" id="Vag-Xh-7hV"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -73,9 +74,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Groups" id="xfS-oj-bM8">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="gearshape" catalog="system" id="mZj-wo-ZsG">
+                        <barButtonItem key="rightBarButtonItem" title="Add" id="mZj-wo-ZsG">
                             <connections>
                                 <action selector="groupManagerAction:" destination="GWa-8U-U7m" id="pn6-4G-s7V"/>
+                                <segue destination="y7P-mW-r9X" kind="show" identifier="AddGroup" id="dyr-ju-piT"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -343,9 +345,6 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Title" id="T4S-kG-u1x"/>
-                    <connections>
-                        <segue destination="Z7x-iD-HmC" kind="custom" identifier="showDetails" customClass="DialogSegue" customModule="nRF_Mesh" customModuleProvider="target" id="Kyp-WD-PEV"/>
-                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qdR-KH-jUW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -552,6 +551,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="y7P-mW-r9X" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="ITK-tg-Td5"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="WJ4-lJ-7ku">
                         <rect key="frame" x="0.0" y="48" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -601,7 +601,6 @@
     </scenes>
     <color key="tintColor" red="0.0" green="0.46666666670000001" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
     <resources>
-        <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="group_scene_outline" width="50" height="50"/>
         <image name="groups_generic_level_outline" width="50" height="50"/>
         <image name="groups_generic_onoff_outline" width="50" height="50"/>

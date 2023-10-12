@@ -256,7 +256,6 @@ internal class AccessLayer {
     ///   - destination: The destination address. This must be a Unicast Address.
     ///   - initialTtl:  The initial TTL (Time To Live) value of the message.
     ///                  If `nil`, the default Node TTL will be used.
-    ///   - completion:  The completion handler with the response.
     func send(_ message: ConfigMessage,
               from element: Element, to destination: Address,
               withTtl initialTtl: UInt8?) {
@@ -593,7 +592,7 @@ private extension AccessLayer {
     /// status is received, and allows the message to be cancelled.
     ///
     /// - important: The message must be of an Acknowledged type and must be
-    ///              targetting a Unicast Address; otherwise this method does nothing.
+    ///              targeting a Unicast Address; otherwise this method does nothing.
     ///
     /// - parameters:
     ///   - pdu: The PDU of the Acknowledged message.

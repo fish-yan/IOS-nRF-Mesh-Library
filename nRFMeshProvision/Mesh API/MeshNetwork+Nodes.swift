@@ -38,7 +38,7 @@ public extension MeshNetwork {
     /// - returns: `True` if the Node was found, `false` otherwise.
     /// - since: 4.0.0
     func contains(node: Node) -> Bool {
-        return nodes.contains(node)
+        return contains(nodeWithUuid: node.uuid)
     }
     
     /// Returns whether the Node with given UUID is in the
@@ -48,7 +48,7 @@ public extension MeshNetwork {
     /// - returns: `True` if the Node was found, `false` otherwise.
     /// - since: 4.0.0 
     func contains(nodeWithUuid uuid: UUID) -> Bool {
-        return node(withUuid: uuid) != nil
+        return nodes.contains { $0.uuid == uuid }
     }
     
     /// Returns Provisioner's Node object, if such exist and the Provisioner
@@ -191,7 +191,7 @@ public extension MeshNetwork {
     ///           already exists in the network.
     func add(node: Node) throws {
         // Make sure the Node does not exist already.
-        guard self.node(withUuid: node.uuid) == nil else {
+        guard !contains(node: node) else {
             throw MeshNetworkError.nodeAlreadyExist
         }
         // Verify if the address range is available for the new Node.
@@ -223,7 +223,7 @@ public extension MeshNetwork {
     /// - important: Sending Config Node Reset message does not guarantee that the
     ///              Node won't be able to communicate with the network. To make sure
     ///              that the Node will not be able to send and receive messages from
-    ///              the network all the Network Keys (and optionaly Application Keys)
+    ///              the network all the Network Keys (and optionally Application Keys)
     ///              known by the Node must to be updated using Key Refresh Procedure,
     ///              or removed from other Nodes.
     ///              See Bluetooth Mesh Profile 1.0.1, chapter: 3.10.7 Node Removal

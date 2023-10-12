@@ -64,7 +64,7 @@ public class MeshNetworkManager: NetworkParametersProvider {
     
     // MARK: - Network Manager properties
     
-    /// Network parameters define the mesh transmition and retransmition parameters,
+    /// Network parameters define the mesh transmission and retransmission parameters,
     /// the default Time To Live (TTL) value and other configuration.
     ///
     /// Initially it is set to ``NetworkParameters/default``.
@@ -100,7 +100,6 @@ public class MeshNetworkManager: NetworkParametersProvider {
     ///   - delegateQueue: The `DispatchQueue` to call delegate methods on.
     ///                    By default the global main queue will be used.
     /// - seeAlso: ``LocalStorage``
-    /// - seeAlso: ``LowerTransportLayer.checkAgainstReplayAttack(_:NetworkPdu)``
     public init(using storage: Storage = LocalStorage(),
                 delegateQueue: DispatchQueue = DispatchQueue.main) {
         self.storage = storage
@@ -285,7 +284,7 @@ public extension MeshNetworkManager {
     ///         the publication configuration of the given Model.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message: The message to be sent.
@@ -312,7 +311,7 @@ public extension MeshNetworkManager {
     /// The method completes when the message has been sent or an error occurred.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:        The message to be sent.
@@ -360,7 +359,7 @@ public extension MeshNetworkManager {
     /// The method completes when the message has been sent or an error occurred.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:        The message to be sent.
@@ -391,7 +390,7 @@ public extension MeshNetworkManager {
     /// The method completes when the message has been sent or an error occurred.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:        The message to be sent.
@@ -432,7 +431,7 @@ public extension MeshNetworkManager {
     /// The method completes when the message has been sent or an error occurred.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:      The message to be sent.
@@ -465,7 +464,7 @@ public extension MeshNetworkManager {
     /// to which the Model belongs to and returns the response.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:        The message to be sent.
@@ -523,7 +522,7 @@ public extension MeshNetworkManager {
     /// to which the target Model belongs to.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:      The message to be sent.
@@ -559,7 +558,7 @@ public extension MeshNetworkManager {
     /// throws an ``AccessError/invalidDestination`` error.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:     The message to be sent.
@@ -612,7 +611,7 @@ public extension MeshNetworkManager {
     /// Sends a Configuration Message to the primary Element on the given ``Node``.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:    The message to be sent.
@@ -638,7 +637,7 @@ public extension MeshNetworkManager {
     /// throws an ``AccessError/invalidDestination`` error.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:     The message to be sent.
@@ -699,7 +698,7 @@ public extension MeshNetworkManager {
     /// and returns the received response.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     ///   - message:    The message to be sent.
@@ -724,7 +723,7 @@ public extension MeshNetworkManager {
     /// and returns the received response.
     ///
     /// An appropriate callback of the ``MeshNetworkDelegate`` will also be called when
-    /// the message has been sent successfully or a problem occured.
+    /// the message has been sent successfully or a problem occurred.
     ///
     /// - parameters:
     /// - parameter message: The acknowledged configuration message to be sent.
@@ -815,7 +814,7 @@ public extension MeshNetworkManager {
     /// ``AccessError/timeout`` error.
     ///
     /// - parameters:
-    ///   - opCode: The message OpCode. For vendor messages it must inlcude the Company Id.
+    ///   - opCode: The message OpCode. For vendor messages it must include the Company Id.
     ///   - element: The Element from which the message is expected.
     ///   - destination: The optional destination of the message.
     ///   - timeout: The timeout in seconds. Use 0 for not timeout.
@@ -887,7 +886,7 @@ public extension MeshNetworkManager {
     /// will return `nil`.
     ///
     /// - warning: This method is implemented using ``waitFor(messageWithOpCode:from:to:timeout:)-6673k``.
-    ///            It is not possible to await a message and message stream simultanosly.
+    ///            It is not possible to await a message and message stream simultaneously.
     ///
     /// - parameters:
     ///   - opCode: The OpCode of the messages to await for.
@@ -910,7 +909,7 @@ public extension MeshNetworkManager {
     /// will return `nil`.
     ///
     /// - warning: This method is implemented using ``waitFor(messageWithOpCode:from:to:timeout:)-6673k``.
-    ///            It is not possible to await a message and message stream simultanosly.
+    ///            It is not possible to await a message and message stream simultaneously.
     ///
     /// - parameters:
     ///   - opCode: The OpCode of the messages to await for.
@@ -929,7 +928,7 @@ public extension MeshNetworkManager {
     /// will return `nil`.
     ///
     /// - warning: This method is implemented using ``waitFor(messageFrom:to:timeout:)-24q2d``.
-    ///            It is not possible to await a message and message stream simultanosly.
+    ///            It is not possible to await a message and message stream simultaneously.
     ///
     /// - parameters:
     ///   - opCode: The OpCode of the messages to await for.
@@ -951,7 +950,7 @@ public extension MeshNetworkManager {
     /// will return `nil`.
     ///
     /// - warning: This method is implemented using ``waitFor(messageFrom:to:timeout:)-24q2d``.
-    ///            It is not possible to await a message and message stream simultanosly.
+    ///            It is not possible to await a message and message stream simultaneously.
     ///
     /// - parameters:
     ///   - opCode: The OpCode of the messages to await for.
@@ -1172,6 +1171,7 @@ public extension MeshNetworkManager {
     func save() -> Bool {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = .withoutEscapingSlashes
         
         let data = try! encoder.encode(meshData)
         return storage.save(data)
@@ -1204,8 +1204,9 @@ public extension MeshNetworkManager {
     func export() -> Data {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = .withoutEscapingSlashes
         if #available(iOS 11.0, *) {
-            encoder.outputFormatting = .sortedKeys
+            encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         }
         
         return try! encoder.encode(meshData.meshNetwork)
@@ -1233,8 +1234,9 @@ public extension MeshNetworkManager {
     func export(_ configuration: ExportConfiguration) -> Data {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = .withoutEscapingSlashes
         if #available(iOS 11.0, *) {
-            encoder.outputFormatting = .sortedKeys
+            encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         }
         
         let meshNetwork = meshData.meshNetwork?.copy(using: configuration)
@@ -1250,7 +1252,19 @@ public extension MeshNetworkManager {
     ///           the local Provisioner failed.
     func `import`(from data: Data) throws -> MeshNetwork {
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
+        
+        // The .iso8601 decoding strategy does not support fractional seconds.
+        // decoder.dateDecodingStrategy = .iso8601
+        
+        // Instead, use ISO8601DateFormatter.
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions.insert(.withFractionalSeconds)
+            
+            let container = try decoder.singleValueContainer()
+            let value = try container.decode(String.self)
+            return formatter.date(from: value) ?? Date.distantPast
+        }
         
         let meshNetwork = try decoder.decode(MeshNetwork.self, from: data)
         

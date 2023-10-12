@@ -30,15 +30,14 @@
 
 import UIKit
 import nRFMeshProvision
-import SwiftUI
 
 class GroupsViewController: UITableViewController, Editable, UISearchBarDelegate {
-    private var groups: [nRFMeshProvision.Group] = []
+    private var groups: [Group] = []
         
     // MARK: - Search Bar
     
     private var searchController: UISearchController!
-    private var filteredGroups: [nRFMeshProvision.Group] = []
+    private var filteredGroups: [Group] = []
     
     // MARK: - Implementation
     
@@ -53,11 +52,6 @@ class GroupsViewController: UITableViewController, Editable, UISearchBarDelegate
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadData()
-    }
-    
-    @IBAction func groupManagerAction(_ sender: UIBarButtonItem) {
-        let hostingVc = UIHostingController(rootView: GroupsManagerView())
-        navigationController?.pushViewController(hostingVc, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -102,9 +96,6 @@ class GroupsViewController: UITableViewController, Editable, UISearchBarDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let group = filteredGroups[indexPath.row]
-        let vc = UIHostingController(rootView: LightDetailView(title: group.name))
-        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -191,7 +182,7 @@ private extension GroupsViewController {
 
 extension GroupsViewController: GroupDelegate {
     
-    func groupChanged(_ group: nRFMeshProvision.Group) {
+    func groupChanged(_ group: Group) {
         groups.append(group)
         filteredGroups.append(group)
         tableView.insertRows(at: [IndexPath(row: groups.count - 1, section: 0)], with: .automatic)
@@ -199,4 +190,3 @@ extension GroupsViewController: GroupDelegate {
     }
     
 }
-

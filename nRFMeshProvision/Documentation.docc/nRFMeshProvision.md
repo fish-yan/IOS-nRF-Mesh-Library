@@ -7,15 +7,15 @@ Provision, configure and control Bluetooth mesh devices with nRF Mesh library.
 The nRF Mesh library allows to provision Bluetooth mesh devices into a mesh network, configure 
 them and send and receive messages.
 
-The library is compatible with the following [Bluetooth specifications](https://www.bluetooth.com/specifications/specs/?status=active&show_latest_version=0&show_latest_version=1&keyword=mesh&filter=):
-- **Mesh Profile 1.0.1** (with experimental support for **Mesh Protocol 1.1**)
-- **Mesh Model 1.0.1**
+The library is compatible with the following [Bluetooth specifications](https://www.bluetooth.com/specifications/specs/?types=adopted&keyword=mesh):
+- **Mesh Protocol 1.1** (backwards compatible with **Mesh Profile 1.0.1**)
+- **Mesh Model 1.1**
 - **Mesh Device Properties 2**
 - **Configuration Database Profile 1.0.1**
 
 > Important: Implementing ADV Bearer on iOS is not possible due to API limitations. 
-  The library is using GATT Proxy protocol, specified in the Bluetooth Mesh Profile 1.0.1,
-  and requires a Node with GATT Proxy functionality to relay messages to the mesh network.
+  The library is using GATT Proxy protocol, specified in the Bluetooth Mesh Protocol 1.1,
+  and requires a Node with GATT Proxy feature to relay messages to the mesh network.
 
 ## Usage
 
@@ -23,22 +23,53 @@ The ``MeshNetworkManager`` is the main entry point for interacting with the mesh
 It can be used to create, load or import a Bluetooth mesh network configuration and send 
 and receive messages. 
 
-The snippet below demostrates how to start.
+The snippet below demonstrates how to start.
 
 ```swift
 // Create the Mesh Network Manager instance.
 meshNetworkManager = MeshNetworkManager()
 
-// Customize network parameters. 
-meshNetworkManager.networkParameters = .custom { builder in
-    builder.defaultTtl = ...
-    builder.incompleteMessageTimeout = ...
-    builder.acknowledgmentTimerInterval = ...
-    builder.transmissionTimerInterval = ...
-    builder.retransmissionLimit = ...
-    builder.acknowledgmentMessageTimeout = ...
-    builder.acknowledgmentMessageInterval = ...
-    // If you know what you're doing, customize the advanced parameters.
+// If needed, customize network parameters using basic:
+meshNetworkManager.networkParameters = .basic { parameters in
+    parameters.setDefaultTtl(...)
+    // Configure SAR Receiver properties
+    parameters.discardIncompleteSegmentedMessages(after: ...)
+    parameters.transmitSegmentAcknowledgmentMessage(
+        usingSegmentReceptionInterval: ...,
+        multipliedByMinimumDelayIncrement: ...)
+    parameters.retransmitSegmentAcknowledgmentMessages(
+        exactly: ..., timesWhenNumberOfSegmentsIsGreaterThan: ...)
+    // Configure SAR Transmitter properties
+    parameters.transmitSegments(withInterval: ...)
+    parameters.retransmitUnacknowledgedSegmentsToUnicastAddress(
+        atMost: ..., timesAndWithoutProgress: ...,
+        timesWithRetransmissionInterval: ..., andIncrement: ...)
+    parameters.retransmitAllSegmentsToGroupAddress(exactly: ..., timesWithInterval: ...)
+    // Configure message configuration
+    parameters.retransmitAcknowledgedMessage(after: ...)
+    parameters.discardAcknowledgedMessages(after: ...)
+}
+// ...or advanced configurator:
+meshNetworkManager.networkParameters = .advanced { parameters in
+    parameters.defaultTtl = ...
+    // Configure SAR Receiver properties
+    parameters.sarDiscardTimeout = ...
+    parameters.sarAcknowledgmentDelayIncrement = ...
+    parameters.sarReceiverSegmentIntervalStep = ...
+    parameters.sarSegmentsThreshold = ...
+    parameters.sarAcknowledgmentRetransmissionsCount = ...
+    // Configure SAR Transmitter properties
+    parameters.sarSegmentIntervalStep = ...
+    parameters.sarUnicastRetransmissionsCount = ...
+    parameters.sarUnicastRetransmissionsWithoutProgressCount = ...
+    parameters.sarUnicastRetransmissionsIntervalStep = ...
+    parameters.sarUnicastRetransmissionsIntervalIncrement = ...
+    parameters.sarMulticastRetransmissionsCount = ...
+    parameters.sarMulticastRetransmissionsIntervalStep = ...
+    // Configure acknowledged message timeouts
+    parameters.acknowledgmentMessageInterval = ...
+    parameters.acknowledgmentMessageTimeout = ...
+    // And if you really know what you're doing...
     builder.allowIvIndexRecoveryOver42 = ...
     builder.ivUpdateTestMode = ...
 }
@@ -49,7 +80,7 @@ meshNetworkManager.networkParameters.defaultTtl = ...
 meshNetworkManager.logger = ...
 ```
 
-The next step is to define the behavior of the manager. The behavoir is determined by set of
+The next step is to define the behavior of the manager. The behavior is determined by set of
 ``Model``s existing on the Node. For more information, read <doc:LocalNode>.
 
 ### Loading mesh configuration
@@ -130,9 +161,9 @@ provisioning procedure.
 - ``LogLevel``
 - ``LogCategory``
 
-### Bearers
+### Bearer
 
-Bearers are objects resopnsible for delivering PDUs to remote nodes. Bluetooth mesh, among others. defines 
+Bearers are objects responsible for delivering PDUs to remote nodes. Bluetooth mesh, among others. defines 
 ADV Bearer and GATT Bearer. Due to API limitations on iOS the ADV Bearer is not available. An iPhone
 can be connected to the mesh network using a GATT connection to a node with GATT Proxy feature. 
 
@@ -146,7 +177,7 @@ can be connected to the mesh network using a GATT connection to a node with GATT
 - ``PduType``
 - ``PduTypes``
 
-### GATT Bearers
+### GATT Bearer
 
 GATT Bearer is used when connecting to a node with GATT Proxy feature. It uses a GATT connection 
 instead of Bluetooth advertising. Messages sent over that bearer need to be proxied to the network
@@ -163,6 +194,13 @@ using ADV Bearer by the GATT Proxy node.
 - ``MeshService``
 - ``MeshProvisioningService``
 - ``MeshProxyService``
+
+### Remote Bearer
+
+PB Remote Bearer allows to provision a device which does not support GATT Mesh Provisioning Service
+via a node with Remote Provisioning Server model.
+
+- ``PBRemoteBearer``
 
 ### Provisioning
 
@@ -396,7 +434,7 @@ Provisioning is the process of adding an unprovisioned device to a mesh network 
 - ``ConfigModelSubscriptionDeleteAll``
 - ``ConfigModelSubscriptionStatus``
 
-### Configuration - Heartbearts
+### Configuration - Heartbeats
 
 - ``HeartbeatPublication``
 - ``HeartbeatSubscription``
@@ -424,6 +462,15 @@ Provisioning is the process of adding an unprovisioned device to a mesh network 
 - ``PrivateNodeIdentitySet``
 - ``PrivateNodeIdentityStatus``
 
+### Configuration - Segmentation and Reassembly
+
+- ``SarReceiverGet``
+- ``SarReceiverSet``
+- ``SarReceiverStatus``
+- ``SarTransmitterGet``
+- ``SarTransmitterSet``
+- ``SarTransmitterStatus``
+
 ### Remote Provisioning Message Types
 
 - ``RemoteProvisioningMessage``
@@ -436,6 +483,7 @@ Provisioning is the process of adding an unprovisioned device to a mesh network 
 - ``RemoteProvisioningScanState``
 - ``RemoteProvisioningLinkState``
 - ``RemoteProvisioningLinkCloseReason``
+- ``RemoteProvisioningLinkStateMessage``
 - ``AdTypes``
 - ``AdStructure``
 - ``NodeProvisioningProtocolInterfaceProcedure``

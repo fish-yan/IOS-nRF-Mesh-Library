@@ -1,10 +1,10 @@
 PODS:
-  - CryptoSwift (1.7.0)
-  - LookinServer (1.1.7):
-    - LookinServer/Core (= 1.1.7)
-  - LookinServer/Core (1.1.7)
-  - nRFMeshProvision (3.2.0):
-    - CryptoSwift (= 1.7.0)
+  - CryptoSwift (1.8.0)
+  - LookinServer (1.2.2):
+    - LookinServer/Core (= 1.2.2)
+  - LookinServer/Core (1.2.2)
+  - nRFMeshProvision (4.0.0):
+    - CryptoSwift (= 1.8.0)
 
 DEPENDENCIES:
   - LookinServer
@@ -20,9 +20,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  CryptoSwift: e71dbe5bbb7a945e365d4b9034dbccf28d033a8f
-  LookinServer: 4ce0469b066871525611d009d8d16a7a50c23491
-  nRFMeshProvision: 3027d1445ce73eeff174811c76cb1c46d47c1b85
+  CryptoSwift: 52aaf3fce7337552863b1d952e408085f0e65030
+  LookinServer: 3204eefff2f18e19fa546931fb5f1b88bc709a0b
+  nRFMeshProvision: 69767fa24aede3ca206ed17e9172be564bd7bfc0
 
 PODFILE CHECKSUM: 9cb3532583456af1f016209c1df39e8e7fcfe553
 

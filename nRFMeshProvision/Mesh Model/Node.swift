@@ -886,7 +886,11 @@ internal extension Node {
         // Don't override features if they already were known.
         // Accurate features states could have been acquired by reading each feature state,
         // while the Page 0 of the Composition Data contains only Supported / Not Supported.
-        features = features ?? page0.features
+        if let features { // `NodeFeaturesState` is a reference type
+            features.applyMissing(from: page0.features)
+        } else {
+            features = page0.features
+        }
         // And set the Elements received.
         set(elements: page0.elements)
         meshNetwork?.timestamp = Date()
@@ -940,6 +944,11 @@ extension Node: Equatable {
     
     public static func == (lhs: Node, rhs: Node) -> Bool {
         return lhs.uuid == rhs.uuid
-    }    
+            && lhs.isConfigComplete == rhs.isConfigComplete
+            && lhs.isCompositionDataReceived == rhs.isCompositionDataReceived
+            && lhs.isExcluded == rhs.isExcluded
+            && lhs.name == rhs.name
+            && lhs.defaultTTL == rhs.defaultTTL
+    }
     
 }

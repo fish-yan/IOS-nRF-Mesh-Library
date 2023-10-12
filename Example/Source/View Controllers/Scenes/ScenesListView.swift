@@ -29,11 +29,10 @@ struct ScenesListView: View {
                     Image(systemName: "gearshape")
                 }
             }
+            .onAppear {
+                scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
+            }
         }
-        .onAppear(perform: {
-            scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
-        })
-        
     }
 }
 

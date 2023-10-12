@@ -52,6 +52,7 @@ struct ScenesManagerView: View {
         let scene = scenes[index]
         scenes.remove(atOffsets: indexSet)
         try? MeshNetworkManager.instance.meshNetwork?.remove(scene: scene.number)
+        let _ = MeshNetworkManager.instance.save()
     }
 }
 
