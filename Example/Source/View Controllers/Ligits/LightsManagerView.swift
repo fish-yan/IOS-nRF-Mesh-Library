@@ -14,17 +14,13 @@ struct LightsManagerView: View {
     var nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
     var body: some View {
         List {
-            Section {
-                ForEach(nodes, id: \.primaryUnicastAddress.hex) { node in
-                    NavigationLink {
-                        NodeView(node: node)
-                            .navigationTitle(node.name ?? "Unknow")
-                    } label: {
-                        ItemView(resource: .meshIcon, title: node.name ?? "Unknow", detail: "Address: 0x\(node.primaryUnicastAddress.hex)")
-                    }
+            ForEach(nodes, id: \.primaryUnicastAddress.hex) { node in
+                NavigationLink {
+                    NodeView(node: node)
+                        .navigationTitle(node.name ?? "Unknow")
+                } label: {
+                    ItemView(resource: .meshIcon, title: node.name ?? "Unknow", detail: "Address: 0x\(node.primaryUnicastAddress.hex)")
                 }
-            } header: {
-                Spacer()
             }
         }
         .navigationTitle("Lights")

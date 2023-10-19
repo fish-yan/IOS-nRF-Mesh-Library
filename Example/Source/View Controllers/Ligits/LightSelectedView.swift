@@ -13,12 +13,15 @@ struct LightSelectedView: View {
     
     @Environment(\.presentationMode) var mode
     
+    var type: ElementType
+    
+    @State var multiSelected: Set<Node> = []
+    
     @State private var editMode: EditMode = .active
-    @State private var multiSelected: Set<Node> = []
-    var nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
+    var allNodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
     
     var body: some View {
-        List(nodes, id: \.self, selection: $multiSelected) { node in
+        List(allNodes, id: \.primaryUnicastAddress, selection: $multiSelected) { node in
             VStack(alignment: .leading) {
                 Text(node.name ?? "Unknow")
                     .font(.headline)
@@ -29,13 +32,18 @@ struct LightSelectedView: View {
         }
         .navigationTitle("Select Lights")
         .toolbar {
-            Button {
-                mode.wrappedValue.dismiss()
-            } label: {
+            Button(action: doneAction) {
                 Text("Done")
             }
         }
         .environment(\.editMode, $editMode)
+    }
+}
+
+extension LightSelectedView {
+    func doneAction() {
+        
+        mode.wrappedValue.dismiss()
     }
 }
 

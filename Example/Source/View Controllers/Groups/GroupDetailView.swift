@@ -9,14 +9,10 @@
 import SwiftUI
 import nRFMeshProvision
 
-struct LightDetailView: View {
+struct GroupDetailView: View {
     
-    var node: Node
-    private var onOffModel: Model?
-    private var levelModel: Model?
-    private var CCTModel: Model?
-    private var angleModel: Model?
-    
+    var group: nRFMeshProvision.Group
+        
     @State private var isOn = false
     @State private var level: Double = 0
     @State private var CCT: Double = 0
@@ -27,14 +23,9 @@ struct LightDetailView: View {
     
     private var messageManager = MeshMessageManager()
     
-    init(node: Node) {
+    init(group: nRFMeshProvision.Group) {
         
-        self.node = node
-        let models = node.primaryElement?.models ?? []
-        onOffModel = models.first(where: {$0.modelIdentifier == .genericOnOffServerModelId})
-        levelModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
-        CCTModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
-        angleModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
+        self.group = group
         
         messageManager.delegate = self
     }
@@ -69,8 +60,7 @@ struct LightDetailView: View {
             }
         }
         .buttonStyle(.borderless)
-        .navigationTitle(node.name ?? "Unknow")
-        .onAppear(perform: onAppear)
+        .navigationTitle(group.name)
         .alert("Error", isPresented: $isError) { } message: {
             Text(errorMessage)
         }
@@ -78,62 +68,38 @@ struct LightDetailView: View {
     }
 }
 
-extension LightDetailView {
-    func onAppear() {
-        messageManager.start {
-            bindApplicationKey()
-        }
-        .then {
-            guard let onOffModel else { return nil }
-            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
-        }
-        .then {
-            guard let levelModel else { return nil }
-            return try MeshNetworkManager.instance.send(GenericLevelGet(), to: levelModel)
-        }
-    }
-    
-    func bindApplicationKey()  {
-        let applicationKey = MeshNetworkManager.instance.meshNetwork!.applicationKeys.notKnownTo(node: node).filter{ self.node.knows(networkKey: $0.boundNetworkKey) }.first
-        guard let applicationKey else {
-            messageManager.done()
-            return
-        }
-        for element in node.elements {
-            element.models.forEach { model in
-                if let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
-                    messageManager.then {
-                        return try MeshNetworkManager.instance.send(message, to: self.node.primaryUnicastAddress)
-                    }
-                }
-            }
-        }
-        messageManager.done()
-    }
+extension GroupDetailView {
     
     func onOffSet(turnOn: Bool) {
-        guard let onOffModel else { return }
+        guard let applicationKey = MeshNetworkManager.instance.meshNetwork?.models(subscribedTo: group).first?.boundApplicationKeys.first else {
+            return
+        }
+
         let transitionTime = GlobalConfig.transitionTime(turnOn)
         let delay = GlobalConfig.delay(turnOn)
         let message = GenericOnOffSet(turnOn, transitionTime: transitionTime, delay: delay)
-        _ = try? MeshNetworkManager.instance.send(message, to: onOffModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group, using: applicationKey)
         
     }
     
     func levelSet(value: Double) {
-        guard let levelModel else { return }
+        guard let applicationKey = MeshNetworkManager.instance.meshNetwork?.models(subscribedTo: group).first?.boundApplicationKeys.first else {
+            return
+        }
         let percent: Double = 30
         let level = Int16(min(32767, -32768 + 655.36 * percent)) // -32768...32767
         let message = GenericLevelSet(level: level)
-        _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group, using: applicationKey)
     }
     
     func CCTSet(value: Double) {
-        guard let levelModel else { return }
+        guard let applicationKey = MeshNetworkManager.instance.meshNetwork?.models(subscribedTo: group).first?.boundApplicationKeys.first else {
+            return
+        }
         let percent: Double = 30
         let level = Int16(min(32767, -32768 + 655.36 * percent)) // -32768...32767
         let message = GenericLevelSet(level: level)
-        _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group, using: applicationKey)
     }
     
     func directionSet(value: Direction) {
@@ -149,7 +115,7 @@ extension LightDetailView {
     }
 }
 
-extension LightDetailView: MeshMessageDelegate {
+extension GroupDetailView: MeshMessageDelegate {
     
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
         switch message {

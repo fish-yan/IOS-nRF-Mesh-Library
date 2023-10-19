@@ -9,19 +9,18 @@
 import SwiftUI
 
 struct SliderView: View {
-    @State var value: Double = 0
+    @Binding var value: Double
     var title: String = ""
-    var range: ClosedRange<Double> = 0...100
+    var range: ClosedRange<Double> = 0...4
+    var onEditingChanged: (Bool) -> Void = { _ in }
     var body: some View {
         VStack(alignment: .leading, content: {
             Text(title)
-            Slider(value: $value, in: range) { isEditing in
-                print(isEditing)
+            Slider(value: $value, in: range, step: 1) { isEditing in
+                debouncer.call {
+                    onEditingChanged(isEditing)
+                }
             }
         })
     }
-}
-
-#Preview {
-    SliderView()
 }

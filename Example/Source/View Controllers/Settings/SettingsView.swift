@@ -30,6 +30,7 @@ struct SettingsView: View {
     private func itemView(title: String, image: String, color: Color) -> some View {
         HStack {
             Image(systemName: image)
+                .font(.headline)
                 .foregroundColor(.white)
                 .frame(width: 28, height: 28)
                 .background(color)

@@ -16,7 +16,7 @@ struct GroupsView: View {
         NavigationView {
             List {
                 ForEach(groups, id: \.address) { group in
-                    NavigationLink(destination: LightDetailView(title: group.name)) {
+                    NavigationLink(destination: GroupDetailView(group: group)) {
                         ItemView(resource: .meshGroup, title: group.name, detail: "Address: 0x\(group.address.hex)")
                     }
                 }

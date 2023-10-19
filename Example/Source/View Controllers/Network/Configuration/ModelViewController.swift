@@ -683,7 +683,7 @@ private extension ModelViewController {
             return nil
         }
         guard let node = model.parentElement?.parentNode,
-              let key = node.applicationKeysAvailableFor(model).first else {
+              let key = node.applicationKeys(availableForModel: model).first else {
             throw MeshNetworkError.noApplicationKey
         }
         let message = ConfigModelAppBind(applicationKey: key, to: model)!

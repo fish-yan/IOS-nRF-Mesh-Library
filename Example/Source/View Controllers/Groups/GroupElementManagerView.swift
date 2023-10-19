@@ -10,12 +10,13 @@ import SwiftUI
 import nRFMeshProvision
 struct GroupElementManagerView: View {
     var group: nRFMeshProvision.Group
-   
+    
+    @State var elementMap: [ElementType: [Model]] = [:]
+    
     @State var isDone = false
     var body: some View {
         List(ElementType.allCases, id: \.self) { type in
-            ElementView(type: type)
-            
+            ElementView(type: type, model: elementMap[type] ?? [])
         }
         .navigationTitle(group.name)
         .toolbar {
@@ -26,14 +27,39 @@ struct GroupElementManagerView: View {
                 Image(systemName: "pencil.line")
             }
         }
-    }    
+        .onAppear(perform: onAppear)
+    }
+}
+
+extension GroupElementManagerView {
+    func onAppear() {
+        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
+            return
+        }
+        meshNetwork.models(subscribedTo: group).forEach({ model in
+            if let type = ElementType(rawValue: model.modelIdentifier) {
+                if var models = elementMap[type] {
+                    models.append(model)
+                    elementMap[type] = models
+                } else {
+                    let models = [model]
+                    elementMap[type] = models
+                }
+            }
+        })
+    }
 }
 
 struct ElementView: View {
     @State private var isActive: Bool = false
     var type: ElementType
+    var models: [Model]
+    private var nodes: Set<Node> {
+        let arr = models.compactMap { $0.parentElement?.parentNode }
+        return Set(arr)
+    }
     var body: some View {
-        NavigationLink(destination: LightSelectedView(), isActive: $isActive) {
+        NavigationLink(destination: LightSelectedView(type: type, multiSelected: nodes), isActive: $isActive) {
             HStack {
                 Image(systemName: type.image)
                     .foregroundColor(.white)
@@ -48,7 +74,7 @@ struct ElementView: View {
     }
 }
  
-enum ElementType: CaseIterable {
+enum ElementType: UInt16, CaseIterable {
     case onOff, level, cct, angle
     
     var image: String {
@@ -74,6 +100,25 @@ enum ElementType: CaseIterable {
         case .level: .blue
         case .cct: .yellow
         case .angle: .gray
+        }
+    }
+    
+    var modelId: UInt16 {
+        switch self {
+        case .onOff: .genericOnOffServerModelId
+        case .level: .genericLevelServerModelId
+        case .cct: .genericLevelServerModelId
+        case .angle: .genericLevelServerModelId
+        }
+    }
+    
+    init?(rawValue: UInt16) {
+        switch rawValue {
+        case .genericOnOffServerModelId: self = .onOff
+        case .genericLevelServerModelId: self = .level
+        case .genericLevelServerModelId: self = .cct
+        case .genericLevelServerModelId: self = .angle
+        default: return nil
         }
     }
 }
