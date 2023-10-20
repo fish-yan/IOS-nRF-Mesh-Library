@@ -9,22 +9,25 @@
 import SwiftUI
 import nRFMeshProvision
 
+class LightDetailStore: ObservableObject {
+    @Published var isOn = false
+    @Published var level: Double = 100
+    @Published var CCT: Double = 0
+    @Published var directions: CGPoint = .zero
+    @Published var isError: Bool = false
+    @Published var error: LightDetailView.ErrorType = .none
+}
+
 struct LightDetailView: View {
-    
+    @Environment(\.dismiss) var dismiss
     var node: Node
     private var onOffModel: Model?
     private var levelModel: Model?
     private var CCTModel: Model?
     private var angleModel: Model?
     
-    @State private var isOn = false
-    @State private var level: Double = 0
-    @State private var CCT: Double = 0
-    @State private var directions: CGPoint = .zero
-    
-    @State private var isError: Bool = false
-    @State private var errorMessage: String = "Error"
-    
+    @ObservedObject var store = LightDetailStore()
+
     private var messageManager = MeshMessageManager()
     
     init(node: Node) {
@@ -43,24 +46,24 @@ struct LightDetailView: View {
         List {
             Section {
                 Button {
-                    onOffSet(turnOn: isOn)
+                    onOffSet()
                 } label: {
                     Image(systemName: "power.circle.fill")
                         .resizable()
                         .frame(width: 80, height: 80)
-                        .tint(isOn ? .orange : .gray.opacity(0.5))
+                        .tint(store.isOn ? .orange : .gray.opacity(0.5))
                         .background(.clear)
                 }
                 .frame(maxWidth: .infinity, minHeight: 100)
             }
             
             Section {
-                SliderView(value: $level, title: "亮度调节") { isEditing in
-                    levelSet(value: level)
+                SliderView(value: $store.level, title: "亮度调节") { isEditing in
+                    levelSet()
                 }
                 
-                SliderView(value: $CCT, title: "色温调节") { isEditing in
-                    CCTSet(value: CCT)
+                SliderView(value: $store.CCT, title: "色温调节") { isEditing in
+                    CCTSet()
                 }
             }
             
@@ -71,15 +74,27 @@ struct LightDetailView: View {
         .buttonStyle(.borderless)
         .navigationTitle(node.name ?? "Unknow")
         .onAppear(perform: onAppear)
-        .alert("Error", isPresented: $isError) { } message: {
-            Text(errorMessage)
+        .alert("Error", isPresented: $store.isError) {
+            Button("OK") {
+                switch store.error {
+                case .bearerError:
+                    dismiss.callAsFunction()
+                default: break
+                }
+            }
+        } message: {
+            Text(store.error.message)
         }
-
     }
 }
 
 extension LightDetailView {
     func onAppear() {
+        guard MeshNetworkManager.bearer.isConnected else {
+            store.isError = true
+            store.error = .bearerError
+            return
+        }
         messageManager.start {
             bindApplicationKey()
         }
@@ -111,41 +126,44 @@ extension LightDetailView {
         messageManager.done()
     }
     
-    func onOffSet(turnOn: Bool) {
+    func onOffSet() {
         guard let onOffModel else { return }
-        let transitionTime = GlobalConfig.transitionTime(turnOn)
-        let delay = GlobalConfig.delay(turnOn)
-        let message = GenericOnOffSet(turnOn, transitionTime: transitionTime, delay: delay)
+        let transitionTime = GlobalConfig.transitionTime(!store.isOn)
+        let delay = GlobalConfig.delay(!store.isOn)
+        let message = GenericOnOffSet(!store.isOn, transitionTime: transitionTime, delay: delay)
         _ = try? MeshNetworkManager.instance.send(message, to: onOffModel)
         
     }
     
-    func levelSet(value: Double) {
+    func levelSet() {
         guard let levelModel else { return }
-        let percent: Double = 30
-        let level = Int16(min(32767, -32768 + 655.36 * percent)) // -32768...32767
+        let index = Int(store.level)
+        let levels = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
+        let value = levels[index]
+        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
         let message = GenericLevelSet(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
     }
     
-    func CCTSet(value: Double) {
+    func CCTSet() {
         guard let levelModel else { return }
-        let percent: Double = 30
-        let level = Int16(min(32767, -32768 + 655.36 * percent)) // -32768...32767
+        let index = Int(store.level)
+        let value = 30.0
+        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
         let message = GenericLevelSet(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
     }
     
     func directionSet(value: Direction) {
-        var x = directions.x
-        var y = directions.y
+        var x = store.directions.x
+        var y = store.directions.y
         switch value {
         case .up: y += 1
         case .left: x -= 1
         case .down: y -= 1
         case .right: x += 1
         }
-        directions = CGPoint(x: x, y: y)
+        store.directions = CGPoint(x: x, y: y)
     }
 }
 
@@ -154,10 +172,18 @@ extension LightDetailView: MeshMessageDelegate {
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
         switch message {
         case let status as GenericOnOffStatus:
-            isOn = status.isOn
+            store.isOn = status.isOn
         case let status as GenericLevelStatus:
-            let l = floorf(0.1 + (Float(status.level) + 32768.0) / 655.35)
-            level = Double(l)
+            let level = floorf(0.1 + (Float(status.level) + 32768.0) / 655.35)
+            if abs(Double(level) - GlobalConfig.level1) < 5 {
+                store.level = 2
+            } else if abs(Double(level) - GlobalConfig.level2) < 5 {
+                store.level = 1
+            } else if abs(Double(level) - GlobalConfig.level3) < 5 {
+                store.level = 0
+            } else {
+                store.level = 3
+            }
         default: break
         }
     }
@@ -167,8 +193,27 @@ extension LightDetailView: MeshMessageDelegate {
     }
     
     func meshNetworkManager(_ manager: MeshNetworkManager, failedToSendMessage message: MeshMessage, from localElement: Element, to destination: MeshAddress, error: Error) {
-        errorMessage = error.localizedDescription
-        isError = true
+        store.error = .messageError(error.localizedDescription)
+        store.isError = true
     }
     
+}
+
+extension LightDetailView {
+    enum ErrorType {
+        case none
+        case messageError(_ value: String)
+        case bearerError
+        
+        var message: String {
+            switch self {
+            case .none:
+                ""
+            case .messageError(let value):
+                value
+            case .bearerError:
+                "bearer is not connected"
+            }
+        }
+    }
 }

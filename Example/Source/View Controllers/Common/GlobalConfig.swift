@@ -17,4 +17,25 @@ struct GlobalConfig {
     static func delay(_ isOn: Bool) -> UInt8 {
         isOn ? LocalStorage.onDelay : LocalStorage.offDelay
     }
+    
+    static var userRole: UserRole {
+        UserRole(rawValue: LocalStorage.userRole) ?? .normal
+    }
+        
+    static var level1: Double {
+        LocalStorage.level1
+    }
+    static var level2: Double {
+        LocalStorage.level2
+    }
+    static var level3: Double {
+        LocalStorage.level3
+    }
+
+}
+
+enum UserRole: String, CaseIterable {
+    case normal
+    case supervisor
+    case commissioner
 }

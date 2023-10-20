@@ -15,7 +15,7 @@ struct SceneLightsView: View {
     var body: some View {
         List {
             ForEach(nodes, id: \.primaryUnicastAddress.hex) { node in
-                NavigationLink(destination: LightDetailView()) {
+                NavigationLink(destination: LightDetailView(node: node)) {
                     ItemView(resource: .meshIcon, title: node.name ?? "Unknow", detail: "Address: 0x\(node.primaryUnicastAddress.hex)")
                 }
             }

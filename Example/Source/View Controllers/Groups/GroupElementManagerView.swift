@@ -16,7 +16,7 @@ struct GroupElementManagerView: View {
     @State var isDone = false
     var body: some View {
         List(ElementType.allCases, id: \.self) { type in
-            ElementView(type: type, model: elementMap[type] ?? [])
+            ElementView(type: type, models: elementMap[type] ?? [])
         }
         .navigationTitle(group.name)
         .toolbar {

@@ -11,7 +11,7 @@ import nRFMeshProvision
 
 struct LightSelectedView: View {
     
-    @Environment(\.presentationMode) var mode
+    @Environment(\.dismiss) var dismiss
     
     var type: ElementType
     
@@ -43,7 +43,7 @@ struct LightSelectedView: View {
 extension LightSelectedView {
     func doneAction() {
         
-        mode.wrappedValue.dismiss()
+        dismiss.callAsFunction()
     }
 }
 

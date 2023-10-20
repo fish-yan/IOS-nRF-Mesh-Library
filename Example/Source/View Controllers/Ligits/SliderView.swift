@@ -11,7 +11,7 @@ import SwiftUI
 struct SliderView: View {
     @Binding var value: Double
     var title: String = ""
-    var range: ClosedRange<Double> = 0...4
+    var range: ClosedRange<Double> = 0...3
     var onEditingChanged: (Bool) -> Void = { _ in }
     var body: some View {
         VStack(alignment: .leading, content: {
