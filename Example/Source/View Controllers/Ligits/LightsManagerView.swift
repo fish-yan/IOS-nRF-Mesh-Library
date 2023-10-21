@@ -11,7 +11,7 @@ import nRFMeshProvision
 
 struct LightsManagerView: View {
     @State private var add = false
-    var nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
+    @State var nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
     var body: some View {
         List {
             ForEach(nodes, id: \.primaryUnicastAddress.hex) { node in
@@ -31,6 +31,9 @@ struct LightsManagerView: View {
             } label: {
                 Image(systemName: "plus")
             }
+        }
+        .onAppear {
+            nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
         }
     }
 }

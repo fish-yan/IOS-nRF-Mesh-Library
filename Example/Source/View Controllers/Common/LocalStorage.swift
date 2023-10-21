@@ -54,6 +54,7 @@ struct LocalStorage {
     @Localed(.offTransitionSteps) static var offTransitionSteps: UInt8 = 0
     @Localed(.onDelay) static var onDelay: UInt8 = 0
     @Localed(.offDelay) static var offDelay: UInt8 = 0
+    @Localed(.level0) static var level0: Double = 100
     @Localed(.level1) static var level1: Double = 75
     @Localed(.level2) static var level2: Double = 50
     @Localed(.level3) static var level3: Double = 25
@@ -64,6 +65,7 @@ struct LocalStorage {
         case offTransitionSteps
         case onDelay
         case offDelay
+        case level0
         case level1
         case level2
         case level3

@@ -15,6 +15,7 @@
 		2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277032AD794920062CACD /* GroupsHostViewController.swift */; };
 		2C2277062AD794C10062CACD /* GroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277052AD794C10062CACD /* GroupsView.swift */; };
 		2C32D7372ADAE2E600915E1D /* MeshMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */; };
+		2C77CAA02AE2C5E80013C697 /* SceneLightDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C77CA9F2AE2C5E80013C697 /* SceneLightDetailView.swift */; };
 		2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C798F152ABDD85600156CAA /* LightsManagerView.swift */; };
 		2C8C0C262ABF0FC100BC0156 /* GroupsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */; };
 		2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C292ABF132800BC0156 /* ItemView.swift */; };
@@ -232,6 +233,7 @@
 		2C2277032AD794920062CACD /* GroupsHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsHostViewController.swift; sourceTree = "<group>"; };
 		2C2277052AD794C10062CACD /* GroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsView.swift; sourceTree = "<group>"; };
 		2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessageManager.swift; sourceTree = "<group>"; };
+		2C77CA9F2AE2C5E80013C697 /* SceneLightDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLightDetailView.swift; sourceTree = "<group>"; };
 		2C798F152ABDD85600156CAA /* LightsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsManagerView.swift; sourceTree = "<group>"; };
 		2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsManagerView.swift; sourceTree = "<group>"; };
 		2C8C0C292ABF132800BC0156 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
@@ -483,6 +485,7 @@
 				2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */,
 				2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */,
 				2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */,
+				2C77CA9F2AE2C5E80013C697 /* SceneLightDetailView.swift */,
 				2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */,
 			);
 			path = Scenes;
@@ -1330,6 +1333,7 @@
 				2C2277062AD794C10062CACD /* GroupsView.swift in Sources */,
 				523F776C22C6324A0030EA6A /* ProgressViewController.swift in Sources */,
 				52547F25232A3F470002AA7B /* EditProvisionerViewController.swift in Sources */,
+				2C77CAA02AE2C5E80013C697 /* SceneLightDetailView.swift in Sources */,
 				5245737D2500E12600CF8500 /* EditSceneViewController.swift in Sources */,
 				5288C2102371B0F700321ED3 /* SimpleOnOffGet.swift in Sources */,
 				529B756D223FE7F1008F1CE7 /* RootViewController.swift in Sources */,

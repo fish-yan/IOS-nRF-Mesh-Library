@@ -12,16 +12,14 @@ import nRFMeshProvision
 struct LightSelectedView: View {
     
     @Environment(\.dismiss) var dismiss
-    
-    var type: ElementType
-    
+        
     @State var multiSelected: Set<Node> = []
     
     @State private var editMode: EditMode = .active
     var allNodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
     
     var body: some View {
-        List(allNodes, id: \.primaryUnicastAddress, selection: $multiSelected) { node in
+        List(allNodes, id: \.self, selection: $multiSelected) { node in
             VStack(alignment: .leading) {
                 Text(node.name ?? "Unknow")
                     .font(.headline)

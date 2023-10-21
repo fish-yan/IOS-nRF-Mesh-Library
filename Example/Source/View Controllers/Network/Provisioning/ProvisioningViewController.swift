@@ -405,13 +405,27 @@ extension ProvisioningViewController: GattBearerDelegate {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 if MeshNetworkManager.instance.save() {
-                    self.dismiss(animated: true) { [weak self] in
-                        self?.dismiss(animated: true) { [weak self] in
-                            guard let self = self else { return }
-                            let network = MeshNetworkManager.instance.meshNetwork!
-                            if let node = network.node(for: self.unprovisionedDevice) {
-                                self.delegate?.provisionerDidProvisionNewDevice(node, whichReplaced: self.previousNode)
+                    if self.presentingViewController != nil {
+                        self.dismiss(animated: true) { [weak self] in
+                            self?.dismiss(animated: true) { [weak self] in
+                                guard let self = self else { return }
+                                let network = MeshNetworkManager.instance.meshNetwork!
+                                if let node = network.node(for: self.unprovisionedDevice) {
+                                    self.delegate?.provisionerDidProvisionNewDevice(node, whichReplaced: self.previousNode)
+                                }
                             }
+                        }
+                    } else {
+                        
+                        let network = MeshNetworkManager.instance.meshNetwork!
+                        if let node = network.node(for: self.unprovisionedDevice) {
+                            let nodeVc = UIStoryboard(name: "Network", bundle: nil).instantiateViewController(identifier: "NodeViewController") as! NodeViewController
+                            nodeVc.node = node
+                            nodeVc.originalNode = self.previousNode
+                            self.navigationController?.pushViewController(nodeVc, animated: true)
+                            var vcs = self.navigationController?.viewControllers ?? []
+                            vcs.removeAll { $0 is ScannerTableViewController || $0 is ProvisioningViewController }
+                            self.navigationController?.viewControllers = vcs
                         }
                     }
                 } else {

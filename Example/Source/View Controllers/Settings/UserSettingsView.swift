@@ -13,7 +13,7 @@ struct UserSettingsView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var selectionRole: UserRole = GlobalConfig.userRole
-    
+    @State var l0Text: String = String(format: "%.f", GlobalConfig.level0)
     @State var l1Text: String = String(format: "%.f", GlobalConfig.level1)
     @State var l2Text: String = String(format: "%.f", GlobalConfig.level2)
     @State var l3Text: String = String(format: "%.f", GlobalConfig.level3)
@@ -54,20 +54,11 @@ struct UserSettingsView: View {
                                 .opacity(role == selectionRole ? 1 : 0)
                         }
                     }
-                    .alert("Please enter code", isPresented: $isPresented) {
-                        SecureField("enter code", text: $code)
-                        Button("OK", action: checkCode)
-                        Button("Cancel", role: .cancel){}
-                    }
-                    .alert("Error", isPresented: $isErrorPresented) {
-                        Button("OK", role: .cancel){}
-                    } message: {
-                        Text(errorMessage)
-                    }
                 }
             }
             if selectionRole == .supervisor || selectionRole == .commissioner {
                 Section {
+                    UserSettingsItem(title: "L0", text: $l0Text, unit: "%")
                     UserSettingsItem(title: "L1", text: $l1Text, unit: "%")
                     UserSettingsItem(title: "L2", text: $l2Text, unit: "%")
                     UserSettingsItem(title: "L3", text: $l3Text, unit: "%")
@@ -88,11 +79,7 @@ struct UserSettingsView: View {
             if selectionRole == .commissioner {
                 Section {
                     Button("Reset") { isNetworkResetPresented = true }
-                }
-                .alert("Reset Network", isPresented: $isNetworkResetPresented) {
-                    Button("Reset", role: .destructive, action: reset)
-                } message: {
-                    Text("Resetting the network will erase all network data.\nMake sure you exported it first.")
+                        .tint(Color.red)
                 }
             }
         }
@@ -100,11 +87,41 @@ struct UserSettingsView: View {
         .toolbar {
             Button("Save", action: save)
         }
+        .onAppear(perform: onAppear)
+        .alert("Please enter code", isPresented: $isPresented) {
+            SecureField("enter code", text: $code)
+            Button("OK", action: checkCode)
+            Button("Cancel", role: .cancel){}
+        }
+        .alert("Error", isPresented: $isErrorPresented) {
+            Button("OK", role: .cancel){}
+        } message: {
+            Text(errorMessage)
+        }
+        .alert("Reset Network", isPresented: $isNetworkResetPresented) {
+            Button("Reset", role: .destructive, action: reset)
+        } message: {
+            Text("Resetting the network will erase all network data.\nMake sure you exported it first.")
+        }
         
     }    
 }
 
 private extension UserSettingsView {
+    func onAppear() {
+        selectionRole = GlobalConfig.userRole
+        
+        l0Text = String(format: "%.f", GlobalConfig.level0)
+        l1Text = String(format: "%.f", GlobalConfig.level1)
+        l2Text = String(format: "%.f", GlobalConfig.level2)
+        l3Text = String(format: "%.f", GlobalConfig.level3)
+        
+        onDelayTime = String(format: "%d", LocalStorage.onDelay)
+        offDelayTime = String(format: "%d", LocalStorage.offDelay)
+        onTransitionTime = String(format: "%d", LocalStorage.onTransitionSteps)
+        offTransitionTime = String(format: "%d", LocalStorage.offTransitionSteps)
+    }
+    
     func checkCode() {
         if prepareRole == .supervisor {
             if code == "666666" {
@@ -127,6 +144,7 @@ private extension UserSettingsView {
     
     func save() {
         LocalStorage.userRole = selectionRole.rawValue
+        LocalStorage.level0 = Double(l0Text) ?? 0
         LocalStorage.level1 = Double(l1Text) ?? 0
         LocalStorage.level2 = Double(l2Text) ?? 0
         LocalStorage.level3 = Double(l3Text) ?? 0
@@ -210,7 +228,7 @@ struct UserSettingsItem: View {
             TextField("0", text: $text)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .multilineTextAlignment(.center)
-                .frame(width: 40)
+                .frame(width: 50)
                 .keyboardType(.numberPad)
             Text(unit)
         }

@@ -61,10 +61,7 @@ struct AddSceneView: UIViewControllerRepresentable {
     var scene: nRFMeshProvision.Scene?
     func makeUIViewController(context: Context) -> EditSceneViewController {
         let addSceneVc = UIStoryboard(name: "Settings", bundle: nil).instantiateViewController(identifier: "EditSceneViewController") as! EditSceneViewController
-        addSceneVc.view.frame = UIScreen.main.bounds
-        if let scene {
-            addSceneVc.scene = scene
-        }
+        addSceneVc.scene = scene
         return addSceneVc
     }
     

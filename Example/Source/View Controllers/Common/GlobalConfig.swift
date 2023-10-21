@@ -21,7 +21,10 @@ struct GlobalConfig {
     static var userRole: UserRole {
         UserRole(rawValue: LocalStorage.userRole) ?? .normal
     }
-        
+       
+    static var level0: Double {
+        LocalStorage.level0
+    }
     static var level1: Double {
         LocalStorage.level1
     }

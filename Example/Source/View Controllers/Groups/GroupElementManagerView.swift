@@ -59,7 +59,7 @@ struct ElementView: View {
         return Set(arr)
     }
     var body: some View {
-        NavigationLink(destination: LightSelectedView(type: type, multiSelected: nodes), isActive: $isActive) {
+        NavigationLink(destination: LightSelectedView(multiSelected: nodes), isActive: $isActive) {
             HStack {
                 Image(systemName: type.image)
                     .foregroundColor(.white)

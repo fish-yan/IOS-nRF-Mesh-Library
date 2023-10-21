@@ -10,7 +10,8 @@ import SwiftUI
 import nRFMeshProvision
 
 struct LightsView: View {
-    var nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
+    @State var nodes: [Node] = []
+    @State private var isShowSetting = false
     var body: some View {
         NavigationView {
             List {
@@ -25,6 +26,11 @@ struct LightsView: View {
                 NavigationLink(destination: LightsManagerView()) {
                     Image(systemName: "gearshape")
                 }
+                .opacity(isShowSetting ? 1 : 0)
+            }
+            .onAppear {
+                isShowSetting = GlobalConfig.userRole != .normal
+                nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
             }
         }
     }

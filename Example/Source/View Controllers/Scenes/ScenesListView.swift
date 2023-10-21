@@ -11,6 +11,7 @@ import nRFMeshProvision
 
 struct ScenesListView: View {
     @State private var scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
+    @State private var isShowSetting = false
     var body: some View {
         NavigationView {
             List {
@@ -28,9 +29,11 @@ struct ScenesListView: View {
                 NavigationLink(destination: ScenesManagerView()) {
                     Image(systemName: "gearshape")
                 }
+                .opacity(isShowSetting ? 1 : 0)
             }
             .onAppear {
                 scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
+                isShowSetting = GlobalConfig.userRole != .normal
             }
         }
     }

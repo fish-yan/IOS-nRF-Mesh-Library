@@ -12,6 +12,7 @@ import nRFMeshProvision
 struct GroupsView: View {
     @State private var groups = MeshNetworkManager.instance.meshNetwork?.groups ?? []
     @State private var addDone: Bool = false
+    @State private var isShowSetting = false
     var body: some View {
         NavigationView {
             List {
@@ -26,9 +27,11 @@ struct GroupsView: View {
                 NavigationLink(destination: GroupsManagerView()) {
                     Image(systemName: "gearshape")
                 }
+                .opacity(isShowSetting ? 1 : 0)
             }
             .onAppear {
                 groups = MeshNetworkManager.instance.meshNetwork?.groups ?? []
+                isShowSetting = GlobalConfig.userRole != .normal
             }
         }
     }

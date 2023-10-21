@@ -21,25 +21,17 @@ class LightDetailStore: ObservableObject {
 struct LightDetailView: View {
     @Environment(\.dismiss) var dismiss
     var node: Node
-    private var onOffModel: Model?
-    private var levelModel: Model?
-    private var CCTModel: Model?
-    private var angleModel: Model?
+    @State private var onOffModel: Model?
+    @State private var levelModel: Model?
+    @State private var CCTModel: Model?
+    @State private var angleModel: Model?
     
     @ObservedObject var store = LightDetailStore()
 
     private var messageManager = MeshMessageManager()
     
     init(node: Node) {
-        
         self.node = node
-        let models = node.primaryElement?.models ?? []
-        onOffModel = models.first(where: {$0.modelIdentifier == .genericOnOffServerModelId})
-        levelModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
-        CCTModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
-        angleModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
-        
-        messageManager.delegate = self
     }
     
     var body: some View {
@@ -58,11 +50,11 @@ struct LightDetailView: View {
             }
             
             Section {
-                SliderView(value: $store.level, title: "亮度调节") { isEditing in
+                SliderView(value: $store.level, title: "Level") { isEditing in
                     levelSet()
                 }
                 
-                SliderView(value: $store.CCT, title: "色温调节") { isEditing in
+                SliderView(value: $store.CCT, title: "CCT") { isEditing in
                     CCTSet()
                 }
             }
@@ -90,15 +82,20 @@ struct LightDetailView: View {
 
 extension LightDetailView {
     func onAppear() {
+        messageManager.delegate = self
+        let models = node.primaryElement?.models ?? []
+        onOffModel = models.first(where: {$0.modelIdentifier == .genericOnOffServerModelId})
+        levelModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
+        CCTModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
+        angleModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
+        print(node.elements.flatMap({$0.models}))
         guard MeshNetworkManager.bearer.isConnected else {
-            store.isError = true
-            store.error = .bearerError
             return
         }
+//        messageManager.start {
+//            bindApplicationKey()
+//        }
         messageManager.start {
-            bindApplicationKey()
-        }
-        .then {
             guard let onOffModel else { return nil }
             return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
         }
@@ -116,7 +113,8 @@ extension LightDetailView {
         }
         for element in node.elements {
             element.models.forEach { model in
-                if let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
+                if model.boundApplicationKeys.isEmpty,
+                   let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
                     messageManager.then {
                         return try MeshNetworkManager.instance.send(message, to: self.node.primaryUnicastAddress)
                     }
@@ -127,6 +125,11 @@ extension LightDetailView {
     }
     
     func onOffSet() {
+        guard MeshNetworkManager.bearer.isConnected else {
+            store.isError = true
+            store.error = .bearerError
+            return
+        }
         guard let onOffModel else { return }
         let transitionTime = GlobalConfig.transitionTime(!store.isOn)
         let delay = GlobalConfig.delay(!store.isOn)
@@ -136,6 +139,11 @@ extension LightDetailView {
     }
     
     func levelSet() {
+        guard MeshNetworkManager.bearer.isConnected else {
+            store.isError = true
+            store.error = .bearerError
+            return
+        }
         guard let levelModel else { return }
         let index = Int(store.level)
         let levels = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
@@ -146,6 +154,11 @@ extension LightDetailView {
     }
     
     func CCTSet() {
+        guard MeshNetworkManager.bearer.isConnected else {
+            store.isError = true
+            store.error = .bearerError
+            return
+        }
         guard let levelModel else { return }
         let index = Int(store.level)
         let value = 30.0
@@ -155,6 +168,11 @@ extension LightDetailView {
     }
     
     func directionSet(value: Direction) {
+        guard MeshNetworkManager.bearer.isConnected else {
+            store.isError = true
+            store.error = .bearerError
+            return
+        }
         var x = store.directions.x
         var y = store.directions.y
         switch value {
