@@ -344,7 +344,7 @@ extension ScannerTableViewController: CBCentralManagerDelegate {
                 // If so, just update the RSSI value.
                 discoveredPeripherals[index].rssi[bearerIndex] = RSSI
             } else {
-                // If the PB GATT Bearer doesn't exist, add it and corrsponding RSSI value.
+                // If the PB GATT Bearer doesn't exist, add it and corresponding RSSI value.
                 let bearer = PBGattBearer(target: peripheral)
                 bearer.logger = MeshNetworkManager.instance.logger
                 discoveredPeripherals[index].bearer.append(bearer)
@@ -400,9 +400,9 @@ extension ScannerTableViewController: GattBearerDelegate {
     
     func bearer(_ bearer: Bearer, didClose error: Error?) {
         DispatchQueue.main.async {
-            self.alert?.message = "Device disconnected"
-            self.alert?.dismiss(animated: true)
-            self.alert = nil
+            self.alert?.dismiss(animated: true) {
+                self.presentAlert(title: "Status", message: error?.localizedDescription ?? "Device disconnected", cancelable: false)
+            }
             self.selectedDevice = nil
             self.startScanning()
         }
