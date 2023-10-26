@@ -634,6 +634,8 @@ extension ModelViewController: ModelViewCellDelegate {
                 return try MeshNetworkManager.instance.send(request, to: model)
             case let command as UnacknowledgedMeshMessage:
                 return try MeshNetworkManager.instance.send(command, to: model)
+            case let command as RuntimeVendorMessage:
+                return try MeshNetworkManager.instance.send(command, to: model)
             default:
                 return nil
             }

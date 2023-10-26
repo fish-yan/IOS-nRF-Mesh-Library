@@ -16,6 +16,9 @@ struct LightSelectedView: View {
     @State var multiSelected: Set<Node> = []
     
     @State private var editMode: EditMode = .active
+    
+    var doneCallback: ((Set<Node>) -> Void)?
+    
     var allNodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
     
     var body: some View {
@@ -40,7 +43,7 @@ struct LightSelectedView: View {
 
 extension LightSelectedView {
     func doneAction() {
-        
+        doneCallback?(multiSelected)
         dismiss.callAsFunction()
     }
 }

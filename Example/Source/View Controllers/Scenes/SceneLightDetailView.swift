@@ -56,10 +56,8 @@ struct SceneLightDetailView: View {
                 SliderView(value: $store.CCT, title: "CCT") { isEditing in
                     
                 }
-            }
-            
-            Section {
-                DirectionControlView { direction in
+                
+                SliderView(value: $store.angle, title: "Angle") { isEditing in
                     
                 }
             }

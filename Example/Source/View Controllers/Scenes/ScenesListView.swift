@@ -33,7 +33,7 @@ struct ScenesListView: View {
             }
             .onAppear {
                 scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
-                isShowSetting = GlobalConfig.userRole != .normal
+                isShowSetting = GlobalConfig.isShowSetting
             }
         }
     }

@@ -23,7 +23,7 @@ struct LightsManagerView: View {
                 }
             }
         }
-        .navigationTitle("Lights")
+        .navigationTitle("Lights Manager")
         .toolbar {
             NavigationLink {
                 ScanDeviceView()

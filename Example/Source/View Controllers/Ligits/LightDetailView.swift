@@ -13,7 +13,9 @@ class LightDetailStore: ObservableObject {
     @Published var isOn = false
     @Published var level: Double = 100
     @Published var CCT: Double = 0
-    @Published var directions: CGPoint = .zero
+    @Published var angle: Double = 0
+    @Published var isAi: Bool = true
+    @Published var isSensor: Bool = true
     @Published var isError: Bool = false
     @Published var error: LightDetailView.ErrorType = .none
 }
@@ -23,8 +25,7 @@ struct LightDetailView: View {
     var node: Node
     @State private var onOffModel: Model?
     @State private var levelModel: Model?
-    @State private var CCTModel: Model?
-    @State private var angleModel: Model?
+    @State private var vendor: Model?
     
     @ObservedObject var store = LightDetailStore()
 
@@ -50,6 +51,17 @@ struct LightDetailView: View {
             }
             
             Section {
+                Toggle("AI", isOn: $store.isAi)
+                    .onChange(of: store.isAi) { value in
+                        aiSet()
+                    }
+                Toggle("Sensor", isOn: $store.isSensor)
+                    .onChange(of: store.isSensor) { value in
+                        sensorSet()
+                    }
+            }
+            
+            Section {
                 SliderView(value: $store.level, title: "Level") { isEditing in
                     levelSet()
                 }
@@ -57,10 +69,10 @@ struct LightDetailView: View {
                 SliderView(value: $store.CCT, title: "CCT") { isEditing in
                     CCTSet()
                 }
-            }
-            
-            Section {
-                DirectionControlView(onChange: directionSet)
+                
+                SliderView(value: $store.angle, title: "Angle") { isEditing in
+                    angleSet()
+                }
             }
         }
         .buttonStyle(.borderless)
@@ -83,45 +95,35 @@ struct LightDetailView: View {
 extension LightDetailView {
     func onAppear() {
         messageManager.delegate = self
-        let models = node.primaryElement?.models ?? []
-        onOffModel = models.first(where: {$0.modelIdentifier == .genericOnOffServerModelId})
-        levelModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
-        CCTModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
-        angleModel = models.first(where: {$0.modelIdentifier == .genericLevelServerModelId})
-        print(node.elements.flatMap({$0.models}))
+        onOffModel = node.primaryElement?.model(withSigModelId: .genericOnOffServerModelId)
+        levelModel = node.primaryElement?.model(withSigModelId: .genericLevelServerModelId)
+        vendor = node.primaryElement?.filteredModels().first(where: { $0.isVendor })
         guard MeshNetworkManager.bearer.isConnected else {
             return
         }
-//        messageManager.start {
-//            bindApplicationKey()
-//        }
-        messageManager.start {
+        bindApplicationKey()
+        messageManager.add {
             guard let onOffModel else { return nil }
             return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
         }
-        .then {
+        .add {
             guard let levelModel else { return nil }
             return try MeshNetworkManager.instance.send(GenericLevelGet(), to: levelModel)
         }
     }
     
     func bindApplicationKey()  {
-        let applicationKey = MeshNetworkManager.instance.meshNetwork!.applicationKeys.notKnownTo(node: node).filter{ self.node.knows(networkKey: $0.boundNetworkKey) }.first
-        guard let applicationKey else {
-            messageManager.done()
+        guard let applicationKey = MeshNetworkManager.instance.meshNetwork?.applicationKey else {
             return
         }
-        for element in node.elements {
-            element.models.forEach { model in
-                if model.boundApplicationKeys.isEmpty,
-                   let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
-                    messageManager.then {
-                        return try MeshNetworkManager.instance.send(message, to: self.node.primaryUnicastAddress)
-                    }
+        for model in (node.primaryElement?.filteredModels() ?? []) {
+            if model.boundApplicationKeys.isEmpty,
+               let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
+                messageManager.add {
+                    return try MeshNetworkManager.instance.send(message, to: self.node.primaryUnicastAddress)
                 }
             }
         }
-        messageManager.done()
     }
     
     func onOffSet() {
@@ -131,11 +133,34 @@ extension LightDetailView {
             return
         }
         guard let onOffModel else { return }
-        let transitionTime = GlobalConfig.transitionTime(!store.isOn)
-        let delay = GlobalConfig.delay(!store.isOn)
-        let message = GenericOnOffSet(!store.isOn, transitionTime: transitionTime, delay: delay)
+        let interval = store.isOn ? GlobalConfig.onTransition : GlobalConfig.offTransition
+        let transitionTime = TransitionTime(TimeInterval(interval))
+        let delay = store.isOn ? GlobalConfig.offDelay : GlobalConfig.onDelay
+        let message = GenericOnOffSet(!store.isOn, transitionTime: transitionTime, delay: UInt8(delay))
         _ = try? MeshNetworkManager.instance.send(message, to: onOffModel)
         
+    }
+    
+    func aiSet() {
+        guard MeshNetworkManager.bearer.isConnected else {
+            store.isError = true
+            store.error = .bearerError
+            return
+        }
+        guard let vendor else { return }
+        let message = LuminaireAiMessage(status: store.isAi ? .on : .off)
+        _ = try? MeshNetworkManager.instance.send(message, to: vendor)
+    }
+    
+    func sensorSet() {
+        guard MeshNetworkManager.bearer.isConnected else {
+            store.isError = true
+            store.error = .bearerError
+            return
+        }
+        guard let vendor else { return }
+        let message = LuminaireSensorMessage(status: store.isSensor ? .on : .off)
+        _ = try? MeshNetworkManager.instance.send(message, to: vendor)
     }
     
     func levelSet() {
@@ -159,29 +184,28 @@ extension LightDetailView {
             store.error = .bearerError
             return
         }
-        guard let levelModel else { return }
-        let index = Int(store.level)
-        let value = 30.0
-        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
-        let message = GenericLevelSet(level: level)
-        _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
+        guard let vendor else { return }
+        let index = Int(store.CCT)
+        let ccts = [GlobalConfig.cct1, GlobalConfig.cct2, GlobalConfig.cct3, 100]
+        let value = ccts[index]
+        let colorTemperature: Int16 = Int16(value)
+        let message = LuminaireColorTemperatureMessage(colorTemperature: colorTemperature)
+        _ = try? MeshNetworkManager.instance.send(message, to: vendor)
     }
     
-    func directionSet(value: Direction) {
+    func angleSet() {
         guard MeshNetworkManager.bearer.isConnected else {
             store.isError = true
             store.error = .bearerError
             return
         }
-        var x = store.directions.x
-        var y = store.directions.y
-        switch value {
-        case .up: y += 1
-        case .left: x -= 1
-        case .down: y -= 1
-        case .right: x += 1
-        }
-        store.directions = CGPoint(x: x, y: y)
+        guard let vendor else { return }
+        let index = Int(store.angle)
+        let ccts = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
+        let value = ccts[index]
+        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
+        let message = LuminaireAngleMessage(angle: 0x0202)
+        _ = try? MeshNetworkManager.instance.send(message, to: vendor)
     }
 }
 
@@ -202,6 +226,14 @@ extension LightDetailView: MeshMessageDelegate {
             } else {
                 store.level = 3
             }
+        case let status as LuminaireColorTemperatureStatus:
+            print(status)
+        case let status as LuminaireAngleStatus:
+            print(status)
+        case let status as LuminaireAiStatus:
+            print(status)
+        case let status as LuminaireSensorStatus:
+            print(status)
         default: break
         }
     }
@@ -211,8 +243,9 @@ extension LightDetailView: MeshMessageDelegate {
     }
     
     func meshNetworkManager(_ manager: MeshNetworkManager, failedToSendMessage message: MeshMessage, from localElement: Element, to destination: MeshAddress, error: Error) {
-        store.error = .messageError(error.localizedDescription)
-        store.isError = true
+        print(message, error.localizedDescription)
+//        store.error = .messageError(error.localizedDescription)
+//        store.isError = true
     }
     
 }
@@ -234,4 +267,17 @@ extension LightDetailView {
             }
         }
     }
+}
+
+private extension Model {
+    
+    var isVendor: Bool {
+        return !isBluetoothSIGAssigned   // Vendor Models.
+            || modelIdentifier == .genericOnOffServerModelId
+            || modelIdentifier == .genericPowerOnOffServerModelId
+            || modelIdentifier == .genericPowerOnOffSetupServerModelId
+            || modelIdentifier == .genericLevelServerModelId
+            || modelIdentifier == .genericDefaultTransitionTimeServerModelId
+    }
+    
 }

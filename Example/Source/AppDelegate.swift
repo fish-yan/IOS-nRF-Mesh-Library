@@ -112,10 +112,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             if try meshNetworkManager.load() {
                 meshNetworkDidChange()
+            } else {
+                _ = createNewMeshNetwork()
             }
-            // else {
-            //    A New Network Wizard will be shown.
-            // }
         } catch {
             print(error)
         }
@@ -256,12 +255,57 @@ extension MeshNetworkManager {
         }
     }
     
+    @discardableResult
+    func send(_ message: VendorMessage,
+              from localElement: Element? = nil, to model: Model,
+              withTtl initialTtl: UInt8? = nil,
+              completion: ((Result<Void, Error>) -> ())? = nil) throws -> MessageHandle {
+        guard let element = model.parentElement else {
+            print("Error: Element does not belong to a Node")
+            throw AccessError.invalidDestination
+        }
+        guard let meshNetwork = meshNetwork,
+              let applicationKey = meshNetwork.applicationKey else {
+            print("Error: Model is not bound to any Application Key")
+            throw AccessError.modelNotBoundToAppKey
+        }
+        return try send(message, from: localElement, to: MeshAddress(element.unicastAddress),
+                        withTtl: initialTtl, using: applicationKey,
+                        completion: completion)
+    }
+    
+    @discardableResult
+    func send(_ message: MeshMessage,
+              from localElement: Element? = nil, to group: Group,
+              withTtl initialTtl: UInt8? = nil,
+              completion: ((Result<Void, Error>) -> ())? = nil) throws -> MessageHandle {
+        guard let meshNetwork = meshNetwork,
+              let applicationKey = meshNetwork.applicationKey else {
+            print("Error: Model is not bound to any Application Key")
+            throw AccessError.modelNotBoundToAppKey
+        }
+        return try send(message, from: localElement, to: group.address,
+                        withTtl: initialTtl, using: applicationKey,
+                        completion: completion)
+    }
+    
+}
+
+extension MeshNetwork {
+    var applicationKey: ApplicationKey? {
+        if Thread.isMainThread {
+            return applicationKeys.first
+        } else {
+            return DispatchQueue.main.sync {
+                return applicationKeys.first
+            }
+        }
+    }
 }
 
 extension Element {
     func filteredModels() -> [Model] {
-        let filterIds: [UInt16] = [.configurationServerModelId,
-                                   .configurationClientModelId,
+        let filterIds: [UInt16] = [.configurationClientModelId,
                                    .genericOnOffServerModelId,
                                    .genericOnOffClientModelId,
                                    .genericLevelServerModelId,

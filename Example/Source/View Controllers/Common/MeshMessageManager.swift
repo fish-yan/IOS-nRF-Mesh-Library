@@ -10,6 +10,7 @@ import UIKit
 import nRFMeshProvision
 
 class MeshMessageManager {
+    private var isSending = false
     private var messageHandle: MessageHandle?
     var delegate: MeshMessageDelegate? {
         didSet {
@@ -19,54 +20,55 @@ class MeshMessageManager {
     
     private var messageQueue = [MessageAction]()
     
-    @discardableResult
-    func start(_ completion: @escaping () throws -> MessageHandle?) -> Self {
+    private func sendNext() {
+        guard !isSending,
+              let messageAction = messageQueue.first else {
+            isSending = false
+            return
+        }
+        self.isSending = true
+        self.messageQueue.removeFirst()
         DispatchQueue.main.async {
-            do {
-                self.messageHandle = try completion()
-                guard let _ = self.messageHandle else {
-                    self.done()
-                    return
+            switch messageAction.completion {
+            case let completion as (() throws -> MessageHandle?):
+                do {
+                    self.messageHandle = try completion()
+                    guard let _ = self.messageHandle else {
+                        self.isSending = false
+                        return
+                    }
+                } catch {
+                    self.isSending = false
+                    self.messageHandle = nil
                 }
-            } catch {
-                self.messageHandle = nil
+                
+            case let completion as (() -> Void):
+                self.isSending = true
+                completion()
+            default: return
             }
         }
-        return self
     }
     
     @discardableResult
-    func start(_ completion: @escaping () -> Void) -> Self {
-        DispatchQueue.main.async {
-            completion()
-        }
-        return self
-    }
-    
-    @discardableResult
-    func then(_ completion: @escaping () throws -> MessageHandle?) -> Self {
+    func add(_ completion: @escaping () throws -> MessageHandle?) -> Self {
         let messageAction = MessageAction(message: "", completion: completion)
         self.messageQueue.append(messageAction)
+        sendNext()
         return self
     }
     
     @discardableResult
-    func then(_ completion: @escaping () -> Void) -> Self {
+    func add(_ completion: @escaping () -> Void) -> Self {
         let messageAction = MessageAction(message: "", completion: completion)
         self.messageQueue.append(messageAction)
+        sendNext()
         return self
     }
     
     func done() {
-        guard let messageAction = messageQueue.first else {
-            return
-        }
-        messageQueue.removeFirst()
-        switch messageAction.completion {
-        case let completion as (() throws -> MessageHandle?):
-            start(completion)
-        default: return
-        }
+        self.isSending = false
+        sendNext()
     }
 }
 
@@ -74,6 +76,13 @@ extension MeshMessageManager: MeshNetworkDelegate {
     func meshNetworkManager(_ manager: MeshNetworkManager,
                             didReceiveMessage message: MeshMessage,
                             sentFrom source: Address, to destination: MeshAddress) {
+        var message = message
+        if let type = luminaireResponseTypes.first(where: { $0.opCode == message.opCode }),
+        let parameters = message.parameters,
+           let msg = type.init(parameters: parameters) {
+            message = msg
+        }
+        
         delegate?.meshNetworkManager(manager, didReceiveMessage: message, sentFrom: source, to: destination)
         done()
     }

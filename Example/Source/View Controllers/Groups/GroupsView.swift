@@ -31,7 +31,7 @@ struct GroupsView: View {
             }
             .onAppear {
                 groups = MeshNetworkManager.instance.meshNetwork?.groups ?? []
-                isShowSetting = GlobalConfig.userRole != .normal
+                isShowSetting = GlobalConfig.isShowSetting
             }
         }
     }

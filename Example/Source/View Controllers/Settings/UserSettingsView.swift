@@ -12,7 +12,7 @@ import nRFMeshProvision
 struct UserSettingsView: View {
     @Environment(\.dismiss) var dismiss
     
-    @State var selectionRole: UserRole = GlobalConfig.userRole
+    @State var selectionRole: UserRole = UserRole(rawValue: GlobalConfig.userRole) ?? .normal
     @State var l0Text: String = String(format: "%.f", GlobalConfig.level0)
     @State var l1Text: String = String(format: "%.f", GlobalConfig.level1)
     @State var l2Text: String = String(format: "%.f", GlobalConfig.level2)
@@ -109,7 +109,7 @@ struct UserSettingsView: View {
 
 private extension UserSettingsView {
     func onAppear() {
-        selectionRole = GlobalConfig.userRole
+        selectionRole = UserRole(rawValue: GlobalConfig.userRole) ?? .normal
         
         l0Text = String(format: "%.f", GlobalConfig.level0)
         l1Text = String(format: "%.f", GlobalConfig.level1)
@@ -143,15 +143,15 @@ private extension UserSettingsView {
     }
     
     func save() {
-        LocalStorage.userRole = selectionRole.rawValue
-        LocalStorage.level0 = Double(l0Text) ?? 0
-        LocalStorage.level1 = Double(l1Text) ?? 0
-        LocalStorage.level2 = Double(l2Text) ?? 0
-        LocalStorage.level3 = Double(l3Text) ?? 0
-        LocalStorage.onDelay = UInt8(onDelayTime) ?? 0
-        LocalStorage.offDelay = UInt8(offDelayTime) ?? 0
-        LocalStorage.onTransitionSteps = UInt8(onTransitionTime) ?? 0
-        LocalStorage.offTransitionSteps = UInt8(offTransitionTime) ?? 0
+        GlobalConfig.userRole = selectionRole.rawValue
+        GlobalConfig.level0 = Double(l0Text) ?? 0
+        GlobalConfig.level1 = Double(l1Text) ?? 0
+        GlobalConfig.level2 = Double(l2Text) ?? 0
+        GlobalConfig.level3 = Double(l3Text) ?? 0
+        GlobalConfig.onDelay = Int(onDelayTime) ?? 0
+        GlobalConfig.offDelay = Int(offDelayTime) ?? 0
+        GlobalConfig.onTransition = Int(onTransitionTime) ?? 0
+        GlobalConfig.offTransition = Int(offTransitionTime) ?? 0
         dismiss.callAsFunction()
     }
     

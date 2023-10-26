@@ -29,7 +29,7 @@ struct LightsView: View {
                 .opacity(isShowSetting ? 1 : 0)
             }
             .onAppear {
-                isShowSetting = GlobalConfig.userRole != .normal
+                isShowSetting = GlobalConfig.isShowSetting
                 nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
             }
         }

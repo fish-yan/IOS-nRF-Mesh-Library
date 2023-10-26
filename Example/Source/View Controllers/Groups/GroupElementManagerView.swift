@@ -16,7 +16,7 @@ struct GroupElementManagerView: View {
     @State var isDone = false
     var body: some View {
         List(ElementType.allCases, id: \.self) { type in
-            ElementView(type: type, models: elementMap[type] ?? [])
+            ElementView(type: type, models: elementMap[type] ?? [], group: group)
         }
         .navigationTitle(group.name)
         .toolbar {
@@ -54,12 +54,24 @@ struct ElementView: View {
     @State private var isActive: Bool = false
     var type: ElementType
     var models: [Model]
+    var group: nRFMeshProvision.Group
+
     private var nodes: Set<Node> {
         let arr = models.compactMap { $0.parentElement?.parentNode }
         return Set(arr)
     }
     var body: some View {
-        NavigationLink(destination: LightSelectedView(multiSelected: nodes), isActive: $isActive) {
+        NavigationLink(isActive: $isActive) {
+            LightSelectedView(multiSelected: nodes) { multiSelected in
+                multiSelected.forEach { node in
+                    if let model = node.primaryElement?.model(withSigModelId: type.modelId) {
+                        let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
+                        _ = try? MeshNetworkManager.instance.send(message, to: node)
+                    }
+                }
+                print(multiSelected)
+            }
+        } label: {
             HStack {
                 Image(systemName: type.image)
                     .foregroundColor(.white)
