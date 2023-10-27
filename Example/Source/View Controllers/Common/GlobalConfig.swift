@@ -23,8 +23,9 @@ class GlobalConfig: ObservableObject {
     @AppStorage("level2") static var level2: Double = 50
     @AppStorage("level3") static var level3: Double = 25
     
-    @AppStorage("cct1") static var cct1: Double = 0
-    @AppStorage("cct2") static var cct2: Double = 10
+    @AppStorage("cct0") static var cct0: Double = 25
+    @AppStorage("cct1") static var cct1: Double = 50
+    @AppStorage("cct2") static var cct2: Double = 75
     @AppStorage("cct3") static var cct3: Double = 100
     
     static var isShowSetting: Bool {

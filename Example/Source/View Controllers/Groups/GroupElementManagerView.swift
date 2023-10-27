@@ -16,7 +16,9 @@ struct GroupElementManagerView: View {
     @State var isDone = false
     var body: some View {
         List(ElementType.allCases, id: \.self) { type in
-            ElementView(type: type, models: elementMap[type] ?? [], group: group)
+            let arr = elementMap[type]?.compactMap { $0.parentElement?.parentNode } ?? []
+            let nodes = Set(arr)
+            ElementView(type: type, nodes: nodes, group: group)
         }
         .navigationTitle(group.name)
         .toolbar {
@@ -53,23 +55,14 @@ extension GroupElementManagerView {
 struct ElementView: View {
     @State private var isActive: Bool = false
     var type: ElementType
-    var models: [Model]
+    @State var nodes: Set<Node>
     var group: nRFMeshProvision.Group
-
-    private var nodes: Set<Node> {
-        let arr = models.compactMap { $0.parentElement?.parentNode }
-        return Set(arr)
-    }
+    
     var body: some View {
         NavigationLink(isActive: $isActive) {
             LightSelectedView(multiSelected: nodes) { multiSelected in
-                multiSelected.forEach { node in
-                    if let model = node.primaryElement?.model(withSigModelId: type.modelId) {
-                        let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
-                        _ = try? MeshNetworkManager.instance.send(message, to: node)
-                    }
-                }
-                print(multiSelected)
+                nodes = multiSelected
+                subscribed()
             }
         } label: {
             HStack {
@@ -81,6 +74,16 @@ struct ElementView: View {
                     .clipped()
                 Spacer().frame(width: 16)
                 Text(type.title)
+            }
+        }
+    }
+    
+    func subscribed() {
+        nodes.forEach { node in
+            if let model = node.primaryElement?.model(withSigModelId: type.modelId),
+               !model.isSubscribed(to: group) {
+                let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
+                _ = try? MeshNetworkManager.instance.send(message, to: node)
             }
         }
     }
@@ -119,8 +122,8 @@ enum ElementType: UInt16, CaseIterable {
         switch self {
         case .onOff: .genericOnOffServerModelId
         case .level: .genericLevelServerModelId
-        case .cct: .genericLevelServerModelId
-        case .angle: .genericLevelServerModelId
+        case .cct: .JLServerModelId
+        case .angle: .JLServerModelId
         }
     }
     

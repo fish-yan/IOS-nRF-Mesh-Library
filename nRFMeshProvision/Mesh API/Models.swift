@@ -622,4 +622,6 @@ public extension UInt16 {
     static let firmwareUpdateClient: UInt16 = 0x1403
     static let firmwareDistributionServer: UInt16 = 0x1404
     static let firmwareDistributionClient: UInt16 = 0x1405
+    
+    static let JLServerModelId: UInt16 = 0x0002
 }

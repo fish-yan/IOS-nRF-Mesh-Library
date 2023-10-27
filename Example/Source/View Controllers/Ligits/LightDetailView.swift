@@ -148,7 +148,7 @@ extension LightDetailView {
             return
         }
         guard let vendor else { return }
-        let message = LuminaireAiMessage(status: store.isAi ? .on : .off)
+        let message = JLAiMessage(status: store.isAi ? .on : .off)
         _ = try? MeshNetworkManager.instance.send(message, to: vendor)
     }
     
@@ -159,7 +159,7 @@ extension LightDetailView {
             return
         }
         guard let vendor else { return }
-        let message = LuminaireSensorMessage(status: store.isSensor ? .on : .off)
+        let message = JLSensorMessage(status: store.isSensor ? .on : .off)
         _ = try? MeshNetworkManager.instance.send(message, to: vendor)
     }
     
@@ -171,7 +171,7 @@ extension LightDetailView {
         }
         guard let levelModel else { return }
         let index = Int(store.level)
-        let levels = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
+        let levels = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, GlobalConfig.level0]
         let value = levels[index]
         let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
         let message = GenericLevelSet(level: level)
@@ -186,10 +186,10 @@ extension LightDetailView {
         }
         guard let vendor else { return }
         let index = Int(store.CCT)
-        let ccts = [GlobalConfig.cct1, GlobalConfig.cct2, GlobalConfig.cct3, 100]
+        let ccts = [GlobalConfig.cct0, GlobalConfig.cct1, GlobalConfig.cct2, GlobalConfig.cct3]
         let value = ccts[index]
         let colorTemperature: Int16 = Int16(value)
-        let message = LuminaireColorTemperatureMessage(colorTemperature: colorTemperature)
+        let message = JLColorTemperatureMessage(colorTemperature: colorTemperature)
         _ = try? MeshNetworkManager.instance.send(message, to: vendor)
     }
     
@@ -204,7 +204,7 @@ extension LightDetailView {
         let ccts = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
         let value = ccts[index]
         let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
-        let message = LuminaireAngleMessage(angle: 0x0202)
+        let message = JLAngleMessage(angle: 0x0202)
         _ = try? MeshNetworkManager.instance.send(message, to: vendor)
     }
 }
@@ -226,13 +226,13 @@ extension LightDetailView: MeshMessageDelegate {
             } else {
                 store.level = 3
             }
-        case let status as LuminaireColorTemperatureStatus:
+        case let status as JLColorTemperatureStatus:
             print(status)
-        case let status as LuminaireAngleStatus:
+        case let status as JLAngleStatus:
             print(status)
-        case let status as LuminaireAiStatus:
+        case let status as JLAiStatus:
             print(status)
-        case let status as LuminaireSensorStatus:
+        case let status as JLSensorStatus:
             print(status)
         default: break
         }

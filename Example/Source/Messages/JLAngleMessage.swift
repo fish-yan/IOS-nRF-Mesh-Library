@@ -9,7 +9,7 @@
 import UIKit
 import nRFMeshProvision
 
-public struct LuminaireAngleMessage: LuminaireMessage {
+public struct JLAngleMessage: JLMessage {
     
     public static var code: UInt32 = 0x11
         
@@ -20,7 +20,7 @@ public struct LuminaireAngleMessage: LuminaireMessage {
     }
 }
 
-public struct LuminaireAngleStatus: LuminaireResponse {
+public struct JLAngleStatus: JLResponse {
     public static var code: UInt32 = 0x11
     
     public var parameters: Data?

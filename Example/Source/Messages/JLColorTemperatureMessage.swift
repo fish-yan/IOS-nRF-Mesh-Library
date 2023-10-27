@@ -9,7 +9,7 @@
 import UIKit
 import nRFMeshProvision
 
-public struct LuminaireColorTemperatureMessage: LuminaireMessage {
+public struct JLColorTemperatureMessage: JLMessage {
     
     public static var code: UInt32 = 0x5
         
@@ -20,7 +20,7 @@ public struct LuminaireColorTemperatureMessage: LuminaireMessage {
     }
 }
 
-public struct LuminaireColorTemperatureStatus: LuminaireResponse {
+public struct JLColorTemperatureStatus: JLResponse {
     
     public static var code: UInt32 = 0x5
     
