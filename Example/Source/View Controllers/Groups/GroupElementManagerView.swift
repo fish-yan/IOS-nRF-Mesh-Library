@@ -8,36 +8,15 @@
 
 import SwiftUI
 import nRFMeshProvision
-struct GroupElementManagerView: View {
-    var group: nRFMeshProvision.Group
-    
-    @State var elementMap: [ElementType: [Model]] = [:]
-    
-    @State var isDone = false
-    var body: some View {
-        List(ElementType.allCases, id: \.self) { type in
-            let arr = elementMap[type]?.compactMap { $0.parentElement?.parentNode } ?? []
-            let nodes = Set(arr)
-            ElementView(type: type, nodes: nodes, group: group)
-        }
-        .navigationTitle(group.name)
-        .toolbar {
-            NavigationLink { 
-                AddGroupView(isDone: $isDone, group: group)
-                    .navigationTitle("Edit Group")
-            } label: {
-                Image(systemName: "pencil.line")
-            }
-        }
-        .onAppear(perform: onAppear)
-    }
-}
 
-extension GroupElementManagerView {
-    func onAppear() {
+class GroupElementViewModel: ObservableObject {
+    @Published var elementMap: [ElementType: [Model]] = [:]
+    
+    func updateModels(with group: nRFMeshProvision.Group) {
         guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
             return
         }
+        elementMap.removeAll()
         meshNetwork.models(subscribedTo: group).forEach({ model in
             if let type = ElementType(rawValue: model.modelIdentifier) {
                 if var models = elementMap[type] {
@@ -52,17 +31,44 @@ extension GroupElementManagerView {
     }
 }
 
-struct ElementView: View {
-    @State private var isActive: Bool = false
-    var type: ElementType
-    @State var nodes: Set<Node>
+struct GroupElementManagerView: View {
     var group: nRFMeshProvision.Group
     
+    @ObservedObject var vm = GroupElementViewModel()
+    
+    @State var isDone = false
+    
     var body: some View {
-        NavigationLink(isActive: $isActive) {
+        List(ElementType.allCases, id: \.self) { type in
+            elementView(type: type)
+        }
+        .navigationTitle(group.name)
+        .toolbar {
+            NavigationLink { 
+                AddGroupView(isDone: $isDone, group: group)
+                    .navigationTitle("Add Group")
+                    .toolbar {
+                        Button("Done") {
+                            isDone = true
+                        }
+                    }
+            } label: {
+                Image(systemName: "pencil.line")
+            }
+        }
+        .onAppear {
+            vm.updateModels(with: group)
+        }
+    }
+    
+    func elementView(type: ElementType) -> some View {
+        let models = vm.elementMap[type] ?? []
+        let arr = models.compactMap { $0.parentElement?.parentNode }
+        var nodes = Set(arr)
+        return NavigationLink {
             LightSelectedView(multiSelected: nodes) { multiSelected in
                 nodes = multiSelected
-                subscribed()
+                subscribed(type: type, nodes: nodes)
             }
         } label: {
             HStack {
@@ -78,7 +84,7 @@ struct ElementView: View {
         }
     }
     
-    func subscribed() {
+    func subscribed(type: ElementType, nodes: Set<Node>) {
         nodes.forEach { node in
             if let model = node.primaryElement?.model(withSigModelId: type.modelId),
                !model.isSubscribed(to: group) {
@@ -86,26 +92,25 @@ struct ElementView: View {
                 _ = try? MeshNetworkManager.instance.send(message, to: node)
             }
         }
+        vm.updateModels(with: group)
     }
 }
  
 enum ElementType: UInt16, CaseIterable {
-    case onOff, level, cct, angle
+    case onOff, level, vendor
     
     var image: String {
         switch self {
         case .onOff: "power.circle.fill"
         case .level: "sun.max.fill"
-        case .cct: "lightbulb.led.fill"
-        case .angle: "light.overhead.right.fill"
+        case .vendor: "lightbulb.led.fill"
         }
     }
     var title: String {
         switch self {
         case .onOff: "On/Off"
         case .level: "Level"
-        case .cct: "CCT"
-        case .angle: "Beam Angle"
+        case .vendor: "Vendor"
         }
     }
     
@@ -113,8 +118,7 @@ enum ElementType: UInt16, CaseIterable {
         switch self {
         case .onOff: .orange
         case .level: .blue
-        case .cct: .yellow
-        case .angle: .gray
+        case .vendor: .yellow
         }
     }
     
@@ -122,8 +126,7 @@ enum ElementType: UInt16, CaseIterable {
         switch self {
         case .onOff: .genericOnOffServerModelId
         case .level: .genericLevelServerModelId
-        case .cct: .JLServerModelId
-        case .angle: .JLServerModelId
+        case .vendor: .glServerModelId
         }
     }
     
@@ -131,8 +134,7 @@ enum ElementType: UInt16, CaseIterable {
         switch rawValue {
         case .genericOnOffServerModelId: self = .onOff
         case .genericLevelServerModelId: self = .level
-        case .genericLevelServerModelId: self = .cct
-        case .genericLevelServerModelId: self = .angle
+        case .glServerModelId: self = .vendor
         default: return nil
         }
     }

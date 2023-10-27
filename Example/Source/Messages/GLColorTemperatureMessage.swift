@@ -9,28 +9,28 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLColorTemperatureMessage: JLMessage {
+public struct GLColorTemperatureMessage: GLMessage {
     
     public static var code: UInt32 = 0x5
         
     public var parameters: Data?
     
-    init(colorTemperature: Int16) {
+    init(colorTemperature: UInt8) {
         self.parameters = Data() + colorTemperature
     }
 }
 
-public struct JLColorTemperatureStatus: JLResponse {
+public struct GLColorTemperatureStatus: GLResponse {
     
     public static var code: UInt32 = 0x5
     
     public var parameters: Data?
     
-    public let colorTemperature: Int16
+    public let colorTemperature: UInt8
     
     public init?(parameters: Data) {
         self.parameters = parameters
-        colorTemperature = Int16(parameters.toHexString(), radix: 16) ?? 0
+        colorTemperature = UInt8(parameters.toHexString(), radix: 16) ?? 0
     }
     
 }

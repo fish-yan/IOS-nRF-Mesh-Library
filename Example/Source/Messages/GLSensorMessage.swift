@@ -9,28 +9,28 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLSensorMessage: JLMessage {
+public struct GLSensorMessage: GLMessage {
     
     public static var code: UInt32 = 0xC
         
     public var parameters: Data?
     
-    init(status: JLSimpleStatus) {
-        self.parameters = Data() + Int16(status.rawValue)
+    init(status: GLSimpleStatus) {
+        self.parameters = Data() + UInt8(status.rawValue)
     }
 }
 
-public struct JLSensorStatus: JLResponse {
+public struct GLSensorStatus: GLResponse {
     public static var code: UInt32 = 0xC
     
     public var parameters: Data?
     
-    public let status: JLSimpleStatus
+    public let status: GLSimpleStatus
     
     public init?(parameters: Data) {
         self.parameters = parameters
         let raw = Int(parameters.toHexString(), radix: 16) ?? 0
-        status = JLSimpleStatus(rawValue: raw) ?? .off
+        status = GLSimpleStatus(rawValue: raw) ?? .off
     }
     
 }

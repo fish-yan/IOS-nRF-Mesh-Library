@@ -104,8 +104,9 @@ extension GroupDetailView {
             store.error = .bearerError
             return
         }
-        let message = JLAiMessage(status: store.isAi ? .on : .off)
+        let message = GLAiMessage(status: store.isAi ? .on : .off)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
+        store.isAi.toggle()
     }
     
     func sensorSet() {
@@ -114,8 +115,9 @@ extension GroupDetailView {
             store.error = .bearerError
             return
         }
-        let message = JLSensorMessage(status: store.isSensor ? .on : .off)
+        let message = GLSensorMessage(status: store.isSensor ? .on : .off)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
+        store.isSensor.toggle()
     }
     
     func levelSet() {
@@ -141,8 +143,8 @@ extension GroupDetailView {
         let index = Int(store.CCT)
         let ccts = [GlobalConfig.cct0, GlobalConfig.cct1, GlobalConfig.cct2, GlobalConfig.cct3]
         let value = ccts[index]
-        let colorTemperature: Int16 = Int16(value)
-        let message = JLColorTemperatureMessage(colorTemperature: colorTemperature)
+        let colorTemperature = UInt8(value)
+        let message = GLColorTemperatureMessage(colorTemperature: colorTemperature)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
@@ -155,8 +157,8 @@ extension GroupDetailView {
         let index = Int(store.angle)
         let ccts = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
         let value = ccts[index]
-        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
-        let message = JLAngleMessage(angle: 0x0202)
+        let level = Int8(min(32767, -32768 + 655.36 * value)) // -32768...32767
+        let message = GLAngleMessage(angle: 0x02)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
 }
@@ -170,13 +172,13 @@ extension GroupDetailView: MeshMessageDelegate {
 //            store.isOn = status.isOn
         case let status as GenericLevelStatus:
             print(status.level)
-        case let status as JLColorTemperatureStatus:
+        case let status as GLColorTemperatureStatus:
             print(status)
-        case let status as JLAngleStatus:
+        case let status as GLAngleStatus:
             print(status)
-        case let status as JLAiStatus:
+        case let status as GLAiStatus:
             print(status)
-        case let status as JLSensorStatus:
+        case let status as GLSensorStatus:
             print(status)
         default: break
         }

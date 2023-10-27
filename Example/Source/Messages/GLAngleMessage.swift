@@ -9,27 +9,27 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLAngleMessage: JLMessage {
+public struct GLAngleMessage: GLMessage {
     
     public static var code: UInt32 = 0x11
         
     public var parameters: Data?
     
-    init(angle: Int16) {
+    init(angle: UInt8) {
         self.parameters = Data() + angle
     }
 }
 
-public struct JLAngleStatus: JLResponse {
+public struct GLAngleStatus: GLResponse {
     public static var code: UInt32 = 0x11
     
     public var parameters: Data?
     
-    public let angle: Int16
+    public let angle: UInt8
     
     public init?(parameters: Data) {
         self.parameters = parameters
-        angle = Int16(parameters.toHexString(), radix: 16) ?? 0
+        angle = UInt8(parameters.toHexString(), radix: 16) ?? 0
     }
     
 }

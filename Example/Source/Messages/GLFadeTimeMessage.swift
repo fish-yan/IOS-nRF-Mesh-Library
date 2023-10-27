@@ -1,5 +1,5 @@
 //
-//  JLFadeTimeMessage.swift
+//  GLFadeTimeMessage.swift
 //  nRF Mesh
 //
 //  Created by yan on 2023/10/26.
@@ -9,7 +9,7 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLFadeTimeMessage: JLMessage {
+public struct GLFadeTimeMessage: GLMessage {
     
     public static var code: UInt32 = 0x2
         
@@ -21,7 +21,7 @@ public struct JLFadeTimeMessage: JLMessage {
     }
 }
 
-public struct JLFadeTimeStatus: JLResponse {
+public struct GLFadeTimeStatus: GLResponse {
     public static var code: UInt32 = 0x2
     
     public var parameters: Data?

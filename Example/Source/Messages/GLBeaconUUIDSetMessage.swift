@@ -1,5 +1,5 @@
 //
-//  JLBeaconOnOffMessage.swift
+//  GLBeaconOnOffMessage.swift
 //  nRF Mesh
 //
 //  Created by yan on 2023/10/26.
@@ -9,7 +9,7 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLBeaconUUIDSetMessage: JLMessage {
+public struct GLBeaconUUIDSetMessage: GLMessage {
     
     public static var code: UInt32 = 0x23
         
@@ -20,7 +20,7 @@ public struct JLBeaconUUIDSetMessage: JLMessage {
     }
 }
 
-public struct JLBeaconUUIDSetStatus: JLResponse {
+public struct GLBeaconUUIDSetStatus: GLResponse {
     public static var code: UInt32 = 0x23
     
     public var parameters: Data?

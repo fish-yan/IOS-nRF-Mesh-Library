@@ -1,5 +1,5 @@
 //
-//  JLLevelMessage.swift
+//  GLRelayMessage.swift
 //  nRF Mesh
 //
 //  Created by yan on 2023/10/26.
@@ -9,9 +9,9 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLLevelMessage: JLMessage {
+public struct GLRelayMessage: GLMessage {
     
-    public static var code: UInt32 = 0x3
+    public static var code: UInt32 = 0x10
         
     public var parameters: Data?
     
@@ -20,8 +20,8 @@ public struct JLLevelMessage: JLMessage {
     }
 }
 
-public struct JLLevelStatus: JLResponse {
-    public static var code: UInt32 = 0x3
+public struct GLRelayStatus: GLResponse {
+    public static var code: UInt32 = 0x10
     
     public var parameters: Data?
     

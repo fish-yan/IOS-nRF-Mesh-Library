@@ -1,5 +1,5 @@
 //
-//  JLSceneSetMessage.swift
+//  GLBeaconOnOffMessage.swift
 //  nRF Mesh
 //
 //  Created by yan on 2023/10/26.
@@ -9,27 +9,27 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLSceneSetMessage: JLMessage {
+public struct GLBeaconRSSIMessage: GLMessage {
     
-    public static var code: UInt32 = 0x4
+    public static var code: UInt32 = 0x21
         
     public var parameters: Data?
     
-    init(scene: Int16) {
-        self.parameters = Data() + scene
+    init(rssi: UInt8) {
+        self.parameters = Data() + rssi
     }
 }
 
-public struct JLSceneSetStatus: JLResponse {
-    public static var code: UInt32 = 0x4
+public struct GLBeaconRSSIStatus: GLResponse {
+    public static var code: UInt32 = 0x21
     
     public var parameters: Data?
     
-    public let scene: Int16
+    public let rssi: UInt8
     
     public init?(parameters: Data) {
         self.parameters = parameters
-        scene = Int16(parameters.asUInt16)
+        rssi = parameters.asUInt8
     }
     
 }

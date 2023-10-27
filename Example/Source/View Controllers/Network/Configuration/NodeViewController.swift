@@ -623,11 +623,11 @@ private extension IndexPath {
     static let nameSection = 0
     static let nodeSection = 1
     static let keysSection = 2
-    static let scenesSection = -1 // 隐藏:2023-8-8
-    static let elementsSection = 3
-    static let compositionDataSection = 4
-    static let switchesSection = -1 // 隐藏:2023-8-8
-    static let actionsSection = 5 // 7
+    static let scenesSection = 3 // 隐藏:2023-8-8
+    static let elementsSection = 4
+    static let compositionDataSection = 5
+    static let switchesSection = 6 // 隐藏:2023-8-8
+    static let actionsSection = 7 // 7
     static let numberOfSections = IndexPath.actionsSection + 1
     
     static let titles = [

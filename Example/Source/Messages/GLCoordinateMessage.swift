@@ -1,5 +1,5 @@
 //
-//  JLCoordinateMessage.swift
+//  GLCoordinateMessage.swift
 //  nRF Mesh
 //
 //  Created by yan on 2023/10/26.
@@ -9,23 +9,23 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLCoordinateMessage: JLMessage {
+public struct GLCoordinateMessage: GLMessage {
     
     public static var code: UInt32 = 0x11
         
     public var parameters: Data?
     
-    init(coordinate: (z: Int16, x: Int16, y: Int16)) {
+    init(coordinate: (z: UInt8, x: UInt8, y: UInt8)) {
         self.parameters = Data() + coordinate.z + coordinate.x + coordinate.y
     }
 }
 
-public struct JLCoordinateStatus: JLResponse {
+public struct GLCoordinateStatus: GLResponse {
     public static var code: UInt32 = 0x11
     
     public var parameters: Data?
     
-    public let coordinate: (z: Int16, x: Int16, y: Int16)
+    public let coordinate: (z: UInt8, x: UInt8, y: UInt8)
     
     public init?(parameters: Data) {
         self.parameters = parameters

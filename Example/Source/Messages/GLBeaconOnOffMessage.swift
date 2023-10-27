@@ -1,5 +1,5 @@
 //
-//  JLBeaconOnOffMessage.swift
+//  GLBeaconOnOffMessage.swift
 //  nRF Mesh
 //
 //  Created by yan on 2023/10/26.
@@ -9,28 +9,28 @@
 import UIKit
 import nRFMeshProvision
 
-public struct JLBeaconOnOffMessage: JLMessage {
+public struct GLBeaconOnOffMessage: GLMessage {
     
     public static var code: UInt32 = 0x20
         
     public var parameters: Data?
     
-    init(status: JLSimpleStatus) {
-        self.parameters = Data() + Int16(status.rawValue)
+    init(status: GLSimpleStatus) {
+        self.parameters = Data() + UInt8(status.rawValue)
     }
 }
 
-public struct JLBeaconOnOffStatus: JLResponse {
+public struct GLBeaconOnOffStatus: GLResponse {
     public static var code: UInt32 = 0x20
     
     public var parameters: Data?
     
-    public let status: JLSimpleStatus
+    public let status: GLSimpleStatus
     
     public init?(parameters: Data) {
         self.parameters = parameters
-        let raw = Int(parameters.asUInt16)
-        status = JLSimpleStatus(rawValue: raw) ?? .off
+        let raw = Int(parameters.asUInt8)
+        status = GLSimpleStatus(rawValue: raw) ?? .off
     }
     
 }

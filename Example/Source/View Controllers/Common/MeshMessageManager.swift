@@ -77,7 +77,7 @@ extension MeshMessageManager: MeshNetworkDelegate {
                             didReceiveMessage message: MeshMessage,
                             sentFrom source: Address, to destination: MeshAddress) {
         var message = message
-        if let type = luminaireResponseTypes.first(where: { $0.opCode == message.opCode }),
+        if let type = jlResponseTypes.first(where: { $0.opCode == message.opCode }),
         let parameters = message.parameters,
            let msg = type.init(parameters: parameters) {
             message = msg
