@@ -23,7 +23,7 @@ class LightDetailStore: ObservableObject {
     @Published var isAi: Bool = true
     @Published var isSensor: Bool = true
     @Published var isError: Bool = false
-    @Published var error: LightDetailView.ErrorType = .none
+    @Published var error: ErrorType = .none
 }
 
 struct LightDetailView: View {
@@ -68,17 +68,17 @@ struct LightDetailView: View {
             }
             
             Section {
-                SliderView(value: $store.level, title: "Level") { isEditing in
+                SliderView("Level", value: $store.level, onDragEnd:  {
                     levelSet()
-                }
+                })
                 
-                SliderView(value: $store.CCT, title: "CCT") { isEditing in
+                SliderView("CCT", value: $store.CCT, onDragEnd:  {
                     CCTSet()
-                }
+                })
                 
-                SliderView(value: $store.angle, title: "Angle") { isEditing in
+                SliderView("Angle", value: $store.angle, onDragEnd:  {
                     angleSet()
-                }
+                })
             }
         }
         .buttonStyle(.borderless)
@@ -176,10 +176,7 @@ extension LightDetailView {
             return
         }
         guard let levelModel else { return }
-        let index = Int(store.level)
-        let levels = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, GlobalConfig.level0]
-        let value = levels[index]
-        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
+        let level = Int16(min(32767, -32768 + 655.36 * store.level)) // -32768...32767
         let message = GenericLevelSet(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
     }
@@ -191,11 +188,7 @@ extension LightDetailView {
             return
         }
         guard let vendorModel else { return }
-        let index = Int(store.CCT)
-        let ccts = [GlobalConfig.cct0, GlobalConfig.cct1, GlobalConfig.cct2, GlobalConfig.cct3]
-        let value = ccts[index]
-        let colorTemperature = UInt8(value)
-        let message = GLColorTemperatureMessage(colorTemperature: colorTemperature)
+        let message = GLColorTemperatureMessage(colorTemperature: UInt8(store.CCT))
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
     
@@ -222,16 +215,7 @@ extension LightDetailView: MeshMessageDelegate {
         case let status as GenericOnOffStatus:
             store.isOn = status.isOn
         case let status as GenericLevelStatus:
-            let level = floorf(0.1 + (Float(status.level) + 32768.0) / 655.35)
-            if abs(Double(level) - GlobalConfig.level1) < 5 {
-                store.level = 2
-            } else if abs(Double(level) - GlobalConfig.level2) < 5 {
-                store.level = 1
-            } else if abs(Double(level) - GlobalConfig.level3) < 5 {
-                store.level = 0
-            } else {
-                store.level = 3
-            }
+            store.level = Double(status.level)
         case let status as GLColorTemperatureStatus:
             print(status)
         case let status as GLAngleStatus:
@@ -256,21 +240,4 @@ extension LightDetailView: MeshMessageDelegate {
     
 }
 
-extension LightDetailView {
-    enum ErrorType {
-        case none
-        case messageError(_ value: String)
-        case bearerError
-        
-        var message: String {
-            switch self {
-            case .none:
-                ""
-            case .messageError(let value):
-                value
-            case .bearerError:
-                "bearer is not connected"
-            }
-        }
-    }
-}
+

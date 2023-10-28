@@ -54,15 +54,15 @@ struct GroupDetailView: View {
             }
             
             Section {
-                SliderView(value: $store.level, title: "Level") { isEditing in
+                SliderView("Level", value: $store.level) { isEditing in
                     levelSet()
                 }
                 
-                SliderView(value: $store.CCT, title: "CCT") { isEditing in
+                SliderView("CCT", value: $store.CCT) { isEditing in
                     CCTSet()
                 }
                 
-                SliderView(value: $store.angle, title: "Angle") { isEditing in
+                SliderView("Angle", value: $store.angle) { isEditing in
                     angleSet()
                 }
             }

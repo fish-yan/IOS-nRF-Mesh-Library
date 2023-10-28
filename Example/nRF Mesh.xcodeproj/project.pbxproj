@@ -27,10 +27,10 @@
 		2C91B9EC2AE94263007D566C /* GLSensorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C91B9EB2AE94263007D566C /* GLSensorMessage.swift */; };
 		2C93E3742ADE23EC00B392DB /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C93E3732ADE23EC00B392DB /* Debouncer.swift */; };
 		2C93E3762ADF79A900B392DB /* GlobalConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C93E3752ADF79A900B392DB /* GlobalConfig.swift */; };
-		2C93E3782ADF79B300B392DB /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C93E3772ADF79B300B392DB /* LocalStorage.swift */; };
 		2CA1A4D22ABB28DD00BB135A /* LightHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */; };
 		2CA1A50B2ABBC12D00BB135A /* LightDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */; };
 		2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50C2ABBC23100BB135A /* SliderView.swift */; };
+		2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */; };
 		2CC0DA672AD583C30031DC9D /* SceneLightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */; };
 		2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */; };
 		2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */; };
@@ -261,10 +261,10 @@
 		2C91B9EB2AE94263007D566C /* GLSensorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLSensorMessage.swift; sourceTree = "<group>"; };
 		2C93E3732ADE23EC00B392DB /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 		2C93E3752ADF79A900B392DB /* GlobalConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConfig.swift; sourceTree = "<group>"; };
-		2C93E3772ADF79B300B392DB /* LocalStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
 		2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightHostViewController.swift; sourceTree = "<group>"; };
 		2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightDetailView.swift; sourceTree = "<group>"; };
 		2CA1A50C2ABBC23100BB135A /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMeshNetworkModel.swift; sourceTree = "<group>"; };
 		2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLightsView.swift; sourceTree = "<group>"; };
 		2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlView.swift; sourceTree = "<group>"; };
 		2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAiMessage.swift; sourceTree = "<group>"; };
@@ -581,6 +581,7 @@
 		52248CDF2523369700B10250 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */,
 				522AFFDB22BBA34900521EDC /* ActionCell.swift */,
 				523F776322C4EDD90030EA6A /* SwitchCell.swift */,
 				520A7D6624F3E05A00BF370A /* RightActionCell.swift */,
@@ -588,7 +589,6 @@
 				2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */,
 				2C93E3732ADE23EC00B392DB /* Debouncer.swift */,
 				2C93E3752ADF79A900B392DB /* GlobalConfig.swift */,
-				2C93E3772ADF79B300B392DB /* LocalStorage.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1317,7 +1317,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				52DE3ABA25DA871800268D7D /* SensorClientDelegate.swift in Sources */,
-				2C93E3782ADF79B300B392DB /* LocalStorage.swift in Sources */,
 				5275962E2A138D9700B04C6F /* SelectPublicationViewController.swift in Sources */,
 				529B764722522D37008F1CE7 /* UITableView+EmptyView.swift in Sources */,
 				5288153D25125AB600484AF0 /* RootTabBarController.swift in Sources */,
@@ -1413,6 +1412,7 @@
 				523F776422C4EDD90030EA6A /* SwitchCell.swift in Sources */,
 				5292F8A7250652BB00EA0F2A /* SceneServerGroupCell.swift in Sources */,
 				522AFFDC22BBA34900521EDC /* ActionCell.swift in Sources */,
+				2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */,
 				52E54CE72345EDA700478F05 /* GenericState.swift in Sources */,
 				52B6C50F2811712D00F6E0F3 /* UITableViewCell+Disabled.swift in Sources */,
 				2CFE865C2AEAA84F00A1CF7D /* GLSceneSetMessage.swift in Sources */,

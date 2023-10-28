@@ -9,18 +9,41 @@
 import SwiftUI
 
 struct SliderView: View {
-    @Binding var value: Double
-    var title: String = ""
-    var range: ClosedRange<Double> = 0...3
+    var text: String
+    var value: Binding<Double>
+    var bounds: ClosedRange<Double> = 0...100
+    var unit: String = "%"
     var onEditingChanged: (Bool) -> Void = { _ in }
+    var onDragEnd: () -> Void = { }
+    init(_ text: String, value: Binding<Double>, in bounds: ClosedRange<Double> = 0...100, unit: String = "%", onEditingChanged: @escaping (Bool) -> Void = { _ in }, onDragEnd: @escaping () -> Void = { }) {
+        self.text = text
+        self.value = value
+        self.bounds = bounds
+        self.unit = unit
+        self.onEditingChanged = onEditingChanged
+        self.onDragEnd = onDragEnd
+    }
+    
     var body: some View {
         VStack(alignment: .leading, content: {
-            Text(title)
-            Slider(value: $value, in: range, step: 1) { isEditing in
-                debouncer.call {
-                    onEditingChanged(isEditing)
-                }
-            }
+            Text("\(text): \(String(format: "%.f", value.wrappedValue))\(unit)")
+            Slider<Text, Text>(
+                value: value,
+                in: bounds,
+                step: 1,
+                onEditingChanged: { isEditing in
+                    debouncer.call {
+                        onEditingChanged(isEditing)
+                    }
+                    if !isEditing {
+                        onDragEnd()
+                    }
+                },
+                minimumValueLabel: Text("\(String(format: "%.f", bounds.lowerBound))"),
+                maximumValueLabel: Text("\(String(format: "%.f", bounds.upperBound))"),
+                label: { Text(text) }
+            )
         })
     }
 }
+

@@ -18,10 +18,10 @@ struct UserSettingsView: View {
     @State var l2Text: String = String(format: "%.f", GlobalConfig.level2)
     @State var l3Text: String = String(format: "%.f", GlobalConfig.level3)
     
-    @State var onDelayTime: String = String(format: "%d", LocalStorage.onDelay)
-    @State var offDelayTime: String = String(format: "%d", LocalStorage.offDelay)
-    @State var onTransitionTime: String = String(format: "%d", LocalStorage.onTransitionSteps)
-    @State var offTransitionTime: String = String(format: "%d", LocalStorage.offTransitionSteps)
+    @State var onDelayTime: String = String(format: "%d", GlobalConfig.onDelay)
+    @State var offDelayTime: String = String(format: "%d", GlobalConfig.offDelay)
+    @State var onTransitionTime: String = String(format: "%d", GlobalConfig.onTransition)
+    @State var offTransitionTime: String = String(format: "%d", GlobalConfig.offTransition)
     
     @State var isPresented = false
     @State var isNetworkResetPresented = false
@@ -116,10 +116,10 @@ private extension UserSettingsView {
         l2Text = String(format: "%.f", GlobalConfig.level2)
         l3Text = String(format: "%.f", GlobalConfig.level3)
         
-        onDelayTime = String(format: "%d", LocalStorage.onDelay)
-        offDelayTime = String(format: "%d", LocalStorage.offDelay)
-        onTransitionTime = String(format: "%d", LocalStorage.onTransitionSteps)
-        offTransitionTime = String(format: "%d", LocalStorage.offTransitionSteps)
+        onDelayTime = String(format: "%d", GlobalConfig.onDelay)
+        offDelayTime = String(format: "%d", GlobalConfig.offDelay)
+        onTransitionTime = String(format: "%d", GlobalConfig.onTransition)
+        offTransitionTime = String(format: "%d", GlobalConfig.offTransition)
     }
     
     func checkCode() {

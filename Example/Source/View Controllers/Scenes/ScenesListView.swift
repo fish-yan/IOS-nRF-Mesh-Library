@@ -12,17 +12,26 @@ import nRFMeshProvision
 struct ScenesListView: View {
     @State private var scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
     @State private var isShowSetting = false
+    @ObservedObject var meshNetworkModel = GLMeshNetworkModel.instance
     var body: some View {
         NavigationView {
             List {
                 ForEach(scenes, id: \.number) { scene in
-                    
-                    NavigationLink {
-                        SceneDetailView()
-                    } label: {
+                    HStack {
                         ItemView(resource: .groupSceneOutline, title: scene.name, detail: "Number: \(scene.number)")
+                        Spacer()
+                        Button {
+                            meshNetworkModel.selectedScene = scene.number
+                            MeshNetworkManager.instance.saveModel()
+                        } label: {
+                            Image(systemName: "checkmark")
+                                .font(.headline)
+                                .opacity(meshNetworkModel.selectedScene == scene.number ? 1 : 0)
+                        }
+
                     }
                 }
+                
             }
             .navigationTitle("Scenes")
             .toolbar {
