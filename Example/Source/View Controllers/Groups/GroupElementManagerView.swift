@@ -66,9 +66,9 @@ struct GroupElementManagerView: View {
         let arr = models.compactMap { $0.parentElement?.parentNode }
         var nodes = Set(arr)
         return NavigationLink {
-            LightSelectedView(multiSelected: nodes) { multiSelected in
-                nodes = multiSelected
-                subscribed(type: type, nodes: nodes)
+            LightSelectedView(multiSelected: nodes) { changes in
+                subscribed(type: type, nodes: changes.add)
+                unsubscribed(type: type, nodes: changes.delete)
             }
         } label: {
             HStack {
@@ -89,6 +89,19 @@ struct GroupElementManagerView: View {
             if let model = node.primaryElement?.model(withSigModelId: type.modelId),
                !model.isSubscribed(to: group) {
                 let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
+                _ = try? MeshNetworkManager.instance.send(message, to: node)
+            }
+        }
+        vm.updateModels(with: group)
+    }
+    
+    func unsubscribed(type: ElementType, nodes: Set<Node>) {
+        nodes.forEach { node in
+            if let model = node.primaryElement?.model(withSigModelId: type.modelId),
+               model.isSubscribed(to: group) {
+                let message: AcknowledgedConfigMessage =
+                    ConfigModelSubscriptionDelete(group: group, from: model) ??
+                    ConfigModelSubscriptionVirtualAddressDelete(group: group, from: model)!
                 _ = try? MeshNetworkManager.instance.send(message, to: node)
             }
         }

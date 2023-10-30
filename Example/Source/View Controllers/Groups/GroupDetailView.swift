@@ -126,10 +126,7 @@ extension GroupDetailView {
             store.error = .bearerError
             return
         }
-        let index = Int(store.level)
-        let levels = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, GlobalConfig.level0]
-        let value = levels[index]
-        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
+        let level = Int16(min(32767, -32768 + 655.36 * store.level)) // -32768...32767
         let message = GenericLevelSet(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
@@ -140,10 +137,7 @@ extension GroupDetailView {
             store.error = .bearerError
             return
         }
-        let index = Int(store.CCT)
-        let ccts = [GlobalConfig.cct0, GlobalConfig.cct1, GlobalConfig.cct2, GlobalConfig.cct3]
-        let value = ccts[index]
-        let colorTemperature = UInt8(value)
+        let colorTemperature = UInt8(store.CCT)
         let message = GLColorTemperatureMessage(colorTemperature: colorTemperature)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }

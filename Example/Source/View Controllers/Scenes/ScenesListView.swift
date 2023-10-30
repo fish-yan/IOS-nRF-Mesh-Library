@@ -16,22 +16,35 @@ struct ScenesListView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(scenes, id: \.number) { scene in
-                    HStack {
-                        ItemView(resource: .groupSceneOutline, title: scene.name, detail: "Number: \(scene.number)")
-                        Spacer()
-                        Button {
-                            meshNetworkModel.selectedScene = scene.number
-                            MeshNetworkManager.instance.saveModel()
-                        } label: {
-                            Image(systemName: "checkmark")
-                                .font(.headline)
-                                .opacity(meshNetworkModel.selectedScene == scene.number ? 1 : 0)
-                        }
-
+                Section {
+                    NavigationLink {
+                        
+                    } label: {
+                        ItemView(resource: .groupSceneOutline, title: "Arco Sense", detail: "General Luminaire")
+                    }
+                    NavigationLink {
+                        
+                    } label: {
+                        ItemView(resource: .groupSceneOutline, title: "Arco Space", detail: "General Luminaire")
                     }
                 }
-                
+                Section {
+                    ForEach(scenes, id: \.number) { scene in
+                        HStack {
+                            ItemView(resource: .groupSceneOutline, title: scene.name, detail: "Number: \(scene.number)")
+                            Spacer()
+                            Button {
+                                meshNetworkModel.selectedScene = scene.number
+                                MeshNetworkManager.instance.saveModel()
+                            } label: {
+                                Image(systemName: "checkmark")
+                                    .font(.headline)
+                                    .opacity(meshNetworkModel.selectedScene == scene.number ? 1 : 0)
+                            }
+
+                        }
+                    }
+                }
             }
             .navigationTitle("Scenes")
             .toolbar {

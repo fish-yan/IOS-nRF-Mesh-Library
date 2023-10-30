@@ -15,11 +15,18 @@ struct LightSelectedView: View {
         
     @State var multiSelected: Set<Node> = []
     
+    var originSelected: Set<Node> = []
+    
     @State private var editMode: EditMode = .active
     
-    var doneCallback: ((Set<Node>) -> Void)?
+    var doneCallback: (((add: Set<Node>, delete: Set<Node>)) -> Void)?
     
     var allNodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
+    
+    init(multiSelected: Set<Node>, doneCallback: (((add: Set<Node>, delete: Set<Node>)) -> Void)?) {
+        self.originSelected = multiSelected
+        self.multiSelected = multiSelected
+    }
     
     var body: some View {
         List(allNodes, id: \.self, selection: $multiSelected) { node in
@@ -43,7 +50,9 @@ struct LightSelectedView: View {
 
 extension LightSelectedView {
     func doneAction() {
-        doneCallback?(multiSelected)
+        let delete = originSelected.subtracting(multiSelected)
+        let add = multiSelected.subtracting(originSelected)
+        doneCallback?((add: add, delete: delete))
         dismiss.callAsFunction()
     }
 }

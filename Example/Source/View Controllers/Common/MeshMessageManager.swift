@@ -12,6 +12,7 @@ import nRFMeshProvision
 class MeshMessageManager {
     private var isSending = false
     private var messageHandle: MessageHandle?
+    private var completion: () -> Void = { }
     var delegate: MeshMessageDelegate? {
         didSet {
             MeshNetworkManager.instance.delegate = self
@@ -21,9 +22,12 @@ class MeshMessageManager {
     private var messageQueue = [MessageAction]()
     
     private func sendNext() {
-        guard !isSending,
-              let messageAction = messageQueue.first else {
+        if isSending {
+            return
+        }
+        guard let messageAction = messageQueue.first else {
             isSending = false
+            completion()
             return
         }
         self.isSending = true
@@ -66,6 +70,11 @@ class MeshMessageManager {
         return self
     }
     
+    func completion(_ completion: @escaping () -> Void) {
+        self.completion = completion
+    }
+    
+    
     func done() {
         self.isSending = false
         sendNext()
@@ -84,6 +93,7 @@ extension MeshMessageManager: MeshNetworkDelegate {
         }
         
         delegate?.meshNetworkManager(manager, didReceiveMessage: message, sentFrom: source, to: destination)
+        print("received message: \(message)")
         done()
     }
     
@@ -91,7 +101,7 @@ extension MeshMessageManager: MeshNetworkDelegate {
                             didSendMessage message: MeshMessage,
                             from localElement: Element, to destination: MeshAddress) {
         delegate?.meshNetworkManager(manager, didSendMessage: message, from: localElement, to: destination)
-        let isAckExpected = message is AcknowledgedMeshMessage
+        let isAckExpected = message is AcknowledgedMeshMessage || message is StaticVendorMessage
         if !isAckExpected {
             done()
         }

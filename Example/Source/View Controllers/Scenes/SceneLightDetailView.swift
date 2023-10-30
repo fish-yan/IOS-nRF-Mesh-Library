@@ -20,6 +20,7 @@ struct SceneLightDetailView: View {
     
     @State var isError: Bool = false
     @State var error: ErrorType = .none
+    @State var isLoading: Bool = false
     
     @ObservedObject var store: GLSceneModel
 
@@ -67,9 +68,9 @@ struct SceneLightDetailView: View {
         .toolbar(content: {
             Button("Save") {
                 saveScene()
-                dismiss.callAsFunction()
             }
         })
+        .alert("loading...", isPresented: $isLoading, actions: { })
         .alert("Error", isPresented: $isError) {
             Button("OK") {
                 switch error {
@@ -214,9 +215,30 @@ extension SceneLightDetailView {
             error = .bearerError
             return
         }
-        guard let sceneModel else { return }
-        let message = SceneStore(scene.number)
-        _ = try? MeshNetworkManager.instance.send(message, to: sceneModel)
+        
+        guard let sceneModel, let vendorModel else { return }
+        isLoading = true
+        messageManager.add {
+            let levels = [UInt8(store.level0), UInt8(store.level1), UInt8(store.level2), UInt8(store.level3)]
+            let message = GLLevelMessage(levels: levels)
+            return try MeshNetworkManager.instance.send(message, to: vendorModel)
+        }
+        .add {
+            let message = GLRunTimeMessage(time: Int(store.runTime))
+            return try MeshNetworkManager.instance.send(message, to: vendorModel)
+        }
+        .add {
+            let message = GLFadeTimeMessage(time: Int(store.fadeTime))
+            return try MeshNetworkManager.instance.send(message, to: vendorModel)
+        }
+        .add {
+            let message = SceneStore(scene.number)
+            return try MeshNetworkManager.instance.send(message, to: sceneModel)
+        }
+        .completion {
+            isLoading = false
+            dismiss.callAsFunction()
+        }
     }
 }
 

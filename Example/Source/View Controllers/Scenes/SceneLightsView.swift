@@ -24,21 +24,25 @@ struct SceneLightsView: View {
         }
         .navigationTitle("Scene Lights")
         .toolbar {
-            NavigationLink {
-                AddSceneView(isDone: $addDone, scene: scene)
-                    .navigationTitle("Add Scene")
-                    .toolbar {
-                        Button("Done") {
-                            addDone = true
+            HStack {
+                NavigationLink {
+                    AddSceneView(isDone: $addDone, scene: scene)
+                        .navigationTitle("Add Scene")
+                        .toolbar {
+                            Button("Done") {
+                                addDone = true
+                            }
                         }
+                } label: {
+                    Image(systemName: "highlighter")
+                }
+                NavigationLink {
+                    LightSelectedView(multiSelected: []) { (add: Set<Node>, delete: Set<Node>) in
+                        
                     }
-            } label: {
-                Image(systemName: "highlighter")
-            }
-            NavigationLink {
-                LightSelectedView()
-            } label: {
-                Image(systemName: "plus")
+                } label: {
+                    Image(systemName: "plus")
+                }
             }
         }
     }
