@@ -109,17 +109,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         meshNetworkManager.logger = self
         
         // Try loading the saved configuration.
-        do {
-            if try meshNetworkManager.load() {
-                meshNetworkDidChange()
-            } else {
-                _ = createNewMeshNetwork()
-            }
-        } catch {
-            print(error)
+        if meshNetworkManager.loadAll() {
+            meshNetworkDidChange()
+        } else {
+            createNewMeshNetwork()
         }
-        createDefaultApplicationKey()
-        createDefaultGroup()
         return true
     }
     
@@ -129,6 +123,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// When done, calls ``AppDelegate/meshNetworkDidChange()``.
     ///
     /// - returns: The newly created mesh network.
+    @discardableResult
     func createNewMeshNetwork() -> MeshNetwork {
         let provisioner = Provisioner(name: UIDevice.current.name,
                                       allocatedUnicastRange: [AddressRange(0x0001...0x199A)],
@@ -204,6 +199,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         connection!.logger = self
         meshNetworkManager.transmitter = connection
         connection!.open()
+        
+        createDefaultApplicationKey()
+        createDefaultGroup()
+        createDefaultScene()
     }
     
     func createDefaultApplicationKey() {
@@ -222,12 +221,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func createDefaultGroup() {
         let network = meshNetworkManager.meshNetwork!
-        let defaultAddress: [UInt16] = [0xD000, 0xD001, 0xD002, 0xD003, 0xD004, 0xD005]
+        let defaultAddress: [UInt16] = [0xD000, 0xD001, 0xD002, 0xD003, 0xD004, 0xD005, 0xD006]
         let unAddaddress = defaultAddress.filter { add in !network.groups.contains(where: { $0.address.address == add })}
         if unAddaddress.isEmpty { return }
         unAddaddress.forEach {
             let group = try! Group(name: String($0, radix: 16, uppercase: true), address: $0)
             try? network.add(group: group)
+        }
+        let _ = meshNetworkManager.save()
+    }
+    
+    func createDefaultScene() {
+        let network = meshNetworkManager.meshNetwork!
+        let defaultScenes: [SceneNumber] = [1, 2, 3, 4]
+        let unAddScene = defaultScenes.filter {number in !network.scenes.contains(where: { $0.number == number }) }
+        unAddScene.forEach { number in
+            try? network.add(scene: number, name: "Scene \(number)")
         }
         let _ = meshNetworkManager.save()
     }

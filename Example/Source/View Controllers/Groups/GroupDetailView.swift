@@ -13,6 +13,11 @@ struct GroupDetailView: View {
     
     var group: nRFMeshProvision.Group
     
+    @State var scenes: [nRFMeshProvision.Scene]
+    @State var selectedScene = -1
+    
+    @ObservedObject var meshNetworkModel = GLMeshNetworkModel.instance
+    
     @State private var isError: Bool = false
     @State private var errorMessage: String = "Error"
     
@@ -21,10 +26,8 @@ struct GroupDetailView: View {
     private var messageManager = MeshMessageManager()
     
     init(group: nRFMeshProvision.Group) {
-        
         self.group = group
-        
-        messageManager.delegate = self
+        self.scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
     }
     
     var body: some View {
@@ -41,6 +44,7 @@ struct GroupDetailView: View {
                 }
                 .frame(maxWidth: .infinity, minHeight: 100)
             }
+            .buttonStyle(.borderless)
             
             Section {
                 Toggle("AI", isOn: $store.isAi)
@@ -52,27 +56,38 @@ struct GroupDetailView: View {
                         sensorSet()
                     }
             }
-            
             Section {
                 SliderView("Level", value: $store.level) { isEditing in
                     levelSet()
                 }
-                
-                SliderView("CCT", value: $store.CCT) { isEditing in
-                    CCTSet()
-                }
-                
-                SliderView("Angle", value: $store.angle) { isEditing in
-                    angleSet()
+//                SliderView("CCT", value: $store.CCT) { isEditing in
+//                    CCTSet()
+//                }
+            }
+            Section {
+                ForEach(scenes, id: \.number) { scene in
+                    HStack {
+                        Text(scene.name)
+                        Spacer()
+                        Button {
+                            sceneSet(scene)
+                        } label: {
+                            Image(systemName: "checkmark")
+                                .font(.headline)
+                                .opacity(selectedScene == scene.number ? 1 : 0)
+                        }
+                    }
                 }
             }
         }
-        .buttonStyle(.borderless)
         .navigationTitle(group.name)
         .alert("Error", isPresented: $isError) { } message: {
             Text(errorMessage)
         }
-
+        .onAppear {
+            messageManager.delegate = self
+            scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
+        }
     }
 }
 
@@ -142,17 +157,14 @@ extension GroupDetailView {
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
-    func angleSet() {
+    func sceneSet(_ scene: nRFMeshProvision.Scene) {
         guard MeshNetworkManager.bearer.isConnected else {
             store.isError = true
             store.error = .bearerError
             return
         }
-        let index = Int(store.angle)
-        let ccts = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
-        let value = ccts[index]
-        let level = Int8(min(32767, -32768 + 655.36 * value)) // -32768...32767
-        let message = GLAngleMessage(angle: 0x02)
+//        let message = SceneRecall(scene.number)
+        let message = GLSceneRecallMessage(scene: UInt8(scene.number))
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
 }
@@ -163,7 +175,6 @@ extension GroupDetailView: MeshMessageDelegate {
         switch message {
         case let status as GenericOnOffStatus:
             print(status.isOn)
-//            store.isOn = status.isOn
         case let status as GenericLevelStatus:
             print(status.level)
         case let status as GLColorTemperatureStatus:
@@ -174,6 +185,10 @@ extension GroupDetailView: MeshMessageDelegate {
             print(status)
         case let status as GLSensorStatus:
             print(status)
+        case let status as GLSceneSetStatus:
+            selectedScene = Int(status.scene)
+//            meshNetworkModel.selectedScene = SceneNumber(status.scene)
+//            MeshNetworkManager.instance.saveModel()
         default: break
         }
     }

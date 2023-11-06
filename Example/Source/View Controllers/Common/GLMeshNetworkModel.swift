@@ -99,10 +99,45 @@ class GLSceneModel: ObservableObject, Codable {
 }
 
 class GLNodeModel: ObservableObject, Codable {
+    @Published var scenes: [SceneNumber: GLSceneModel] = [:]
+    @Published var selectedScene: SceneNumber = 0
     
+    enum CodingKeys: String, CodingKey {
+        case scenes, selectedScene
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        scenes = try values.decode([SceneNumber: GLSceneModel].self, forKey: .scenes)
+        selectedScene = try values.decode(SceneNumber.self, forKey: .selectedScene)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(scenes, forKey: .scenes)
+        try container.encode(selectedScene, forKey: .selectedScene)
+    }
 }
 
 class GLGroupModel: ObservableObject, Codable {
+    @Published var scenes: [SceneNumber: GLSceneModel] = [:]
+    @Published var selectedScene: SceneNumber = 0
+    
+    enum CodingKeys: String, CodingKey {
+        case scenes, selectedScene
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        scenes = try values.decode([SceneNumber: GLSceneModel].self, forKey: .scenes)
+        selectedScene = try values.decode(SceneNumber.self, forKey: .selectedScene)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(scenes, forKey: .scenes)
+        try container.encode(selectedScene, forKey: .selectedScene)
+    }
     
 }
 
@@ -134,6 +169,12 @@ class GLMeshNetworkModel: ObservableObject, Codable {
         try container.encode(scenes, forKey: .scenes)
         try container.encode(selectedScene, forKey: .selectedScene)
     }
+    
+    func reset() {
+        nodes.removeAll()
+        groups.removeAll()
+        selectedScene = 0
+    }
 }
 private let storage: Storage = LocalStorage(fileName: "GLModel.json")
 extension MeshNetworkManager {
@@ -141,8 +182,8 @@ extension MeshNetworkManager {
     @discardableResult
     func loadAll() -> Bool {
         let success = (try? load()) ?? false
-        let isModelLoaded = loadModel()
-        return success && isModelLoaded
+        loadModel()
+        return success
     }
     
     @discardableResult
@@ -153,7 +194,6 @@ extension MeshNetworkManager {
             let model = try? decoder.decode(GLMeshNetworkModel.self, from: data) {
             GLMeshNetworkModel.instance.groups = model.groups
             GLMeshNetworkModel.instance.nodes = model.nodes
-            GLMeshNetworkModel.instance.scenes = model.scenes
             print("model load success")
             return true
         }
@@ -167,7 +207,7 @@ extension MeshNetworkManager {
         if isModelSaved {
             print("model save success")
         }
-        return success && isModelSaved
+        return success
     }
     
     @discardableResult
@@ -178,6 +218,19 @@ extension MeshNetworkManager {
         
         let data = try! encoder.encode(GLMeshNetworkModel.instance)
         return storage.save(data)
+    }
+    
+    @discardableResult
+    func clearAll() -> Bool {
+        let success = clear()
+        clearModel()
+        return success
+    }
+    
+    @discardableResult
+    func clearModel() -> Bool {
+        GLMeshNetworkModel.instance.reset()
+        return saveModel()
     }
 }
 

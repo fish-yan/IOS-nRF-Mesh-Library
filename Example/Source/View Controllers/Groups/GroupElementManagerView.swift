@@ -10,7 +10,16 @@ import SwiftUI
 import nRFMeshProvision
 
 class GroupElementViewModel: ObservableObject {
+    @Published var level0: Double = 100
+    @Published var level1: Double = 70
+    @Published var level2: Double = 50
+    @Published var level3: Double = 20
+    @Published var runTime: Double = 300
+    @Published var fadeTime: Double = 60
+    
     @Published var elementMap: [ElementType: [Model]] = [:]
+    
+    @Published var scenes: [nRFMeshProvision.Scene] = []
     
     func updateModels(with group: nRFMeshProvision.Group) {
         guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
@@ -29,18 +38,60 @@ class GroupElementViewModel: ObservableObject {
             }
         })
     }
+    
+    func updateScene() {
+        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
+            return
+        }
+        scenes = meshNetwork.scenes
+    }
 }
 
 struct GroupElementManagerView: View {
     var group: nRFMeshProvision.Group
     
-    @ObservedObject var vm = GroupElementViewModel()
+    @ObservedObject var viewModel = GroupElementViewModel()
     
     @State var isDone = false
     
     var body: some View {
-        List(ElementType.allCases, id: \.self) { type in
-            elementView(type: type)
+        List {
+            Section {
+                ForEach(ElementType.allCases, id: \.self) { type in
+                    elementView(type: type)
+                }
+            } header: {
+                Text("Subscribe Model")
+            }
+            Section {
+                SliderView("L0", value: $viewModel.level0)
+                SliderView("L1", value: $viewModel.level1)
+                SliderView("L2", value: $viewModel.level2)
+                SliderView("L3", value: $viewModel.level3)
+                HStack {
+                    Spacer()
+                    Button("send", action: glLevelsSet)
+                }
+            } header: {
+                Text("General Luminaire Level")
+            }
+            
+            Section {
+                SliderView("run time", value: $viewModel.runTime, in: 0...900, unit: "s", onDragEnd: runtimeSet)
+                SliderView("fade time", value: $viewModel.fadeTime, in: 0...60, unit: "s", onDragEnd: fadetimeSet)
+            }
+            Section {
+                ForEach(viewModel.scenes, id: \.number) { scene in
+                    NavigationLink {
+                        SceneGroupDetailView(group: group, scene: scene)
+                    } label: {
+                        ItemView(resource: .icScenes24Pt, title: scene.name, detail: "Number: \(scene.number)")
+                    }
+
+                }
+            } header: {
+                Text("Scene")
+            }
         }
         .navigationTitle(group.name)
         .toolbar {
@@ -57,18 +108,19 @@ struct GroupElementManagerView: View {
             }
         }
         .onAppear {
-            vm.updateModels(with: group)
+            viewModel.updateModels(with: group)
+            viewModel.updateScene()
         }
     }
     
     func elementView(type: ElementType) -> some View {
-        let models = vm.elementMap[type] ?? []
+        let models = viewModel.elementMap[type] ?? []
         let arr = models.compactMap { $0.parentElement?.parentNode }
-        var nodes = Set(arr)
+        let nodes = Set(arr)
         return NavigationLink {
-            LightSelectedView(multiSelected: nodes) { changes in
-                subscribed(type: type, nodes: changes.add)
-                unsubscribed(type: type, nodes: changes.delete)
+            LightSelectedView(multiSelected: nodes, originSelected: nodes) { changes in
+                subscribe(type: type, nodes: changes.add)
+                unsubscribe(type: type, nodes: changes.delete)
             }
         } label: {
             HStack {
@@ -84,7 +136,7 @@ struct GroupElementManagerView: View {
         }
     }
     
-    func subscribed(type: ElementType, nodes: Set<Node>) {
+    func subscribe(type: ElementType, nodes: Set<Node>) {
         nodes.forEach { node in
             if let model = node.primaryElement?.model(withSigModelId: type.modelId),
                !model.isSubscribed(to: group) {
@@ -92,10 +144,10 @@ struct GroupElementManagerView: View {
                 _ = try? MeshNetworkManager.instance.send(message, to: node)
             }
         }
-        vm.updateModels(with: group)
+        viewModel.updateModels(with: group)
     }
     
-    func unsubscribed(type: ElementType, nodes: Set<Node>) {
+    func unsubscribe(type: ElementType, nodes: Set<Node>) {
         nodes.forEach { node in
             if let model = node.primaryElement?.model(withSigModelId: type.modelId),
                model.isSubscribed(to: group) {
@@ -105,7 +157,23 @@ struct GroupElementManagerView: View {
                 _ = try? MeshNetworkManager.instance.send(message, to: node)
             }
         }
-        vm.updateModels(with: group)
+        viewModel.updateModels(with: group)
+    }
+    
+    func glLevelsSet() {
+        let levels = [UInt8(viewModel.level0), UInt8(viewModel.level1), UInt8(viewModel.level2), UInt8(viewModel.level3)]
+        let message = GLLevelMessage(levels: levels)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
+    }
+    
+    func runtimeSet() {
+        let message = GLRunTimeMessage(time: Int(viewModel.runTime))
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
+    }
+    
+    func fadetimeSet() {
+        let message = GLFadeTimeMessage(time: Int(viewModel.fadeTime))
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
 }
  

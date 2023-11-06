@@ -16,7 +16,13 @@ struct ScenesManagerView: View {
         List {
             ForEach(scenes, id: \.number) { scene in
                 NavigationLink {
-                    SceneLightsView(scene: scene)
+                    AddSceneView(isDone: $addDone, scene: scene)
+                        .navigationTitle("Add Scene")
+                        .toolbar {
+                            Button("Done") {
+                                addDone = true
+                            }
+                        }
                 } label: {
                     ItemView(resource: .groupSceneOutline, title: scene.name, detail: "Number: \(scene.number)")
                 }

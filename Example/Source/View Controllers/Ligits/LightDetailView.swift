@@ -24,21 +24,34 @@ class LightDetailStore: ObservableObject {
     @Published var isSensor: Bool = true
     @Published var isError: Bool = false
     @Published var error: ErrorType = .none
+    
+    @Published var scenes: [nRFMeshProvision.Scene] = []
+    
+    func updateScene() {
+        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
+            return
+        }
+        scenes = meshNetwork.scenes
+    }
 }
 
 struct LightDetailView: View {
     @Environment(\.dismiss) var dismiss
     var node: Node
+    @State var scenes: [nRFMeshProvision.Scene] = []
+    @State var selectedScene = -1
+    
     @State private var onOffModel: Model?
     @State private var levelModel: Model?
     @State private var vendorModel: Model?
     
     @ObservedObject var store = LightDetailStore()
-
+    
     private var messageManager = MeshMessageManager()
     
     init(node: Node) {
         self.node = node
+        self.scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
     }
     
     var body: some View {
@@ -55,6 +68,7 @@ struct LightDetailView: View {
                 }
                 .frame(maxWidth: .infinity, minHeight: 100)
             }
+            .buttonStyle(.borderless)
             
             Section {
                 Toggle("AI", isOn: $store.isAi)
@@ -75,13 +89,23 @@ struct LightDetailView: View {
                 SliderView("CCT", value: $store.CCT, onDragEnd:  {
                     CCTSet()
                 })
-                
-                SliderView("Angle", value: $store.angle, onDragEnd:  {
-                    angleSet()
-                })
+            }
+            Section {
+                ForEach(scenes, id: \.number) { scene in
+                    HStack {
+                        Text(scene.name)
+                        Spacer()
+                        Button {
+                            sceneSet(scene)
+                        } label: {
+                            Image(systemName: "checkmark")
+                                .font(.headline)
+                                .opacity(selectedScene == scene.number ? 1 : 0)
+                        }
+                    }
+                }
             }
         }
-        .buttonStyle(.borderless)
         .navigationTitle(node.name ?? "Unknow")
         .onAppear(perform: onAppear)
         .alert("Error", isPresented: $store.isError) {
@@ -101,6 +125,7 @@ struct LightDetailView: View {
 extension LightDetailView {
     func onAppear() {
         messageManager.delegate = self
+        scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
         onOffModel = node.primaryElement?.model(withSigModelId: .genericOnOffServerModelId)
         levelModel = node.primaryElement?.model(withSigModelId: .genericLevelServerModelId)
         vendorModel = node.primaryElement?.model(withSigModelId: .glServerModelId)
@@ -192,18 +217,15 @@ extension LightDetailView {
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
     
-    func angleSet() {
+    func sceneSet(_ scene: nRFMeshProvision.Scene) {
         guard MeshNetworkManager.bearer.isConnected else {
             store.isError = true
             store.error = .bearerError
             return
         }
         guard let vendorModel else { return }
-        let index = Int(store.angle)
-        let ccts = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
-        let value = ccts[index]
-        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
-        let message = GLAngleMessage(angle: 0x02)
+//        let message = SceneRecall(scene.number)
+        let message = GLSceneRecallMessage(scene: UInt8(scene.number))
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
 }
@@ -215,7 +237,8 @@ extension LightDetailView: MeshMessageDelegate {
         case let status as GenericOnOffStatus:
             store.isOn = status.isOn
         case let status as GenericLevelStatus:
-            store.level = Double(status.level)
+            let level = floorf(0.1 + (Float(status.level) + 32768.0) / 655.35)
+            store.level = Double(level)
         case let status as GLColorTemperatureStatus:
             print(status)
         case let status as GLAngleStatus:
@@ -224,6 +247,8 @@ extension LightDetailView: MeshMessageDelegate {
             print(status)
         case let status as GLSensorStatus:
             print(status)
+        case let status as GLSceneSetStatus:
+            selectedScene = Int(status.scene)
         default: break
         }
     }

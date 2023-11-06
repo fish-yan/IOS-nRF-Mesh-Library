@@ -13,7 +13,7 @@ class GlobalConfig: ObservableObject {
     
     private init() { }
     
-    @AppStorage("userRole") static var userRole: String = "normal"
+    @AppStorage("userRole") static var userRole: Int = 0
     @AppStorage("onTransitionSteps") static var onTransition: Int = 0
     @AppStorage("offTransitionSteps") static var offTransition: Int = 0
     @AppStorage("onDelay") static var onDelay: Int = 0
@@ -31,10 +31,22 @@ class GlobalConfig: ObservableObject {
     static var isShowSetting: Bool {
         (UserRole(rawValue: userRole) ?? .normal) != .normal
     }
+    
+    static var isShowAdvance: Bool {
+        (UserRole(rawValue: userRole) ?? .normal) == .commissioner
+    }
 }
 
-enum UserRole: String, CaseIterable {
-    case normal
-    case supervisor
-    case commissioner
+enum UserRole: Int, CaseIterable {
+    case normal = 0
+    case supervisor = 1
+    case commissioner = 2
+    
+    var string: String {
+        switch self {
+        case .normal: "normal"
+        case .supervisor: "supervisor"
+        case .commissioner: "commissioner"
+        }
+    }
 }

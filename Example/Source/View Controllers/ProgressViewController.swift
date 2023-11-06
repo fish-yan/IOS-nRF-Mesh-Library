@@ -43,7 +43,7 @@ class ProgressViewController: UITableViewController {
     private var alert: UIAlertController?
     private var messageHandle: MessageHandle?
     
-    private var messageQueue = [MessageAction]()
+    var messageQueue = [MessageAction]()
     
     // MARK: - Implementation
     

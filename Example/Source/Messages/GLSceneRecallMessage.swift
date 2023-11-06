@@ -1,5 +1,5 @@
 //
-//  GLSceneSetMessage.swift
+//  GLSceneRecallMessage.swift
 //  nRF Mesh
 //
 //  Created by yan on 2023/10/26.
@@ -9,7 +9,7 @@
 import UIKit
 import nRFMeshProvision
 
-public struct GLSceneSetMessage: GLMessage {
+public struct GLSceneRecallMessage: GLMessage {
     
     public static var code: UInt32 = 0x4
         

@@ -30,6 +30,7 @@ struct SceneDetailView: View {
             } header: {
                 Text("power")
             }
+            .buttonStyle(.borderless)
             
             Section {
                 Toggle("Sensor", isOn: $isSensorOn)
@@ -38,7 +39,6 @@ struct SceneDetailView: View {
                 Text("control")
             }
         }
-        .buttonStyle(.borderless)
         .navigationTitle(title)
     }
 }

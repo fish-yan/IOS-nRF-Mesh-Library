@@ -47,7 +47,7 @@ struct UserSettingsView: View {
                         
                     } label: {
                         HStack {
-                            Text(role.rawValue.capitalized)
+                            Text(role.string.capitalized)
                                 .foregroundStyle(Color(UIColor.label))
                             Spacer()
                             Image(systemName: "checkmark")
@@ -56,6 +56,7 @@ struct UserSettingsView: View {
                     }
                 }
             }
+            /*
             if selectionRole == .supervisor || selectionRole == .commissioner {
                 Section {
                     UserSettingsItem(title: "L0", text: $l0Text, unit: "%")
@@ -75,7 +76,7 @@ struct UserSettingsView: View {
                     Text("Time")
                 }
             }
-            
+            */
             if selectionRole == .commissioner {
                 Section {
                     Button("Reset") { isNetworkResetPresented = true }
@@ -156,13 +157,8 @@ private extension UserSettingsView {
     }
     
     func reset() {
-        _ = MeshNetworkManager.instance.clear()
-        createNetwork(withFixedKeys: false,
-            networkKeys: 1,
-            applicationKeys: 1,
-            groups: 6,
-            virtualGroups: 0,
-            scenes: 0)
+        _ = MeshNetworkManager.instance.clearAll()
+        (UIApplication.shared.delegate as! AppDelegate).createNewMeshNetwork()
     }
     
     func createNetwork(withFixedKeys fixed: Bool,
@@ -193,9 +189,9 @@ private extension UserSettingsView {
             _ = try? network.add(applicationKey: key, name: "Application Key \(i + 1)")
         }
         // Add groups and scenes.
-        for i in 0..<groups {
+        for _ in 0..<groups {
             if let address = network.nextAvailableGroupAddress() {
-                _ = try? network.add(group: Group(name: "Group \(i + 1)", address: address))
+                _ = try? network.add(group: Group(name: String(address, radix: 16, uppercase: true), address: address))
             }
         }
         for i in 0..<virtualGroups {

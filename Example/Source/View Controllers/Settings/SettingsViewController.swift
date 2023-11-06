@@ -168,9 +168,9 @@ extension SettingsViewController: WizardDelegate {
             _ = try? network.add(applicationKey: key, name: "Application Key \(i + 1)")
         }
         // Add groups and scenes.
-        for i in 0..<groups {
+        for _ in 0..<groups {
             if let address = network.nextAvailableGroupAddress() {
-                _ = try? network.add(group: Group(name: "Group \(i + 1)", address: address))
+                _ = try? network.add(group: Group(name: String(address, radix: 16, uppercase: true), address: address))
             }
         }
         for i in 0..<virtualGroups {
@@ -217,7 +217,7 @@ private extension SettingsViewController {
                                              + "Make sure you exported it first.",
                                       preferredStyle: .actionSheet)
         let resetAction = UIAlertAction(title: "Reset", style: .destructive) { [weak self] _ in
-            _ = MeshNetworkManager.instance.clear()
+            _ = MeshNetworkManager.instance.clearAll()
             self?.openNewNetworkWizard()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

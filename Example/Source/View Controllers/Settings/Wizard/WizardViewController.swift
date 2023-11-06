@@ -64,10 +64,10 @@ class WizardViewController: UIViewController,
         if option.selectedSegmentIndex == 0 {
             delegate?.createNetwork(withFixedKeys: false,
                 networkKeys: 1,
-                applicationKeys: 0,
-                groups: 0,
+                applicationKeys: 1,
+                groups: 7,
                 virtualGroups: 0,
-                scenes: 0)
+                scenes: 4)
         } else {
             delegate?.createNetwork(
                 withFixedKeys: option.selectedSegmentIndex == 2,

@@ -23,11 +23,12 @@ struct LightSelectedView: View {
     
     var allNodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
     
-    init(multiSelected: Set<Node>, doneCallback: (((add: Set<Node>, delete: Set<Node>)) -> Void)?) {
-        self.originSelected = multiSelected
-        self.multiSelected = multiSelected
-    }
-    
+//    init(multiSelected: Set<Node>, doneCallback: (((add: Set<Node>, delete: Set<Node>)) -> Void)?) {
+//        self.originSelected = multiSelected
+//        self.multiSelected = multiSelected
+//        self.doneCallback = doneCallback
+//    }
+//    
     var body: some View {
         List(allNodes, id: \.self, selection: $multiSelected) { node in
             VStack(alignment: .leading) {

@@ -1,42 +1,31 @@
 //
-//  SceneLightDetailView.swift
+//  LightManagerDetailView.swift
 //  nRF Mesh
 //
-//  Created by yan on 2023/10/20.
+//  Created by yan on 2023/11/5.
 //  Copyright © 2023 CocoaPods. All rights reserved.
 //
 
 import SwiftUI
 import nRFMeshProvision
 
-struct SceneLightDetailView: View {
+struct LightManagerDetailView: View {
     @Environment(\.dismiss) var dismiss
+    
     var node: Node
-    var scene: nRFMeshProvision.Scene
+    private var messageManager = MeshMessageManager()
+    @ObservedObject var store = LightDetailStore()
+    
+    @State var isError: Bool = false
+    @State var error: ErrorType = .none
+    
     @State private var onOffModel: Model?
     @State private var levelModel: Model?
     @State private var vendorModel: Model?
     @State private var sceneModel: Model?
     
-    @State var isError: Bool = false
-    @State var error: ErrorType = .none
-    @State var isLoading: Bool = false
-    
-    @ObservedObject var store: GLSceneModel
-
-    private var messageManager = MeshMessageManager()
-    
-    init(node: Node, scene: nRFMeshProvision.Scene) {
-        let model = switch scene.number {
-        case 1: GLSceneModel.scene1Model
-        case 2: GLSceneModel.scene2Model
-        case 3: GLSceneModel.scene3Model
-        case 4: GLSceneModel.scene4Model
-        default: scene.model ?? GLSceneModel()
-        }
-        self.store = model
+    init(node: Node) {
         self.node = node
-        self.scene = scene
     }
     
     var body: some View {
@@ -59,32 +48,45 @@ struct SceneLightDetailView: View {
                 SliderView("run time", value: $store.runTime, in: 0...900, unit: "s", onDragEnd: runtimeSet)
                 SliderView("fade time", value: $store.fadeTime, in: 0...60, unit: "s", onDragEnd: fadetimeSet)
             }
+            
+            Section {
+                ForEach(store.scenes, id: \.number) { scene in
+                    NavigationLink {
+                        SceneLightDetailView(node: node, scene: scene)
+                    } label: {
+                        ItemView(resource: .icScenes24Pt, title: scene.name, detail: "Number: \(scene.number)")
+                    }
+
+                }
+            } header: {
+                Text("Scene")
+            }
         }
         .navigationTitle(node.name ?? "Unknow")
         .toolbar(content: {
-            Button("Save") {
-                saveScene()
-            }
+            NavigationLink("Advance", destination: NodeView(node: node)
+                .navigationTitle(node.name ?? "Unknow"))
+            .opacity(GlobalConfig.isShowAdvance ? 1 : 0)
         })
-        .alert("loading...", isPresented: $isLoading, actions: { })
-        .alert("Error", isPresented: $isError) {
+        .alert("Error", isPresented: $store.isError) {
             Button("OK") {
-                switch error {
+                switch store.error {
                 case .bearerError:
                     dismiss.callAsFunction()
                 default: break
                 }
             }
         } message: {
-            Text(error.message)
+            Text(store.error.message)
         }
         .onAppear(perform: onAppear)
     }
 }
 
 
-extension SceneLightDetailView {
+extension LightManagerDetailView {
     func onAppear() {
+        store.updateScene()
         messageManager.delegate = self
         onOffModel = node.primaryElement?.model(withSigModelId: .genericOnOffServerModelId)
         levelModel = node.primaryElement?.model(withSigModelId: .genericLevelServerModelId)
@@ -164,22 +166,7 @@ extension SceneLightDetailView {
             return
         }
         guard let vendorModel else { return }
-        let message = GLColorTemperatureMessage(colorTemperature:  UInt8(store.cct))
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
-    }
-    
-    func angleSet() {
-        guard MeshNetworkManager.bearer.isConnected else {
-            isError = true
-            error = .bearerError
-            return
-        }
-        guard let vendorModel else { return }
-        let index = Int(store.angle)
-        let ccts = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
-        let value = ccts[index]
-        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
-        let message = GLAngleMessage(angle: 0x02)
+        let message = GLColorTemperatureMessage(colorTemperature:  UInt8(store.CCT))
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
     
@@ -204,21 +191,9 @@ extension SceneLightDetailView {
         let message = GLFadeTimeMessage(time: Int(store.fadeTime))
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
-    
-    func saveScene() {
-        guard MeshNetworkManager.bearer.isConnected else {
-            isError = true
-            error = .bearerError
-            return
-        }
-        
-        guard let sceneModel else { return }
-        let message = SceneStore(scene.number)
-        _ = try? MeshNetworkManager.instance.send(message, to: sceneModel)
-    }
 }
 
-extension SceneLightDetailView: MeshMessageDelegate {
+extension LightManagerDetailView: MeshMessageDelegate {
     
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
         switch message {

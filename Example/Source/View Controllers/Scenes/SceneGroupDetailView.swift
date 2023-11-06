@@ -9,14 +9,10 @@
 import SwiftUI
 import nRFMeshProvision
 
-struct SceneLightDetailView: View {
+struct SceneGroupDetailView: View {
     @Environment(\.dismiss) var dismiss
-    var node: Node
+    var group: nRFMeshProvision.Group
     var scene: nRFMeshProvision.Scene
-    @State private var onOffModel: Model?
-    @State private var levelModel: Model?
-    @State private var vendorModel: Model?
-    @State private var sceneModel: Model?
     
     @State var isError: Bool = false
     @State var error: ErrorType = .none
@@ -26,7 +22,7 @@ struct SceneLightDetailView: View {
 
     private var messageManager = MeshMessageManager()
     
-    init(node: Node, scene: nRFMeshProvision.Scene) {
+    init(group: nRFMeshProvision.Group, scene: nRFMeshProvision.Scene) {
         let model = switch scene.number {
         case 1: GLSceneModel.scene1Model
         case 2: GLSceneModel.scene2Model
@@ -35,7 +31,7 @@ struct SceneLightDetailView: View {
         default: scene.model ?? GLSceneModel()
         }
         self.store = model
-        self.node = node
+        self.group = group
         self.scene = scene
     }
     
@@ -60,7 +56,7 @@ struct SceneLightDetailView: View {
                 SliderView("fade time", value: $store.fadeTime, in: 0...60, unit: "s", onDragEnd: fadetimeSet)
             }
         }
-        .navigationTitle(node.name ?? "Unknow")
+        .navigationTitle(group.name)
         .toolbar(content: {
             Button("Save") {
                 saveScene()
@@ -83,31 +79,11 @@ struct SceneLightDetailView: View {
 }
 
 
-extension SceneLightDetailView {
+extension SceneGroupDetailView {
     func onAppear() {
         messageManager.delegate = self
-        onOffModel = node.primaryElement?.model(withSigModelId: .genericOnOffServerModelId)
-        levelModel = node.primaryElement?.model(withSigModelId: .genericLevelServerModelId)
-        vendorModel = node.primaryElement?.model(withSigModelId: .glServerModelId)
-        sceneModel = node.primaryElement?.model(withSigModelId: .sceneServerModelId)
         guard MeshNetworkManager.bearer.isConnected else {
             return
-        }
-        bindApplicationKey()
-    }
-    
-    func bindApplicationKey()  {
-        guard let applicationKey = MeshNetworkManager.instance.meshNetwork?.applicationKey else {
-            return
-        }
-        let models = [onOffModel, levelModel, vendorModel, sceneModel].compactMap { $0 }
-        models.forEach { model in
-            if model.boundApplicationKeys.isEmpty,
-               let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
-                messageManager.add {
-                    return try MeshNetworkManager.instance.send(message, to: self.node.primaryUnicastAddress)
-                }
-            }
         }
     }
     
@@ -117,9 +93,8 @@ extension SceneLightDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
         let message = GLAiMessage(status: store.isAi ? .on : .off)
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func sensorSet() {
@@ -128,9 +103,8 @@ extension SceneLightDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
         let message = GLSensorMessage(status: store.isSensor ? .on : .off)
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func levelSet() {
@@ -139,10 +113,9 @@ extension SceneLightDetailView {
             error = .bearerError
             return
         }
-        guard let levelModel else { return }
 //        let level = Int16(min(32767, -32768 + 655.36 * store.level)) // -32768...32767
 //        let message = GenericLevelSet(level: level)
-//        _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
+//        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func glLevelsSet() {
@@ -151,10 +124,9 @@ extension SceneLightDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
         let levels = [UInt8(store.level0), UInt8(store.level1), UInt8(store.level2), UInt8(store.level3)]
         let message = GLLevelMessage(levels: levels)
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func CCTSet() {
@@ -163,24 +135,8 @@ extension SceneLightDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
         let message = GLColorTemperatureMessage(colorTemperature:  UInt8(store.cct))
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
-    }
-    
-    func angleSet() {
-        guard MeshNetworkManager.bearer.isConnected else {
-            isError = true
-            error = .bearerError
-            return
-        }
-        guard let vendorModel else { return }
-        let index = Int(store.angle)
-        let ccts = [GlobalConfig.level3, GlobalConfig.level2, GlobalConfig.level1, 100]
-        let value = ccts[index]
-        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
-        let message = GLAngleMessage(angle: 0x02)
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func runtimeSet() {
@@ -189,9 +145,8 @@ extension SceneLightDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
         let message = GLRunTimeMessage(time: Int(store.runTime))
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func fadetimeSet() {
@@ -200,9 +155,8 @@ extension SceneLightDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
         let message = GLFadeTimeMessage(time: Int(store.fadeTime))
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func saveScene() {
@@ -212,13 +166,12 @@ extension SceneLightDetailView {
             return
         }
         
-        guard let sceneModel else { return }
         let message = SceneStore(scene.number)
-        _ = try? MeshNetworkManager.instance.send(message, to: sceneModel)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
 }
 
-extension SceneLightDetailView: MeshMessageDelegate {
+extension SceneGroupDetailView: MeshMessageDelegate {
     
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
         switch message {

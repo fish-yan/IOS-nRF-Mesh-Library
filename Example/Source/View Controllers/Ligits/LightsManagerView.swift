@@ -16,8 +16,7 @@ struct LightsManagerView: View {
         List {
             ForEach(nodes, id: \.primaryUnicastAddress.hex) { node in
                 NavigationLink {
-                    NodeView(node: node)
-                        .navigationTitle(node.name ?? "Unknow")
+                    LightManagerDetailView(node: node)
                 } label: {
                     ItemView(resource: .meshIcon, title: node.name ?? "Unknow", detail: "Address: 0x\(node.primaryUnicastAddress.hex)")
                 }
@@ -31,6 +30,7 @@ struct LightsManagerView: View {
             } label: {
                 Image(systemName: "plus")
             }
+            .opacity(GlobalConfig.isShowAdvance ? 1 : 0)
         }
         .onAppear {
             nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }

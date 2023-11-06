@@ -39,21 +39,11 @@ public enum GLSimpleStatus: Int {
 
 extension Data {
     var asUInt8: UInt8 {
-        return (UInt8(self[0]) << 8) | UInt8(self[1])
+        return self[0]
     }
     
     func prePad(_ count: Int) -> Data {
         Data(repeating: 0, count: (Swift.max(0, count - self.count))) + self
-    }
-}
-
-extension Array where Element == UInt16 {
-    public static func + (lhs: Data, rhs: Self) -> Data {
-        rhs.reduce(lhs, +)
-    }
-    
-    public static func += (lhs: inout Data, rhs: Self) {
-        lhs = lhs + rhs
     }
 }
 
