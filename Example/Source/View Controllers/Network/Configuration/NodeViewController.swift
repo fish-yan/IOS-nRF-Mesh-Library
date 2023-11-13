@@ -587,7 +587,7 @@ extension NodeViewController: MeshNetworkDelegate {
             
         case is ConfigNodeResetStatus:
             done {
-                self.navigationController?.popViewController(animated: true)
+                self.navigationController?.popToRootViewController(animated: true)
             }
         default:
             done()

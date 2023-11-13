@@ -378,7 +378,7 @@ extension ProvisioningViewController: GattBearerDelegate {
                     guard let network = manager.meshNetwork else {
                         return
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.dismissStatusDialog()
                         if self.presentingViewController != nil {
                             if let node = network.node(for: self.unprovisionedDevice) {
