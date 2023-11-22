@@ -446,17 +446,18 @@ extension ProvisioningViewController: GattBearerDelegate {
             done()
             return
         }
-        
-        node.primaryElement?.models.forEach { model in
-            if let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
-                then("Bind Application Key...") {
-                    return try MeshNetworkManager.instance.send(message, to: node.primaryUnicastAddress)
+        node.elements.forEach { element in
+            element.models.forEach { model in
+                if let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
+                    then("Bind Application Key...") {
+                        return try MeshNetworkManager.instance.send(message, to: node.primaryUnicastAddress)
+                    }
                 }
             }
         }
         done()
         subscribeToGroup()
-//        addDefaultSceneAddresses()
+        addDefaultSceneAddresses()
     }
     
     func subscribeToGroup() {
@@ -479,18 +480,10 @@ extension ProvisioningViewController: GattBearerDelegate {
               let address = node?.primaryUnicastAddress else {
             return
         }
-        for scene in meshNetwork.scenes {
-            guard address.isUnicast && !scene.addresses.contains(address) else {
-                continue
-            }
-            guard let model = node?.primaryElement?.model(withSigModelId: .sceneSetupServerModelId) else {
-                continue
-            }
-            then("Storing Scene...") {
-                let message = SceneStore(scene.number)
-                return try MeshNetworkManager.instance.send(message, to: model)
-            }
+        for scene in meshNetwork.scenes where scene.number <= 4 {
+            scene.add(address: address)
         }
+        _ = MeshNetworkManager.instance.save()
     }
     
 }

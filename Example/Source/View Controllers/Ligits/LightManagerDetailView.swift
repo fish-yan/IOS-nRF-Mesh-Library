@@ -19,11 +19,6 @@ struct LightManagerDetailView: View {
     @State var isError: Bool = false
     @State var error: ErrorType = .none
     
-    @State private var onOffModel: Model?
-    @State private var levelModel: Model?
-    @State private var vendorModel: Model?
-    @State private var sceneModel: Model?
-    
     init(node: Node) {
         self.node = node
     }
@@ -51,15 +46,29 @@ struct LightManagerDetailView: View {
             
             Section {
                 ForEach(store.scenes, id: \.number) { scene in
-                    NavigationLink {
-                        SceneLightDetailView(node: node, scene: scene)
-                    } label: {
-                        ItemView(resource: .icScenes24Pt, title: scene.name, detail: "Number: \(scene.number)")
+                    HStack {
+                        Text(scene.name)
+                        Spacer()
+                        Button {
+                            sceneSet(scene)
+                        } label: {
+                            Image(systemName: "checkmark")
+                                .font(.headline)
+                                .opacity(store.selectedScene == scene.number ? 1 : 0)
+                        }
                     }
-
                 }
+                .onDelete(perform: delete)
             } header: {
-                Text("Scene")
+                HStack {
+                    Text("Scene")
+                    Spacer()
+                    NavigationLink {
+                        LightStoreSceneView(node: node, selectedScene: $store.selectedScene)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
             }
         }
         .navigationTitle(node.name ?? "Unknow")
@@ -86,40 +95,17 @@ struct LightManagerDetailView: View {
 
 extension LightManagerDetailView {
     func onAppear() {
-        store.updateScene()
+        store.updateScene(node: node)
         messageManager.delegate = self
-        onOffModel = node.primaryElement?.model(withSigModelId: .genericOnOffServerModelId)
-        levelModel = node.primaryElement?.model(withSigModelId: .genericLevelServerModelId)
-        vendorModel = node.primaryElement?.model(withSigModelId: .glServerModelId)
-        sceneModel = node.primaryElement?.model(withSigModelId: .sceneServerModelId)
-        guard MeshNetworkManager.bearer.isConnected else {
-            return
-        }
-        bindApplicationKey()
     }
-    
-    func bindApplicationKey()  {
-        guard let applicationKey = MeshNetworkManager.instance.meshNetwork?.applicationKey else {
-            return
-        }
-        let models = [onOffModel, levelModel, vendorModel, sceneModel].compactMap { $0 }
-        models.forEach { model in
-            if model.boundApplicationKeys.isEmpty,
-               let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
-                messageManager.add {
-                    return try MeshNetworkManager.instance.send(message, to: self.node.primaryUnicastAddress)
-                }
-            }
-        }
-    }
-    
+        
     func aiSet() {
         guard MeshNetworkManager.bearer.isConnected else {
             isError = true
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
+        guard let vendorModel = node.vendorModel else { return }
         let message = GLAiMessage(status: store.isAi ? .on : .off)
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
@@ -130,7 +116,7 @@ extension LightManagerDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
+        guard let vendorModel = node.vendorModel else { return }
         let message = GLSensorMessage(status: store.isSensor ? .on : .off)
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
@@ -141,7 +127,7 @@ extension LightManagerDetailView {
             error = .bearerError
             return
         }
-        guard let levelModel else { return }
+        guard let levelModel = node.levelModel else { return }
 //        let level = Int16(min(32767, -32768 + 655.36 * store.level)) // -32768...32767
 //        let message = GenericLevelSet(level: level)
 //        _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
@@ -153,20 +139,9 @@ extension LightManagerDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
+        guard let vendorModel = node.vendorModel else { return }
         let levels = [UInt8(store.level0), UInt8(store.level1), UInt8(store.level2), UInt8(store.level3)]
         let message = GLLevelMessage(levels: levels)
-        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
-    }
-    
-    func CCTSet() {
-        guard MeshNetworkManager.bearer.isConnected else {
-            isError = true
-            error = .bearerError
-            return
-        }
-        guard let vendorModel else { return }
-        let message = GLColorTemperatureMessage(colorTemperature:  UInt8(store.CCT))
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
     
@@ -176,7 +151,7 @@ extension LightManagerDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
+        guard let vendorModel = node.vendorModel else { return }
         let message = GLRunTimeMessage(time: Int(store.runTime))
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
@@ -187,9 +162,31 @@ extension LightManagerDetailView {
             error = .bearerError
             return
         }
-        guard let vendorModel else { return }
+        guard let vendorModel = node.vendorModel else { return }
         let message = GLFadeTimeMessage(time: Int(store.fadeTime))
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+    }
+    
+    func sceneSet(_ scene: nRFMeshProvision.Scene) {
+        guard MeshNetworkManager.bearer.isConnected else {
+            store.isError = true
+            store.error = .bearerError
+            return
+        }
+        guard let sceneModel = node.sceneModel else { return }
+        let message = SceneRecall(scene.number)
+        _ = try? MeshNetworkManager.instance.send(message, to: sceneModel)
+    }
+    
+    func delete(indexSet: IndexSet) {
+        guard let index = indexSet.min(),
+              let sceneSetupModel = node.sceneSetupModel else {
+            return
+        }
+        let scene = store.scenes[index]
+        store.scenes.remove(atOffsets: indexSet)
+        let message = SceneDelete(scene.number)
+        _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
     }
 }
 
@@ -209,8 +206,8 @@ extension LightManagerDetailView: MeshMessageDelegate {
             print(status)
         case let status as SceneRegisterStatus:
             print(status)
-            MeshNetworkManager.instance.saveModel()
-            dismiss.callAsFunction()
+//            MeshNetworkManager.instance.saveModel()
+//            dismiss.callAsFunction()
         default: break
         }
     }

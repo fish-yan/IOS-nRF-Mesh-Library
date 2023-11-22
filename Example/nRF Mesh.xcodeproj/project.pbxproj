@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C1193A32B0B9367004F0CFF /* LightStoreSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1193A22B0B9367004F0CFF /* LightStoreSceneView.swift */; };
 		2C1459892ABB221200351A40 /* LightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1459882ABB221200351A40 /* LightsView.swift */; };
 		2C1850372AF53B7900900348 /* SceneGroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1850362AF53B7900900348 /* SceneGroupDetailView.swift */; };
 		2C18503A2AF7C3FE00900348 /* GLRelayViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1850392AF7C3FE00900348 /* GLRelayViewCell.swift */; };
@@ -37,6 +38,7 @@
 		2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50C2ABBC23100BB135A /* SliderView.swift */; };
 		2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */; };
 		2CC0DA672AD583C30031DC9D /* SceneLightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */; };
+		2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */; };
 		2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */; };
 		2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */; };
 		2CF32E422AD43C6200D254F2 /* ScenesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E412AD43C6200D254F2 /* ScenesListView.swift */; };
@@ -246,6 +248,7 @@
 
 /* Begin PBXFileReference section */
 		2A5BED1139337A6A368C8D2E /* Pods-nRF Mesh.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nRF Mesh.release.xcconfig"; path = "Target Support Files/Pods-nRF Mesh/Pods-nRF Mesh.release.xcconfig"; sourceTree = "<group>"; };
+		2C1193A22B0B9367004F0CFF /* LightStoreSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightStoreSceneView.swift; sourceTree = "<group>"; };
 		2C1459882ABB221200351A40 /* LightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsView.swift; sourceTree = "<group>"; };
 		2C1850362AF53B7900900348 /* SceneGroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneGroupDetailView.swift; sourceTree = "<group>"; };
 		2C1850382AF7C3C300900348 /* GLRelay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GLRelay.xib; sourceTree = "<group>"; };
@@ -277,6 +280,7 @@
 		2CA1A50C2ABBC23100BB135A /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
 		2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMeshNetworkModel.swift; sourceTree = "<group>"; };
 		2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLightsView.swift; sourceTree = "<group>"; };
+		2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshNetwork+Extension.swift"; sourceTree = "<group>"; };
 		2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlView.swift; sourceTree = "<group>"; };
 		2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAiMessage.swift; sourceTree = "<group>"; };
 		2CF32E412AD43C6200D254F2 /* ScenesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesListView.swift; sourceTree = "<group>"; };
@@ -514,6 +518,7 @@
 				2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */,
 				2C798F152ABDD85600156CAA /* LightsManagerView.swift */,
 				2C18503E2AF7C70700900348 /* LightManagerDetailView.swift */,
+				2C1193A22B0B9367004F0CFF /* LightStoreSceneView.swift */,
 				2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */,
 				2CA1A50C2ABBC23100BB135A /* SliderView.swift */,
 				2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */,
@@ -969,6 +974,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
+				2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */,
 				2C42B5012AE66EA1006887FF /* Messages */,
 				52DF5D8D22968F7C00C297C1 /* Mesh Network */,
 				52835253227AEC8C0097B949 /* View Controllers */,
@@ -1450,6 +1456,7 @@
 				5217D2E0250F522A004FDE79 /* GenericDefaultTransitionTimeServerDelegate.swift in Sources */,
 				F09DE4C729D771F20073969A /* Model+Name.swift in Sources */,
 				2C93E3742ADE23EC00B392DB /* Debouncer.swift in Sources */,
+				2C1193A32B0B9367004F0CFF /* LightStoreSceneView.swift in Sources */,
 				52E54CD42343874000478F05 /* GenericOnOffServerCell.swift in Sources */,
 				2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */,
 				52547F24232A3F470002AA7B /* RangeCell.swift in Sources */,
@@ -1474,6 +1481,7 @@
 				F063C01D29C27EAB00A445A9 /* IntroViewController.swift in Sources */,
 				5292F8A325021B8F00EA0F2A /* ModelIdentifiers.swift in Sources */,
 				52835258227AEDA30097B949 /* DeviceCell.swift in Sources */,
+				2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */,
 				52E54CD82343876000478F05 /* GenericLevelServerCell.swift in Sources */,
 				A7B526A7277B210000F5C60D /* GenericPowerOnOffSetupViewCell.swift in Sources */,
 				F063C01A29C2774300A445A9 /* SelectKeysViewController.swift in Sources */,

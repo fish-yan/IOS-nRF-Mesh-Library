@@ -111,7 +111,7 @@ public class Scene: Codable {
     }
 }
 
-internal extension Scene {
+public extension Scene {
     
     /// Adds the Unicast Address to the Scene object.
     ///

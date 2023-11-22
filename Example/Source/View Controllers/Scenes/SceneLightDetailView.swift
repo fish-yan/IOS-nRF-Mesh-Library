@@ -234,7 +234,7 @@ extension SceneLightDetailView: MeshMessageDelegate {
             print(status)
         case let status as SceneRegisterStatus:
             print(status)
-            MeshNetworkManager.instance.saveModel()
+//            MeshNetworkManager.instance.saveModel()
             dismiss.callAsFunction()
         default: break
         }
