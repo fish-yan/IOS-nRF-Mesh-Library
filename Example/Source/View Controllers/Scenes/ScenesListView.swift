@@ -12,7 +12,6 @@ import nRFMeshProvision
 struct ScenesListView: View {
     @State private var scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
     @State private var isShowSetting = false
-    @ObservedObject var meshNetworkModel = GLMeshNetworkModel.instance
     var body: some View {
         NavigationView {
             List {

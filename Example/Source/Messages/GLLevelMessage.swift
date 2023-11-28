@@ -15,8 +15,11 @@ public struct GLLevelMessage: GLMessage {
         
     public var parameters: Data?
     
+    public var levels: [UInt8]
+    
     init(levels: [UInt8]) {
         self.parameters = levels.reduce(into: Data(), {$0 += $1})
+        self.levels = levels
     }
 }
 

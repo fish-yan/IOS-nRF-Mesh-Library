@@ -9,29 +9,95 @@
 import SwiftUI
 import nRFMeshProvision
 
-class LightDetailStore: ObservableObject {
+class LightDetailStore: NSObject, ObservableObject, Codable {
+    
     @Published var isOn = false
+    
+    @Published var isAi: Bool = true
+    @Published var isSensor: Bool = true
+    
     @Published var level: Double = 100
+    @Published var CCT: Double = 0
+    @Published var angle: Double = 0
+    
     @Published var level0: Double = 100
     @Published var level1: Double = 70
     @Published var level2: Double = 50
     @Published var level3: Double = 20
+    
     @Published var runTime: Double = 300
     @Published var fadeTime: Double = 60
-    @Published var CCT: Double = 0
-    @Published var angle: Double = 0
-    @Published var isAi: Bool = true
-    @Published var isSensor: Bool = true
-    @Published var selectedScene: SceneNumber = 0
+    
     
     @Published var isError: Bool = false
     @Published var error: ErrorType = .none
     
+    @Published var selectedScene: SceneNumber = 0
+    
     @Published var scenes: [nRFMeshProvision.Scene] = []
+    
+    @Published var allScenes: [nRFMeshProvision.Scene] = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
     
     func updateScene(node: Node) {
         scenes = node.scenes
     }
+    
+    func updateScene(group: nRFMeshProvision.Group) {
+        scenes = group.scenes
+    }
+    
+    override init() {}
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        isOn = try values.decode(Bool.self, forKey: .isOn)
+        isAi = try values.decode(Bool.self, forKey: .isAi)
+        isSensor = try values.decode(Bool.self, forKey: .isSensor)
+        level = try values.decode(Double.self, forKey: .level)
+        CCT = try values.decode(Double.self, forKey: .CCT)
+        level0 = try values.decode(Double.self, forKey: .level0)
+        level1 = try values.decode(Double.self, forKey: .level1)
+        level2 = try values.decode(Double.self, forKey: .level2)
+        level3 = try values.decode(Double.self, forKey: .level3)
+        runTime = try values.decode(Double.self, forKey: .runTime)
+        fadeTime = try values.decode(Double.self, forKey: .fadeTime)
+        selectedScene = try values.decode(SceneNumber.self, forKey: .selectedScene)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(isOn, forKey: .isOn)
+        try container.encode(isAi, forKey: .isAi)
+        try container.encode(isSensor, forKey: .isSensor)
+        try container.encode(level, forKey: .level)
+        try container.encode(CCT, forKey: .CCT)
+        try container.encode(level0, forKey: .level0)
+        try container.encode(level1, forKey: .level1)
+        try container.encode(level2, forKey: .level2)
+        try container.encode(level3, forKey: .level3)
+        try container.encode(runTime, forKey: .runTime)
+        try container.encode(fadeTime, forKey: .fadeTime)
+        try container.encode(selectedScene, forKey: .selectedScene)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case isOn, isAi, isSensor, level, CCT, angle, level0, level1, level2, level3, runTime, fadeTime, selectedScene
+    }
+    
+    override var description: String {
+        """
+onOff: \(isOn ? "true" : "false")
+ai: \(isAi ? "true" : "false")
+sensor: \(isSensor ? "true" : "false")
+level: \(String(format: "%.f%%", level))
+cct: \(String(format: "%.f%%", CCT))
+levels: \(String(format: "%.f%%", level0)) \(String(format: "%.f%%", level1)) \(String(format: "%.f%%", level2)) \(String(format: "%.f%%", level3))
+runTime: \(String(format: "%.fs", runTime))
+fadeTime: \(String(format: "%.fs", fadeTime))
+selectedScene: \(selectedScene)
+"""
+    }
+    
 }
 
 struct LightDetailView: View {
@@ -188,7 +254,7 @@ extension LightDetailView {
             return
         }
         guard let cctModel = node.cctModel else { return }
-        let level = Int16(min(32767, -32768 + 655.36 * store.level)) // -32768...32767
+        let level = Int16(min(32767, -32768 + 655.36 * store.CCT)) // -32768...32767
         let message = GenericLevelSet(level: level)
 //        let message = GLColorTemperatureMessage(colorTemperature: UInt8(store.CCT))
         _ = try? MeshNetworkManager.instance.send(message, to: cctModel)

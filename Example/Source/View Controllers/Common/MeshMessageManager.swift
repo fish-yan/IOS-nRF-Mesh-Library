@@ -63,7 +63,7 @@ class MeshMessageManager {
     }
     
     @discardableResult
-    func add(_ completion: @escaping () -> Void) -> Self {
+    func addWithoutHandle(_ completion: @escaping () -> Void) -> Self {
         let messageAction = MessageAction(message: "", completion: completion)
         self.messageQueue.append(messageAction)
         sendNext()
@@ -76,8 +76,10 @@ class MeshMessageManager {
     
     
     func done() {
-        self.isSending = false
-        sendNext()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+            self.isSending = false
+            self.sendNext()
+        }
     }
 }
 
@@ -103,6 +105,9 @@ extension MeshMessageManager: MeshNetworkDelegate {
         delegate?.meshNetworkManager(manager, didSendMessage: message, from: localElement, to: destination)
         let isAckExpected = message is AcknowledgedMeshMessage || message is StaticVendorMessage
         if !isAckExpected {
+            done()
+        }
+        if message is GLRunTimeMessage {
             done()
         }
     }

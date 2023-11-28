@@ -7,10 +7,34 @@
 //
 
 import SwiftUI
+import nRFMeshProvision
 
 struct DraftsView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach(GLMeshNetworkModel.instance.drafts, id: \.self) { draft in
+                NavigationLink {
+                    DraftControlView(store: draft.store)
+                } label: {
+                    VStack(alignment: .leading) {
+                        Text(draft.name)
+                            .font(.headline)
+                            .foregroundStyle(Color(uiColor: .label))
+                        Text(draft.store.description)
+                            .font(.subheadline)
+                            .foregroundStyle(Color(uiColor: .secondaryLabel))
+                    }
+                }
+                
+            }
+            .onDelete(perform: onDelete)
+        }
+        .navigationTitle("Drafts")
+    }
+    
+    func onDelete(indexSet: IndexSet) {
+        GLMeshNetworkModel.instance.drafts.remove(atOffsets: indexSet)
+        MeshNetworkManager.instance.saveModel()
     }
 }
 

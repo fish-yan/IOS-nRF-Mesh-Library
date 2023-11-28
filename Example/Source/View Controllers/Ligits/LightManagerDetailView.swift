@@ -9,9 +9,7 @@
 import SwiftUI
 import nRFMeshProvision
 
-struct LightManagerDetailView: View {
-    @Environment(\.dismiss) var dismiss
-    
+struct LightManagerDetailView: View {    
     var node: Node
     private var messageManager = MeshMessageManager()
     @ObservedObject var store = LightDetailStore()
@@ -78,13 +76,7 @@ struct LightManagerDetailView: View {
             .opacity(GlobalConfig.isShowAdvance ? 1 : 0)
         })
         .alert("Error", isPresented: $store.isError) {
-            Button("OK") {
-                switch store.error {
-                case .bearerError:
-                    dismiss.callAsFunction()
-                default: break
-                }
-            }
+            Button("OK") {}
         } message: {
             Text(store.error.message)
         }
@@ -204,6 +196,8 @@ extension LightManagerDetailView: MeshMessageDelegate {
             print(status)
         case let status as GLSensorStatus:
             print(status)
+        case let status as SceneStatus:
+            store.selectedScene = status.scene
         case let status as SceneRegisterStatus:
             print(status)
 //            MeshNetworkManager.instance.saveModel()

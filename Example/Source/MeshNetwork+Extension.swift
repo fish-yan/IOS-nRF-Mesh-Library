@@ -50,6 +50,21 @@ extension MeshNetworkManager {
                         completion: completion)
     }
     
+    func send(_ message: MeshMessage, to model: Model) throws -> MessageHandle {
+        guard let element = model.parentElement else {
+            print("Error: Element does not belong to a Node")
+            throw AccessError.invalidDestination
+        }
+        guard let meshNetwork = meshNetwork,
+              let applicationKey = meshNetwork.applicationKey else {
+            print("Error: Model is not bound to any Application Key")
+            throw AccessError.modelNotBoundToAppKey
+        }
+        return try send(message, from: nil, to: MeshAddress(element.unicastAddress),
+                        withTtl: nil, using: applicationKey,
+                        completion: nil)
+    }
+    
     @discardableResult
     func send(_ message: MeshMessage,
               from localElement: Element? = nil, to group: Group,
@@ -96,6 +111,14 @@ extension Node {
         return nil
     }
     
+    var angleModel: Model? {
+        let models = models(withSigModelId: .genericLevelServerModelId)
+        if models.count >= 3 {
+            return models[2]
+        }
+        return nil
+    }
+    
     var sceneModel: Model? {
         primaryElement?.model(withSigModelId: .sceneServerModelId)
     }
@@ -121,5 +144,14 @@ extension Element {
                                    .genericLevelServerModelId,
                                    .genericLevelClientModelId]
         return self.models.filter { filterIds.contains($0.modelIdentifier) || !$0.isBluetoothSIGAssigned}
+    }
+}
+
+public extension Group {
+    var scenes: [nRFMeshProvision.Scene] {
+        guard let applicationKey = MeshNetworkManager.instance.meshNetwork?.applicationKey else {
+            return []
+        }
+        return scenes(onModelsBoundTo: applicationKey)
     }
 }

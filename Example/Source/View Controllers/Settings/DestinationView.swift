@@ -7,13 +7,22 @@
 //
 
 import SwiftUI
+import nRFMeshProvision
 
 struct DestinationView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    
+    let messages: [GLMessageModel]
 
-#Preview {
-    DestinationView()
+    var body: some View {
+        List {
+            Section {
+                NavigationLink("Lights", destination: LightsSendView(messages: messages))
+            }
+            
+            Section {
+                NavigationLink("Groups", destination: GroupsSendView(messages: messages))
+            }
+        }
+        .navigationTitle("Destination")
+    }
 }

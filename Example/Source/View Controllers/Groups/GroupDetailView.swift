@@ -13,11 +13,6 @@ struct GroupDetailView: View {
     
     var group: nRFMeshProvision.Group
     
-    @State var scenes: [nRFMeshProvision.Scene]
-    @State var selectedScene = -1
-    
-    @ObservedObject var meshNetworkModel = GLMeshNetworkModel.instance
-    
     @State private var isError: Bool = false
     @State private var errorMessage: String = "Error"
     
@@ -27,7 +22,6 @@ struct GroupDetailView: View {
     
     init(group: nRFMeshProvision.Group) {
         self.group = group
-        self.scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
     }
     
     var body: some View {
@@ -65,7 +59,7 @@ struct GroupDetailView: View {
 //                }
             }
             Section {
-                ForEach(scenes, id: \.number) { scene in
+                ForEach(store.scenes, id: \.number) { scene in
                     HStack {
                         Text(scene.name)
                         Spacer()
@@ -74,7 +68,7 @@ struct GroupDetailView: View {
                         } label: {
                             Image(systemName: "checkmark")
                                 .font(.headline)
-                                .opacity(selectedScene == scene.number ? 1 : 0)
+                                .opacity(store.selectedScene == scene.number ? 1 : 0)
                         }
                     }
                 }
@@ -86,7 +80,7 @@ struct GroupDetailView: View {
         }
         .onAppear {
             messageManager.delegate = self
-            scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
+            store.updateScene(group: group)
         }
     }
 }
@@ -163,8 +157,7 @@ extension GroupDetailView {
             store.error = .bearerError
             return
         }
-//        let message = SceneRecall(scene.number)
-        let message = GLSceneRecallMessage(scene: UInt8(scene.number))
+        let message = SceneRecall(scene.number)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
 }
@@ -185,10 +178,8 @@ extension GroupDetailView: MeshMessageDelegate {
             print(status)
         case let status as GLSensorStatus:
             print(status)
-        case let status as GLSceneSetStatus:
-            selectedScene = Int(status.scene)
-//            meshNetworkModel.selectedScene = SceneNumber(status.scene)
-//            MeshNetworkManager.instance.saveModel()
+        case let status as SceneStatus:
+            store.selectedScene = status.scene
         default: break
         }
     }

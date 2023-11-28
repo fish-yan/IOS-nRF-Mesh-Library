@@ -15,8 +15,8 @@
 		2C18503F2AF7C70700900348 /* LightManagerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C18503E2AF7C70700900348 /* LightManagerDetailView.swift */; };
 		2C1AF5F52ADFDE6500B6DF11 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1AF5F42ADFDE6500B6DF11 /* GroupDetailView.swift */; };
 		2C2276FE2AD6D8760062CACD /* SettingsHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2276FD2AD6D8760062CACD /* SettingsHostViewController.swift */; };
-		2C2277002AD6D9890062CACD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2276FF2AD6D9890062CACD /* SettingsView.swift */; };
-		2C2277022AD6DD6E0062CACD /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277012AD6DD6E0062CACD /* UserSettingsView.swift */; };
+		2C2277002AD6D9890062CACD /* SettingsView1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2276FF2AD6D9890062CACD /* SettingsView1.swift */; };
+		2C2277022AD6DD6E0062CACD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277012AD6DD6E0062CACD /* SettingsView.swift */; };
 		2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277032AD794920062CACD /* GroupsHostViewController.swift */; };
 		2C2277062AD794C10062CACD /* GroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277052AD794C10062CACD /* GroupsView.swift */; };
 		2C31774A2B02224C007964C2 /* VendorModel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C18503B2AF7C47A00900348 /* VendorModel.xib */; };
@@ -24,8 +24,16 @@
 		2C42B5032AE67003006887FF /* GLColorTemperatureMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */; };
 		2C42B5052AE676FC006887FF /* GLAngleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5042AE676FC006887FF /* GLAngleMessage.swift */; };
 		2C42B5072AE76BC7006887FF /* GLMessageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */; };
+		2C72D6102B0EEB30004625CA /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D60F2B0EEB30004625CA /* ControlView.swift */; };
+		2C72D6122B0EEB88004625CA /* CustomControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6112B0EEB88004625CA /* CustomControlView.swift */; };
+		2C72D6142B0F2EB2004625CA /* DestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6132B0F2EB2004625CA /* DestinationView.swift */; };
+		2C72D6162B0F3C45004625CA /* GroupsSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6152B0F3C45004625CA /* GroupsSendView.swift */; };
+		2C72D6182B0F3C4E004625CA /* LightsSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6172B0F3C4E004625CA /* LightsSendView.swift */; };
 		2C77CAA02AE2C5E80013C697 /* SceneLightDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C77CA9F2AE2C5E80013C697 /* SceneLightDetailView.swift */; };
 		2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C798F152ABDD85600156CAA /* LightsManagerView.swift */; };
+		2C7BE3732B148F40006376F7 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */; };
+		2C7BE3752B14977C006376F7 /* DraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3742B14977C006376F7 /* DraftsView.swift */; };
+		2C7BE3772B14D72F006376F7 /* DraftControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3762B14D72F006376F7 /* DraftControlView.swift */; };
 		2C8C0C262ABF0FC100BC0156 /* GroupsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */; };
 		2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C292ABF132800BC0156 /* ItemView.swift */; };
 		2C8C0C2C2AC06DC600BC0156 /* GroupElementManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C2B2AC06DC600BC0156 /* GroupElementManagerView.swift */; };
@@ -258,16 +266,24 @@
 		2C18503E2AF7C70700900348 /* LightManagerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightManagerDetailView.swift; sourceTree = "<group>"; };
 		2C1AF5F42ADFDE6500B6DF11 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 		2C2276FD2AD6D8760062CACD /* SettingsHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHostViewController.swift; sourceTree = "<group>"; };
-		2C2276FF2AD6D9890062CACD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		2C2277012AD6DD6E0062CACD /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
+		2C2276FF2AD6D9890062CACD /* SettingsView1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView1.swift; sourceTree = "<group>"; };
+		2C2277012AD6DD6E0062CACD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2C2277032AD794920062CACD /* GroupsHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsHostViewController.swift; sourceTree = "<group>"; };
 		2C2277052AD794C10062CACD /* GroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsView.swift; sourceTree = "<group>"; };
 		2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessageManager.swift; sourceTree = "<group>"; };
 		2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLColorTemperatureMessage.swift; sourceTree = "<group>"; };
 		2C42B5042AE676FC006887FF /* GLAngleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAngleMessage.swift; sourceTree = "<group>"; };
 		2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMessageDelegate.swift; sourceTree = "<group>"; };
+		2C72D60F2B0EEB30004625CA /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
+		2C72D6112B0EEB88004625CA /* CustomControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomControlView.swift; sourceTree = "<group>"; };
+		2C72D6132B0F2EB2004625CA /* DestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationView.swift; sourceTree = "<group>"; };
+		2C72D6152B0F3C45004625CA /* GroupsSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsSendView.swift; sourceTree = "<group>"; };
+		2C72D6172B0F3C4E004625CA /* LightsSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsSendView.swift; sourceTree = "<group>"; };
 		2C77CA9F2AE2C5E80013C697 /* SceneLightDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLightDetailView.swift; sourceTree = "<group>"; };
 		2C798F152ABDD85600156CAA /* LightsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsManagerView.swift; sourceTree = "<group>"; };
+		2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
+		2C7BE3742B14977C006376F7 /* DraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftsView.swift; sourceTree = "<group>"; };
+		2C7BE3762B14D72F006376F7 /* DraftControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftControlView.swift; sourceTree = "<group>"; };
 		2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsManagerView.swift; sourceTree = "<group>"; };
 		2C8C0C292ABF132800BC0156 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
 		2C8C0C2B2AC06DC600BC0156 /* GroupElementManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupElementManagerView.swift; sourceTree = "<group>"; };
@@ -607,6 +623,7 @@
 				2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */,
 				2C93E3732ADE23EC00B392DB /* Debouncer.swift */,
 				2C93E3752ADF79A900B392DB /* GlobalConfig.swift */,
+				2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -779,8 +796,15 @@
 				5267FDCB2A02935D00ECD38B /* Wizard */,
 				52547F1B232A3F470002AA7B /* Provisioners */,
 				2C2276FD2AD6D8760062CACD /* SettingsHostViewController.swift */,
-				2C2276FF2AD6D9890062CACD /* SettingsView.swift */,
-				2C2277012AD6DD6E0062CACD /* UserSettingsView.swift */,
+				2C2276FF2AD6D9890062CACD /* SettingsView1.swift */,
+				2C2277012AD6DD6E0062CACD /* SettingsView.swift */,
+				2C72D6112B0EEB88004625CA /* CustomControlView.swift */,
+				2C7BE3762B14D72F006376F7 /* DraftControlView.swift */,
+				2C72D60F2B0EEB30004625CA /* ControlView.swift */,
+				2C72D6132B0F2EB2004625CA /* DestinationView.swift */,
+				2C72D6172B0F3C4E004625CA /* LightsSendView.swift */,
+				2C72D6152B0F3C45004625CA /* GroupsSendView.swift */,
+				2C7BE3742B14977C006376F7 /* DraftsView.swift */,
 				529B756F223FF1AE008F1CE7 /* SettingsViewController.swift */,
 				529B759B2243BA10008F1CE7 /* NetworkKeysViewController.swift */,
 				529B7571223FFC39008F1CE7 /* AppKeysViewController.swift */,
@@ -1350,6 +1374,7 @@
 				5212152F231554190059FB3D /* ProgressCollectionViewController.swift in Sources */,
 				523F776A22C621F50030EA6A /* NodeAddNetworkKeyViewController.swift in Sources */,
 				52E54CE12344974B00478F05 /* GenericLevelClientDelegate.swift in Sources */,
+				2C7BE3772B14D72F006376F7 /* DraftControlView.swift in Sources */,
 				2CFE86582AEAA32700A1CF7D /* GLBeaconUUIDSetMessage.swift in Sources */,
 				5292F8A9250654C600EA0F2A /* SceneSetupServerGroupCell.swift in Sources */,
 				5283528022806C280097B949 /* ProvisioningViewController.swift in Sources */,
@@ -1417,6 +1442,7 @@
 				5211EAD5250777E100089FF2 /* SceneServerDelegate.swift in Sources */,
 				2CFE86562AEAA2A200A1CF7D /* GLBeaconTimeIntervalMessage.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				2C72D6142B0F2EB2004625CA /* DestinationView.swift in Sources */,
 				2C2277062AD794C10062CACD /* GroupsView.swift in Sources */,
 				523F776C22C6324A0030EA6A /* ProgressViewController.swift in Sources */,
 				52547F25232A3F470002AA7B /* EditProvisionerViewController.swift in Sources */,
@@ -1429,6 +1455,7 @@
 				523F776822C615CE0030EA6A /* NodeAppKeysViewController.swift in Sources */,
 				523F777922CB57190030EA6A /* ModelViewController.swift in Sources */,
 				522AFFE022C2376C00521EDC /* ElementViewController.swift in Sources */,
+				2C72D6122B0EEB88004625CA /* CustomControlView.swift in Sources */,
 				5288C20E2371A91900321ED3 /* SimpleOnOffSet.swift in Sources */,
 				2CF32E442AD43DBE00D254F2 /* ScenesHostViewController.swift in Sources */,
 				523F779722CE2BF60030EA6A /* SetPublicationDestinationsViewController.swift in Sources */,
@@ -1450,6 +1477,8 @@
 				528445C924EEA765002168A1 /* HeartbeatSubscriptionCell.swift in Sources */,
 				2CC0DA672AD583C30031DC9D /* SceneLightsView.swift in Sources */,
 				5231403F2301761C0074325A /* ConfigurationServerViewCell.swift in Sources */,
+				2C72D6162B0F3C45004625CA /* GroupsSendView.swift in Sources */,
+				2C7BE3752B14977C006376F7 /* DraftsView.swift in Sources */,
 				2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */,
 				52A8EA9624EE704A004C14C7 /* SetHeartbeatSubscriptionViewController.swift in Sources */,
 				52547EFB231800F30002AA7B /* GroupTargetModelsViewController.swift in Sources */,
@@ -1493,10 +1522,12 @@
 				F085CA0829D70ACB00C2DF89 /* ConfigurationViewController.swift in Sources */,
 				52547F26232A3F470002AA7B /* ProvisionersViewController.swift in Sources */,
 				529EC8DA2A309C640056BB48 /* CompanyIdentifier.swift in Sources */,
+				2C7BE3732B148F40006376F7 /* TextFieldAlert.swift in Sources */,
 				2CFE865E2AEAA91B00A1CF7D /* GLGlobalOnOffMessage.swift in Sources */,
 				5267FDCD2A02937E00ECD38B /* CustomConfigCell.swift in Sources */,
 				52518B3322E0B43200A1FD1E /* GroupCell.swift in Sources */,
 				529B7570223FF1AE008F1CE7 /* SettingsViewController.swift in Sources */,
+				2C72D6182B0F3C4E004625CA /* LightsSendView.swift in Sources */,
 				5292F8A1250137DC00EA0F2A /* NodeScenesViewController.swift in Sources */,
 				2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */,
 				526021F62343660200E88F06 /* ControlViewController.swift in Sources */,
@@ -1507,7 +1538,7 @@
 				5288C20A2371A89900321ED3 /* SimpleOnOffClientDelegate.swift in Sources */,
 				529B759C2243BA10008F1CE7 /* NetworkKeysViewController.swift in Sources */,
 				2C42B5052AE676FC006887FF /* GLAngleMessage.swift in Sources */,
-				2C2277002AD6D9890062CACD /* SettingsView.swift in Sources */,
+				2C2277002AD6D9890062CACD /* SettingsView1.swift in Sources */,
 				521599D525E91F9300F602FA /* SensorValueCell.swift in Sources */,
 				52518B3122E0B18400A1FD1E /* GroupsViewController.swift in Sources */,
 				52A8EA9424EE6D18004C14C7 /* HeartbeatSubscriptionPeriodCell.swift in Sources */,
@@ -1516,11 +1547,12 @@
 				5283528222806D7C0097B949 /* NetworkKeySelectionViewController.swift in Sources */,
 				522AFFDE22BBBC6400521EDC /* NodeFeaturesCell.swift in Sources */,
 				523F776E22C63EAD0030EA6A /* NodeAddAppKeyViewController.swift in Sources */,
-				2C2277022AD6DD6E0062CACD /* UserSettingsView.swift in Sources */,
+				2C2277022AD6DD6E0062CACD /* SettingsView.swift in Sources */,
 				2C18503A2AF7C3FE00900348 /* GLRelayViewCell.swift in Sources */,
 				529B7643225222E8008F1CE7 /* Address+String.swift in Sources */,
 				52248CDC251E21F000B10250 /* ExportViewController.swift in Sources */,
 				5288C2062370571100321ED3 /* ProxySelectorViewController.swift in Sources */,
+				2C72D6102B0EEB30004625CA /* ControlView.swift in Sources */,
 				2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

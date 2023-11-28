@@ -9,70 +9,7 @@
 import SwiftUI
 import nRFMeshProvision
 
-
-struct TextFieldAlert: ViewModifier {
-    @Binding var isPresented: Bool
-    let title: String
-    @Binding var text: String
-    let placeholder: String
-    let action: (String) -> Void
-    func body(content: Content) -> some View {
-        ZStack(alignment: .center) {
-            content
-                .disabled(isPresented)
-            if isPresented {
-                VStack {
-                    Text(title).font(.headline).padding()
-                    SecureField(placeholder, text: $text).textFieldStyle(.roundedBorder).padding()
-                    Divider()
-                    HStack{
-                        Spacer()
-                        Button(role: .cancel) {
-                            withAnimation {
-                                isPresented.toggle()
-                            }
-                        } label: {
-                            Text("Cancel")
-                        }
-                        Spacer()
-                        Divider()
-                        Spacer()
-                        Button() {
-                            action(text)
-                            withAnimation {
-                                isPresented.toggle()
-                            }
-                        } label: {
-                            Text("Done")
-                        }
-                        Spacer()
-                    }
-                }
-                .background(.background)
-                .frame(width: 300, height: 200)
-                .cornerRadius(20)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(.quaternary, lineWidth: 1)
-                }
-            }
-        }
-    }
-}
-
-extension View {
-    public func textFieldAlert(
-        isPresented: Binding<Bool>,
-        title: String,
-        text: Binding<String>,
-        placeholder: String = "",
-        action: @escaping (String) -> Void
-    ) -> some View {
-        self.modifier(TextFieldAlert(isPresented: isPresented, title: title, text: text, placeholder: placeholder, action: action))
-    }
-}
-
-struct UserSettingsView: View {
+struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var selectionRole: UserRole = UserRole(rawValue: GlobalConfig.userRole) ?? .normal
@@ -93,87 +30,91 @@ struct UserSettingsView: View {
     @State var errorMessage = "Error"
     
     @State var prepareRole: UserRole = .normal
-        
+    
     @State var code: String = ""
-            
+    
     var body: some View {
-        List {
-            Section {
-                ForEach(UserRole.allCases, id: \.self) { role in
-                    Button {
-                        if role == .normal {
-                            selectionRole = role
-                        } else {
-                            isPresented = true
-                            prepareRole = role
-                        }
-                        
-                    } label: {
-                        HStack {
-                            Text(role.string.capitalized)
-                                .foregroundStyle(Color(UIColor.label))
-                            Spacer()
-                            Image(systemName: "checkmark")
-                                .opacity(role == selectionRole ? 1 : 0)
+        NavigationView {
+            List {
+                Section {
+                    ForEach(UserRole.allCases, id: \.self) { role in
+                        Button {
+                            if role == .normal {
+                                selectionRole = role
+                            } else {
+                                isPresented = true
+                                prepareRole = role
+                            }
+                            
+                        } label: {
+                            HStack {
+                                Text(role.string.capitalized)
+                                    .foregroundStyle(Color(UIColor.label))
+                                Spacer()
+                                Image(systemName: "checkmark")
+                                    .opacity(role == selectionRole ? 1 : 0)
+                            }
                         }
                     }
                 }
+                /*
+                 if selectionRole == .supervisor || selectionRole == .commissioner {
+                 Section {
+                 UserSettingsItem(title: "L0", text: $l0Text, unit: "%")
+                 UserSettingsItem(title: "L1", text: $l1Text, unit: "%")
+                 UserSettingsItem(title: "L2", text: $l2Text, unit: "%")
+                 UserSettingsItem(title: "L3", text: $l3Text, unit: "%")
+                 } header: {
+                 Text("Level")
+                 }
+                 
+                 Section {
+                 UserSettingsItem(title: "On Delay Time", text: $onDelayTime, unit: "s")
+                 UserSettingsItem(title: "Off Delay Time", text: $offDelayTime, unit: "s")
+                 UserSettingsItem(title: "On Transaction Time", text: $onTransitionTime, unit: "s")
+                 UserSettingsItem(title: "Off Transaction Time", text: $offTransitionTime, unit: "s")
+                 } header: {
+                 Text("Time")
+                 }
+                 }
+                 */
+                if selectionRole == .commissioner {
+                    Section {
+                        NavigationLink("Execute Batch", destination: CustomControlView())
+                        NavigationLink("Drafts", destination: DraftsView())
+                    }
+                    
+                    Section {
+                        Button("Reset") { isNetworkResetPresented = true }
+                            .tint(Color.red)
+                    }
+                }
             }
-            /*
-            if selectionRole == .supervisor || selectionRole == .commissioner {
-                Section {
-                    UserSettingsItem(title: "L0", text: $l0Text, unit: "%")
-                    UserSettingsItem(title: "L1", text: $l1Text, unit: "%")
-                    UserSettingsItem(title: "L2", text: $l2Text, unit: "%")
-                    UserSettingsItem(title: "L3", text: $l3Text, unit: "%")
-                } header: {
-                    Text("Level")
-                }
-                
-                Section {
-                    UserSettingsItem(title: "On Delay Time", text: $onDelayTime, unit: "s")
-                    UserSettingsItem(title: "Off Delay Time", text: $offDelayTime, unit: "s")
-                    UserSettingsItem(title: "On Transaction Time", text: $onTransitionTime, unit: "s")
-                    UserSettingsItem(title: "Off Transaction Time", text: $offTransitionTime, unit: "s")
-                } header: {
-                    Text("Time")
-                }
+            .navigationTitle("User Settings")
+            .toolbar {
+                Button("Save", action: save)
             }
-            */
-            if selectionRole == .commissioner {
-                Section {
-                    NavigationLink("Execute Batch", destination: CustomControlView())
+            .onAppear(perform: onAppear)
+            .textFieldAlert(isPresented: $isPresented, title: "Please enter code", text: "", placeholder: "enter code", isSecured: true, action: { text in
+                if let text {
+                    checkCode(text)
                 }
-                
-                Section {
-                    Button("Reset") { isNetworkResetPresented = true }
-                        .tint(Color.red)
-                }
+            })
+            .alert("Error", isPresented: $isErrorPresented) {
+                Button("OK", role: .cancel){}
+            } message: {
+                Text(errorMessage)
+            }
+            .alert("Reset Network", isPresented: $isNetworkResetPresented) {
+                Button("Reset", role: .destructive, action: reset)
+            } message: {
+                Text("Resetting the network will erase all network data.\nMake sure you exported it first.")
             }
         }
-        .navigationTitle("User Settings")
-        .toolbar {
-            Button("Save", action: save)
-        }
-        .onAppear(perform: onAppear)
-        .textFieldAlert(isPresented: $isPresented, title: "Please enter code", text: $code, placeholder: "enter code", action: { text in
-            checkCode()
-        })
-        .alert("Error", isPresented: $isErrorPresented) {
-            Button("OK", role: .cancel){}
-        } message: {
-            Text(errorMessage)
-        }
-        .alert("Reset Network", isPresented: $isNetworkResetPresented) {
-            Button("Reset", role: .destructive, action: reset)
-        } message: {
-            Text("Resetting the network will erase all network data.\nMake sure you exported it first.")
-        }
-        
-    }    
+    }
 }
 
-private extension UserSettingsView {
+private extension SettingsView {
     func onAppear() {
         selectionRole = UserRole(rawValue: GlobalConfig.userRole) ?? .normal
         
@@ -188,7 +129,7 @@ private extension UserSettingsView {
         offTransitionTime = String(format: "%d", GlobalConfig.offTransition)
     }
     
-    func checkCode() {
+    func checkCode(_ code: String) {
         if prepareRole == .supervisor {
             if code == "666666" {
                 selectionRole = prepareRole
@@ -205,7 +146,6 @@ private extension UserSettingsView {
                 isErrorPresented = true
             }
         }
-        code = ""
     }
     
     func save() {
@@ -269,8 +209,8 @@ private extension UserSettingsView {
         }
         
         if MeshNetworkManager.instance.save() {
-//            reload()
-//            resetViews()
+            //            reload()
+            //            resetViews()
         } else {
             errorMessage = "Mesh configuration could not be saved."
             isErrorPresented = true
@@ -297,5 +237,5 @@ struct UserSettingsItem: View {
 }
 
 #Preview {
-    UserSettingsView()
+    SettingsView()
 }

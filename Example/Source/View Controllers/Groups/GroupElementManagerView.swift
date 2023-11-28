@@ -9,50 +9,16 @@
 import SwiftUI
 import nRFMeshProvision
 
-class GroupElementViewModel: ObservableObject {
-    @Published var level0: Double = 100
-    @Published var level1: Double = 70
-    @Published var level2: Double = 50
-    @Published var level3: Double = 20
-    @Published var runTime: Double = 300
-    @Published var fadeTime: Double = 60
-    
-    @Published var elementMap: [ElementType: [Model]] = [:]
-    
-    @Published var scenes: [nRFMeshProvision.Scene] = []
-    
-    func updateModels(with group: nRFMeshProvision.Group) {
-        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
-            return
-        }
-        elementMap.removeAll()
-        meshNetwork.models(subscribedTo: group).forEach({ model in
-            if let type = ElementType(rawValue: model.modelIdentifier) {
-                if var models = elementMap[type] {
-                    models.append(model)
-                    elementMap[type] = models
-                } else {
-                    let models = [model]
-                    elementMap[type] = models
-                }
-            }
-        })
-    }
-    
-    func updateScene() {
-        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
-            return
-        }
-        scenes = meshNetwork.scenes
-    }
-}
-
 struct GroupElementManagerView: View {
     var group: nRFMeshProvision.Group
-    
-    @ObservedObject var viewModel = GroupElementViewModel()
+    private var messageManager = MeshMessageManager()
+    @ObservedObject var store = LightDetailStore()
     
     @State var isDone = false
+    
+    init(group: nRFMeshProvision.Group) {
+        self.group = group
+    }
     
     var body: some View {
         List {
@@ -64,10 +30,10 @@ struct GroupElementManagerView: View {
                 Text("Subscribe Model")
             }
             Section {
-                SliderView("L0", value: $viewModel.level0)
-                SliderView("L1", value: $viewModel.level1)
-                SliderView("L2", value: $viewModel.level2)
-                SliderView("L3", value: $viewModel.level3)
+                SliderView("L0", value: $store.level0)
+                SliderView("L1", value: $store.level1)
+                SliderView("L2", value: $store.level2)
+                SliderView("L3", value: $store.level3)
                 HStack {
                     Spacer()
                     Button("send", action: glLevelsSet)
@@ -77,20 +43,34 @@ struct GroupElementManagerView: View {
             }
             
             Section {
-                SliderView("run time", value: $viewModel.runTime, in: 0...900, unit: "s", onDragEnd: runtimeSet)
-                SliderView("fade time", value: $viewModel.fadeTime, in: 0...60, unit: "s", onDragEnd: fadetimeSet)
+                SliderView("run time", value: $store.runTime, in: 0...900, unit: "s", onDragEnd: runtimeSet)
+                SliderView("fade time", value: $store.fadeTime, in: 0...60, unit: "s", onDragEnd: fadetimeSet)
             }
             Section {
-                ForEach(viewModel.scenes, id: \.number) { scene in
-                    NavigationLink {
-                        SceneGroupDetailView(group: group, scene: scene)
-                    } label: {
-                        ItemView(resource: .icScenes24Pt, title: scene.name, detail: "Number: \(scene.number)")
+                ForEach(store.scenes, id: \.number) { scene in
+                    HStack {
+                        Text(scene.name)
+                        Spacer()
+                        Button {
+                            sceneSet(scene)
+                        } label: {
+                            Image(systemName: "checkmark")
+                                .font(.headline)
+                                .opacity(store.selectedScene == scene.number ? 1 : 0)
+                        }
                     }
-
                 }
+                .onDelete(perform: delete)
             } header: {
-                Text("Scene")
+                HStack {
+                    Text("Scene")
+                    Spacer()
+                    NavigationLink {
+                        LightStoreSceneView(group: group, selectedScene: $store.selectedScene)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
             }
         }
         .navigationTitle(group.name)
@@ -108,13 +88,22 @@ struct GroupElementManagerView: View {
             }
         }
         .onAppear {
-            viewModel.updateModels(with: group)
-            viewModel.updateScene()
+            store.updateScene(group: group)
+            messageManager.delegate = self
         }
     }
     
     func elementView(type: ElementType) -> some View {
-        let models = viewModel.elementMap[type] ?? []
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        var models = [Model]()
+        switch type {
+        case .onOff:
+            models = meshNetwork.models(subscribedTo: group).filter { $0.modelIdentifier == .genericOnOffServerModelId && $0.isBluetoothSIGAssigned }
+        case .level:
+            models = meshNetwork.models(subscribedTo: group).filter { $0.modelIdentifier == .genericLevelServerModelId && $0.isBluetoothSIGAssigned }
+        case .vendor:
+            models = meshNetwork.models(subscribedTo: group).filter { !$0.isBluetoothSIGAssigned }
+        }
         let arr = models.compactMap { $0.parentElement?.parentNode }
         let nodes = Set(arr)
         return NavigationLink {
@@ -137,19 +126,37 @@ struct GroupElementManagerView: View {
     }
     
     func subscribe(type: ElementType, nodes: Set<Node>) {
+        
         nodes.forEach { node in
-            if let model = node.primaryElement?.model(withSigModelId: type.modelId),
+            var model: Model?
+            switch type {
+            case .onOff:
+                model = node.onOffModel
+            case .level:
+                model = node.levelModel
+            case .vendor:
+                model = node.vendorModel
+            }
+            if let model,
                !model.isSubscribed(to: group) {
                 let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
                 _ = try? MeshNetworkManager.instance.send(message, to: node)
             }
         }
-        viewModel.updateModels(with: group)
     }
     
     func unsubscribe(type: ElementType, nodes: Set<Node>) {
         nodes.forEach { node in
-            if let model = node.primaryElement?.model(withSigModelId: type.modelId),
+            var model: Model?
+            switch type {
+            case .onOff:
+                model = node.onOffModel
+            case .level:
+                model = node.levelModel
+            case .vendor:
+                model = node.vendorModel
+            }
+            if let model,
                model.isSubscribed(to: group) {
                 let message: AcknowledgedConfigMessage =
                     ConfigModelSubscriptionDelete(group: group, from: model) ??
@@ -157,23 +164,61 @@ struct GroupElementManagerView: View {
                 _ = try? MeshNetworkManager.instance.send(message, to: node)
             }
         }
-        viewModel.updateModels(with: group)
     }
     
     func glLevelsSet() {
-        let levels = [UInt8(viewModel.level0), UInt8(viewModel.level1), UInt8(viewModel.level2), UInt8(viewModel.level3)]
+        let levels = [UInt8(store.level0), UInt8(store.level1), UInt8(store.level2), UInt8(store.level3)]
         let message = GLLevelMessage(levels: levels)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func runtimeSet() {
-        let message = GLRunTimeMessage(time: Int(viewModel.runTime))
+        let message = GLRunTimeMessage(time: Int(store.runTime))
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
     func fadetimeSet() {
-        let message = GLFadeTimeMessage(time: Int(viewModel.fadeTime))
+        let message = GLFadeTimeMessage(time: Int(store.fadeTime))
         _ = try? MeshNetworkManager.instance.send(message, to: group)
+    }
+    
+    func sceneSet(_ scene: nRFMeshProvision.Scene) {
+        let message = SceneRecall(scene.number)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
+    }
+    
+    func delete(indexSet: IndexSet) {
+        guard let index = indexSet.min() else {
+            return
+        }
+        let scene = store.scenes[index]
+        store.scenes.remove(atOffsets: indexSet)
+        let message = SceneDelete(scene.number)
+        _ = try? MeshNetworkManager.instance.send(message, to: group)
+    }
+}
+
+extension GroupElementManagerView: MeshMessageDelegate {
+    func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
+        switch message {
+        case let status as GenericLevelStatus:
+            print(status)
+        case let status as GLColorTemperatureStatus:
+            print(status)
+        case let status as GLAngleStatus:
+            print(status)
+        case let status as GLAiStatus:
+            print(status)
+        case let status as GLSensorStatus:
+            print(status)
+        case let status as SceneStatus:
+            store.selectedScene = status.scene
+        case let status as SceneRegisterStatus:
+            print(status)
+//            MeshNetworkManager.instance.saveModel()
+//            dismiss.callAsFunction()
+        default: break
+        }
     }
 }
  
@@ -200,23 +245,6 @@ enum ElementType: UInt16, CaseIterable {
         case .onOff: .orange
         case .level: .blue
         case .vendor: .yellow
-        }
-    }
-    
-    var modelId: UInt16 {
-        switch self {
-        case .onOff: .genericOnOffServerModelId
-        case .level: .genericLevelServerModelId
-        case .vendor: .glServerModelId
-        }
-    }
-    
-    init?(rawValue: UInt16) {
-        switch rawValue {
-        case .genericOnOffServerModelId: self = .onOff
-        case .genericLevelServerModelId: self = .level
-        case .glServerModelId: self = .vendor
-        default: return nil
         }
     }
 }

@@ -11,7 +11,8 @@ import nRFMeshProvision
 
 struct LightStoreSceneView: View {
     @Environment(\.dismiss) var dismiss;
-    var node: Node
+    var node: Node?
+    var group: nRFMeshProvision.Group?
     
     @State var storedScenes: [nRFMeshProvision.Scene] = []
     @State var newScenes: [nRFMeshProvision.Scene] = []
@@ -24,6 +25,11 @@ struct LightStoreSceneView: View {
     
     init(node: Node, selectedScene: Binding<SceneNumber>) {
         self.node = node
+        _selected = selectedScene
+    }
+    
+    init(group: nRFMeshProvision.Group, selectedScene: Binding<SceneNumber>) {
+        self.group = group
         _selected = selectedScene
     }
     
@@ -82,7 +88,12 @@ struct LightStoreSceneView: View {
 
 private extension LightStoreSceneView {
     func onAppear() {
-        storedScenes = node.scenes
+        if let node {
+            storedScenes = node.scenes
+        } else if let group {
+            storedScenes = group.scenes
+        }
+        
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
         newScenes = meshNetwork.scenes.filter { !storedScenes.contains($0) }
         messageManager.delegate = self
@@ -90,10 +101,14 @@ private extension LightStoreSceneView {
     
     func storeScene() {
         let message = SceneStore(selectedScene)
-        guard let sceneSetupModel = node.sceneSetupModel else {
-            return
+        if let node {
+            guard let sceneSetupModel = node.sceneSetupModel else {
+                return
+            }
+            _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
+        } else if let group {
+            _ = try? MeshNetworkManager.instance.send(message, to: group)
         }
-        _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
     }
 }
 

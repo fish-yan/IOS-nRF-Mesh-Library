@@ -15,9 +15,12 @@ public struct GLRunTimeMessage: GLMessage {
         
     public var parameters: Data?
     
+    public var time: Int
+    
     init(time: Int) {
         let hex = String(format: "%04d", time)
         self.parameters = Data(hex: hex)
+        self.time = time
     }
 }
 

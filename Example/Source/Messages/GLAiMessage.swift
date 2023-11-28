@@ -15,8 +15,11 @@ public struct GLAiMessage: GLMessage {
         
     public var parameters: Data?
     
+    public let status: GLSimpleStatus
+    
     init(status: GLSimpleStatus) {
         self.parameters = Data() + UInt8(status.rawValue)
+        self.status = status
     }
 }
 

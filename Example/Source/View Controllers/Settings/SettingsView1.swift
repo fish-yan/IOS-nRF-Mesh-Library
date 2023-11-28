@@ -8,12 +8,12 @@
 
 import SwiftUI
 
-struct SettingsView: View {
+struct SettingsView1: View {
     var body: some View {
         NavigationView {
             List {
                 NavigationLink {
-                    UserSettingsView()
+                    SettingsView()
                 } label: {
                     itemView(title: "User Setting", image: "gear", color: .gray)
                 }
