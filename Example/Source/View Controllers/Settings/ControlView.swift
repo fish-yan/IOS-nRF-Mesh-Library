@@ -9,8 +9,8 @@
 import SwiftUI
 import nRFMeshProvision
 
-enum MessageType: CaseIterable, Codable {
-    case onOff, ai, sensor, level, cct, angle, glLevel, runTime, fadeTime, sceneStore
+enum MessageType: Codable, Equatable {
+    case onOff, ai, sensor, level, cct, angle, glLevel, runTime, fadeTime, sceneStore, scenes
     var name: String {
         switch self {
         case .onOff: "onOff"
@@ -23,21 +23,39 @@ enum MessageType: CaseIterable, Codable {
         case .runTime: "runTime"
         case .fadeTime: "fadeTime"
         case .sceneStore: "sceneStore"
+        case .scenes: "scenes"
+        }
+    }
+    
+    func model(node: Node) -> Model? {
+        switch self {
+        case .onOff:
+            return node.onOffModel
+        case .level:
+            return node.levelModel
+        case .cct:
+            return node.cctModel
+        case .angle:
+            return node.angleModel
+        case .sceneStore:
+            return node.sceneSetupModel
+        case .scenes:
+            return node.sceneModel
+        case .ai, .sensor, .glLevel, .fadeTime, .runTime:
+            return node.vendorModel
         }
     }
 }
 
 struct ControlView: View {
     
-    @ObservedObject private var store: LightDetailStore
+    @ObservedObject private var store: MessageDetailStore
     
     @State private var messageTypes: [MessageType]
+        
+    @State private var onMessageChange: ((GLMessageModel) -> Void)
     
-    @State private var messages: [GLMessageModel] = []
-    
-    @State private var onMessageChange: (([GLMessageModel]) -> Void)
-    
-    init(messageTypes: [MessageType], store: LightDetailStore, onMessageChange: @escaping ([GLMessageModel]) -> Void = { _ in }) {
+    init(messageTypes: [MessageType], store: MessageDetailStore, onMessageChange: @escaping (GLMessageModel) -> Void = { _ in }) {
         self.messageTypes = messageTypes
         self.store = store
         self.onMessageChange = onMessageChange
@@ -86,6 +104,10 @@ struct ControlView: View {
             if messageTypes.contains(.sceneStore) {
                 allScenesView
             }
+            
+            if messageTypes.contains(.scenes) {
+                scenesView
+            }
         }
     }
     
@@ -132,7 +154,7 @@ struct ControlView: View {
     }
     
     private var angleView: some View {
-        SliderView("angle", value: $store.angle, onDragEnd:  {
+        SliderView("Angle", value: $store.angle, onDragEnd:  {
             angleSet()
         })
     }
@@ -158,16 +180,38 @@ struct ControlView: View {
     }
     
     private var runTimeView: some View {
-        SliderView("run time", value: $store.runTime, in: 0...900, unit: "s", onDragEnd: runTimeSet)
+        SliderView("Run time", value: $store.runTime, in: 0...900, unit: "s", onDragEnd: runTimeSet)
     }
     
     private var fadeTimeView: some View {
-        SliderView("fade time", value: $store.fadeTime, in: 0...60, unit: "s", onDragEnd: fadeTimeSet)
+        SliderView("Fade time", value: $store.fadeTime, in: 0...60, unit: "s", onDragEnd: fadeTimeSet)
     }
     
     private var allScenesView: some View {
         Section {
             ForEach(store.allScenes, id: \.number) { scene in
+                HStack {
+                    Text(scene.name)
+                    Spacer()
+                    Button {
+                        sceneStore(scene)
+                    } label: {
+                        Image(systemName: "checkmark")
+                            .font(.headline)
+                            .opacity(store.selectedScene == scene.number ? 1 : 0)
+                    }
+                }
+            }
+        } header: {
+            Text("Scene Store")
+        } footer: {
+            Text("select scene and store")
+        }
+    }
+    
+    private var scenesView: some View {
+        Section {
+            ForEach(store.scenes, id: \.number) { scene in
                 HStack {
                     Text(scene.name)
                     Spacer()
@@ -181,9 +225,9 @@ struct ControlView: View {
                 }
             }
         } header: {
-            Text("Scene Store")
+            Text("Scene Recall")
         } footer: {
-            Text("select scene and store to node or group")
+            Text("select scene and Recall")
         }
     }
 }
@@ -238,16 +282,20 @@ private extension ControlView {
         updateMessage(type: .fadeTime, message: message)
     }
     
-    func sceneSet(_ scene: nRFMeshProvision.Scene) {
+    func sceneStore(_ scene: nRFMeshProvision.Scene) {
         store.selectedScene = scene.number
         let message = SceneStore(scene.number)
         updateMessage(type: .sceneStore, message: message)
     }
     
+    func sceneSet(_ scene: nRFMeshProvision.Scene) {
+        store.selectedScene = scene.number
+        let message = SceneRecall(scene.number)
+        updateMessage(type: .scenes, message: message)
+    }
+    
     func updateMessage(type: MessageType, message: MeshMessage) {
-        messages.removeAll(where: { $0.type == type })
         let model = GLMessageModel(type: type, message: message)
-        messages.append(model)
-        onMessageChange(messages)
+        onMessageChange(model)
     }
 }

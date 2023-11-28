@@ -67,34 +67,18 @@ private extension LightsSendView {
     }
     func sendAction() {
         isPresented = true
+        var isFirst = true
         for node in multiSelected {
             for message in self.messages {
-                var model: Model?
-                var modelName = ""
-                switch message.type {
-                case .onOff:
-                    model = node.onOffModel
-                    modelName = "onOff"
-                case .level:
-                    model = node.levelModel
-                    modelName = "level"
-                case .cct:
-                    model = node.cctModel
-                    modelName = "cct"
-                case .angle:
-                    model = node.angleModel
-                    modelName = "angle"
-                case .sceneStore:
-                    model = node.sceneSetupModel
-                    modelName = "sceneSetup"
-                case .ai, .sensor, .glLevel, .fadeTime, .runTime:
-                    model = node.vendorModel
-                    modelName = "vendor"
-                }
-                if let model {
-                    messageManager.add {
-                        alertMessage = "send \(message.type.name) message to node:\(node.name ?? "Unknow") on \(modelName) model"
-                        return try MeshNetworkManager.instance.send(message.message, to: model)
+                if let model = message.type.model(node: node) {
+                    messageManager.addWithoutHandle {
+                        alertMessage = "send \(message.type.name) message to node:\(node.name ?? "Unknow")"
+                        let needWait = !isFirst && message.message is GLMessage
+                        let deadline: DispatchTime = needWait ? .now() + 6 : .now() + 2
+                        DispatchQueue.main.asyncAfter(deadline: deadline) {
+                            _ = try? MeshNetworkManager.instance.send(message.message, to: model)
+                        }
+                        isFirst = false
                     }
                 }
             }

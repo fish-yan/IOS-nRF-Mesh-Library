@@ -12,7 +12,7 @@ import nRFMeshProvision
 struct LightManagerDetailView: View {    
     var node: Node
     private var messageManager = MeshMessageManager()
-    @ObservedObject var store = LightDetailStore()
+    @ObservedObject var store = MessageDetailStore()
     
     @State var isError: Bool = false
     @State var error: ErrorType = .none

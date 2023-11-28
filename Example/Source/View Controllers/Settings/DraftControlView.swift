@@ -17,8 +17,6 @@ struct DraftControlView: View {
             let model = GLMessageModel(type: type, message: message)
             messages.append(model)
         }
-        let onOff = GenericOnOffSet(store.isOn)
-        updateMessage(type: .onOff, message: onOff)
         
         let ai = GLAiMessage(status: store.isAi ? .on : .off)
         updateMessage(type: .ai, message: ai)
@@ -54,14 +52,15 @@ struct DraftControlView: View {
     }
     @State var isPresented = false
     @State var name = ""
-    @ObservedObject var store = LightDetailStore()
+    @ObservedObject var store = MessageDetailStore()
     
-    init(store: LightDetailStore) {
+    init(store: MessageDetailStore) {
         self.store = store
     }
     
     var body: some View {
-        ControlView(messageTypes: MessageType.allCases, store: store)
+        let types: [MessageType] = [.ai, .sensor, .level, .cct, .angle, .glLevel, .runTime, .fadeTime, .sceneStore]
+        ControlView(messageTypes: types, store: store)
         .navigationTitle("Draft Control")
         .toolbar {
             HStack {

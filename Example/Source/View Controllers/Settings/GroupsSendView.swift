@@ -67,6 +67,7 @@ private extension GroupsSendView {
     }
     func sendAction() {
         isPresented = true
+        var isFirst = true
         for group in multiSelected {
             for message in self.messages {
                 switch message.type {
@@ -74,9 +75,14 @@ private extension GroupsSendView {
                     continue
                 default: break
                 }
-                messageManager.add {
+                messageManager.addWithoutHandle {
                     alertMessage = "send \(message.type.name) message to node:\(group.name)"
-                    return try MeshNetworkManager.instance.send(message.message, to: group)
+                    let needWait = !isFirst && message.message is GLMessage
+                    let deadline: DispatchTime = needWait ? .now() + 6 : .now() + 2
+                    DispatchQueue.main.asyncAfter(deadline: deadline) {
+                        _ = try? MeshNetworkManager.instance.send(message.message, to: group)
+                    }
+                    isFirst = false
                 }
             }
         }

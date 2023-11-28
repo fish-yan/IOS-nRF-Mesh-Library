@@ -615,12 +615,12 @@
 		52248CDF2523369700B10250 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */,
 				2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */,
 				522AFFDB22BBA34900521EDC /* ActionCell.swift */,
 				523F776322C4EDD90030EA6A /* SwitchCell.swift */,
 				520A7D6624F3E05A00BF370A /* RightActionCell.swift */,
 				2C8C0C292ABF132800BC0156 /* ItemView.swift */,
-				2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */,
 				2C93E3732ADE23EC00B392DB /* Debouncer.swift */,
 				2C93E3752ADF79A900B392DB /* GlobalConfig.swift */,
 				2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */,

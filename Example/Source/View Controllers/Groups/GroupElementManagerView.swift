@@ -12,7 +12,7 @@ import nRFMeshProvision
 struct GroupElementManagerView: View {
     var group: nRFMeshProvision.Group
     private var messageManager = MeshMessageManager()
-    @ObservedObject var store = LightDetailStore()
+    @ObservedObject var store = MessageDetailStore()
     
     @State var isDone = false
     

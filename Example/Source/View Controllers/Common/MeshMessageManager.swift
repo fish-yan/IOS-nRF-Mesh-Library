@@ -10,6 +10,7 @@ import UIKit
 import nRFMeshProvision
 
 class MeshMessageManager {
+    private var debouncer = Debouncer(interval: 100)
     private var isSending = false
     private var messageHandle: MessageHandle?
     private var completion: () -> Void = { }
@@ -31,12 +32,11 @@ class MeshMessageManager {
             return
         }
         self.isSending = true
-        self.messageQueue.removeFirst()
         DispatchQueue.main.async {
             switch messageAction.completion {
-            case let completion as (() throws -> MessageHandle?):
+            case let callback as (() throws -> MessageHandle?):
                 do {
-                    self.messageHandle = try completion()
+                    self.messageHandle = try callback()
                     guard let _ = self.messageHandle else {
                         self.isSending = false
                         return
@@ -46,9 +46,9 @@ class MeshMessageManager {
                     self.messageHandle = nil
                 }
                 
-            case let completion as (() -> Void):
+            case let callback as (() -> Void):
                 self.isSending = true
-                completion()
+                callback()
             default: return
             }
         }
@@ -65,7 +65,7 @@ class MeshMessageManager {
     @discardableResult
     func addWithoutHandle(_ completion: @escaping () -> Void) -> Self {
         let messageAction = MessageAction(message: "", completion: completion)
-        self.messageQueue.append(messageAction)
+        messageQueue.append(messageAction)
         sendNext()
         return self
     }
@@ -76,9 +76,16 @@ class MeshMessageManager {
     
     
     func done() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-            self.isSending = false
-            self.sendNext()
+        self.isSending = false
+        if !messageQueue.isEmpty {
+            messageQueue.removeFirst()
+        }
+        if messageQueue.isEmpty {
+            completion()
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(110)) {
+                self.sendNext()
+            }
         }
     }
 }
@@ -87,16 +94,19 @@ extension MeshMessageManager: MeshNetworkDelegate {
     func meshNetworkManager(_ manager: MeshNetworkManager,
                             didReceiveMessage message: MeshMessage,
                             sentFrom source: Address, to destination: MeshAddress) {
-        var message = message
-        if let type = jlResponseTypes.first(where: { $0.opCode == message.opCode }),
-        let parameters = message.parameters,
-           let msg = type.init(parameters: parameters) {
-            message = msg
+        debouncer.call {
+            var message = message
+            if let type = jlResponseTypes.first(where: { $0.opCode == message.opCode }),
+               let parameters = message.parameters,
+               let msg = type.init(parameters: parameters) {
+                message = msg
+            }
+            
+            self.delegate?.meshNetworkManager(manager, didReceiveMessage: message, sentFrom: source, to: destination)
+            print("received message: \(message)")
+            
+            self.done()
         }
-        
-        delegate?.meshNetworkManager(manager, didReceiveMessage: message, sentFrom: source, to: destination)
-        print("received message: \(message)")
-        done()
     }
     
     func meshNetworkManager(_ manager: MeshNetworkManager,

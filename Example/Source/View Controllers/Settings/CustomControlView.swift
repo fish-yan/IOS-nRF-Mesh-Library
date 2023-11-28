@@ -14,11 +14,13 @@ struct CustomControlView: View {
     @State var messages: [GLMessageModel] = []
     @State var isPresented = false
     @State var name = ""
-    @StateObject var store = LightDetailStore()
+    @StateObject var store = MessageDetailStore()
     
     var body: some View {
-        ControlView(messageTypes: MessageType.allCases, store: store) { messages in
-            self.messages = messages
+        let types: [MessageType] = [.ai, .sensor, .level, .cct, .angle, .glLevel, .runTime, .fadeTime, .sceneStore]
+        ControlView(messageTypes: types, store: store) { message in
+            messages.removeAll(where: { $0.type == message.type })
+            messages.append(message)
         }
         .navigationTitle("Custom Control")
         .toolbar {
@@ -32,7 +34,9 @@ struct CustomControlView: View {
             }
         }
         .textFieldAlert(isPresented: $isPresented, title: "Please input name", text: "", placeholder: "name", action: { text in
-            saveDraft(text ?? "")
+            if let text {
+                saveDraft(text)
+            }
         })
     }
 }
@@ -44,8 +48,4 @@ private extension CustomControlView {
         MeshNetworkManager.instance.saveModel()
         dismiss.callAsFunction()
     }
-}
-
-#Preview {
-    CustomControlView()
 }

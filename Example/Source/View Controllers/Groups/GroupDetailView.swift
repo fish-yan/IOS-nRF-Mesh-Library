@@ -16,7 +16,7 @@ struct GroupDetailView: View {
     @State private var isError: Bool = false
     @State private var errorMessage: String = "Error"
     
-    @ObservedObject var store = LightDetailStore()
+    @ObservedObject var store = MessageDetailStore()
     
     private var messageManager = MeshMessageManager()
     

@@ -22,9 +22,33 @@ struct DraftsView: View {
                         Text(draft.name)
                             .font(.headline)
                             .foregroundStyle(Color(uiColor: .label))
-                        Text(draft.store.description)
-                            .font(.subheadline)
-                            .foregroundStyle(Color(uiColor: .secondaryLabel))
+                        Spacer().frame(height: 10)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("ai:")
+                                Text("sensor:")
+                                Text("level:")
+                                Text("cct:")
+                                Text("levels:")
+                                Text("runTime:")
+                                Text("fadeTime:")
+                                Text("scene:")
+                            }
+                            .frame(width: 100)
+                            VStack(alignment: .leading) {
+                                Text(draft.store.isAi ? "on" : "off")
+                                Text(draft.store.isSensor ? "on" : "off")
+                                Text("\(draft.store.level, specifier: "%.f")%")
+                                Text("\(draft.store.CCT, specifier: "%.f")%")
+                                Text("\(draft.store.level0, specifier: "%.f")% \(draft.store.level1, specifier: "%.f")% \(draft.store.level2, specifier: "%.f")% \(draft.store.level3, specifier: "%.f")%")
+                                Text("\(draft.store.runTime, specifier: "%.f")")
+                                Text("\(draft.store.fadeTime, specifier: "%.f")")
+                                Text("\(draft.store.selectedScene)")
+                            }
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(Color(uiColor: .secondaryLabel))
+                        
                     }
                 }
                 
@@ -39,15 +63,13 @@ struct DraftsView: View {
         MeshNetworkManager.instance.saveModel()
     }
     
-    func messages(with store: LightDetailStore) -> [GLMessageModel] {
+    func messages(with store: MessageDetailStore) -> [GLMessageModel] {
         var messages = [GLMessageModel]()
         func updateMessage(type: MessageType, message: MeshMessage) {
             messages.removeAll(where: { $0.type == type })
             let model = GLMessageModel(type: type, message: message)
             messages.append(model)
         }
-        let onOff = GenericOnOffSet(store.isOn)
-        updateMessage(type: .onOff, message: onOff)
         
         let ai = GLAiMessage(status: store.isAi ? .on : .off)
         updateMessage(type: .ai, message: ai)
@@ -77,12 +99,10 @@ struct DraftsView: View {
         let fadeTime = GLFadeTimeMessage(time: Int(store.fadeTime))
         updateMessage(type: .fadeTime, message: fadeTime)
         
-        let selectedScene = SceneStore(store.selectedScene)
-        updateMessage(type: .sceneStore, message: selectedScene)
+        if store.selectedScene > 0 {
+            let selectedScene = SceneStore(store.selectedScene)
+            updateMessage(type: .sceneStore, message: selectedScene)
+        }
         return messages
     }
-}
-
-#Preview {
-    DraftsView()
 }
