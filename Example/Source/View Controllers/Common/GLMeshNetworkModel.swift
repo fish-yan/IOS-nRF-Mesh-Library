@@ -242,19 +242,21 @@ class GLDraftModel: ObservableObject, Codable, Hashable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case name, store
+        case name, store, messageTypes
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         name = try values.decode(String.self, forKey: .name)
         store = try values.decode(MessageDetailStore.self, forKey: .store)
+        messageTypes = try values.decode([MessageType].self, forKey: .messageTypes)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(store, forKey: .store)
+        try container.encode(messageTypes, forKey: .messageTypes)
     }
     
     func hash(into hasher: inout Hasher) {
