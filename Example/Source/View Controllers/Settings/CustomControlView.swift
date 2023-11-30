@@ -43,7 +43,8 @@ struct CustomControlView: View {
 
 private extension CustomControlView {
     func saveDraft(_ name: String) {
-        let draft = GLDraftModel(name: name, store: store)
+        let messageTypes = messages.map { $0.type }
+        let draft = GLDraftModel(name: name, store: store, messageTypes: messageTypes)
         GLMeshNetworkModel.instance.drafts.append(draft)
         MeshNetworkManager.instance.saveModel()
         dismiss.callAsFunction()

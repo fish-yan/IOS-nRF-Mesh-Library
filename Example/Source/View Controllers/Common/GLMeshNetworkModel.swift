@@ -233,10 +233,12 @@ class GLDraftModel: ObservableObject, Codable, Hashable {
     
     @Published var name: String = "Draft"
     @Published var store: MessageDetailStore = MessageDetailStore()
+    @Published var messageTypes: [MessageType] = []
     
-    init(name: String, store: MessageDetailStore) {
+    init(name: String, store: MessageDetailStore, messageTypes: [MessageType]) {
         self.name = name
         self.store = store
+        self.messageTypes = messageTypes
     }
     
     enum CodingKeys: String, CodingKey {
