@@ -116,7 +116,7 @@
             </objects>
             <point key="canvasLocation" x="431" y="1270"/>
         </scene>
-        <!--Scene-->
+        <!--Control-->
         <scene sceneID="6Ie-es-WDS">
             <objects>
                 <viewController id="V9C-H5-0cM" customClass="ScenesHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
@@ -127,7 +127,7 @@
                             <segue destination="bXY-Rz-Hwi" kind="embed" destinationCreationSelector="showLightsView:" id="0VD-T1-UOb"/>
                         </connections>
                     </containerView>
-                    <tabBarItem key="tabBarItem" title="Scene" image="ic_scenes_24pt" id="kK1-m1-dCz"/>
+                    <tabBarItem key="tabBarItem" title="Control" image="ic_scenes_24pt" id="kK1-m1-dCz"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bAE-Fu-Y1b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

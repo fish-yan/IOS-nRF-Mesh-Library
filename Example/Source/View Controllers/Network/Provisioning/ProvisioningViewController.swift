@@ -466,12 +466,14 @@ extension ProvisioningViewController: GattBearerDelegate {
             return
         }
         groups.forEach { group in
-            node.primaryElement?.models.forEach({ model in
-                then("subscribe to group: \(group.name)...") {
-                    let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
-                    return try MeshNetworkManager.instance.send(message, to: node)
-                }
-            })
+            node.elements.forEach { element in
+                element.models.forEach({ model in
+                    then("subscribe to group: \(group.name)...") {
+                        let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
+                        return try MeshNetworkManager.instance.send(message, to: node)
+                    }
+                })
+            }
         }
     }
     

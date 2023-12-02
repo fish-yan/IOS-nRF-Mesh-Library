@@ -17,7 +17,7 @@ class ScenesHostViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     @IBSegueAction func showLightsView(_ coder: NSCoder) -> UIViewController? {
-        return UIHostingController(coder: coder, rootView: ScenesListView())
+        return UIHostingController(coder: coder, rootView: GroupControlView())
     }
 
     /*

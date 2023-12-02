@@ -80,7 +80,3 @@ struct AddSceneView: UIViewControllerRepresentable {
     
     
 }
-
-#Preview {
-    ScenesManagerView()
-}

@@ -85,6 +85,10 @@ struct SettingsView: View {
                     }
                     
                     Section {
+                        NavigationLink("Scenes", destination: ScenesManagerView())
+                    }
+                    
+                    Section {
                         Button("Reset") { isNetworkResetPresented = true }
                             .tint(Color.red)
                     }
@@ -234,8 +238,4 @@ struct UserSettingsItem: View {
             Text(unit)
         }
     }
-}
-
-#Preview {
-    SettingsView()
 }

@@ -44,6 +44,7 @@
 		2CA1A4D22ABB28DD00BB135A /* LightHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */; };
 		2CA1A50B2ABBC12D00BB135A /* LightDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */; };
 		2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50C2ABBC23100BB135A /* SliderView.swift */; };
+		2CA6A1E92B1A13CC0073E7BF /* GroupControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */; };
 		2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */; };
 		2CC0DA672AD583C30031DC9D /* SceneLightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */; };
 		2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */; };
@@ -294,6 +295,7 @@
 		2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightHostViewController.swift; sourceTree = "<group>"; };
 		2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightDetailView.swift; sourceTree = "<group>"; };
 		2CA1A50C2ABBC23100BB135A /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlView.swift; sourceTree = "<group>"; };
 		2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMeshNetworkModel.swift; sourceTree = "<group>"; };
 		2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLightsView.swift; sourceTree = "<group>"; };
 		2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshNetwork+Extension.swift"; sourceTree = "<group>"; };
@@ -566,6 +568,14 @@
 			path = Messages;
 			sourceTree = "<group>";
 		};
+		2CA6A1E72B1A13A60073E7BF /* GroupControl */ = {
+			isa = PBXGroup;
+			children = (
+				2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */,
+			);
+			path = GroupControl;
+			sourceTree = "<group>";
+		};
 		2CF32E402AD43C3100D254F2 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
@@ -778,6 +788,7 @@
 				529B756C223FE7F1008F1CE7 /* RootViewController.swift */,
 				523F776B22C6324A0030EA6A /* ProgressViewController.swift */,
 				5212152E231554190059FB3D /* ProgressCollectionViewController.swift */,
+				2CA6A1E72B1A13A60073E7BF /* GroupControl */,
 				2CF32E402AD43C3100D254F2 /* Scenes */,
 				2C1459872ABB215000351A40 /* Ligits */,
 				52248CDF2523369700B10250 /* Common */,
@@ -1522,6 +1533,7 @@
 				F085CA0829D70ACB00C2DF89 /* ConfigurationViewController.swift in Sources */,
 				52547F26232A3F470002AA7B /* ProvisionersViewController.swift in Sources */,
 				529EC8DA2A309C640056BB48 /* CompanyIdentifier.swift in Sources */,
+				2CA6A1E92B1A13CC0073E7BF /* GroupControlView.swift in Sources */,
 				2C7BE3732B148F40006376F7 /* TextFieldAlert.swift in Sources */,
 				2CFE865E2AEAA91B00A1CF7D /* GLGlobalOnOffMessage.swift in Sources */,
 				5267FDCD2A02937E00ECD38B /* CustomConfigCell.swift in Sources */,

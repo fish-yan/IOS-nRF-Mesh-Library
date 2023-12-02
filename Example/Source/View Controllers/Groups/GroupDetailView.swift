@@ -99,10 +99,7 @@ extension GroupDetailView {
             store.error = .bearerError
             return
         }
-        let interval = store.isOn ? GlobalConfig.onTransition : GlobalConfig.offTransition
-        let transitionTime = TransitionTime(TimeInterval(interval))
-        let delay = store.isOn ? GlobalConfig.offDelay : GlobalConfig.onDelay
-        let message = GenericOnOffSet(!store.isOn, transitionTime: transitionTime, delay: UInt8(delay))
+        let message = GenericOnOffSet(!store.isOn)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
         store.isOn.toggle()
     }

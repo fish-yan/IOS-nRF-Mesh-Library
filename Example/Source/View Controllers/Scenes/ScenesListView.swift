@@ -35,7 +35,3 @@ struct ScenesListView: View {
         }
     }
 }
-
-#Preview {
-    ScenesListView()
-}
