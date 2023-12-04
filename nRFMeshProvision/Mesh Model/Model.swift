@@ -272,7 +272,7 @@ internal extension Model {
     
 }
 
-internal extension Model {
+public extension Model {
     
     /// Copies the properties from the given Model.
     ///

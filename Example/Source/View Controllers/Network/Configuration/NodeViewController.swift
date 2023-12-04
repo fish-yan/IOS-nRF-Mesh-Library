@@ -458,10 +458,10 @@ private extension NodeViewController {
             let message = ConfigCompositionDataGet()
             return try MeshNetworkManager.instance.send(message, to: node)
         }
-        .then("Adding Application Key...", completion: { [weak self] in
+        .thenNoHandle("Adding Application Key...", completion: { [weak self] in
             self?.addDefaultApplicationKey(applicationKey)
         })
-        .then("Bind Application Key...") { [weak self] in
+        .thenNoHandle("Bind Application Key...") { [weak self] in
             self?.bindApplicationKey(applicationKey)
         }
     }

@@ -76,6 +76,8 @@ class ProvisioningViewController: ProgressViewController {
     private var provisioningManager: ProvisioningManager!
     private var capabilitiesReceived = false
     
+    private var connectBearDelegate = NetworkConnectDelegateObjc()
+    
     private var alert: UIAlertController?
     
     // MARK: - View Controller
@@ -362,23 +364,14 @@ extension ProvisioningViewController: GattBearerDelegate {
             let manager = MeshNetworkManager.instance
             if manager.save() {
                 let connection = MeshNetworkManager.bearer!
+                connection.delegate = connectBearDelegate
+                
                 func done(reconnect: Bool) {
                     self.presentStatusDialog(message: "start config...")
-                    if reconnect, let pbGattBearer = self.bearer as? PBGattBearer {
-                        connection.disconnect()
-                        // The bearer has closed. Attempt to send a message
-                        // will fail, but the Proxy Filter will receive .bearerClosed
-                        // error, upon which it will clear the filter list and notify
-                        // the delegate.
-                        manager.proxyFilter.proxyDidDisconnect()
-                        manager.proxyFilter.clear()
-                        let gattBearer = GattBearer(targetWithIdentifier: pbGattBearer.identifier)
-                        connection.use(proxy: gattBearer)
-                    }
-                    guard let network = manager.meshNetwork else {
-                        return
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    connectBearDelegate.done = {
+                        guard let network = manager.meshNetwork else {
+                            return
+                        }
                         self.dismissStatusDialog()
                         if self.presentingViewController != nil {
                             if let node = network.node(for: self.unprovisionedDevice) {
@@ -392,6 +385,19 @@ extension ProvisioningViewController: GattBearerDelegate {
                             }
                         }
                     }
+                    if reconnect, let pbGattBearer = self.bearer as? PBGattBearer {
+                        connection.disconnect()
+                        // The bearer has closed. Attempt to send a message
+                        // will fail, but the Proxy Filter will receive .bearerClosed
+                        // error, upon which it will clear the filter list and notify
+                        // the delegate.
+                        manager.proxyFilter.proxyDidDisconnect()
+                        manager.proxyFilter.clear()
+                        let gattBearer = GattBearer(targetWithIdentifier: pbGattBearer.identifier)
+                        connection.use(proxy: gattBearer)
+                    }
+                    
+                    
                 }
                 let reconnectAction = UIAlertAction(title: "Yes", style: .default) { _ in
                     done(reconnect: true)
@@ -422,6 +428,8 @@ extension ProvisioningViewController: GattBearerDelegate {
               let applicationKey = meshNetwork.applicationKey else {
             return
         }
+        addDefaultSceneAddresses()
+        addDefaultGroup()
         MeshNetworkManager.instance.delegate = self
         start("Requesting Composition Data...") {
             let message = ConfigCompositionDataGet()
@@ -435,7 +443,7 @@ extension ProvisioningViewController: GattBearerDelegate {
             let message = ConfigAppKeyAdd(applicationKey: applicationKey)
             return try MeshNetworkManager.instance.send(message, to: node)
         })
-        .then("Bind Application Key...") { [weak self] in
+        .thenNoHandle("Bind Application Key...") { [weak self] in
             self?.bindApplicationKey()
         }
     }
@@ -456,13 +464,26 @@ extension ProvisioningViewController: GattBearerDelegate {
             }
         }
         done()
-        subscribeToGroup()
-        addDefaultSceneAddresses()
+//        subscribeToGroup()
+    }
+    
+    func addDefaultGroup() {
+        guard let groups = MeshNetworkManager.instance.meshNetwork?.groups,
+              let node else {
+            return
+        }
+        groups.forEach { group in
+            node.elements.forEach { element in
+                element.models.forEach({ model in
+                    model.subscribe(to: group)
+                })
+            }
+        }
     }
     
     func subscribeToGroup() {
         guard let groups = MeshNetworkManager.instance.meshNetwork?.groups,
-        let node else {
+              let node else {
             return
         }
         groups.forEach { group in
@@ -719,4 +740,15 @@ private extension String {
         return replacingOccurrences(of: ", ", with: "\n")
     }
     
+}
+
+private class NetworkConnectDelegateObjc: NSObject, BearerDelegate {
+    var done: (() -> Void)?
+    func bearerDidOpen(_ bearer: nRFMeshProvision.Bearer) {
+        done?()
+    }
+    
+    func bearer(_ bearer: nRFMeshProvision.Bearer, didClose error: Error?) {
+        
+    }
 }

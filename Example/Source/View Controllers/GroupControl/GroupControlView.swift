@@ -95,7 +95,9 @@ struct GroupControlView: View {
                 Button("Arcospace") {
                     sceneRecallSet(group: D002)
                 }
-                Button("Cancel", role: .cancel) {}
+                Button("Cancel", role: .cancel) {
+                    selectedScene = 0
+                }
             } message: {
                 Text("发送指令到 所有灯/Arcosense灯/Arcospace灯")
             }
@@ -123,55 +125,59 @@ struct GroupControlView: View {
             }
         }
         .padding(10)
+        .frame(maxWidth: .infinity)
     }
     
     var groups: [nRFMeshProvision.Group] {
         MeshNetworkManager.instance.meshNetwork?.groups ?? []
     }
     
-    var D000: nRFMeshProvision.Group {
-        groups.first(where: { $0.address.hex == "D000" })!
+    var D000: nRFMeshProvision.Group? {
+        groups.first(where: { $0.address.hex == "D000" })
     }
     
-    var D001: nRFMeshProvision.Group {
-        groups.first(where: { $0.address.hex == "D001" })!
+    var D001: nRFMeshProvision.Group? {
+        groups.first(where: { $0.address.hex == "D001" })
     }
     
-    var D002: nRFMeshProvision.Group {
-        groups.first(where: { $0.address.hex == "D002" })!
+    var D002: nRFMeshProvision.Group? {
+        groups.first(where: { $0.address.hex == "D002" })
     }
     
-    var D003: nRFMeshProvision.Group {
-        groups.first(where: { $0.address.hex == "D003" })!
+    var D003: nRFMeshProvision.Group? {
+        groups.first(where: { $0.address.hex == "D003" })
     }
     
-    var D004: nRFMeshProvision.Group {
-        groups.first(where: { $0.address.hex == "D004" })!
+    var D004: nRFMeshProvision.Group? {
+        groups.first(where: { $0.address.hex == "D004" })
     }
     
-    var D005: nRFMeshProvision.Group {
-        groups.first(where: { $0.address.hex == "D005" })!
+    var D005: nRFMeshProvision.Group? {
+        groups.first(where: { $0.address.hex == "D005" })
     }
     
-    var D006: nRFMeshProvision.Group {
-        groups.first(where: { $0.address.hex == "D006" })!
+    var D006: nRFMeshProvision.Group? {
+        groups.first(where: { $0.address.hex == "D006" })
     }
 }
 
 extension GroupControlView {
-    func onOffSet(onOff: Bool, group: nRFMeshProvision.Group) {
+    func onOffSet(onOff: Bool, group: nRFMeshProvision.Group?) {
+        guard let group else { return }
         let message = GenericOnOffSet(onOff)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
-    func levelSet(value: Double, group: nRFMeshProvision.Group) {
+    func levelSet(value: Double, group: nRFMeshProvision.Group?) {
+        guard let group else { return }
         let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
         let message = GenericLevelSet(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }
     
-    func sceneRecallSet(group: nRFMeshProvision.Group) {
+    func sceneRecallSet(group: nRFMeshProvision.Group?) {
         guard selectedScene > 0 else { return }
+        guard let group else { selectedScene = 0; return }
         let message = SceneRecall(selectedScene)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
     }

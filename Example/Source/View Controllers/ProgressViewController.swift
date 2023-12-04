@@ -90,7 +90,7 @@ class ProgressViewController: UITableViewController {
     }
     
     @discardableResult
-    func then(_ message: String, completion: @escaping () -> Void) -> Self {
+    func thenNoHandle(_ message: String, completion: @escaping () -> Void) -> Self {
         let messageAction = MessageAction(message: message, completion: completion)
         self.messageQueue.append(messageAction)
         return self
