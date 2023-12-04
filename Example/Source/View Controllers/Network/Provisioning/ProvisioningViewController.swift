@@ -680,9 +680,18 @@ extension ProvisioningViewController: MeshNetworkDelegate {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
-        case is ConfigModelSubscriptionStatus:
+//        case is ConfigModelSubscriptionStatus:
+        case is ConfigModelAppStatus:
             if messageQueue.isEmpty {
-                self.navigationController?.popToRootViewController(animated: true)
+                let destination = UIStoryboard(name: "Network", bundle: nil).instantiateViewController(withIdentifier: "NodeViewController") as! NodeViewController
+                destination.node = node
+                
+                self.navigationController?.pushViewController(destination, animated: true)
+                CATransaction.setCompletionBlock {
+                    if let root = self.navigationController?.viewControllers.first {
+                        self.navigationController?.viewControllers = [root, destination]
+                    }
+                }                
             }
         default:
             break
