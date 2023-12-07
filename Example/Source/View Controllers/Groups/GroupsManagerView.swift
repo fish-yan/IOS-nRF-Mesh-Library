@@ -10,7 +10,7 @@ import SwiftUI
 import nRFMeshProvision
 
 struct GroupsManagerView: View {
-    @State private var groups = MeshNetworkManager.instance.meshNetwork?.groups ?? []
+    @State private var groups: [nRFMeshProvision.Group] = []
     @State private var addDone: Bool = false
     var body: some View {
         List {
@@ -75,8 +75,4 @@ struct AddGroupView: UIViewControllerRepresentable {
     }
     
     typealias UIViewControllerType = AddGroupViewController
-}
-
-#Preview {
-    GroupsManagerView()
 }

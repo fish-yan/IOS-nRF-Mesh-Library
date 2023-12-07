@@ -16,18 +16,28 @@ struct GroupElementManagerView: View {
     
     @State var isDone = false
     
+    @State var nodes: Set<Node> = []
+    
     init(group: nRFMeshProvision.Group) {
         self.group = group
     }
     
     var body: some View {
         List {
-            Section {
-                ForEach(ElementType.allCases, id: \.self) { type in
-                    elementView(type: type)
+            let hiddenAdd = MeshNetworkManager.defaultGroupAddresses.contains(where: {$0 == group.address.address})
+            if !hiddenAdd {
+                Section {
+                    NavigationLink {
+                        LightSelectedView(multiSelected: nodes, originSelected: nodes) { changes in
+                            subscribe(nodes: changes.add)
+                            unsubscribe(nodes: changes.delete)
+                        }
+                    } label: {
+                        Text("Add Lights")
+                    }
+                } header: {
+                    Text("Add light to group")
                 }
-            } header: {
-                Text("Subscribe Model")
             }
             Section {
                 SliderView("L0", value: $store.level0)
@@ -90,78 +100,37 @@ struct GroupElementManagerView: View {
         .onAppear {
             store.updateScene(group: group)
             messageManager.delegate = self
+            let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+            let models = meshNetwork.models(subscribedTo: group)
+            let arr = models.compactMap { $0.parentElement?.parentNode }
+            nodes = Set(arr)
         }
     }
     
-    func elementView(type: ElementType) -> some View {
-        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-        var models = [Model]()
-        switch type {
-        case .onOff:
-            models = meshNetwork.models(subscribedTo: group).filter { $0.modelIdentifier == .genericOnOffServerModelId && $0.isBluetoothSIGAssigned }
-        case .level:
-            models = meshNetwork.models(subscribedTo: group).filter { $0.modelIdentifier == .genericLevelServerModelId && $0.isBluetoothSIGAssigned }
-        case .vendor:
-            models = meshNetwork.models(subscribedTo: group).filter { !$0.isBluetoothSIGAssigned }
-        }
-        let arr = models.compactMap { $0.parentElement?.parentNode }
-        let nodes = Set(arr)
-        return NavigationLink {
-            LightSelectedView(multiSelected: nodes, originSelected: nodes) { changes in
-                subscribe(type: type, nodes: changes.add)
-                unsubscribe(type: type, nodes: changes.delete)
-            }
-        } label: {
-            HStack {
-                Image(systemName: type.image)
-                    .foregroundColor(.white)
-                    .frame(width: 28, height: 28)
-                    .background(type.color)
-                    .cornerRadius(6)
-                    .clipped()
-                Spacer().frame(width: 16)
-                Text(type.title)
-            }
-        }
-    }
-    
-    func subscribe(type: ElementType, nodes: Set<Node>) {
-        
+    func subscribe(nodes: Set<Node>) {
         nodes.forEach { node in
-            var model: Model?
-            switch type {
-            case .onOff:
-                model = node.onOffModel
-            case .level:
-                model = node.levelModel
-            case .vendor:
-                model = node.vendorModel
-            }
-            if let model,
-               !model.isSubscribed(to: group) {
-                let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
-                _ = try? MeshNetworkManager.instance.send(message, to: node)
+            node.elements.forEach { element in
+                element.models.forEach { model in
+                    if !model.isSubscribed(to: group) {
+                        let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
+                        _ = try? MeshNetworkManager.instance.send(message, to: node)
+                    }
+                }
             }
         }
     }
     
-    func unsubscribe(type: ElementType, nodes: Set<Node>) {
+    func unsubscribe(nodes: Set<Node>) {
         nodes.forEach { node in
-            var model: Model?
-            switch type {
-            case .onOff:
-                model = node.onOffModel
-            case .level:
-                model = node.levelModel
-            case .vendor:
-                model = node.vendorModel
-            }
-            if let model,
-               model.isSubscribed(to: group) {
-                let message: AcknowledgedConfigMessage =
-                    ConfigModelSubscriptionDelete(group: group, from: model) ??
-                    ConfigModelSubscriptionVirtualAddressDelete(group: group, from: model)!
-                _ = try? MeshNetworkManager.instance.send(message, to: node)
+            node.elements.forEach { element in
+                element.models.forEach { model in
+                    if model.isSubscribed(to: group) {
+                        let message: AcknowledgedConfigMessage =
+                            ConfigModelSubscriptionDelete(group: group, from: model) ??
+                            ConfigModelSubscriptionVirtualAddressDelete(group: group, from: model)!
+                        _ = try? MeshNetworkManager.instance.send(message, to: node)
+                    }
+                }
             }
         }
     }
@@ -218,33 +187,6 @@ extension GroupElementManagerView: MeshMessageDelegate {
 //            MeshNetworkManager.instance.saveModel()
 //            dismiss.callAsFunction()
         default: break
-        }
-    }
-}
- 
-enum ElementType: UInt16, CaseIterable {
-    case onOff, level, vendor
-    
-    var image: String {
-        switch self {
-        case .onOff: "power.circle.fill"
-        case .level: "sun.max.fill"
-        case .vendor: "lightbulb.led.fill"
-        }
-    }
-    var title: String {
-        switch self {
-        case .onOff: "On/Off"
-        case .level: "Level"
-        case .vendor: "Vendor"
-        }
-    }
-    
-    var color: Color {
-        switch self {
-        case .onOff: .orange
-        case .level: .blue
-        case .vendor: .yellow
         }
     }
 }

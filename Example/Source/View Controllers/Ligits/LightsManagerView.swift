@@ -67,7 +67,3 @@ struct ScanDeviceView: UIViewControllerRepresentable {
     
     typealias UIViewControllerType = ScannerTableViewController
 }
-
-#Preview {
-    LightsManagerView()
-}

@@ -28,6 +28,8 @@ struct GroupControlView: View {
                         HStack {
                             onOffButton(onOff: allOnOff, title: "总开关", text: "On 开灯, AI 动作, Off 关灯,AI 不动作") {
                                 allOnOff.toggle()
+                                PIROnOff = allOnOff
+                                AIOnOff = allOnOff
                                 onOffSet(onOff: allOnOff, group: D000)
                             }
                             onOffButton(onOff: emergencyOnOff, title: "紧急照明", text: "On 所有灯全亮, AI 不动作, Off 回到正常") {

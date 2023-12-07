@@ -10,7 +10,7 @@ import SwiftUI
 import nRFMeshProvision
 
 struct ScenesManagerView: View {
-    @State private var scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
+    @State private var scenes: [nRFMeshProvision.Scene] = []
     @State private var addDone: Bool = false
     var body: some View {
         List {
@@ -32,7 +32,7 @@ struct ScenesManagerView: View {
         .navigationTitle("Scenes Manager")
         .toolbar { addItem }
         .onAppear(perform: {
-            scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
+            scenes = MeshNetworkManager.instance.meshNetwork?.customScenes ?? []
         })
     }
     

@@ -23,9 +23,14 @@ struct LightDetailView: View {
     }
     
     var body: some View {
-        let types: [MessageType] = [.onOff, .ai, .sensor, .level, .cct, .angle, .scenes]
+        let types: [MessageType] = [.onOff, .ai, .sensor, .level, .cct, .angle]
         ControlView(messageTypes: types, store: store, onMessageChange: send)
         .navigationTitle(node.name ?? "Unknow")
+        .toolbar {
+            NavigationLink("Advance", destination: NodeView(node: node)
+                .navigationTitle(node.name ?? "Unknow"))
+            .opacity(GlobalConfig.isShowAdvance ? 1 : 0)
+        }
         .onAppear(perform: onAppear)
         .alert("Error", isPresented: $store.isError) {
             Button("OK") {

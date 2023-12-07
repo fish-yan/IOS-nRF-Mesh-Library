@@ -79,10 +79,10 @@ struct SettingsView: View {
                  }
                  */
                 if selectionRole == .commissioner {
-                    Section {
-                        NavigationLink("Execute Batch", destination: CustomControlView())
-                        NavigationLink("Drafts", destination: DraftsView())
-                    }
+//                    Section {
+//                        NavigationLink("Execute Batch", destination: CustomControlView())
+//                        NavigationLink("Drafts", destination: DraftsView())
+//                    }
                     
                     Section {
                         NavigationLink("Scenes", destination: ScenesManagerView())

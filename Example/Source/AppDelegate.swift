@@ -203,6 +203,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         createDefaultApplicationKey()
         createDefaultGroup()
         createDefaultScene()
+        addDefaultScene()
+        addDefaultGroup()
     }
     
     func createDefaultApplicationKey() {
@@ -221,7 +223,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func createDefaultGroup() {
         let network = meshNetworkManager.meshNetwork!
-        let defaultAddress: [UInt16] = [0xD000, 0xD001, 0xD002, 0xD003, 0xD004, 0xD005, 0xD006]
+        let defaultAddress = MeshNetworkManager.defaultGroupAddresses
         let unAddaddress = defaultAddress.filter { add in !network.groups.contains(where: { $0.address.address == add })}
         if unAddaddress.isEmpty { return }
         unAddaddress.forEach {
@@ -233,12 +235,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func createDefaultScene() {
         let network = meshNetworkManager.meshNetwork!
-        let defaultScenes: [SceneNumber] = [1, 2, 3, 4]
+        let defaultScenes: [SceneNumber] = MeshNetworkManager.defaultSceneAddresses
         let unAddScene = defaultScenes.filter {number in !network.scenes.contains(where: { $0.number == number }) }
         unAddScene.forEach { number in
             try? network.add(scene: number, name: "Scene \(number)")
         }
         let _ = meshNetworkManager.save()
+    }
+    
+    func addDefaultScene() {
+        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
+            return
+        }
+        let nodes = meshNetwork.nodes.filter { !$0.isProvisioner }
+        let defaultScenes: [SceneNumber] = MeshNetworkManager.defaultSceneAddresses
+        nodes.forEach { node in
+            let address = node.primaryUnicastAddress
+            for scene in meshNetwork.scenes where defaultScenes.contains(scene.number) {
+                scene.add(address: address)
+            }
+            _ = MeshNetworkManager.instance.save()
+        }
+    }
+    
+    func addDefaultGroup() {
+        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
+            return
+        }
+        let defaultAddress = MeshNetworkManager.defaultGroupAddresses
+        let nodes = meshNetwork.nodes.filter { !$0.isProvisioner }
+        nodes.forEach { node in
+            meshNetwork.groups.forEach { group in
+                if defaultAddress.contains(group.address.address) {
+                    node.elements.forEach { element in
+                        element.models.forEach({ model in
+                            model.subscribe(to: group)
+                        })
+                    }
+                }
+            }
+        }
     }
 }
 

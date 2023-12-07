@@ -80,6 +80,8 @@ extension MeshNetworkManager {
                         completion: completion)
     }
     
+    static var defaultGroupAddresses: [Address] = [0xD000, 0xD001, 0xD002, 0xD003, 0xD004, 0xD005, 0xD006]
+    static let defaultSceneAddresses: [SceneNumber] = [1, 2, 3, 4]
 }
 
 extension MeshNetwork {
@@ -92,9 +94,22 @@ extension MeshNetwork {
             }
         }
     }
+    
+    var customGroups: [nRFMeshProvision.Group] {
+        let defaultAddress = MeshNetworkManager.defaultGroupAddresses
+        return groups.filter { !defaultAddress.contains($0.address.address) }
+    }
+    
+    var customScenes: [nRFMeshProvision.Scene] {
+        scenes.filter { !MeshNetworkManager.defaultSceneAddresses.contains($0.number) }
+    }
 }
 
 extension Node {
+    var customScenes: [nRFMeshProvision.Scene] {
+        scenes.filter { !MeshNetworkManager.defaultSceneAddresses.contains($0.number) }
+    }
+    
     var onOffModel: Model? {
         models(withSigModelId: .genericOnOffServerModelId).first
     }
@@ -153,5 +168,9 @@ public extension Group {
             return []
         }
         return scenes(onModelsBoundTo: applicationKey)
+    }
+    
+    var customScenes: [nRFMeshProvision.Scene] {
+        scenes.filter { !MeshNetworkManager.defaultSceneAddresses.contains($0.number) }
     }
 }

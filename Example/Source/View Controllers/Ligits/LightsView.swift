@@ -23,10 +23,13 @@ struct LightsView: View {
             }
             .navigationTitle("Lights")
             .toolbar {
-                NavigationLink(destination: LightsManagerView()) {
-                    Image(systemName: "gearshape")
+                NavigationLink {
+                    ScanDeviceView()
+                        .navigationTitle("Provision Device")
+                } label: {
+                    Image(systemName: "plus")
                 }
-                .opacity(isShowSetting ? 1 : 0)
+                .opacity(GlobalConfig.isShowAdvance ? 1 : 0)
             }
             .onAppear {
                 isShowSetting = GlobalConfig.isShowSetting
@@ -34,8 +37,4 @@ struct LightsView: View {
             }
         }
     }
-}
-
-#Preview {
-    LightsView()
 }
