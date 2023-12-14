@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLAngleMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLAngleStatus.self
+    }
     
     public static var code: UInt32 = 0x11
         

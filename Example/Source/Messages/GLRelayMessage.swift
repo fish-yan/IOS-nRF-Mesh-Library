@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLRelayMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLRelayStatus.self
+    }
     
     public static var code: UInt32 = 0x10
         

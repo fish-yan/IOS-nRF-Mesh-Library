@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLColorTemperatureMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLColorTemperatureStatus.self
+    }
     
     public static var code: UInt32 = 0x5
         

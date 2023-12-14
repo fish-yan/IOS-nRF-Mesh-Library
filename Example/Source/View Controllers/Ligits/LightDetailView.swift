@@ -16,7 +16,7 @@ struct LightDetailView: View {
     @ObservedObject var store = MessageDetailStore()
     @State var isShowAdvance = false
     
-    private var messageManager = MeshMessageManager()
+    @State private var messageManager = MeshMessageManager()
     
     init(node: Node) {
         self.node = node
@@ -54,6 +54,7 @@ struct LightDetailView: View {
 extension LightDetailView {
     func onAppear() {
         isShowAdvance = GlobalConfig.isShowAdvance
+        messageManager = MeshMessageManager()
         messageManager.delegate = self
         guard MeshNetworkManager.bearer.isConnected else {
             return

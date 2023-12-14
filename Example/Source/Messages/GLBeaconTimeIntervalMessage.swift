@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLBeaconTimeIntervalMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLBeaconTimeIntervalStatus.self
+    }
     
     public static var code: UInt32 = 0x22
         

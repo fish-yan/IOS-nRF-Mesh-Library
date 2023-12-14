@@ -1,22 +1,23 @@
 #ifdef SHOULD_COMPILE_LOOKIN_SERVER 
 
 //
-//  LKS_AttrModificationHandler.m
+//  LKS_InbuiltAttrModificationHandler.m
 //  LookinServer
 //
 //  Created by Li Kai on 2019/6/12.
 //  https://lookin.work
 //
 
-#import "LKS_AttrModificationHandler.h"
+#import "LKS_InbuiltAttrModificationHandler.h"
 #import "UIColor+LookinServer.h"
 #import "LookinAttributeModification.h"
 #import "LKS_AttrGroupsMaker.h"
 #import "LookinDisplayItemDetail.h"
 #import "LookinStaticAsyncUpdateTask.h"
 #import "LookinServerDefines.h"
+#import "LKS_CustomAttrGroupsMaker.h"
 
-@implementation LKS_AttrModificationHandler
+@implementation LKS_InbuiltAttrModificationHandler
 
 + (void)handleModification:(LookinAttributeModification *)modification completion:(void (^)(LookinDisplayItemDetail *data, NSError *error))completion {
     if (!completion) {
@@ -206,6 +207,12 @@
         LookinDisplayItemDetail *detail = [LookinDisplayItemDetail new];
         detail.displayItemOid = modification.targetOid;
         detail.attributesGroupList = [LKS_AttrGroupsMaker attrGroupsForLayer:layer];
+        
+        NSString *version = modification.clientReadableVersion;
+        if (version.length > 0 && [version lookin_numbericOSVersion] >= 10004) {
+            detail.customAttrGroupList = [[[LKS_CustomAttrGroupsMaker alloc] initWithLayer:layer] make];
+        }
+        
         detail.frameValue = [NSValue valueWithCGRect:layer.frame];
         detail.boundsValue = [NSValue valueWithCGRect:layer.bounds];
         detail.hiddenValue = [NSNumber numberWithBool:layer.isHidden];

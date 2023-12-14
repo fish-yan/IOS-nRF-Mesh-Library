@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLGlobalOnOffMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLGlobalOnOffStatus.self
+    }
     
     public static var code: UInt32 = 0x12
         

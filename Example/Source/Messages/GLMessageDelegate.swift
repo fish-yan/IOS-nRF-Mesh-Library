@@ -11,19 +11,19 @@ import nRFMeshProvision
 
 fileprivate let companyId: Int16 = 0x0841
 
-public protocol GLMessage: StaticVendorMessage {
+public protocol GLMessage: StaticAcknowledgedVendorMessage {
     static var code: UInt32 { get }
 }
 
 extension GLMessage {
     public static var opCode: UInt32 { (UInt32(0xC0 | code) << 16) | UInt32(companyId.bigEndian) }
-        
+
     public init?(parameters: Data) {
         return nil
     }
 }
 
-public protocol GLResponse: StaticMeshMessage {
+public protocol GLResponse: StaticMeshResponse {
     static var code: UInt32 { get }
 }
 

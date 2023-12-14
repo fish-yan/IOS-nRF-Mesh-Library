@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLSensorMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLSensorStatus.self
+    }
     
     public static var code: UInt32 = 0xC
         

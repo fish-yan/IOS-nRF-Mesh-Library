@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLSceneRecallMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLSceneSetStatus.self
+    }
     
     public static var code: UInt32 = 0x4
         

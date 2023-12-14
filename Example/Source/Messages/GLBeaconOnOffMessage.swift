@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLBeaconOnOffMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLBeaconOnOffStatus.self
+    }
     
     public static var code: UInt32 = 0x20
         

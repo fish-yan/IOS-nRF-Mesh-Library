@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLBeaconUUIDSetMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLBeaconUUIDSetStatus.self
+    }
     
     public static var code: UInt32 = 0x23
         

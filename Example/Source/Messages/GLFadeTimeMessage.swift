@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLFadeTimeMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLFadeTimeStatus.self
+    }
     
     public static var code: UInt32 = 0x2
         

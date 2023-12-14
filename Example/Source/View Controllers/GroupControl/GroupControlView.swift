@@ -178,10 +178,10 @@ extension GroupControlView {
         store.isSensor = false
         store.isAi = false
         store.level = 0
-//        messageManager.delegate = self
-//        messageManager.add {
-//            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D000)
-//        }
+        messageManager.delegate = self
+        messageManager.add {
+            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D000)
+        }
 //        .add {
 //            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D004)
 //        }

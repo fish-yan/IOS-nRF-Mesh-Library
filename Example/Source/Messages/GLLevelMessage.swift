@@ -10,6 +10,9 @@ import UIKit
 import nRFMeshProvision
 
 public struct GLLevelMessage: GLMessage {
+    public static var responseType: nRFMeshProvision.StaticMeshResponse.Type {
+        return GLLevelStatus.self
+    }
     
     public static var code: UInt32 = 0x3
         
