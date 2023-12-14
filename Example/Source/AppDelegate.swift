@@ -254,8 +254,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             for scene in meshNetwork.scenes where defaultScenes.contains(scene.number) {
                 scene.add(address: address)
             }
-            _ = MeshNetworkManager.instance.save()
         }
+        _ = MeshNetworkManager.instance.save()
     }
     
     func addDefaultGroup() {
@@ -266,15 +266,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let nodes = meshNetwork.nodes.filter { !$0.isProvisioner }
         nodes.forEach { node in
             meshNetwork.groups.forEach { group in
-                if defaultAddress.contains(group.address.address) {
-                    node.elements.forEach { element in
-                        element.models.forEach({ model in
-                            model.subscribe(to: group)
-                        })
-                    }
+                node.usefulModels.forEach { model in
+                    model.subscribe(to: group)
                 }
             }
         }
+        _ = MeshNetworkManager.instance.save()
     }
 }
 

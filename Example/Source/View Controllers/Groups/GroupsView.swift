@@ -30,7 +30,7 @@ struct GroupsView: View {
                 .opacity(isShowSetting ? 1 : 0)
             }
             .onAppear {
-                groups = MeshNetworkManager.instance.meshNetwork?.groups ?? []
+                groups = MeshNetworkManager.instance.meshNetwork?.customGroups ?? []
                 isShowSetting = GlobalConfig.isShowSetting
             }
         }

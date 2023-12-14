@@ -102,18 +102,19 @@ struct GroupElementManagerView: View {
             messageManager.delegate = self
             let meshNetwork = MeshNetworkManager.instance.meshNetwork!
             let models = meshNetwork.models(subscribedTo: group)
-            let arr = models.compactMap { $0.parentElement?.parentNode }
+            let arr = models.filter({ $0.parentElement!.parentNode!.usefulModels.contains($0)})
+                .compactMap { $0.parentElement?.parentNode }
             nodes = Set(arr)
         }
     }
     
     func subscribe(nodes: Set<Node>) {
         nodes.forEach { node in
-            node.elements.forEach { element in
-                element.models.forEach { model in
-                    if !model.isSubscribed(to: group) {
+            node.usefulModels.forEach { model in
+                if !model.isSubscribed(to: group) {
+                    messageManager.add {
                         let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
-                        _ = try? MeshNetworkManager.instance.send(message, to: node)
+                        return try MeshNetworkManager.instance.send(message, to: node)
                     }
                 }
             }
@@ -122,13 +123,13 @@ struct GroupElementManagerView: View {
     
     func unsubscribe(nodes: Set<Node>) {
         nodes.forEach { node in
-            node.elements.forEach { element in
-                element.models.forEach { model in
-                    if model.isSubscribed(to: group) {
+            node.usefulModels.forEach { model in
+                if model.isSubscribed(to: group) {
+                    messageManager.add {
                         let message: AcknowledgedConfigMessage =
-                            ConfigModelSubscriptionDelete(group: group, from: model) ??
-                            ConfigModelSubscriptionVirtualAddressDelete(group: group, from: model)!
-                        _ = try? MeshNetworkManager.instance.send(message, to: node)
+                        ConfigModelSubscriptionDelete(group: group, from: model) ??
+                        ConfigModelSubscriptionVirtualAddressDelete(group: group, from: model)!
+                        return try MeshNetworkManager.instance.send(message, to: node)
                     }
                 }
             }

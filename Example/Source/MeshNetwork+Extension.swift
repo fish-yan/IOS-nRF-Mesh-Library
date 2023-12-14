@@ -95,12 +95,20 @@ extension MeshNetwork {
         }
     }
     
-    var customGroups: [nRFMeshProvision.Group] {
+    var defaultGroups: [Group] {
+        MeshNetworkManager.defaultGroupAddresses.map { try! Group(name: String($0, radix: 16), address: $0)}
+    }
+    
+    var customGroups: [Group] {
         let defaultAddress = MeshNetworkManager.defaultGroupAddresses
         return groups.filter { !defaultAddress.contains($0.address.address) }
     }
     
-    var customScenes: [nRFMeshProvision.Scene] {
+    var defaultScenes: [Scene] {
+        scenes.filter { MeshNetworkManager.defaultSceneAddresses.contains($0.number) }
+    }
+    
+    var customScenes: [Scene] {
         scenes.filter { !MeshNetworkManager.defaultSceneAddresses.contains($0.number) }
     }
 }
@@ -112,6 +120,30 @@ extension Node {
     
     var onOffModel: Model? {
         models(withSigModelId: .genericOnOffServerModelId).first
+    }
+    
+    var emergencyModel: Model? {
+        let models = models(withSigModelId: .genericOnOffServerModelId)
+        if models.count >= 2 {
+            return models[1]
+        }
+        return nil
+    }
+    
+    var pirModel: Model? {
+        let models = models(withSigModelId: .genericOnOffServerModelId)
+        if models.count >= 3 {
+            return models[2]
+        }
+        return nil
+    }
+    
+    var aiModel: Model? {
+        let models = models(withSigModelId: .genericOnOffServerModelId)
+        if models.count >= 4 {
+            return models[3]
+        }
+        return nil
     }
     
     var levelModel: Model? {
@@ -147,7 +179,7 @@ extension Node {
     }
     
     var usefulModels: [Model] {
-        return [onOffModel, levelModel, cctModel, vendorModel].compactMap { $0 }
+        return [onOffModel, emergencyModel, pirModel, aiModel, levelModel, cctModel, vendorModel, angleModel, sceneModel, sceneSetupModel].compactMap { $0 }
     }
 }
 

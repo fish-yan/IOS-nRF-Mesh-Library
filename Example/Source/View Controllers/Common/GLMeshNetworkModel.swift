@@ -161,6 +161,10 @@ class MessageDetailStore: NSObject, ObservableObject, Codable {
     @Published var runTime: Double = 300
     @Published var fadeTime: Double = 60
     
+    @Published var emergencyOnOff: Bool = false
+    @Published var beaconOnOff: Bool = true
+    @Published var rssi: Double = -100
+    @Published var beaconUUID: String = "0x08410000"
     
     @Published var isError: Bool = false
     @Published var error: ErrorType = .none
@@ -268,6 +272,40 @@ class GLDraftModel: ObservableObject, Codable, Hashable {
     }
 }
 
+class GLZone: ObservableObject, Codable, Hashable {
+    @Published var name: String = "Zone"
+    @Published var zone: UInt8 = 0x0
+    
+    init(name: String, zone: UInt8) {
+        self.name = name
+        self.zone = zone
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case name, zone
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        name = try values.decode(String.self, forKey: .name)
+        zone = try values.decode(UInt8.self, forKey: .zone)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(zone, forKey: .zone)
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(zone)
+    }
+    
+    static func == (lhs: GLZone, rhs: GLZone) -> Bool {
+        lhs.hashValue == rhs.hashValue
+    }
+}
+
 class GLMeshNetworkModel: ObservableObject, Codable {
     static let instance: GLMeshNetworkModel = GLMeshNetworkModel()
     private init() { }
@@ -277,9 +315,10 @@ class GLMeshNetworkModel: ObservableObject, Codable {
     @Published var scenes: [SceneNumber: GLSceneModel] = [:]
     
     @Published var drafts: [GLDraftModel] = []
+    @Published var zone: [GLZone] = []
     
     enum CodingKeys: String, CodingKey {
-        case nodes, groups, scenes, drafts
+        case nodes, groups, scenes, drafts, zone
     }
     
     required init(from decoder: Decoder) throws {
@@ -288,6 +327,7 @@ class GLMeshNetworkModel: ObservableObject, Codable {
         groups = try values.decode([Address: GLGroupModel].self, forKey: .groups)
         scenes = try values.decode([SceneNumber: GLSceneModel].self, forKey: .scenes)
         drafts = try values.decode([GLDraftModel].self, forKey: .drafts)
+        zone = try values.decode([GLZone].self, forKey: .zone)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -296,6 +336,7 @@ class GLMeshNetworkModel: ObservableObject, Codable {
         try container.encode(groups, forKey: .groups)
         try container.encode(scenes, forKey: .scenes)
         try container.encode(drafts, forKey: .drafts)
+        try container.encode(zone, forKey: .zone)
     }
     
     func reset() {
@@ -303,6 +344,16 @@ class GLMeshNetworkModel: ObservableObject, Codable {
         groups.removeAll()
         scenes.removeAll()
         drafts.removeAll()
+        zone.removeAll()
+    }
+    
+    func nextZone() -> UInt8 {
+        let sortedZone = zone.sorted(by: {$0.zone < $1.zone})
+        if let last = sortedZone.last {
+            return last.zone + 1
+        } else {
+            return 0
+        }
     }
 }
 private let storage: Storage = LocalStorage(fileName: "GLModel.json")
@@ -325,6 +376,7 @@ extension MeshNetworkManager {
             GLMeshNetworkModel.instance.nodes = model.nodes
             GLMeshNetworkModel.instance.scenes = model.scenes
             GLMeshNetworkModel.instance.drafts = model.drafts
+            GLMeshNetworkModel.instance.zone = model.zone
             print("model load success")
             return true
         }

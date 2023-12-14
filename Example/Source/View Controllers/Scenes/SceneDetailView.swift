@@ -42,7 +42,3 @@ struct SceneDetailView: View {
         .navigationTitle(title)
     }
 }
-
-#Preview {
-    SceneDetailView()
-}

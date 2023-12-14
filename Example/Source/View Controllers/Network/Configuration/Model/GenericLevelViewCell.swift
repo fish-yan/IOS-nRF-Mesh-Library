@@ -318,6 +318,12 @@ private extension GenericLevelViewCell {
     
     /// Sends Generic Level Get message.
     func readGenericLevelState() {
+        guard !model.boundApplicationKeys.isEmpty else {
+            parentViewController?.presentAlert(
+                title: "Bound key required",
+                message: "Bind at least one Application Key before sending the message.")
+            return
+        }
         
         delegate?.send(GenericLevelGet(), description: "Reading state...")
     }

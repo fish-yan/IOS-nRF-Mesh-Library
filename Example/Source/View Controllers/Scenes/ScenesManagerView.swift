@@ -32,7 +32,7 @@ struct ScenesManagerView: View {
         .navigationTitle("Scenes Manager")
         .toolbar { addItem }
         .onAppear(perform: {
-            scenes = MeshNetworkManager.instance.meshNetwork?.customScenes ?? []
+            scenes = MeshNetworkManager.instance.meshNetwork?.scenes ?? []
         })
     }
     

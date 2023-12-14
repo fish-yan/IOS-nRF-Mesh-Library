@@ -95,7 +95,7 @@ private extension LightStoreSceneView {
         }
         
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-        newScenes = meshNetwork.scenes.filter { !storedScenes.contains($0) }
+        newScenes = meshNetwork.customScenes.filter { !storedScenes.contains($0) }
         messageManager.delegate = self
     }
     

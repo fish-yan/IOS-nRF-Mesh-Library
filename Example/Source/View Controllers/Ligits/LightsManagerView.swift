@@ -40,10 +40,12 @@ struct LightsManagerView: View {
 
 struct NodeView: UIViewControllerRepresentable {
     var node: Node
+    var resetCallback: (() -> Void)?
     func makeUIViewController(context: Context) -> NodeViewController {
         let storyboard = UIStoryboard(name: "Network", bundle: Bundle.main)
         let vc = storyboard.instantiateViewController(identifier: "NodeViewController") as! NodeViewController
         vc.node = node
+        vc.resetCallback = resetCallback
         return vc
     }
     

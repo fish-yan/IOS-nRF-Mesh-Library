@@ -25,7 +25,7 @@ struct GroupsManagerView: View {
         .navigationTitle("Groups Manager")
         .toolbar { addItem }
         .onAppear {
-            groups = MeshNetworkManager.instance.meshNetwork?.groups ?? []
+            groups = MeshNetworkManager.instance.meshNetwork?.customGroups ?? []
         }
     }
     

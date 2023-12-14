@@ -34,6 +34,8 @@
 		2C7BE3732B148F40006376F7 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */; };
 		2C7BE3752B14977C006376F7 /* DraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3742B14977C006376F7 /* DraftsView.swift */; };
 		2C7BE3772B14D72F006376F7 /* DraftControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3762B14D72F006376F7 /* DraftControlView.swift */; };
+		2C7D864E2B22172C0027932B /* ZoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7D864D2B22172C0027932B /* ZoneListView.swift */; };
+		2C7D86502B2218530027932B /* AddZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7D864F2B2218520027932B /* AddZoneView.swift */; };
 		2C8C0C262ABF0FC100BC0156 /* GroupsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */; };
 		2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C292ABF132800BC0156 /* ItemView.swift */; };
 		2C8C0C2C2AC06DC600BC0156 /* GroupElementManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C2B2AC06DC600BC0156 /* GroupElementManagerView.swift */; };
@@ -285,6 +287,8 @@
 		2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		2C7BE3742B14977C006376F7 /* DraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftsView.swift; sourceTree = "<group>"; };
 		2C7BE3762B14D72F006376F7 /* DraftControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftControlView.swift; sourceTree = "<group>"; };
+		2C7D864D2B22172C0027932B /* ZoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneListView.swift; sourceTree = "<group>"; };
+		2C7D864F2B2218520027932B /* AddZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddZoneView.swift; sourceTree = "<group>"; };
 		2C8C0C252ABF0FC100BC0156 /* GroupsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsManagerView.swift; sourceTree = "<group>"; };
 		2C8C0C292ABF132800BC0156 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
 		2C8C0C2B2AC06DC600BC0156 /* GroupElementManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupElementManagerView.swift; sourceTree = "<group>"; };
@@ -572,6 +576,8 @@
 			isa = PBXGroup;
 			children = (
 				2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */,
+				2C7D864D2B22172C0027932B /* ZoneListView.swift */,
+				2C7D864F2B2218520027932B /* AddZoneView.swift */,
 			);
 			path = GroupControl;
 			sourceTree = "<group>";
@@ -1375,6 +1381,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C7D864E2B22172C0027932B /* ZoneListView.swift in Sources */,
 				52DE3ABA25DA871800268D7D /* SensorClientDelegate.swift in Sources */,
 				5275962E2A138D9700B04C6F /* SelectPublicationViewController.swift in Sources */,
 				529B764722522D37008F1CE7 /* UITableView+EmptyView.swift in Sources */,
@@ -1494,6 +1501,7 @@
 				52A8EA9624EE704A004C14C7 /* SetHeartbeatSubscriptionViewController.swift in Sources */,
 				52547EFB231800F30002AA7B /* GroupTargetModelsViewController.swift in Sources */,
 				5217D2E0250F522A004FDE79 /* GenericDefaultTransitionTimeServerDelegate.swift in Sources */,
+				2C7D86502B2218530027932B /* AddZoneView.swift in Sources */,
 				F09DE4C729D771F20073969A /* Model+Name.swift in Sources */,
 				2C93E3742ADE23EC00B392DB /* Debouncer.swift in Sources */,
 				2C1193A32B0B9367004F0CFF /* LightStoreSceneView.swift in Sources */,

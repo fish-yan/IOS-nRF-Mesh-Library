@@ -14,6 +14,7 @@ struct LightDetailView: View {
     var node: Node
     
     @ObservedObject var store = MessageDetailStore()
+    @State var isShowAdvance = false
     
     private var messageManager = MeshMessageManager()
     
@@ -27,9 +28,13 @@ struct LightDetailView: View {
         ControlView(messageTypes: types, store: store, onMessageChange: send)
         .navigationTitle(node.name ?? "Unknow")
         .toolbar {
-            NavigationLink("Advance", destination: NodeView(node: node)
-                .navigationTitle(node.name ?? "Unknow"))
-            .opacity(GlobalConfig.isShowAdvance ? 1 : 0)
+            NavigationLink("Advance", destination: {
+                NodeView(node: node, resetCallback: {
+                    dismiss.callAsFunction()
+                })
+                .navigationTitle(node.name ?? "Unknow")
+            })
+            .opacity(isShowAdvance ? 1 : 0)
         }
         .onAppear(perform: onAppear)
         .alert("Error", isPresented: $store.isError) {
@@ -48,6 +53,7 @@ struct LightDetailView: View {
 
 extension LightDetailView {
     func onAppear() {
+        isShowAdvance = GlobalConfig.isShowAdvance
         messageManager.delegate = self
         guard MeshNetworkManager.bearer.isConnected else {
             return
@@ -59,6 +65,14 @@ extension LightDetailView {
         .add {
             guard let levelModel = node.levelModel else { return nil }
             return try MeshNetworkManager.instance.send(GenericLevelGet(), to: levelModel)
+        }
+        .add {
+            guard let vendorModel = node.vendorModel else { return nil }
+            return try MeshNetworkManager.instance.send(GLAiMessage(status: .read), to: vendorModel)
+        }
+        .add {
+            guard let vendorModel = node.vendorModel else { return nil }
+            return try MeshNetworkManager.instance.send(GLSensorMessage(status: .read), to: vendorModel)
         }
     }
     
@@ -92,9 +106,9 @@ extension LightDetailView: MeshMessageDelegate {
         case let status as GLAngleStatus:
             print(status)
         case let status as GLAiStatus:
-            print(status)
+            store.isAi = status.status == .on
         case let status as GLSensorStatus:
-            print(status)
+            store.isSensor = status.status == .on
         case let status as SceneStatus:
             store.selectedScene = status.scene
             

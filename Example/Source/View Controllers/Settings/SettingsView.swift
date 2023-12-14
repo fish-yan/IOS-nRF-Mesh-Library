@@ -41,6 +41,7 @@ struct SettingsView: View {
                         Button {
                             if role == .normal {
                                 selectionRole = role
+                                save()
                             } else {
                                 isPresented = true
                                 prepareRole = role
@@ -57,33 +58,7 @@ struct SettingsView: View {
                         }
                     }
                 }
-                /*
-                 if selectionRole == .supervisor || selectionRole == .commissioner {
-                 Section {
-                 UserSettingsItem(title: "L0", text: $l0Text, unit: "%")
-                 UserSettingsItem(title: "L1", text: $l1Text, unit: "%")
-                 UserSettingsItem(title: "L2", text: $l2Text, unit: "%")
-                 UserSettingsItem(title: "L3", text: $l3Text, unit: "%")
-                 } header: {
-                 Text("Level")
-                 }
-                 
-                 Section {
-                 UserSettingsItem(title: "On Delay Time", text: $onDelayTime, unit: "s")
-                 UserSettingsItem(title: "Off Delay Time", text: $offDelayTime, unit: "s")
-                 UserSettingsItem(title: "On Transaction Time", text: $onTransitionTime, unit: "s")
-                 UserSettingsItem(title: "Off Transaction Time", text: $offTransitionTime, unit: "s")
-                 } header: {
-                 Text("Time")
-                 }
-                 }
-                 */
                 if selectionRole == .commissioner {
-//                    Section {
-//                        NavigationLink("Execute Batch", destination: CustomControlView())
-//                        NavigationLink("Drafts", destination: DraftsView())
-//                    }
-                    
                     Section {
                         NavigationLink("Scenes", destination: ScenesManagerView())
                     }
@@ -95,9 +70,6 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("User Settings")
-            .toolbar {
-                Button("Save", action: save)
-            }
             .onAppear(perform: onAppear)
             .textFieldAlert(isPresented: $isPresented, title: "Please enter code", text: "", placeholder: "enter code", isSecured: true, action: { text in
                 if let text {
@@ -121,22 +93,13 @@ struct SettingsView: View {
 private extension SettingsView {
     func onAppear() {
         selectionRole = UserRole(rawValue: GlobalConfig.userRole) ?? .normal
-        
-        l0Text = String(format: "%.f", GlobalConfig.level0)
-        l1Text = String(format: "%.f", GlobalConfig.level1)
-        l2Text = String(format: "%.f", GlobalConfig.level2)
-        l3Text = String(format: "%.f", GlobalConfig.level3)
-        
-        onDelayTime = String(format: "%d", GlobalConfig.onDelay)
-        offDelayTime = String(format: "%d", GlobalConfig.offDelay)
-        onTransitionTime = String(format: "%d", GlobalConfig.onTransition)
-        offTransitionTime = String(format: "%d", GlobalConfig.offTransition)
     }
     
     func checkCode(_ code: String) {
         if prepareRole == .supervisor {
             if code == "666666" {
                 selectionRole = prepareRole
+                save()
             } else {
                 errorMessage = "Code is error"
                 isErrorPresented = true
@@ -145,6 +108,7 @@ private extension SettingsView {
         if prepareRole == .commissioner {
             if code == "888888" {
                 selectionRole = prepareRole
+                save()
             } else {
                 errorMessage = "Code is error"
                 isErrorPresented = true
@@ -154,15 +118,6 @@ private extension SettingsView {
     
     func save() {
         GlobalConfig.userRole = selectionRole.rawValue
-        GlobalConfig.level0 = Double(l0Text) ?? 0
-        GlobalConfig.level1 = Double(l1Text) ?? 0
-        GlobalConfig.level2 = Double(l2Text) ?? 0
-        GlobalConfig.level3 = Double(l3Text) ?? 0
-        GlobalConfig.onDelay = Int(onDelayTime) ?? 0
-        GlobalConfig.offDelay = Int(offDelayTime) ?? 0
-        GlobalConfig.onTransition = Int(onTransitionTime) ?? 0
-        GlobalConfig.offTransition = Int(offTransitionTime) ?? 0
-        dismiss.callAsFunction()
     }
     
     func reset() {

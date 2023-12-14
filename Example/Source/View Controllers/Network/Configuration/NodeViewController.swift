@@ -42,6 +42,8 @@ class NodeViewController: ProgressViewController {
     /// The original Node is set when provisioning replaces a Node that already exists in the network.
     var originalNode: Node?
     
+    var resetCallback: (() -> Void)?
+    
     // MARK: - Outlets
     
     @IBOutlet weak var configureButton: UIBarButtonItem!
@@ -70,7 +72,7 @@ class NodeViewController: ProgressViewController {
         
         if refreshControl == nil {
             refreshControl = UIRefreshControl()
-            refreshControl!.tintColor = .white
+            refreshControl!.tintColor = .blue
             refreshControl!.addTarget(self, action: #selector(getCompositionData), for: .valueChanged)
         }
     }
@@ -86,16 +88,19 @@ class NodeViewController: ProgressViewController {
             // The Provisioner cannot sent or receive messages.
             return
         }
-        
-        // If the Composition Data were never obtained, get them now.
-        if !node.isCompositionDataReceived {
-            // This will request Composition Data when the bearer is open.
-            getCompositionData()
-            // performSegue(withIdentifier: "reconfigure", sender: nil)
-        } else if node.defaultTTL == nil {
-            getTtl()
-        } else {
-            configureButton.isEnabled = node.deviceKey != nil
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            // If the Composition Data were never obtained, get them now.
+            if !self.node.isCompositionDataReceived {
+                // This will request Composition Data when the bearer is open.
+                self.getCompositionData()
+                // performSegue(withIdentifier: "reconfigure", sender: nil)
+            } else if self.node.defaultTTL == nil {
+                self.getTtl()
+                self.addDefaultGroup()
+            } else {
+                self.configureButton.isEnabled = self.node.deviceKey != nil
+                self.addDefaultGroup()
+            }
         }
     }
     
@@ -445,6 +450,7 @@ private extension NodeViewController {
     }
     
     @objc func getCompositionData() {
+        addDefaultSceneAddresses()
         guard let node = node, MeshNetworkManager.bearer.isOpen else {
             refreshControl?.endRefreshing()
             return
@@ -492,6 +498,27 @@ private extension NodeViewController {
             }
         }
         done()
+    }
+    
+    func addDefaultGroup() {
+        let groups = MeshNetworkManager.instance.meshNetwork!.defaultGroups
+        groups.forEach { group in
+            node.usefulModels.forEach { model in
+                model.subscribe(to: group)
+            }
+        }
+        _ = MeshNetworkManager.instance.save()
+    }
+    
+    func addDefaultSceneAddresses() {
+        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork,
+              let address = node?.primaryUnicastAddress else {
+            return
+        }
+        for scene in meshNetwork.scenes where scene.number <= 4 {
+            scene.add(address: address)
+        }
+        _ = MeshNetworkManager.instance.save()
     }
     
     func getTtl() {
@@ -562,10 +589,10 @@ extension NodeViewController: MeshNetworkDelegate {
         case is ConfigCompositionDataStatus:
             // When the Composition Data are known, we can try to reconfigure the Node based on
             // how it was configured before.
+            self.refreshControl?.endRefreshing()
             if let originalNode = self.originalNode {
                 done {
                     self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
                     self.configureButton.isEnabled = true
                     
                     self.performSegue(withIdentifier: "reconfigure", sender: originalNode)
@@ -574,6 +601,7 @@ extension NodeViewController: MeshNetworkDelegate {
                 return
             }
             self.getTtl()
+            addDefaultGroup()
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -584,10 +612,17 @@ extension NodeViewController: MeshNetworkDelegate {
                 self.refreshControl?.endRefreshing()
                 self.configureButton.isEnabled = true
             }
-            
+        case is ConfigModelAppStatus:
+            done {
+                self.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
+            }
         case is ConfigNodeResetStatus:
             done {
                 self.navigationController?.popToRootViewController(animated: true)
+                CATransaction.setCompletionBlock {
+                    self.resetCallback?()
+                }
             }
         default:
             done()

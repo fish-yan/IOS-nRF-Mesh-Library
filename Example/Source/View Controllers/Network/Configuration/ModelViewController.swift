@@ -624,11 +624,7 @@ extension ModelViewController: ModelViewCellDelegate {
             return
         }
         currentMessage = message
-        start("Binding Application Key...") { [weak self] in
-            guard let self = self else { return nil }
-            return try self.bindApplicationKeyIfNeed()
-        }
-        .then(description) {
+        start(description) {
             switch message {
             case let request as AcknowledgedMeshMessage:
                 return try MeshNetworkManager.instance.send(request, to: model)
@@ -647,11 +643,7 @@ extension ModelViewController: ModelViewCellDelegate {
             return
         }
         currentMessage = message
-        start("Binding Application Key...") { [weak self] in
-            guard let self = self else { return nil }
-            return try self.bindApplicationKeyIfNeed()
-        }
-        .then(description) {
+        start(description) {
             return try MeshNetworkManager.instance.send(message, to: node)
         }
     }
@@ -677,19 +669,6 @@ private extension ModelViewController {
             // Model App Bindings -> Subscriptions -> Publication -> Custom UI.
             reloadBindings()
         }
-    }
-    
-    func bindApplicationKeyIfNeed() throws -> MessageHandle? {
-        guard model.boundApplicationKeys.isEmpty else {
-            self.done()
-            return nil
-        }
-        guard let node = model.parentElement?.parentNode,
-              let key = node.applicationKeys(availableForModel: model).first else {
-            throw MeshNetworkError.noApplicationKey
-        }
-        let message = ConfigModelAppBind(applicationKey: key, to: model)!
-        return try MeshNetworkManager.instance.send(message, to: node)
     }
     
     func reloadBindings() {

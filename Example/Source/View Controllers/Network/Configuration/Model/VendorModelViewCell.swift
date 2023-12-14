@@ -211,6 +211,13 @@ private extension VendorModelViewCell {
         parametersField.resignFirstResponder()
         responseOpCodeField.resignFirstResponder()
         
+        guard !model.boundApplicationKeys.isEmpty else {
+            parentViewController?.presentAlert(
+                title: "Bound key required",
+                message: "Bind at least one Application Key before sending the message.")
+            return
+        }
+        
         // Clear the response fields.
         expectedResponseOpCode = nil
         responseOpCodeLabel.text = nil

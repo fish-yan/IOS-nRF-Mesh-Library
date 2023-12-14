@@ -364,27 +364,8 @@ extension ProvisioningViewController: GattBearerDelegate {
             let manager = MeshNetworkManager.instance
             if manager.save() {
                 let connection = MeshNetworkManager.bearer!
-                connection.delegate = connectBearDelegate
                 
                 func done(reconnect: Bool) {
-                    self.presentStatusDialog(message: "start config...")
-                    connectBearDelegate.done = {
-                        guard let network = manager.meshNetwork else {
-                            return
-                        }
-                        self.dismissStatusDialog()
-                        if self.presentingViewController != nil {
-                            if let node = network.node(for: self.unprovisionedDevice) {
-                                self.delegate?.provisionerDidProvisionNewDevice(node, whichReplaced: self.previousNode)
-                            }
-                        } else {
-                            if let network = MeshNetworkManager.instance.meshNetwork,
-                               let node = network.node(for: self.unprovisionedDevice) {
-                                self.node = node
-                                self.getCompositionData()
-                            }
-                        }
-                    }
                     if reconnect, let pbGattBearer = self.bearer as? PBGattBearer {
                         connection.disconnect()
                         // The bearer has closed. Attempt to send a message
@@ -395,9 +376,23 @@ extension ProvisioningViewController: GattBearerDelegate {
                         manager.proxyFilter.clear()
                         let gattBearer = GattBearer(targetWithIdentifier: pbGattBearer.identifier)
                         connection.use(proxy: gattBearer)
+                        
+                        guard let network = manager.meshNetwork else {
+                            return
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            let node = network.node(for: self.unprovisionedDevice)
+                            let destination = UIStoryboard(name: "Network", bundle: nil).instantiateViewController(withIdentifier: "NodeViewController") as! NodeViewController
+                            destination.node = node
+                            
+                            self.navigationController?.pushViewController(destination, animated: true)
+                            CATransaction.setCompletionBlock {
+                                if let root = self.navigationController?.viewControllers.first {
+                                    self.navigationController?.viewControllers = [root, destination]
+                                }
+                            }
+                        }
                     }
-                    
-                    
                 }
                 let reconnectAction = UIAlertAction(title: "Yes", style: .default) { _ in
                     done(reconnect: true)
@@ -420,95 +415,6 @@ extension ProvisioningViewController: GattBearerDelegate {
             }
         }
     }
-    
-    func getCompositionData() {
-        guard let node,
-              MeshNetworkManager.bearer.isOpen,
-              let meshNetwork = MeshNetworkManager.instance.meshNetwork,
-              let applicationKey = meshNetwork.applicationKey else {
-            return
-        }
-        addDefaultSceneAddresses()
-        addDefaultGroup()
-        MeshNetworkManager.instance.delegate = self
-        start("Requesting Composition Data...") {
-            let message = ConfigCompositionDataGet()
-            return try MeshNetworkManager.instance.send(message, to: node)
-        }
-        .then("Requesting default TTL...") {
-            let message = ConfigDefaultTtlGet()
-            return try MeshNetworkManager.instance.send(message, to: node)
-        }
-        .then("Adding Application Key...", completion: {
-            let message = ConfigAppKeyAdd(applicationKey: applicationKey)
-            return try MeshNetworkManager.instance.send(message, to: node)
-        })
-        .thenNoHandle("Bind Application Key...") { [weak self] in
-            self?.bindApplicationKey()
-        }
-    }
-    
-    func bindApplicationKey()  {
-        guard let node,
-              let applicationKey = MeshNetworkManager.instance.meshNetwork?.applicationKey else {
-            done()
-            return
-        }
-        node.elements.forEach { element in
-            element.models.forEach { model in
-                if let message = ConfigModelAppBind(applicationKey: applicationKey, to: model) {
-                    then("Bind Application Key...") {
-                        return try MeshNetworkManager.instance.send(message, to: node.primaryUnicastAddress)
-                    }
-                }
-            }
-        }
-        done()
-//        subscribeToGroup()
-    }
-    
-    func addDefaultGroup() {
-        guard let groups = MeshNetworkManager.instance.meshNetwork?.groups,
-              let node else {
-            return
-        }
-        groups.forEach { group in
-            node.elements.forEach { element in
-                element.models.forEach({ model in
-                    model.subscribe(to: group)
-                })
-            }
-        }
-    }
-    
-    func subscribeToGroup() {
-        guard let groups = MeshNetworkManager.instance.meshNetwork?.groups,
-              let node else {
-            return
-        }
-        groups.forEach { group in
-            node.elements.forEach { element in
-                element.models.forEach({ model in
-                    then("subscribe to group: \(group.name)...") {
-                        let message: AcknowledgedConfigMessage = ConfigModelSubscriptionAdd(group: group, to: model) ?? ConfigModelSubscriptionVirtualAddressAdd(group: group, to: model)!
-                        return try MeshNetworkManager.instance.send(message, to: node)
-                    }
-                })
-            }
-        }
-    }
-    
-    func addDefaultSceneAddresses() {
-        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork,
-              let address = node?.primaryUnicastAddress else {
-            return
-        }
-        for scene in meshNetwork.scenes where scene.number <= 4 {
-            scene.add(address: address)
-        }
-        _ = MeshNetworkManager.instance.save()
-    }
-    
 }
 
 extension ProvisioningViewController: ProvisioningDelegate {

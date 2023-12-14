@@ -29,10 +29,10 @@ struct LightsView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
-                .opacity(GlobalConfig.isShowAdvance ? 1 : 0)
+                .opacity(isShowSetting ? 1 : 0)
             }
             .onAppear {
-                isShowSetting = GlobalConfig.isShowSetting
+                isShowSetting = GlobalConfig.isShowAdvance
                 nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner }
             }
         }

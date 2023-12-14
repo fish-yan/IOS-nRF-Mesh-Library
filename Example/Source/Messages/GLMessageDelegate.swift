@@ -35,6 +35,10 @@ public enum GLSimpleStatus: Int {
     case off = 0
     case on = 1
     case read = 2
+    
+    public init(bool: Bool) {
+        self.init(rawValue: bool ? 1 : 0)!
+    }
 }
 
 extension Data {
