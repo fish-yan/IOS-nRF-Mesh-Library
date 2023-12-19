@@ -10,18 +10,16 @@ import SwiftUI
 import nRFMeshProvision
 
 struct GroupControlView: View {
-    @State private var emergencyOnOff = false
-    
-    @StateObject private var store = MessageDetailStore()
-    
+        
     @State private var isPresented = false
     
-    private var messageManager = MeshMessageManager()
-
-    var zone: GLZone
+    @ObservedObject var zone: GLZone
+    
+    @ObservedObject var store: MessageDetailStore
     
     init(zone: GLZone) {
         self.zone = zone
+        self.store = zone.store
     }
     
     var body: some View {
@@ -33,9 +31,9 @@ struct GroupControlView: View {
                             store.isOn.toggle()
                             onOffSet(onOff: store.isOn, group: D000)
                         }
-                        onOffButton(onOff: emergencyOnOff, title: "紧急照明", text: "On 所有灯全亮, AI 不动作, Off 回到正常") {
-                            emergencyOnOff.toggle()
-                            onOffSet(onOff: emergencyOnOff, group: D004)
+                        onOffButton(onOff: store.emergencyOnOff, title: "紧急照明", text: "On 所有灯全亮, AI 不动作, Off 回到正常") {
+                            store.emergencyOnOff.toggle()
+                            onOffSet(onOff: store.emergencyOnOff, group: D004)
                         }
                     }
                     HStack {
@@ -89,7 +87,6 @@ struct GroupControlView: View {
             }
         }
         .navigationTitle("Control")
-        .onAppear(perform: onAppear)
         .alert("Set Scene To Lights", isPresented: $isPresented) {
             Button("All") {
                 sceneRecallSet(group: D000)
@@ -174,43 +171,17 @@ struct GroupControlView: View {
 
 extension GroupControlView {
     
-    func onAppear() {
-        store.isSensor = false
-        store.isAi = false
-        store.level = 0
-//        messageManager.delegate = self
-//        messageManager.add {
-//            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D000)
-//        }
-//        .add {
-//            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D004)
-//        }
-//        .add {
-//            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D005)
-//        }
-//        .add {
-//            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D006)
-//        }
-//        .add {
-//            return try MeshNetworkManager.instance.send(GenericLevelGet(), to: D000)
-//        }
-//        .add {
-//            return try MeshNetworkManager.instance.send(GenericLevelGet(), to: D001)
-//        }
-//        .add {
-//            return try MeshNetworkManager.instance.send(GenericLevelGet(), to: D002)
-//        }
-    }
-    
     func onOffSet(onOff: Bool, group: nRFMeshProvision.Group) {
         let message = GenericOnOffSet(onOff)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
+        MeshNetworkManager.instance.saveModel()
     }
     
     func levelSet(value: Double, group: nRFMeshProvision.Group) {
         let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
         let message = GenericLevelSet(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
+        MeshNetworkManager.instance.saveModel()
     }
     
     func sceneRecallSet(group: nRFMeshProvision.Group?) {
@@ -218,68 +189,7 @@ extension GroupControlView {
         guard let group else { store.selectedScene = 0; return }
         let message = SceneRecall(store.selectedScene)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
+        MeshNetworkManager.instance.saveModel()
     }
     
-}
-
-extension GroupControlView: MeshMessageDelegate {
-    func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
-        let group = mapToGroup(source: source)
-        switch message {
-        case let status as GenericOnOffStatus:
-            switch group {
-            case D000:
-                store.isOn = status.isOn
-//            case D004:
-//                store.emergencyOnOff = status.isOn
-//            case D005:
-//                store.isSensor = status.isOn
-//            case D006:
-//                store.isAi = status.isOn
-            default: break
-            }
-            
-        case let status as GenericLevelStatus:
-            let level = floorf(0.1 + (Float(status.level) + 32768.0) / 655.35)
-            switch group {
-            case D000:
-                store.level = Double(level)
-            case D001:
-                store.CCT = Double(level)
-            case D002:
-                store.angle = Double(level)
-            default: break
-            }
-        case let status as SceneStatus:
-            store.selectedScene = status.scene
-            
-        default: break
-        }
-    }
-    
-    func mapToGroup(source: Address) -> nRFMeshProvision.Group {
-        let network = MeshNetworkManager.instance.meshNetwork!
-        if let node = network.nodes.first(where: { $0.unicastAddressRange.contains(source) }),
-           let group = match(node: node, source: source) {
-            return group
-        }
-        return D000
-    }
-    
-    func match(node: Node, source: Address) -> nRFMeshProvision.Group? {
-        if [node.onOffModel, node.levelModel].contains(where: {$0?.parentElement?.unicastAddress == source }) {
-            return D000
-        } else if node.cctModel?.parentElement?.unicastAddress == source {
-            return D001
-        } else if node.angleModel?.parentElement?.unicastAddress == source {
-            return D002
-        } else if node.emergencyModel?.parentElement?.unicastAddress == source {
-            return D004
-        } else if node.pirModel?.parentElement?.unicastAddress == source {
-            return D005
-        } else if node.aiModel?.parentElement?.unicastAddress == source {
-            return D006
-        }
-        return nil
-    }
 }
