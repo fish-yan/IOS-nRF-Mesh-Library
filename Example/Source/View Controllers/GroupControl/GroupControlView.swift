@@ -178,10 +178,10 @@ extension GroupControlView {
         store.isSensor = false
         store.isAi = false
         store.level = 0
-        messageManager.delegate = self
-        messageManager.add {
-            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D000)
-        }
+//        messageManager.delegate = self
+//        messageManager.add {
+//            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D000)
+//        }
 //        .add {
 //            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: D004)
 //        }
@@ -230,12 +230,12 @@ extension GroupControlView: MeshMessageDelegate {
             switch group {
             case D000:
                 store.isOn = status.isOn
-            case D004:
-                store.emergencyOnOff = status.isOn
-            case D005:
-                store.isSensor = status.isOn
-            case D006:
-                store.isAi = status.isOn
+//            case D004:
+//                store.emergencyOnOff = status.isOn
+//            case D005:
+//                store.isSensor = status.isOn
+//            case D006:
+//                store.isAi = status.isOn
             default: break
             }
             
