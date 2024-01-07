@@ -83,9 +83,7 @@ class MeshMessageManager {
         if messageQueue.isEmpty {
             completion()
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(110)) {
-                self.sendNext()
-            }
+            self.sendNext()
         }
     }
 }

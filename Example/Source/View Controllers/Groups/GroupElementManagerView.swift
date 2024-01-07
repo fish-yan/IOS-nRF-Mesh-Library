@@ -97,15 +97,17 @@ struct GroupElementManagerView: View {
                 Image(systemName: "pencil.line")
             }
         }
-        .onAppear {
-            store.updateScene(group: group)
-            messageManager.delegate = self
-            let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-            let models = meshNetwork.models(subscribedTo: group)
-            let arr = models.filter({ $0.parentElement!.parentNode!.usefulModels.contains($0)})
-                .compactMap { $0.parentElement?.parentNode }
-            nodes = Set(arr)
-        }
+        .onAppear(perform: onAppear)
+    }
+    
+    func onAppear() {
+        store.updateScene(group: group)
+        messageManager.delegate = self
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        let models = meshNetwork.models(subscribedTo: group)
+        let arr = models.filter({ $0.parentElement!.parentNode!.usefulModels.contains($0)})
+            .compactMap { $0.parentElement?.parentNode }
+        nodes = Set(arr)
     }
     
     func subscribe(nodes: Set<Node>) {
@@ -171,8 +173,10 @@ struct GroupElementManagerView: View {
 extension GroupElementManagerView: MeshMessageDelegate {
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
         switch message {
-        case let status as GenericLevelStatus:
-            print(status)
+        case let status as ConfigModelSubscriptionStatus:
+            debouncer.call {
+                self.onAppear()
+            }
         case let status as GLColorTemperatureStatus:
             print(status)
         case let status as GLAngleStatus:

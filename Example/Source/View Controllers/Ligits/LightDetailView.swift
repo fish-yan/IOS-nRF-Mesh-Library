@@ -68,12 +68,12 @@ extension LightDetailView {
             return try MeshNetworkManager.instance.send(GenericLevelGet(), to: levelModel)
         }
         .add {
-            guard let vendorModel = node.vendorModel else { return nil }
-            return try MeshNetworkManager.instance.send(GLAiMessage(status: .read), to: vendorModel)
+            guard let cctModel = node.cctModel else { return nil }
+            return try MeshNetworkManager.instance.send(GenericLevelGet(), to: cctModel)
         }
         .add {
-            guard let vendorModel = node.vendorModel else { return nil }
-            return try MeshNetworkManager.instance.send(GLSensorMessage(status: .read), to: vendorModel)
+            guard let angleModel = node.angleModel else { return nil }
+            return try MeshNetworkManager.instance.send(GenericLevelGet(), to: angleModel)
         }
     }
     
@@ -87,9 +87,14 @@ extension LightDetailView {
 extension LightDetailView: MeshMessageDelegate {
     
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
+        print("aa:message:\(message), source: \(source)")
         switch message {
         case let status as GenericOnOffStatus:
-            store.isOn = status.isOn
+            switch source {
+            case node.onOffModel?.parentElement?.unicastAddress:
+                store.isOn = status.isOn
+            default: break
+            }
         case let status as GenericLevelStatus:
             let level = floorf(0.1 + (Float(status.level) + 32768.0) / 655.35)
             switch source {
@@ -101,32 +106,9 @@ extension LightDetailView: MeshMessageDelegate {
                 store.angle = Double(level)
             default: break
             }
-            
-        case let status as GLColorTemperatureStatus:
-            print(status)
-        case let status as GLAngleStatus:
-            print(status)
-        case let status as GLAiStatus:
-            store.isAi = status.status == .on
-        case let status as GLSensorStatus:
-            store.isSensor = status.status == .on
-        case let status as SceneStatus:
-            store.selectedScene = status.scene
-            
         default: break
         }
     }
-    
-    func meshNetworkManager(_ manager: MeshNetworkManager, didSendMessage message: MeshMessage, from localElement: Element, to destination: MeshAddress) {
-        
-    }
-    
-    func meshNetworkManager(_ manager: MeshNetworkManager, failedToSendMessage message: MeshMessage, from localElement: Element, to destination: MeshAddress, error: Error) {
-        print(message, error.localizedDescription)
-//        store.error = .messageError(error.localizedDescription)
-//        store.isError = true
-    }
-    
 }
 
 

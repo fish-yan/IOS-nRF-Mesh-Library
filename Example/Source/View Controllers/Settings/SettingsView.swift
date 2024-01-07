@@ -8,23 +8,20 @@
 
 import SwiftUI
 import nRFMeshProvision
+import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var selectionRole: UserRole = UserRole(rawValue: GlobalConfig.userRole) ?? .normal
-    @State var l0Text: String = String(format: "%.f", GlobalConfig.level0)
-    @State var l1Text: String = String(format: "%.f", GlobalConfig.level1)
-    @State var l2Text: String = String(format: "%.f", GlobalConfig.level2)
-    @State var l3Text: String = String(format: "%.f", GlobalConfig.level3)
-    
-    @State var onDelayTime: String = String(format: "%d", GlobalConfig.onDelay)
-    @State var offDelayTime: String = String(format: "%d", GlobalConfig.offDelay)
-    @State var onTransitionTime: String = String(format: "%d", GlobalConfig.onTransition)
-    @State var offTransitionTime: String = String(format: "%d", GlobalConfig.offTransition)
     
     @State var isPresented = false
     @State var isNetworkResetPresented = false
+    
+    @State var isFileImportPresented = false
+    @State var isFileExportPresented = false
+    
+    @State var importSuccess = false
     
     @State var isErrorPresented = false
     @State var errorMessage = "Error"
@@ -64,6 +61,24 @@ struct SettingsView: View {
                     }
                     
                     Section {
+                        Button("Export") {
+                            isFileExportPresented = true
+                        }
+                        Button("Import") {
+                            isFileImportPresented = true
+                        }
+                        .fileImporter(isPresented: $isFileImportPresented, allowedContentTypes: [.json]) { result in
+                            switch result {
+                            case .success(let fileUrl):
+                                importWith(fileUrl: fileUrl)
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                        
+                    }
+                    
+                    Section {
                         Button("Reset") { isNetworkResetPresented = true }
                             .tint(Color.red)
                     }
@@ -86,6 +101,38 @@ struct SettingsView: View {
             } message: {
                 Text("Resetting the network will erase all network data.\nMake sure you exported it first.")
             }
+            .alert("Import success", isPresented: $importSuccess) {
+                Button("OK", role: .cancel){}
+            }
+            .sheet(isPresented: $isFileExportPresented) {
+                ExportView()
+            }
+        }
+    }
+    
+    private func importWith(fileUrl: URL) {
+        guard fileUrl.startAccessingSecurityScopedResource() else { // Notice this line right here
+             return
+        }
+        do {
+            let data = try Data(contentsOf: fileUrl)
+            let somejson = try JSONSerialization.jsonObject(with: data)
+            guard let json = somejson as? [String: Any] else {
+                return
+            }
+            if let meshJson = json["meshData"] {
+                let meshData = try JSONSerialization.data(withJSONObject: meshJson)
+                _ = try MeshNetworkManager.instance.import(from: meshData)
+            }
+            if let glJson = json["glData"] {
+                let glData = try JSONSerialization.data(withJSONObject: glJson)
+                _ = try MeshNetworkManager.instance.importGLModel(from: glData)
+            }
+            
+            MeshNetworkManager.instance.saveAll()
+            importSuccess = true
+        } catch {
+            print(error)
         }
     }
 }
@@ -192,5 +239,31 @@ struct UserSettingsItem: View {
                 .keyboardType(.numberPad)
             Text(unit)
         }
+    }
+}
+
+struct TextFile: FileDocument {
+    // 告诉系统我们仅支持纯文本
+    static var readableContentTypes: [UTType] = [.json]
+
+    // 默认情况下，您的文档为空
+    var text = ""
+
+    // 创建新的空文档的简单初始化程序
+    init(initialText: String = "") {
+        text = initialText
+    }
+
+    // 此初始化程序加载以前保存的数据
+    init(configuration: ReadConfiguration) throws {
+        if let data = configuration.file.regularFileContents {
+            text = String(decoding: data, as: UTF8.self)
+        }
+    }
+
+    // 当系统要将数据写入磁盘时，将调用此方法
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        let data = Data(text.utf8)
+        return FileWrapper(regularFileWithContents: data)
     }
 }

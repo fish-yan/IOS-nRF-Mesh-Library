@@ -486,3 +486,30 @@ extension UIView {
     }
     
 }
+
+extension UIViewController {
+    private var tag: Int { -878 }
+    func showHud() {
+        var indicator: UIActivityIndicatorView
+        if let view = self.view.viewWithTag(tag) as? UIActivityIndicatorView {
+            indicator = view
+        } else {
+            indicator = UIActivityIndicatorView(style: .large)
+            indicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+            indicator.center = CGPoint(x: self.view.center.x, y: self.view.center.y)
+            indicator.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+            indicator.layer.cornerRadius = 8
+            indicator.hidesWhenStopped = true
+            indicator.tag = tag
+            self.view.addSubview(indicator)
+        }
+        self.view.bringSubviewToFront(indicator)
+        indicator.startAnimating()
+    }
+    
+    func hidHud() {
+        if let indicator = self.view.viewWithTag(tag) as? UIActivityIndicatorView {
+            indicator.stopAnimating()
+        }
+    }
+}

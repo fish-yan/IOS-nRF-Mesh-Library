@@ -304,33 +304,48 @@ extension SettingsViewController: UIDocumentPickerDelegate {
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
+            guard url.startAccessingSecurityScopedResource() else { // Notice this line right here
+                 return
+            }
             do {
                 let data = try Data(contentsOf: url)
-                let meshNetwork = try manager.import(from: data)
-                // Try restoring the Provisioner used last time on this device.
-                if !meshNetwork.restoreLocalProvisioner() {
-                    // If it's a new network and has only one Provisioner, just save it.
-                    // Otherwise, give the user option to select one.
-                    if meshNetwork.provisioners.count > 1 {
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-                            let alert = UIAlertController(title: "Select Provisioner",
-                                                          message: "Select Provisioner instance to be used on this device:",
-                                                          preferredStyle: .actionSheet)
-                            alert.popoverPresentationController?.barButtonItem = self.organizeButton
-                            for provisioner in meshNetwork.provisioners {
-                                alert.addAction(UIAlertAction(title: provisioner.name, style: .default) { [weak self] action in
-                                    // This will effectively set the Provisioner to be used
-                                    // be the library. Provisioner from index 0 is the local one.
-                                    meshNetwork.moveProvisioner(provisioner, toIndex: 0)
-                                    self?.saveAndReload()
-                                })
+                let somejson = try JSONSerialization.jsonObject(with: data)
+                guard let json = somejson as? [String: Any] else {
+                    return
+                }
+                if let meshJson = json["meshData"] {
+                    let meshData = try JSONSerialization.data(withJSONObject: meshJson)
+                    let meshNetwork = try manager.import(from: meshData)
+                    // Try restoring the Provisioner used last time on this device.
+                    if !meshNetwork.restoreLocalProvisioner() {
+                        // If it's a new network and has only one Provisioner, just save it.
+                        // Otherwise, give the user option to select one.
+                        if meshNetwork.provisioners.count > 1 {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
+                                let alert = UIAlertController(title: "Select Provisioner",
+                                                              message: "Select Provisioner instance to be used on this device:",
+                                                              preferredStyle: .actionSheet)
+                                alert.popoverPresentationController?.barButtonItem = self.organizeButton
+                                for provisioner in meshNetwork.provisioners {
+                                    alert.addAction(UIAlertAction(title: provisioner.name, style: .default) { [weak self] action in
+                                        // This will effectively set the Provisioner to be used
+                                        // be the library. Provisioner from index 0 is the local one.
+                                        meshNetwork.moveProvisioner(provisioner, toIndex: 0)
+                                        self?.saveAndReload()
+                                    })
+                                }
+                                self.present(alert, animated: true)
                             }
-                            self.present(alert, animated: true)
+                            return
                         }
-                        return
                     }
                 }
+                if let glJson = json["glData"] {
+                    let glData = try JSONSerialization.data(withJSONObject: glJson)
+                    _ = try MeshNetworkManager.instance.importGLModel(from: glData)
+                }
+               
                 self.saveAndReload()
             } catch let DecodingError.dataCorrupted(context) {
                 let path = context.codingPath.path

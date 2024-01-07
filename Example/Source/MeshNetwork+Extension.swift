@@ -122,29 +122,29 @@ extension Node {
         models(withSigModelId: .genericOnOffServerModelId).first
     }
     
-    var emergencyModel: Model? {
-        let models = models(withSigModelId: .genericOnOffServerModelId)
-        if models.count >= 2 {
-            return models[1]
-        }
-        return nil
-    }
-    
-    var pirModel: Model? {
-        let models = models(withSigModelId: .genericOnOffServerModelId)
-        if models.count >= 3 {
-            return models[2]
-        }
-        return nil
-    }
-    
-    var aiModel: Model? {
-        let models = models(withSigModelId: .genericOnOffServerModelId)
-        if models.count >= 4 {
-            return models[3]
-        }
-        return nil
-    }
+//    var emergencyModel: Model? {
+//        let models = models(withSigModelId: .genericOnOffServerModelId)
+//        if models.count >= 2 {
+//            return models[1]
+//        }
+//        return nil
+//    }
+//    
+//    var pirModel: Model? {
+//        let models = models(withSigModelId: .genericOnOffServerModelId)
+//        if models.count >= 3 {
+//            return models[2]
+//        }
+//        return nil
+//    }
+//    
+//    var aiModel: Model? {
+//        let models = models(withSigModelId: .genericOnOffServerModelId)
+//        if models.count >= 4 {
+//            return models[3]
+//        }
+//        return nil
+//    }
     
     var levelModel: Model? {
         models(withSigModelId: .genericLevelServerModelId).first
@@ -179,7 +179,7 @@ extension Node {
     }
     
     var usefulModels: [Model] {
-        return [onOffModel, emergencyModel, pirModel, aiModel, levelModel, cctModel, vendorModel, angleModel, sceneModel, sceneSetupModel].compactMap { $0 }
+        return [onOffModel, levelModel, cctModel, vendorModel, angleModel, sceneModel, sceneSetupModel].compactMap { $0 }
     }
 }
 

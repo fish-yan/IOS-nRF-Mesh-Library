@@ -265,8 +265,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaultAddress = MeshNetworkManager.defaultGroupAddresses
         let nodes = meshNetwork.nodes.filter { !$0.isProvisioner }
         nodes.forEach { node in
-            meshNetwork.groups.forEach { group in
-                node.usefulModels.forEach { model in
+            node.usefulModels.forEach { model in
+                for group in meshNetwork.groups where defaultAddress.contains(group.address.address) {
                     model.subscribe(to: group)
                 }
             }

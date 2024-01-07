@@ -264,14 +264,21 @@ private extension ExportViewController {
     ///                                  parameters are to be exported.
     func exportNetwork(using exportConfiguration: ExportConfiguration) {
         let manager = MeshNetworkManager.instance
-        
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            let data = manager.export(exportConfiguration)
+            let name = manager.meshNetwork?.meshName ?? "mesh"
+            let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(name).json")
             
             do {
-                let name = manager.meshNetwork?.meshName ?? "mesh"
-                let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(name).json")
+                let meshData = manager.export(exportConfiguration)
+                let meshJson = try JSONSerialization.jsonObject(with: meshData)
+                
+                let glData = manager.exportGLModel()
+                let glJson = try JSONSerialization.jsonObject(with: glData)
+                
+                let newJson = ["meshData": meshJson, "glData": glJson]
+                let data = try JSONSerialization.data(withJSONObject: newJson)
+                
                 try data.write(to: fileURL)
                 
                 DispatchQueue.main.async { [weak self] in

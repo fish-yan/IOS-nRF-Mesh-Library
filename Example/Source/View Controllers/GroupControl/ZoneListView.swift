@@ -15,19 +15,24 @@ struct ZoneListView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(zones, id: \.self) { zone in
-                    NavigationLink {
-                        GroupControlView(zone: zone)
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(zone.name)
-                            Text("Address: 0x\(String(zone.zone, radix: 16))")
-                                .font(.subheadline)
-                                .foregroundStyle(Color(uiColor: .secondaryLabel))
+                Section {
+                    ForEach(zones, id: \.self) { zone in
+                        NavigationLink {
+                            GroupControlView(zone: zone)
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text(zone.name)
+                                    .font(.headline)
+                                Text("Address: 0x\(String(zone.zone, radix: 16))")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color(uiColor: .secondaryLabel))
+                            }
                         }
                     }
+                    .onDelete(perform: delete)
+                } footer: {
+                    Text("")
                 }
-                .onDelete(perform: delete)
             }
             .navigationTitle("Zone")
             .toolbar {

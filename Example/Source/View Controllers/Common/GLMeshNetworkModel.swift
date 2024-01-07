@@ -146,8 +146,8 @@ class MessageDetailStore: NSObject, ObservableObject, Codable {
     
     @Published var isOn = false
     
-    @Published var isAi: Bool = false
-    @Published var isSensor: Bool = false
+    @Published var isAi: Bool = true
+    @Published var isSensor: Bool = true
     @Published var emergencyOnOff: Bool = false
     
     @Published var level: Double = 0
@@ -384,6 +384,41 @@ extension MeshNetworkManager {
             return true
         }
         return false
+    }
+    
+    func exportGLModel() -> Data {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = .withoutEscapingSlashes
+        if #available(iOS 11.0, *) {
+            encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
+        }
+        return try! encoder.encode(GLMeshNetworkModel.instance)
+    }
+    
+    func importGLModel(from data: Data) throws -> GLMeshNetworkModel {
+        let decoder = JSONDecoder()
+        
+        // The .iso8601 decoding strategy does not support fractional seconds.
+        // decoder.dateDecodingStrategy = .iso8601
+        
+        // Instead, use ISO8601DateFormatter.
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions.insert(.withFractionalSeconds)
+            
+            let container = try decoder.singleValueContainer()
+            let value = try container.decode(String.self)
+            return formatter.date(from: value) ?? Date.distantPast
+        }
+        
+        let model = try decoder.decode(GLMeshNetworkModel.self, from: data)
+        GLMeshNetworkModel.instance.groups = model.groups
+        GLMeshNetworkModel.instance.nodes = model.nodes
+        GLMeshNetworkModel.instance.scenes = model.scenes
+        GLMeshNetworkModel.instance.drafts = model.drafts
+        GLMeshNetworkModel.instance.zone = model.zone
+        return model
     }
     
     @discardableResult
