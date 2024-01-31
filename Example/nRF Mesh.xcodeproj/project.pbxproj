@@ -24,6 +24,7 @@
 		2C42B5032AE67003006887FF /* GLColorTemperatureMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */; };
 		2C42B5052AE676FC006887FF /* GLAngleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5042AE676FC006887FF /* GLAngleMessage.swift */; };
 		2C42B5072AE76BC7006887FF /* GLMessageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */; };
+		2C5BBC852B61480C00FBA1AA /* LightControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BBC842B61480C00FBA1AA /* LightControlView.swift */; };
 		2C72D6102B0EEB30004625CA /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D60F2B0EEB30004625CA /* ControlView.swift */; };
 		2C72D6122B0EEB88004625CA /* CustomControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6112B0EEB88004625CA /* CustomControlView.swift */; };
 		2C72D6142B0F2EB2004625CA /* DestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6132B0F2EB2004625CA /* DestinationView.swift */; };
@@ -52,6 +53,9 @@
 		2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */; };
 		2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */; };
 		2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */; };
+		2CEFBCCA2B664EAA00948F93 /* VerticalControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFBCC82B664EA900948F93 /* VerticalControl.swift */; };
+		2CEFBCCB2B664EAA00948F93 /* BeamShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFBCC72B664EA900948F93 /* BeamShapeView.swift */; };
+		2CEFBCCC2B664EAA00948F93 /* DotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFBCC92B664EAA00948F93 /* DotView.swift */; };
 		2CF32E422AD43C6200D254F2 /* ScenesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E412AD43C6200D254F2 /* ScenesListView.swift */; };
 		2CF32E442AD43DBE00D254F2 /* ScenesHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */; };
 		2CF32E462AD445BF00D254F2 /* SceneDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */; };
@@ -279,6 +283,7 @@
 		2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLColorTemperatureMessage.swift; sourceTree = "<group>"; };
 		2C42B5042AE676FC006887FF /* GLAngleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAngleMessage.swift; sourceTree = "<group>"; };
 		2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMessageDelegate.swift; sourceTree = "<group>"; };
+		2C5BBC842B61480C00FBA1AA /* LightControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightControlView.swift; sourceTree = "<group>"; };
 		2C72D60F2B0EEB30004625CA /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
 		2C72D6112B0EEB88004625CA /* CustomControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomControlView.swift; sourceTree = "<group>"; };
 		2C72D6132B0F2EB2004625CA /* DestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationView.swift; sourceTree = "<group>"; };
@@ -307,6 +312,9 @@
 		2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshNetwork+Extension.swift"; sourceTree = "<group>"; };
 		2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlView.swift; sourceTree = "<group>"; };
 		2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAiMessage.swift; sourceTree = "<group>"; };
+		2CEFBCC72B664EA900948F93 /* BeamShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamShapeView.swift; sourceTree = "<group>"; };
+		2CEFBCC82B664EA900948F93 /* VerticalControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalControl.swift; sourceTree = "<group>"; };
+		2CEFBCC92B664EAA00948F93 /* DotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotView.swift; sourceTree = "<group>"; };
 		2CF32E412AD43C6200D254F2 /* ScenesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesListView.swift; sourceTree = "<group>"; };
 		2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesHostViewController.swift; sourceTree = "<group>"; };
 		2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDetailView.swift; sourceTree = "<group>"; };
@@ -542,6 +550,10 @@
 			isa = PBXGroup;
 			children = (
 				2C1459882ABB221200351A40 /* LightsView.swift */,
+				2C5BBC842B61480C00FBA1AA /* LightControlView.swift */,
+				2CEFBCC72B664EA900948F93 /* BeamShapeView.swift */,
+				2CEFBCC92B664EAA00948F93 /* DotView.swift */,
+				2CEFBCC82B664EA900948F93 /* VerticalControl.swift */,
 				2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */,
 				2C798F152ABDD85600156CAA /* LightsManagerView.swift */,
 				2C18503E2AF7C70700900348 /* LightManagerDetailView.swift */,
@@ -1416,6 +1428,7 @@
 				52DF5D8F229691BD00C297C1 /* NetworkConnection.swift in Sources */,
 				52547F27232A3F470002AA7B /* EditRangesViewController.swift in Sources */,
 				52B7FD6D2525B40300308673 /* NodeSceneRecallViewController.swift in Sources */,
+				2CEFBCCB2B664EAA00948F93 /* BeamShapeView.swift in Sources */,
 				2C1459892ABB221200351A40 /* LightsView.swift in Sources */,
 				F09DE4D129E5A2180073969A /* MeshTaskStatus.swift in Sources */,
 				521215312316C36B0059FB3D /* GenericLevelGroupCell.swift in Sources */,
@@ -1425,6 +1438,7 @@
 				52CD0A50232FA6CD00A9A181 /* ProxyViewController.swift in Sources */,
 				2C8C0C2E2AC06DFF00BC0156 /* LightSelectedView.swift in Sources */,
 				528AB9FA228D856C000BE9DC /* ProvisioningViewDelegate.swift in Sources */,
+				2CEFBCCC2B664EAA00948F93 /* DotView.swift in Sources */,
 				5288C2162371BC1300321ED3 /* SimpleOnOffClientCell.swift in Sources */,
 				5288C20423704EF300321ED3 /* ConnectionModeCell.swift in Sources */,
 				52547F28232A3F470002AA7B /* RangeView.swift in Sources */,
@@ -1549,6 +1563,7 @@
 				F085CA0829D70ACB00C2DF89 /* ConfigurationViewController.swift in Sources */,
 				52547F26232A3F470002AA7B /* ProvisionersViewController.swift in Sources */,
 				529EC8DA2A309C640056BB48 /* CompanyIdentifier.swift in Sources */,
+				2C5BBC852B61480C00FBA1AA /* LightControlView.swift in Sources */,
 				2CA6A1E92B1A13CC0073E7BF /* GroupControlView.swift in Sources */,
 				2C7BE3732B148F40006376F7 /* TextFieldAlert.swift in Sources */,
 				2CFE865E2AEAA91B00A1CF7D /* GLGlobalOnOffMessage.swift in Sources */,
@@ -1570,6 +1585,7 @@
 				521599D525E91F9300F602FA /* SensorValueCell.swift in Sources */,
 				52518B3122E0B18400A1FD1E /* GroupsViewController.swift in Sources */,
 				52A8EA9424EE6D18004C14C7 /* HeartbeatSubscriptionPeriodCell.swift in Sources */,
+				2CEFBCCA2B664EAA00948F93 /* VerticalControl.swift in Sources */,
 				2C42B5032AE67003006887FF /* GLColorTemperatureMessage.swift in Sources */,
 				2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */,
 				5283528222806D7C0097B949 /* NetworkKeySelectionViewController.swift in Sources */,
@@ -1843,7 +1859,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Source/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1875,7 +1891,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Source/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
