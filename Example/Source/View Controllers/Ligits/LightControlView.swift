@@ -10,18 +10,21 @@ import SwiftUI
 import nRFMeshProvision
 
 struct LightControlView: View {
+    @Environment(\.dismiss) var dismiss
+
     var node: Node
     let dims = [0, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.85, 1]
     // 2500 2700 3000 3500 4000 5000
     let ccts = [0, 0.08, 0.2, 0.4, 0.6, 1]
     @State var dim: Double = 0
     @State var cct: Double = 0
-    @State var angle: Double = 0
+    @State var angle: Double = 0.5
     @State var tdim: Double = 0
     @State var tcct: Double = 0
-    @State var tangle: Double = 0
+    @State var tangle: Double = 0.5
     @State var isOn: Bool = false
     @State private var messageManager = MeshMessageManager()
+    @State var isError: Bool = false
 
     var body: some View {
         ZStack {
@@ -29,6 +32,9 @@ struct LightControlView: View {
             VStack {
                 ZStack(alignment: .top) {
                     BeamShapeView(angle: $angle, endValue: $tangle, hue: cct, brightness: dim)
+                        .animation(.easeInOut, value: angle)
+                        .animation(.easeInOut, value: cct)
+                        .animation(.easeInOut, value: dim)
 
                     HStack {
                         VerticalControl(type: .dim, value: $dim, endValue: $tdim, onAdd: {
@@ -62,12 +68,16 @@ struct LightControlView: View {
                         
                 }
                 Spacer().frame(height: 30)
+                let s = (1-cct) * 0.5
+                let color = Color(hue: 0.079, saturation: s, brightness: 1)
                 Button("", systemImage: "power", action: {
                     onOffSet()
                 })
                 .font(.system(size: 60, weight: .bold))
-                .foregroundStyle(isOn ? .orange : .white)
+                .foregroundStyle(isOn ? color : .white)
+                .opacity(isOn ? dim : 0.3)
                 .frame(height: 80)
+                .animation(.easeInOut, value: isOn)
                 Spacer().frame(height: 30)
             }
         }
@@ -88,6 +98,14 @@ struct LightControlView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .alert("Error", isPresented: $isError) {
+            Button("OK") {
+                    dismiss.callAsFunction()
+            }
+        } message: {
+            Text("bearer is not connected")
+        }
+        .loadingable(text: "connecting...")
     }
     
     var dimDot: Double {
@@ -117,15 +135,37 @@ struct LightControlView: View {
 extension LightControlView {
     func onAppear() {
         messageManager = MeshMessageManager()
+        messageManager.remove()
         messageManager.delegate = self
-        guard MeshNetworkManager.bearer.isConnected else {
-            return
+        Task {
+            Loading.show()
+            guard await checkConnect() else {
+                isError = true
+                Loading.hidden()
+                return
+            }
+            Loading.hidden()
+            messageManager.add {
+                guard let onOffModel = node.onOffModel else { return nil }
+                return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
+            }
+            
         }
+    }
+    
+    func checkConnect() async -> Bool {
+        for _ in 0..<30 {
+            let connect = MeshNetworkManager.bearer.isConnected
+            if connect {
+                return true
+            }
+            try? await Task.sleep(nanoseconds: 1000000000)
+        }
+        return false
+    }
+    
+    func readLevelStatus() {
         messageManager.add {
-            guard let onOffModel = node.onOffModel else { return nil }
-            return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
-        }
-        .add {
             guard let cctModel = node.cctModel else { return nil }
             return try MeshNetworkManager.instance.send(GenericLevelGet(), to: cctModel)
         }
@@ -183,26 +223,23 @@ extension LightControlView: MeshMessageDelegate {
             switch source {
             case node.onOffModel?.parentElement?.unicastAddress:
                 isOn = status.isOn
-                guard let levelModel = node.levelModel else { return }
-                _ = try? MeshNetworkManager.instance.send(GenericLevelGet(), to: levelModel)
+                readLevelStatus()
             default: break
             }
         case let status as GenericLevelStatus:
             let level = floorf(0.1 + (Float(status.level) + 32768.0) / 655.35)
-            withAnimation {
-                switch source {
-                case node.levelModel?.parentElement?.unicastAddress:
-                    dim = Double(level)/100
-                    tdim = Double(level)/100
-                    isOn = dim != 0
-                case node.cctModel?.parentElement?.unicastAddress:
-                    cct = Double(100-level)/100
-                    tcct = Double(100-level)/100
-                case node.angleModel?.parentElement?.unicastAddress:
-                    angle = Double(100-level)/100
-                    tangle = Double(100-level)/100
-                default: break
-                }
+            switch source {
+            case node.levelModel?.parentElement?.unicastAddress:
+                dim = Double(level)/100
+                tdim = Double(level)/100
+                isOn = dim != 0
+            case node.cctModel?.parentElement?.unicastAddress:
+                cct = Double(100-level)/100
+                tcct = Double(100-level)/100
+            case node.angleModel?.parentElement?.unicastAddress:
+                angle = max(Double(100-level)/100, 0.1667)
+                tangle = max(Double(100-level)/100, 0.1667)
+            default: break
             }
         default: break
         }

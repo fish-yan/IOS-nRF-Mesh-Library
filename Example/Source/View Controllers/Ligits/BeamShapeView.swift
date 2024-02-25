@@ -27,11 +27,10 @@ struct BeamShapeView: View {
                 let y: CGFloat = 100
                 let centerX = geometry.size.width/2
                 let height: Double = geometry.size.width/1.2
-                let degress = 10 + angle.wrappedValue * 50
+                let degress = angle.wrappedValue * 60
                 let harfWidth = tan(Angle(degrees: degress/2).radians) * height
-                let h = hue - 0.5 < 0 ? 0.15 : 0.55
-                let s = abs(hue - 0.5) / 2
-                let color = Color(hue: h, saturation: s, brightness: 1)
+                let s = (1-hue) * 0.5
+                let color = Color(hue: 0.079, saturation: s, brightness: 1)
                 ZStack {
                     Path { path in
                         path.move(to: CGPoint(x: centerX, y: y))
@@ -45,6 +44,7 @@ struct BeamShapeView: View {
                     }
                     .fill(color.opacity(brightness * 0.9))
                 }
+                .animation(.easeInOut, value: angle.wrappedValue)
             })
             HStack {
                 let dotValue = 5 * angle.wrappedValue
@@ -67,10 +67,13 @@ struct BeamShapeView: View {
             MagnifyGesture()
                 .onChanged({ magnifyValue in
                     let value = endValue.wrappedValue * magnifyValue.magnification
-                    angle.wrappedValue = max(min(value, 1), 0)
+                    print(value)
+                    angle.wrappedValue = max(min(value, 1), 0.1667)
+                    
                 })
                 .onEnded({ gestureValue in
                     endValue.wrappedValue = angle.wrappedValue
+//                    print(endValue.wrappedValue)
                 })
         )
     }

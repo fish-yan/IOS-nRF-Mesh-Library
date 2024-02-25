@@ -86,6 +86,10 @@ class MeshMessageManager {
             self.sendNext()
         }
     }
+    
+    func remove() {
+        messageQueue.removeAll()
+    }
 }
 
 extension MeshMessageManager: MeshNetworkDelegate {

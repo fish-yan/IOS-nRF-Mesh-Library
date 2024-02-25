@@ -19,6 +19,7 @@
 		2C2277022AD6DD6E0062CACD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277012AD6DD6E0062CACD /* SettingsView.swift */; };
 		2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277032AD794920062CACD /* GroupsHostViewController.swift */; };
 		2C2277062AD794C10062CACD /* GroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277052AD794C10062CACD /* GroupsView.swift */; };
+		2C2C10E42B6A0757004507FE /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2C10E32B6A0757004507FE /* Loading.swift */; };
 		2C31774A2B02224C007964C2 /* VendorModel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C18503B2AF7C47A00900348 /* VendorModel.xib */; };
 		2C32D7372ADAE2E600915E1D /* MeshMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */; };
 		2C42B5032AE67003006887FF /* GLColorTemperatureMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */; };
@@ -60,6 +61,7 @@
 		2CF32E442AD43DBE00D254F2 /* ScenesHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */; };
 		2CF32E462AD445BF00D254F2 /* SceneDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */; };
 		2CF32E482AD446AC00D254F2 /* ScenesManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */; };
+		2CFB58B52B6D18F400C42663 /* LaunchScreen1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */; };
 		2CFCE59F2B48406B00CF2491 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFCE59E2B48406B00CF2491 /* UniformTypeIdentifiers.framework */; };
 		2CFCE5A32B48D9B600CF2491 /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCE5A22B48D9B600CF2491 /* ExportView.swift */; };
 		2CFE864C2AEA962300A1CF7D /* GLLevelMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFE864B2AEA962300A1CF7D /* GLLevelMessage.swift */; };
@@ -279,6 +281,7 @@
 		2C2277012AD6DD6E0062CACD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2C2277032AD794920062CACD /* GroupsHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsHostViewController.swift; sourceTree = "<group>"; };
 		2C2277052AD794C10062CACD /* GroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsView.swift; sourceTree = "<group>"; };
+		2C2C10E32B6A0757004507FE /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessageManager.swift; sourceTree = "<group>"; };
 		2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLColorTemperatureMessage.swift; sourceTree = "<group>"; };
 		2C42B5042AE676FC006887FF /* GLAngleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAngleMessage.swift; sourceTree = "<group>"; };
@@ -319,6 +322,7 @@
 		2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesHostViewController.swift; sourceTree = "<group>"; };
 		2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDetailView.swift; sourceTree = "<group>"; };
 		2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesManagerView.swift; sourceTree = "<group>"; };
+		2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen1.storyboard; sourceTree = "<group>"; };
 		2CFCE59E2B48406B00CF2491 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
 		2CFCE5A22B48D9B600CF2491 /* ExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
 		2CFE864B2AEA962300A1CF7D /* GLLevelMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLLevelMessage.swift; sourceTree = "<group>"; };
@@ -650,6 +654,7 @@
 			children = (
 				2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */,
 				2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */,
+				2C2C10E32B6A0757004507FE /* Loading.swift */,
 				522AFFDB22BBA34900521EDC /* ActionCell.swift */,
 				523F776322C4EDD90030EA6A /* SwitchCell.swift */,
 				520A7D6624F3E05A00BF370A /* RightActionCell.swift */,
@@ -679,6 +684,7 @@
 			children = (
 				5231403A22FDA8280074325A /* Model */,
 				3089BC9E2099CA4900E30192 /* LaunchScreen.storyboard */,
+				2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				52E54CD92343878B00478F05 /* Control.storyboard */,
 				52CD0A562330BDE500A9A181 /* Groups.storyboard */,
@@ -1279,6 +1285,7 @@
 				A7B526A8277B210000F5C60D /* GenericPowerOnOffSetup.xib in Resources */,
 				52A9C1C62313D7D80036792A /* GenericLevel.xib in Resources */,
 				F085CA0229D1E0B900C2DF89 /* Subscribe.storyboard in Resources */,
+				2CFB58B52B6D18F400C42663 /* LaunchScreen1.storyboard in Resources */,
 				5231404E230AC4680074325A /* GLCoordinateModel.xib in Resources */,
 				5231403C22FDA8670074325A /* ConfigurationServer.xib in Resources */,
 				521599DB25E9306300F602FA /* CHANGELOG.md in Resources */,
@@ -1503,6 +1510,7 @@
 				523F776422C4EDD90030EA6A /* SwitchCell.swift in Sources */,
 				5292F8A7250652BB00EA0F2A /* SceneServerGroupCell.swift in Sources */,
 				522AFFDC22BBA34900521EDC /* ActionCell.swift in Sources */,
+				2C2C10E42B6A0757004507FE /* Loading.swift in Sources */,
 				2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */,
 				52E54CE72345EDA700478F05 /* GenericState.swift in Sources */,
 				52B6C50F2811712D00F6E0F3 /* UITableViewCell+Disabled.swift in Sources */,

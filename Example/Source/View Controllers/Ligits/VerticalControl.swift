@@ -15,7 +15,7 @@ enum VerticalControlType {
         case .dim:
             [Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)), Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)), Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))]
         case .cct:
-            [Color(#colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))]
+            [Color(#colorLiteral(red: 0.6901960784, green: 0.7647058824, blue: 0.8901960784, alpha: 1)), Color(#colorLiteral(red: 0.8745098039, green: 0.8666666667, blue: 0.2980392157, alpha: 1))]
         }
     }
     
