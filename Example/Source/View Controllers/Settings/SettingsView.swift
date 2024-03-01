@@ -54,10 +54,14 @@ struct SettingsView: View {
                             }
                         }
                     }
+                } header: {
+                    Text("Roles")
                 }
                 if selectionRole == .commissioner {
                     Section {
                         NavigationLink("Scenes", destination: ScenesManagerView())
+                    } header: {
+                        Text("Scenes")
                     }
                     
                     Section {
@@ -75,14 +79,37 @@ struct SettingsView: View {
                                 print(error)
                             }
                         }
-                        
+                    } header: {
+                        Text("File")
                     }
-                    
+                }
+                Section {
+                    let info = Bundle.main.infoDictionary ?? [:]
+                    let name = info["CFBundleDisplayName"] as? String
+                    let version = info["CFBundleShortVersionString"] as? String
+                    let build = info["CFBundleVersion"] as? String
+                    HStack {
+                        Text("App Name")
+                        Spacer()
+                        Text(name ?? "")
+                    }
+                    HStack {
+                        Text("App Version")
+                        Spacer()
+                        Text("\(version ?? "")(\(build ?? ""))")
+                    }
+                } header: {
+                    Text("App Info")
+                }
+                if selectionRole == .commissioner {
                     Section {
                         Button("Reset") { isNetworkResetPresented = true }
                             .tint(Color.red)
+                    } header: {
+                        Text("Reset")
                     }
                 }
+                
             }
             .navigationTitle("User Settings")
             .onAppear(perform: onAppear)
