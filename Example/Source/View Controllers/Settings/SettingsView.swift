@@ -71,14 +71,14 @@ struct SettingsView: View {
                         Button("Import") {
                             isFileImportPresented = true
                         }
-                        .fileImporter(isPresented: $isFileImportPresented, allowedContentTypes: [.json]) { result in
-                            switch result {
-                            case .success(let fileUrl):
-                                importWith(fileUrl: fileUrl)
-                            case .failure(let error):
-                                print(error)
-                            }
-                        }
+//                        .fileImporter(isPresented: $isFileImportPresented, allowedContentTypes: [.json]) { result in
+//                            switch result {
+//                            case .success(let fileUrl):
+//                                importWith(fileUrl: fileUrl)
+//                            case .failure(let error):
+//                                print(error)
+//                            }
+//                        }
                     } header: {
                         Text("File")
                     }
@@ -134,12 +134,20 @@ struct SettingsView: View {
             .sheet(isPresented: $isFileExportPresented) {
                 ExportView()
             }
+            .sheet(isPresented: $isFileImportPresented) {
+                ImportView {
+                    print("aaa")
+                    importSuccess = true
+                }
+            }
         }
     }
     
     private func importWith(fileUrl: URL) {
-        guard fileUrl.startAccessingSecurityScopedResource() else { // Notice this line right here
-             return
+        if #available(iOS 17.0, *) {
+            guard fileUrl.startAccessingSecurityScopedResource() else { // Notice this line right here
+                return
+            }
         }
         do {
             let data = try Data(contentsOf: fileUrl)
@@ -147,15 +155,21 @@ struct SettingsView: View {
             guard let json = somejson as? [String: Any] else {
                 return
             }
+            var isImport = false
             if let meshJson = json["meshData"] {
+                isImport = true
                 let meshData = try JSONSerialization.data(withJSONObject: meshJson)
                 _ = try MeshNetworkManager.instance.import(from: meshData)
             }
             if let glJson = json["glData"] {
+                isImport = true
                 let glData = try JSONSerialization.data(withJSONObject: glJson)
                 _ = try MeshNetworkManager.instance.importGLModel(from: glData)
             }
-            
+            if !isImport {
+                isImport = true
+                _ = try MeshNetworkManager.instance.import(from: data)
+            }
             MeshNetworkManager.instance.saveAll()
             importSuccess = true
         } catch {

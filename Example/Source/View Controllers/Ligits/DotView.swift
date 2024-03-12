@@ -32,11 +32,14 @@ struct DotView: View {
     
     private var circles: some View {
         ForEach(0..<count, id: \.self) { i in
-            Circle()
-                .fill(color(i))
-                .stroke(.white, lineWidth: 2.5)
-                .frame(width: 10,height: 10)
-                .padding(2)
+            ZStack {
+                Circle()
+                    .fill(color(i))
+                Circle()
+                    .stroke(.white, lineWidth: 2.5)
+            }
+            .frame(width: 10,height: 10)
+            .padding(2)
         }
     }
     

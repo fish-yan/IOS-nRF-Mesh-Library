@@ -28,7 +28,9 @@ class Debouncer {
         self.lock.sync {
             self.workItem?.cancel()
             self.workItem = DispatchWorkItem {
-                callback()
+                DispatchQueue.main.async {
+                    callback()
+                }
             }
             
             if let workItem = self.workItem {

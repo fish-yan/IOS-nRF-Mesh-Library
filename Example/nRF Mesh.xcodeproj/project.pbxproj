@@ -20,6 +20,7 @@
 		2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277032AD794920062CACD /* GroupsHostViewController.swift */; };
 		2C2277062AD794C10062CACD /* GroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2277052AD794C10062CACD /* GroupsView.swift */; };
 		2C2C10E42B6A0757004507FE /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2C10E32B6A0757004507FE /* Loading.swift */; };
+		2C315D292B9F44ED0040271E /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C315D282B9F44ED0040271E /* ImportView.swift */; };
 		2C31774A2B02224C007964C2 /* VendorModel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C18503B2AF7C47A00900348 /* VendorModel.xib */; };
 		2C32D7372ADAE2E600915E1D /* MeshMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */; };
 		2C42B5032AE67003006887FF /* GLColorTemperatureMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */; };
@@ -282,6 +283,7 @@
 		2C2277032AD794920062CACD /* GroupsHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsHostViewController.swift; sourceTree = "<group>"; };
 		2C2277052AD794C10062CACD /* GroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsView.swift; sourceTree = "<group>"; };
 		2C2C10E32B6A0757004507FE /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
+		2C315D282B9F44ED0040271E /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
 		2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessageManager.swift; sourceTree = "<group>"; };
 		2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLColorTemperatureMessage.swift; sourceTree = "<group>"; };
 		2C42B5042AE676FC006887FF /* GLAngleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAngleMessage.swift; sourceTree = "<group>"; };
@@ -839,6 +841,7 @@
 				2C2276FF2AD6D9890062CACD /* SettingsView1.swift */,
 				2C2277012AD6DD6E0062CACD /* SettingsView.swift */,
 				2CFCE5A22B48D9B600CF2491 /* ExportView.swift */,
+				2C315D282B9F44ED0040271E /* ImportView.swift */,
 				2C72D6112B0EEB88004625CA /* CustomControlView.swift */,
 				2C72D60F2B0EEB30004625CA /* ControlView.swift */,
 				2C72D6132B0F2EB2004625CA /* DestinationView.swift */,
@@ -1432,6 +1435,7 @@
 				5288C20823705C8D00321ED3 /* ProxyCell.swift in Sources */,
 				52BC6F4824507A5400EBEEA4 /* DisconnectCell.swift in Sources */,
 				523F777B22CB86A00030EA6A /* ModelBindAppKeyViewController.swift in Sources */,
+				2C315D292B9F44ED0040271E /* ImportView.swift in Sources */,
 				52DF5D8F229691BD00C297C1 /* NetworkConnection.swift in Sources */,
 				52547F27232A3F470002AA7B /* EditRangesViewController.swift in Sources */,
 				52B7FD6D2525B40300308673 /* NodeSceneRecallViewController.swift in Sources */,
@@ -1862,12 +1866,12 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Source/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1894,12 +1898,12 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Source/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -25,6 +25,7 @@ struct LightControlView: View {
     @State var isOn: Bool = false
     @State private var messageManager = MeshMessageManager()
     @State var isError: Bool = false
+    @State var isShowAdvance = false
 
     var body: some View {
         ZStack {
@@ -82,20 +83,29 @@ struct LightControlView: View {
             }
         }
         .onAppear(perform: onAppear)
-        .onChange(of: dim) { oldValue, newValue in
+        .onChange(of: dim) { newValue in
             debouncer.call {
                 self.levelSet()
             }
         }
-        .onChange(of: cct) { oldValue, newValue in
+        .onChange(of: cct) { newValue in
             debouncer.call {
                 self.cctSet()
             }
         }
-        .onChange(of: angle) { oldValue, newValue in
+        .onChange(of: angle) { newValue in
             debouncer.call {
                 self.angleSet()
             }
+        }
+        .toolbar {
+            NavigationLink("Advance", destination: {
+                NodeView(node: node, resetCallback: {
+                    dismiss.callAsFunction()
+                })
+                .navigationTitle(node.name ?? "Unknow")
+            })
+            .opacity(isShowAdvance ? 1 : 0)
         }
         .navigationBarTitleDisplayMode(.inline)
         .alert("Error", isPresented: $isError) {
@@ -134,6 +144,7 @@ struct LightControlView: View {
 
 extension LightControlView {
     func onAppear() {
+        isShowAdvance = GlobalConfig.isShowAdvance
         messageManager = MeshMessageManager()
         messageManager.remove()
         messageManager.delegate = self

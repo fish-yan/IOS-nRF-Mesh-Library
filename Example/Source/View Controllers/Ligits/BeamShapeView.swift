@@ -64,13 +64,19 @@ struct BeamShapeView: View {
         }
         .background(.black)
         .gesture(
-            MagnifyGesture()
-                .onChanged({ magnifyValue in
-                    let value = endValue.wrappedValue * magnifyValue.magnification
+            MagnificationGesture()
+                .onChanged({ magnification in
+                    let value = endValue.wrappedValue * magnification
                     print(value)
                     angle.wrappedValue = max(min(value, 1), 0.1667)
-                    
                 })
+//            MagnifyGesture()
+//                .onChanged({ magnifyValue in
+//                    let value = endValue.wrappedValue * magnifyValue.magnification
+//                    print(value)
+//                    angle.wrappedValue = max(min(value, 1), 0.1667)
+//                    
+//                })
                 .onEnded({ gestureValue in
                     endValue.wrappedValue = angle.wrappedValue
 //                    print(endValue.wrappedValue)
