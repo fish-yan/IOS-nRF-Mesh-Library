@@ -26,7 +26,7 @@ struct BeamShapeView: View {
             GeometryReader(content: { geometry in
                 let y: CGFloat = 100
                 let centerX = geometry.size.width/2
-                let height: Double = geometry.size.width/1.2
+                let height: Double = geometry.size.height - 130
                 let degress = angle.wrappedValue * 60
                 let harfWidth = tan(Angle(degrees: degress/2).radians) * height
                 let s = (1-hue) * 0.5

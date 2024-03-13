@@ -39,11 +39,13 @@ class MeshMessageManager {
                     self.messageHandle = try callback()
                     guard let _ = self.messageHandle else {
                         self.isSending = false
+                        self.done()
                         return
                     }
                 } catch {
                     self.isSending = false
                     self.messageHandle = nil
+                    self.done()
                 }
                 
             case let callback as (() -> Void):
