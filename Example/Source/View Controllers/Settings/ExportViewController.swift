@@ -275,8 +275,13 @@ private extension ExportViewController {
                 
                 let glData = manager.exportGLModel()
                 let glJson = try JSONSerialization.jsonObject(with: glData)
+                var sequence: UInt32 = 0
+                if let element = manager.meshNetwork?.localProvisioner?.node?.primaryElement,
+                   let localSequence = manager.getSequenceNumber(ofLocalElement: element) {
+                    sequence = localSequence
+                }
                 
-                let newJson = ["meshData": meshJson, "glData": glJson]
+                let newJson = ["meshData": meshJson, "glData": glJson, "sequence": sequence]
                 let data = try JSONSerialization.data(withJSONObject: newJson)
                 
                 try data.write(to: fileURL)

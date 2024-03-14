@@ -21,7 +21,8 @@ struct SettingsView: View {
     @State var isFileImportPresented = false
     @State var isFileExportPresented = false
     
-    @State var importSuccess = false
+    @State var isAlert = false
+    @State var alertMessage = ""
     
     @State var isErrorPresented = false
     @State var errorMessage = "Error"
@@ -29,6 +30,7 @@ struct SettingsView: View {
     @State var prepareRole: UserRole = .normal
     
     @State var code: String = ""
+    @State var sequence: String = "0"
     
     var body: some View {
         NavigationView {
@@ -70,6 +72,24 @@ struct SettingsView: View {
                         }
                         Button("Import") {
                             isFileImportPresented = true
+                        }
+                        HStack {
+                            Text("Set Sequence")
+                            Spacer()
+                            TextField("Sequence", text: $sequence)
+                                .frame(width: 50)
+                                .multilineTextAlignment(.trailing)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                            Button("Save") {
+                                let s: UInt32 = UInt32(sequence) ?? 0
+                                if let network = MeshNetworkManager.instance.meshNetwork,
+                                   let element = network.localProvisioner?.node?.primaryElement {
+                                    MeshNetworkManager.instance.setSequenceNumber(s, forLocalElement: element)
+                                    alertMessage = "set sequence success"
+                                    isAlert = true
+                                }
+                            }
+                            .frame(width: 40)
                         }
 //                        .fileImporter(isPresented: $isFileImportPresented, allowedContentTypes: [.json]) { result in
 //                            switch result {
@@ -128,7 +148,7 @@ struct SettingsView: View {
             } message: {
                 Text("Resetting the network will erase all network data.\nMake sure you exported it first.")
             }
-            .alert("Import success", isPresented: $importSuccess) {
+            .alert(alertMessage, isPresented: $isAlert) {
                 Button("OK", role: .cancel){}
             }
             .sheet(isPresented: $isFileExportPresented) {
@@ -136,8 +156,9 @@ struct SettingsView: View {
             }
             .sheet(isPresented: $isFileImportPresented) {
                 ImportView {
-                    print("aaa")
-                    importSuccess = true
+                    alertMessage = "Import success"
+                    isAlert = true
+                    onAppear()
                 }
             }
         }
@@ -171,7 +192,8 @@ struct SettingsView: View {
                 _ = try MeshNetworkManager.instance.import(from: data)
             }
             MeshNetworkManager.instance.saveAll()
-            importSuccess = true
+            alertMessage = "Import success"
+            isAlert = true
         } catch {
             print(error)
         }
@@ -181,6 +203,11 @@ struct SettingsView: View {
 private extension SettingsView {
     func onAppear() {
         selectionRole = UserRole(rawValue: GlobalConfig.userRole) ?? .normal
+        if let network = MeshNetworkManager.instance.meshNetwork,
+           let element = network.localProvisioner?.node?.primaryElement {
+            let s = MeshNetworkManager.instance.getSequenceNumber(ofLocalElement: element) ?? 0
+            sequence = "\(s)"
+        }
     }
     
     func checkCode(_ code: String) {
