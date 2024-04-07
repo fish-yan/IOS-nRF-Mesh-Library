@@ -32,7 +32,7 @@ struct LightControlView: View {
             Color.black.ignoresSafeArea()
             VStack {
                 ZStack(alignment: .top) {
-                    BeamShapeView(angle: $angle, endValue: $tangle, hue: cct, brightness: dim)
+                    BeamShapeView(angle: $angle, hue: cct, brightness: dim)
                         .animation(.easeInOut, value: angle)
                         .animation(.easeInOut, value: cct)
                         .animation(.easeInOut, value: dim)
@@ -156,10 +156,10 @@ extension LightControlView {
                 return
             }
             Loading.hidden()
-            messageManager.add {
-                guard let onOffModel = node.onOffModel else { return nil }
-                return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
-            }
+//            messageManager.add {
+//                guard let onOffModel = node.onOffModel else { return nil }
+//                return try MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
+//            }
             
         }
     }
@@ -234,7 +234,7 @@ extension LightControlView: MeshMessageDelegate {
             switch source {
             case node.onOffModel?.parentElement?.unicastAddress:
                 isOn = status.isOn
-                readLevelStatus()
+//                readLevelStatus()
             default: break
             }
         case let status as GenericLevelStatus:

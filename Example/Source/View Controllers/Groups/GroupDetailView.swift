@@ -33,7 +33,7 @@ struct GroupDetailView: View {
                     Image(systemName: "power.circle.fill")
                         .resizable()
                         .frame(width: 80, height: 80)
-                        .tint(store.isOn ? .orange : .gray.opacity(0.5))
+                        .tint(store.isOn == true ? .orange : .gray.opacity(0.5))
                         .background(.clear)
                 }
                 .frame(maxWidth: .infinity, minHeight: 100)
@@ -99,9 +99,9 @@ extension GroupDetailView {
             store.error = .bearerError
             return
         }
-        let message = GenericOnOffSet(!store.isOn)
+        let message = GenericOnOffSet(!store.isOn!)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
-        store.isOn.toggle()
+        store.isOn?.toggle()
     }
     
     func aiSet() {

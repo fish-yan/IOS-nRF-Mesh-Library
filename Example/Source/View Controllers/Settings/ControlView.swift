@@ -119,7 +119,7 @@ struct ControlView: View {
                 Image(systemName: "power.circle.fill")
                     .resizable()
                     .frame(width: 80, height: 80)
-                    .tint(store.isOn ? .orange : .gray.opacity(0.5))
+                    .tint(store.isOn == true ? .orange : .gray.opacity(0.5))
                     .background(.clear)
             }
             .frame(maxWidth: .infinity, minHeight: 100)
@@ -225,7 +225,15 @@ struct ControlView: View {
                 }
             }
         } header: {
-            Text("Scene Recall")
+            HStack {
+                Text("Scene")
+                Spacer()
+                NavigationLink {
+//                    LightStoreSceneView(group: group, selectedScene: $store.selectedScene)
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
         } footer: {
             Text("select scene and Recall")
         }
@@ -234,8 +242,8 @@ struct ControlView: View {
 
 private extension ControlView {
     func onOffSet() {
-        store.isOn.toggle()
-        let message = GenericOnOffSet(store.isOn)
+        store.isOn?.toggle()
+        let message = GenericOnOffSet(store.isOn!)
         updateMessage(type: .onOff, message: message)
     }
     

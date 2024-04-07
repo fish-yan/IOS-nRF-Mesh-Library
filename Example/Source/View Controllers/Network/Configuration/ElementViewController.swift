@@ -47,7 +47,7 @@ class ElementViewController: UITableViewController {
         
         title = element.name ?? "Element \(element.index + 1)"
         
-        filterModels = element.filteredModels()
+        filterModels = element.models
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -1,0 +1,75 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  
+  scheme = "nRF Mesh"
+  output_directory = "~/Desktop/ipa"
+  output_name = "#{scheme}-#{Time.now.strftime("%Y-%m-%d %H:%M")}"
+  pgy_api_key = "047c1f3a44a3b18d456c08ae8534c2dc"
+  pgy_user_key = "67ba0b7c7d2fb4fee7953796db9fa8de"
+
+
+  desc "上传ipa 到 pgy"
+  lane :pgy do |options|
+    #方法调用：fastlane uploadpgy config:"Debug"
+    # 环境类型
+    configuration = "Debug" #options[:c] 
+    changelog = options[:l]
+    # if configuration["Debug"]
+      method = "development"
+    # else 
+    #   method = "ad-hoc"
+    # end
+    package(config: configuration, method: method, devs: options[:d])
+    puts "*************| 开始上传到pgy... |*************"
+    uploadpgy(desc: changelog)
+    puts "*************| 上传到pgy成功🎉 |*************"
+  end
+
+
+  lane :package do |options|
+    puts "*************| 开始打包... |*************"
+    increment_build_number(
+      build_number: Time.now.strftime("%Y%m%d%H%M")
+    )
+    gym(
+      scheme: scheme, #改为你项目的scheme
+      workspace: "#{scheme}.xcworkspace", #如果项目使用CocoaPods需要加上
+      configuration: "#{options[:config]}", # Debug or Release
+      output_directory: output_directory,
+      output_name: output_name,
+      silent: true,
+      include_symbols: true,
+      include_bitcode: false,
+      export_method: options[:method],
+    )
+  end
+
+  lane :uploadpgy do |options|
+    #使用自动证书管理
+    # update_code_signing_settings(
+    #   use_automatic_signing: true,
+    #   path: "#{scheme}.xcodeproj"
+    # )
+    
+    # 多个参数 可以使用逗号(, )分离   
+    pgyer(api_key: pgy_api_key, update_description: options[:desc])    
+  end
+
+
+end

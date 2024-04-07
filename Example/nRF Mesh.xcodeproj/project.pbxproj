@@ -3,13 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		2C1193A32B0B9367004F0CFF /* LightStoreSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1193A22B0B9367004F0CFF /* LightStoreSceneView.swift */; };
 		2C1459892ABB221200351A40 /* LightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1459882ABB221200351A40 /* LightsView.swift */; };
-		2C1850372AF53B7900900348 /* SceneGroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1850362AF53B7900900348 /* SceneGroupDetailView.swift */; };
 		2C18503A2AF7C3FE00900348 /* GLRelayViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1850392AF7C3FE00900348 /* GLRelayViewCell.swift */; };
 		2C18503D2AF7C4A800900348 /* VendorModelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C18503C2AF7C4A800900348 /* VendorModelViewCell.swift */; };
 		2C18503F2AF7C70700900348 /* LightManagerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C18503E2AF7C70700900348 /* LightManagerDetailView.swift */; };
@@ -32,7 +31,6 @@
 		2C72D6142B0F2EB2004625CA /* DestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6132B0F2EB2004625CA /* DestinationView.swift */; };
 		2C72D6162B0F3C45004625CA /* GroupsSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6152B0F3C45004625CA /* GroupsSendView.swift */; };
 		2C72D6182B0F3C4E004625CA /* LightsSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6172B0F3C4E004625CA /* LightsSendView.swift */; };
-		2C77CAA02AE2C5E80013C697 /* SceneLightDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C77CA9F2AE2C5E80013C697 /* SceneLightDetailView.swift */; };
 		2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C798F152ABDD85600156CAA /* LightsManagerView.swift */; };
 		2C7BE3732B148F40006376F7 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */; };
 		2C7BE3752B14977C006376F7 /* DraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3742B14977C006376F7 /* DraftsView.swift */; };
@@ -51,7 +49,21 @@
 		2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50C2ABBC23100BB135A /* SliderView.swift */; };
 		2CA6A1E92B1A13CC0073E7BF /* GroupControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */; };
 		2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */; };
-		2CC0DA672AD583C30031DC9D /* SceneLightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */; };
+		2CB620202BB7B30C002804D3 /* Color+Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */; };
+		2CB620222BB7BA13002804D3 /* Font+Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620212BB7BA13002804D3 /* Font+Mesh.swift */; };
+		2CB620262BB7BC58002804D3 /* ScenesHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620252BB7BC22002804D3 /* ScenesHostViewController.swift */; };
+		2CB620282BB7BCC6002804D3 /* CScenesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620272BB7BCC6002804D3 /* CScenesView.swift */; };
+		2CB6202A2BB7BD99002804D3 /* CScenesPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620292BB7BD99002804D3 /* CScenesPageView.swift */; };
+		2CB620432BB943F3002804D3 /* CLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620402BB943F2002804D3 /* CLightView.swift */; };
+		2CB620442BB943F3002804D3 /* MeshSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620412BB943F2002804D3 /* MeshSliderView.swift */; };
+		2CB620452BB943F3002804D3 /* CLightListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620422BB943F3002804D3 /* CLightListView.swift */; };
+		2CB620482BB946D5002804D3 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB620462BB94533002804D3 /* Colors.xcassets */; };
+		2CB6204E2BBA53CD002804D3 /* MeshApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6204D2BBA53CD002804D3 /* MeshApp.swift */; };
+		2CB620502BBA542B002804D3 /* MeshTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6204F2BBA542B002804D3 /* MeshTabView.swift */; };
+		2CB620522BBAAB33002804D3 /* UINavigationController+SwipBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620512BBAAB33002804D3 /* UINavigationController+SwipBack.swift */; };
+		2CB620542BBAB2AA002804D3 /* PathManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620532BBAB2AA002804D3 /* PathManager.swift */; };
+		2CB620582BBC051A002804D3 /* COnOffItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620572BBC051A002804D3 /* COnOffItemView.swift */; };
+		2CB6205C2BBC2C0E002804D3 /* MeshSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */; };
 		2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */; };
 		2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */; };
 		2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */; };
@@ -59,7 +71,6 @@
 		2CEFBCCB2B664EAA00948F93 /* BeamShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFBCC72B664EA900948F93 /* BeamShapeView.swift */; };
 		2CEFBCCC2B664EAA00948F93 /* DotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFBCC92B664EAA00948F93 /* DotView.swift */; };
 		2CF32E422AD43C6200D254F2 /* ScenesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E412AD43C6200D254F2 /* ScenesListView.swift */; };
-		2CF32E442AD43DBE00D254F2 /* ScenesHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */; };
 		2CF32E462AD445BF00D254F2 /* SceneDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */; };
 		2CF32E482AD446AC00D254F2 /* ScenesManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */; };
 		2CFB58B52B6D18F400C42663 /* LaunchScreen1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */; };
@@ -270,7 +281,6 @@
 		2A5BED1139337A6A368C8D2E /* Pods-nRF Mesh.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nRF Mesh.release.xcconfig"; path = "Target Support Files/Pods-nRF Mesh/Pods-nRF Mesh.release.xcconfig"; sourceTree = "<group>"; };
 		2C1193A22B0B9367004F0CFF /* LightStoreSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightStoreSceneView.swift; sourceTree = "<group>"; };
 		2C1459882ABB221200351A40 /* LightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsView.swift; sourceTree = "<group>"; };
-		2C1850362AF53B7900900348 /* SceneGroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneGroupDetailView.swift; sourceTree = "<group>"; };
 		2C1850382AF7C3C300900348 /* GLRelay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GLRelay.xib; sourceTree = "<group>"; };
 		2C1850392AF7C3FE00900348 /* GLRelayViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLRelayViewCell.swift; sourceTree = "<group>"; };
 		2C18503B2AF7C47A00900348 /* VendorModel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VendorModel.xib; sourceTree = "<group>"; };
@@ -294,7 +304,6 @@
 		2C72D6132B0F2EB2004625CA /* DestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationView.swift; sourceTree = "<group>"; };
 		2C72D6152B0F3C45004625CA /* GroupsSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsSendView.swift; sourceTree = "<group>"; };
 		2C72D6172B0F3C4E004625CA /* LightsSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsSendView.swift; sourceTree = "<group>"; };
-		2C77CA9F2AE2C5E80013C697 /* SceneLightDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLightDetailView.swift; sourceTree = "<group>"; };
 		2C798F152ABDD85600156CAA /* LightsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsManagerView.swift; sourceTree = "<group>"; };
 		2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		2C7BE3742B14977C006376F7 /* DraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftsView.swift; sourceTree = "<group>"; };
@@ -313,7 +322,21 @@
 		2CA1A50C2ABBC23100BB135A /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
 		2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlView.swift; sourceTree = "<group>"; };
 		2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMeshNetworkModel.swift; sourceTree = "<group>"; };
-		2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLightsView.swift; sourceTree = "<group>"; };
+		2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Mesh.swift"; sourceTree = "<group>"; };
+		2CB620212BB7BA13002804D3 /* Font+Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Mesh.swift"; sourceTree = "<group>"; };
+		2CB620252BB7BC22002804D3 /* ScenesHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesHostViewController.swift; sourceTree = "<group>"; };
+		2CB620272BB7BCC6002804D3 /* CScenesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CScenesView.swift; sourceTree = "<group>"; };
+		2CB620292BB7BD99002804D3 /* CScenesPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CScenesPageView.swift; sourceTree = "<group>"; };
+		2CB620402BB943F2002804D3 /* CLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLightView.swift; sourceTree = "<group>"; };
+		2CB620412BB943F2002804D3 /* MeshSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSliderView.swift; sourceTree = "<group>"; };
+		2CB620422BB943F3002804D3 /* CLightListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLightListView.swift; sourceTree = "<group>"; };
+		2CB620462BB94533002804D3 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		2CB6204D2BBA53CD002804D3 /* MeshApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshApp.swift; sourceTree = "<group>"; };
+		2CB6204F2BBA542B002804D3 /* MeshTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshTabView.swift; sourceTree = "<group>"; };
+		2CB620512BBAAB33002804D3 /* UINavigationController+SwipBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+SwipBack.swift"; sourceTree = "<group>"; };
+		2CB620532BBAB2AA002804D3 /* PathManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathManager.swift; sourceTree = "<group>"; };
+		2CB620572BBC051A002804D3 /* COnOffItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COnOffItemView.swift; sourceTree = "<group>"; };
+		2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSegmentView.swift; sourceTree = "<group>"; };
 		2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshNetwork+Extension.swift"; sourceTree = "<group>"; };
 		2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlView.swift; sourceTree = "<group>"; };
 		2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAiMessage.swift; sourceTree = "<group>"; };
@@ -321,7 +344,6 @@
 		2CEFBCC82B664EA900948F93 /* VerticalControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalControl.swift; sourceTree = "<group>"; };
 		2CEFBCC92B664EAA00948F93 /* DotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotView.swift; sourceTree = "<group>"; };
 		2CF32E412AD43C6200D254F2 /* ScenesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesListView.swift; sourceTree = "<group>"; };
-		2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesHostViewController.swift; sourceTree = "<group>"; };
 		2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDetailView.swift; sourceTree = "<group>"; };
 		2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenesManagerView.swift; sourceTree = "<group>"; };
 		2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen1.storyboard; sourceTree = "<group>"; };
@@ -555,6 +577,7 @@
 		2C1459872ABB215000351A40 /* Ligits */ = {
 			isa = PBXGroup;
 			children = (
+				2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */,
 				2C1459882ABB221200351A40 /* LightsView.swift */,
 				2C5BBC842B61480C00FBA1AA /* LightControlView.swift */,
 				2CEFBCC72B664EA900948F93 /* BeamShapeView.swift */,
@@ -566,7 +589,6 @@
 				2C1193A22B0B9367004F0CFF /* LightStoreSceneView.swift */,
 				2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */,
 				2CA1A50C2ABBC23100BB135A /* SliderView.swift */,
-				2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */,
 				2C8C0C2D2AC06DFF00BC0156 /* LightSelectedView.swift */,
 			);
 			path = Ligits;
@@ -605,16 +627,27 @@
 			path = GroupControl;
 			sourceTree = "<group>";
 		};
+		2CB620232BB7BA47002804D3 /* C */ = {
+			isa = PBXGroup;
+			children = (
+				2CB620292BB7BD99002804D3 /* CScenesPageView.swift */,
+				2CB620272BB7BCC6002804D3 /* CScenesView.swift */,
+				2CB620572BBC051A002804D3 /* COnOffItemView.swift */,
+				2CB620422BB943F3002804D3 /* CLightListView.swift */,
+				2CB620402BB943F2002804D3 /* CLightView.swift */,
+				2CB620412BB943F2002804D3 /* MeshSliderView.swift */,
+				2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
 		2CF32E402AD43C3100D254F2 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				2CB620252BB7BC22002804D3 /* ScenesHostViewController.swift */,
 				2CF32E412AD43C6200D254F2 /* ScenesListView.swift */,
 				2CF32E452AD445BF00D254F2 /* SceneDetailView.swift */,
 				2CF32E472AD446AC00D254F2 /* ScenesManagerView.swift */,
-				2CC0DA662AD583C30031DC9D /* SceneLightsView.swift */,
-				2C77CA9F2AE2C5E80013C697 /* SceneLightDetailView.swift */,
-				2C1850362AF53B7900900348 /* SceneGroupDetailView.swift */,
-				2CF32E432AD43DBE00D254F2 /* ScenesHostViewController.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -919,6 +952,10 @@
 				52DA9D7124F6765C0051795B /* UInt16+Time.swift */,
 				5292F8A225021B8F00EA0F2A /* ModelIdentifiers.swift */,
 				52B6C50E2811712D00F6E0F3 /* UITableViewCell+Disabled.swift */,
+				2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */,
+				2CB620212BB7BA13002804D3 /* Font+Mesh.swift */,
+				2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */,
+				2CB620512BBAAB33002804D3 /* UINavigationController+SwipBack.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1042,13 +1079,17 @@
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */,
+				2CB6204D2BBA53CD002804D3 /* MeshApp.swift */,
+				2CB6204F2BBA542B002804D3 /* MeshTabView.swift */,
+				2CB620532BBAB2AA002804D3 /* PathManager.swift */,
+				2CB620232BB7BA47002804D3 /* C */,
 				2C42B5012AE66EA1006887FF /* Messages */,
 				52DF5D8D22968F7C00C297C1 /* Mesh Network */,
 				52835253227AEC8C0097B949 /* View Controllers */,
 				529B757322410784008F1CE7 /* Utils */,
 				5231403922FDA80E0074325A /* UI */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
+				2CB620462BB94533002804D3 /* Colors.xcassets */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Source;
@@ -1250,7 +1291,7 @@
 				};
 			};
 			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "nRF Mesh" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1287,6 +1328,7 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				A7B526A8277B210000F5C60D /* GenericPowerOnOffSetup.xib in Resources */,
 				52A9C1C62313D7D80036792A /* GenericLevel.xib in Resources */,
+				2CB620482BB946D5002804D3 /* Colors.xcassets in Resources */,
 				F085CA0229D1E0B900C2DF89 /* Subscribe.storyboard in Resources */,
 				2CFB58B52B6D18F400C42663 /* LaunchScreen1.storyboard in Resources */,
 				5231404E230AC4680074325A /* GLCoordinateModel.xib in Resources */,
@@ -1417,6 +1459,7 @@
 				5288153D25125AB600484AF0 /* RootTabBarController.swift in Sources */,
 				52CD0A55232FC11700A9A181 /* AddressCell.swift in Sources */,
 				52313FEE22EAFB090074325A /* SubscribeViewController.swift in Sources */,
+				2CB620282BB7BCC6002804D3 /* CScenesView.swift in Sources */,
 				5212152B23152A450059FB3D /* SectionView.swift in Sources */,
 				5212152F231554190059FB3D /* ProgressCollectionViewController.swift in Sources */,
 				523F776A22C621F50030EA6A /* NodeAddNetworkKeyViewController.swift in Sources */,
@@ -1436,7 +1479,10 @@
 				52BC6F4824507A5400EBEEA4 /* DisconnectCell.swift in Sources */,
 				523F777B22CB86A00030EA6A /* ModelBindAppKeyViewController.swift in Sources */,
 				2C315D292B9F44ED0040271E /* ImportView.swift in Sources */,
+				2CB6205C2BBC2C0E002804D3 /* MeshSegmentView.swift in Sources */,
 				52DF5D8F229691BD00C297C1 /* NetworkConnection.swift in Sources */,
+				2CB620542BBAB2AA002804D3 /* PathManager.swift in Sources */,
+				2CB620262BB7BC58002804D3 /* ScenesHostViewController.swift in Sources */,
 				52547F27232A3F470002AA7B /* EditRangesViewController.swift in Sources */,
 				52B7FD6D2525B40300308673 /* NodeSceneRecallViewController.swift in Sources */,
 				2CEFBCCB2B664EAA00948F93 /* BeamShapeView.swift in Sources */,
@@ -1450,9 +1496,11 @@
 				2C8C0C2E2AC06DFF00BC0156 /* LightSelectedView.swift in Sources */,
 				528AB9FA228D856C000BE9DC /* ProvisioningViewDelegate.swift in Sources */,
 				2CEFBCCC2B664EAA00948F93 /* DotView.swift in Sources */,
+				2CB620502BBA542B002804D3 /* MeshTabView.swift in Sources */,
 				5288C2162371BC1300321ED3 /* SimpleOnOffClientCell.swift in Sources */,
 				5288C20423704EF300321ED3 /* ConnectionModeCell.swift in Sources */,
 				52547F28232A3F470002AA7B /* RangeView.swift in Sources */,
+				2CB620582BBC051A002804D3 /* COnOffItemView.swift in Sources */,
 				52314041230192C50074325A /* ModelViewCell.swift in Sources */,
 				527596302A138ECC00B04C6F /* SelectPublicationDestintionsViewController.swift in Sources */,
 				5283524822733BCF0097B949 /* EditKeyViewController.swift in Sources */,
@@ -1465,6 +1513,7 @@
 				2C8C0C2C2AC06DC600BC0156 /* GroupElementManagerView.swift in Sources */,
 				2C18503F2AF7C70700900348 /* LightManagerDetailView.swift in Sources */,
 				2CFE864C2AEA962300A1CF7D /* GLLevelMessage.swift in Sources */,
+				2CB620442BB943F3002804D3 /* MeshSliderView.swift in Sources */,
 				523F778722CCDE250030EA6A /* SetPublicationViewController.swift in Sources */,
 				52CD0A622330DCFF00A9A181 /* CustomAddressCell.swift in Sources */,
 				52A8EA8F24EBF099004C14C7 /* SetHeartbeatPublicationDestinationsViewController.swift in Sources */,
@@ -1479,6 +1528,7 @@
 				2CFE86502AEA9CDC00A1CF7D /* GLFadeTimeMessage.swift in Sources */,
 				2CFE86602AEAA96A00A1CF7D /* GLRelayMessage.swift in Sources */,
 				52547EF92317ECA70002AA7B /* DialogSegue.swift in Sources */,
+				2CB620202BB7B30C002804D3 /* Color+Mesh.swift in Sources */,
 				525242E0225CBFEC0044CECB /* RangeObject+String.swift in Sources */,
 				529B7575224107A5008F1CE7 /* AppInfo.swift in Sources */,
 				52121526231528AC0059FB3D /* GenericOnOffGroupCell.swift in Sources */,
@@ -1496,7 +1546,7 @@
 				2C2277062AD794C10062CACD /* GroupsView.swift in Sources */,
 				523F776C22C6324A0030EA6A /* ProgressViewController.swift in Sources */,
 				52547F25232A3F470002AA7B /* EditProvisionerViewController.swift in Sources */,
-				2C77CAA02AE2C5E80013C697 /* SceneLightDetailView.swift in Sources */,
+				2CB6202A2BB7BD99002804D3 /* CScenesPageView.swift in Sources */,
 				5245737D2500E12600CF8500 /* EditSceneViewController.swift in Sources */,
 				5288C2102371B0F700321ED3 /* SimpleOnOffGet.swift in Sources */,
 				529B756D223FE7F1008F1CE7 /* RootViewController.swift in Sources */,
@@ -1507,7 +1557,6 @@
 				522AFFE022C2376C00521EDC /* ElementViewController.swift in Sources */,
 				2C72D6122B0EEB88004625CA /* CustomControlView.swift in Sources */,
 				5288C20E2371A91900321ED3 /* SimpleOnOffSet.swift in Sources */,
-				2CF32E442AD43DBE00D254F2 /* ScenesHostViewController.swift in Sources */,
 				523F779722CE2BF60030EA6A /* SetPublicationDestinationsViewController.swift in Sources */,
 				2C32D7372ADAE2E600915E1D /* MeshMessageManager.swift in Sources */,
 				52E54CD023437D3D00478F05 /* ModelControlCell.swift in Sources */,
@@ -1526,7 +1575,6 @@
 				52F6AD7622BA612900F0D7DF /* UIViewController+Toast.swift in Sources */,
 				5217D2E5250F90D8004FDE79 /* GenericDefaultTransitionTimeViewCell.swift in Sources */,
 				528445C924EEA765002168A1 /* HeartbeatSubscriptionCell.swift in Sources */,
-				2CC0DA672AD583C30031DC9D /* SceneLightsView.swift in Sources */,
 				5231403F2301761C0074325A /* ConfigurationServerViewCell.swift in Sources */,
 				2C72D6162B0F3C45004625CA /* GroupsSendView.swift in Sources */,
 				2C7BE3752B14977C006376F7 /* DraftsView.swift in Sources */,
@@ -1545,7 +1593,7 @@
 				2CFCE5A32B48D9B600CF2491 /* ExportView.swift in Sources */,
 				529B758622428A45008F1CE7 /* UIViewController+Alert.swift in Sources */,
 				2CF32E422AD43C6200D254F2 /* ScenesListView.swift in Sources */,
-				2C1850372AF53B7900900348 /* SceneGroupDetailView.swift in Sources */,
+				2CB620452BB943F3002804D3 /* CLightListView.swift in Sources */,
 				2CFE864E2AEA9B2E00A1CF7D /* GLRunTimeMessage.swift in Sources */,
 				F09DE4CF29E5A0BF0073969A /* MeshTask.swift in Sources */,
 				529B7572223FFC39008F1CE7 /* AppKeysViewController.swift in Sources */,
@@ -1556,7 +1604,9 @@
 				5251498122E0E36600CBF1E3 /* AddGroupViewController.swift in Sources */,
 				2CFE86542AEAA1BC00A1CF7D /* GLBeaconRSSIMessage.swift in Sources */,
 				2CA1A4D22ABB28DD00BB135A /* LightHostViewController.swift in Sources */,
+				2CB620222BB7BA13002804D3 /* Font+Mesh.swift in Sources */,
 				F09DE4D329E99A360073969A /* SelectGroupsViewController.swift in Sources */,
+				2CB6204E2BBA53CD002804D3 /* MeshApp.swift in Sources */,
 				2C1AF5F52ADFDE6500B6DF11 /* GroupDetailView.swift in Sources */,
 				5211EADB25090DB000089FF2 /* SceneSetupServerDelegate.swift in Sources */,
 				2C91B9EC2AE94263007D566C /* GLSensorMessage.swift in Sources */,
@@ -1585,6 +1635,7 @@
 				2C72D6182B0F3C4E004625CA /* LightsSendView.swift in Sources */,
 				5292F8A1250137DC00EA0F2A /* NodeScenesViewController.swift in Sources */,
 				2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */,
+				2CB620432BB943F3002804D3 /* CLightView.swift in Sources */,
 				526021F62343660200E88F06 /* ControlViewController.swift in Sources */,
 				2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */,
 				5245737B2500E10800CF8500 /* ScenesViewController.swift in Sources */,
@@ -1610,6 +1661,7 @@
 				5288C2062370571100321ED3 /* ProxySelectorViewController.swift in Sources */,
 				2C72D6102B0EEB30004625CA /* ControlView.swift in Sources */,
 				2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */,
+				2CB620522BBAAB33002804D3 /* UINavigationController+SwipBack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1748,6 +1800,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1794,7 +1847,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
@@ -1808,6 +1861,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1847,7 +1901,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
@@ -1863,15 +1917,18 @@
 			baseConfigurationReference = 62E57B0980FA0DB98C344CBB /* Pods-nRF Mesh.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 202404072218;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
+				ENABLE_ON_DEMAND_RESOURCES = NO;
 				INFOPLIST_FILE = Source/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1895,15 +1952,19 @@
 			baseConfigurationReference = 2A5BED1139337A6A368C8D2E /* Pods-nRF Mesh.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 202404072218;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
+				ENABLE_ON_DEMAND_RESOURCES = NO;
+				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = Source/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -62,6 +62,10 @@ class EditProvisionerViewController: UITableViewController {
     @IBAction func cancelTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
+    @IBAction func localProvisionerTapped(_ sender: UIButton) {
+        try? MeshNetworkManager.instance.meshNetwork?.setLocalProvisioner(provisioner)
+        showToast("set local provisioner success.")
+    }
     
     // MARK: - Public parameters
     

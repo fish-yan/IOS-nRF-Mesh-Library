@@ -27,9 +27,9 @@ struct GroupControlView: View {
             Section {
                 VStack {
                     HStack {
-                        onOffButton(onOff: store.isOn, title: "总开关", text: "On 开灯, AI 动作, Off 关灯,AI 不动作") {
-                            store.isOn.toggle()
-                            onOffSet(onOff: store.isOn, group: D000)
+                        onOffButton(onOff: store.isOn == true, title: "总开关", text: "On 开灯, AI 动作, Off 关灯,AI 不动作") {
+                            store.isOn?.toggle()
+                            onOffSet(onOff: store.isOn == true, group: D000)
                         }
                         onOffButton(onOff: store.emergencyOnOff, title: "紧急照明", text: "On 所有灯全亮, AI 不动作, Off 回到正常") {
                             store.emergencyOnOff.toggle()

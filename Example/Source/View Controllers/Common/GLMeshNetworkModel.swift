@@ -7,94 +7,48 @@
 //
 
 import UIKit
+import Combine
 import nRFMeshProvision
 
-class GLSceneModel: ObservableObject, Codable {
+class GLSceneModel: ObservableObject, Codable, Hashable {
     @Published var number: SceneNumber = 1
-    
-    @Published var level0: Double = 100
-    @Published var level1: Double = 70
-    @Published var level2: Double = 50
-    @Published var level3: Double = 20
-    
-    @Published var cct: Double = 0
-    @Published var angle: Double = 0
-    
-    @Published var runTime: Double = 300
-    @Published var fadeTime: Double = 60
-    
-    @Published var isAi: Bool = true
-    @Published var isSensor: Bool = true
+    @Published var name: String = ""
+    @Published var detail: String = ""
+    @Published var icon: String = "ic_scene_custom"
     
     enum CodingKeys: String, CodingKey {
-        case number, level, level0, level1, level2, level3, cct, angle, runTime, fadeTime, isAi, isSensor
+        case number, name, detail, icon
     }
     
-    init() {}
-    
-    static var scene1Model = GLSceneModel()
-    static var scene2Model: GLSceneModel = {
-        let model = GLSceneModel()
-        model.number = 2
-        model.level0 = 100
-        model.level1 = 70
-        model.level2 = 50
-        model.level3 = 0
-        model.runTime = 30
-        model.fadeTime = 10
-        return model
-    }()
-    static var scene3Model: GLSceneModel = {
-        let model = GLSceneModel()
-        model.number = 3
-        model.level0 = 70
-        model.level1 = 50
-        model.level2 = 30
-        model.level3 = 20
-        model.runTime = 300
-        model.fadeTime = 60
-        return model
-    }()
-    static var scene4Model: GLSceneModel = {
-        let model = GLSceneModel()
-        model.number = 4
-        model.level0 = 100
-        model.level1 = 70
-        model.level2 = 50
-        model.level3 = 20
-        model.runTime = 20
-        model.fadeTime = 5
-        return model
-    }()
+    init(number: SceneNumber, name: String, detail: String, icon: String = "ic_scene_custom") {
+        self.number = number
+        self.name = name
+        self.detail = detail
+        self.icon = icon
+    }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         number = try values.decode(SceneNumber.self, forKey: .number)
-        level0 = try values.decode(Double.self, forKey: .level0)
-        level1 = try values.decode(Double.self, forKey: .level1)
-        level2 = try values.decode(Double.self, forKey: .level2)
-        level3 = try values.decode(Double.self, forKey: .level3)
-        cct = try values.decode(Double.self, forKey: .cct)
-        angle = try values.decode(Double.self, forKey: .angle)
-        runTime = try values.decode(Double.self, forKey: .runTime)
-        fadeTime = try values.decode(Double.self, forKey: .fadeTime)
-        isAi = try values.decode(Bool.self, forKey: .isAi)
-        isSensor = try values.decode(Bool.self, forKey: .isSensor)
+        name = try values.decode(String.self, forKey: .name)
+        detail = try values.decode(String.self, forKey: .detail)
+        icon = try values.decode(String.self, forKey: .icon)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(number, forKey: .number)
-        try container.encode(level0, forKey: .level0)
-        try container.encode(level1, forKey: .level1)
-        try container.encode(level2, forKey: .level2)
-        try container.encode(level3, forKey: .level3)
-        try container.encode(cct, forKey: .cct)
-        try container.encode(angle, forKey: .angle)
-        try container.encode(runTime, forKey: .runTime)
-        try container.encode(fadeTime, forKey: .fadeTime)
-        try container.encode(isAi, forKey: .isAi)
-        try container.encode(isSensor, forKey: .isSensor)
+        try container.encode(name, forKey: .name)
+        try container.encode(detail, forKey: .detail)
+        try container.encode(icon, forKey: .icon)
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(number)
+    }
+    
+    static func == (lhs: GLSceneModel, rhs: GLSceneModel) -> Bool {
+        lhs.hashValue == rhs.hashValue
     }
 }
 
@@ -144,7 +98,7 @@ class GLGroupModel: ObservableObject, Codable {
 
 class MessageDetailStore: NSObject, ObservableObject, Codable {
     
-    @Published var isOn = false
+    @Published var isOn: Bool?
     
     @Published var isAi: Bool = true
     @Published var isSensor: Bool = true
@@ -275,21 +229,30 @@ class GLDraftModel: ObservableObject, Codable, Hashable {
 class GLZone: ObservableObject, Codable, Hashable {
     @Published var name: String = "Zone"
     @Published var zone: UInt8 = 0x0
+    @Published var scenes: [SceneNumber: GLSceneModel] = [:]
+    @Published var availableScenes: [GLSceneModel] = []
     @Published var store: MessageDetailStore = MessageDetailStore()
+    
+    private var anyCancellable: AnyCancellable?
     
     init(name: String, zone: UInt8) {
         self.name = name
         self.zone = zone
+        anyCancellable = self.store.objectWillChange.sink {
+            self.objectWillChange.send()
+        }
     }
     
     enum CodingKeys: String, CodingKey {
-        case name, zone, store
+        case name, zone, scenes, availableScenes, store
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         name = try values.decode(String.self, forKey: .name)
         zone = try values.decode(UInt8.self, forKey: .zone)
+        scenes = try values.decode([SceneNumber: GLSceneModel].self, forKey: .scenes)
+        availableScenes = try values.decode([GLSceneModel].self, forKey: .availableScenes)
         store = try values.decode(MessageDetailStore.self, forKey: .store)
     }
     
@@ -297,6 +260,8 @@ class GLZone: ObservableObject, Codable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(zone, forKey: .zone)
+        try container.encode(scenes, forKey: .scenes)
+        try container.encode(availableScenes, forKey: .availableScenes)
         try container.encode(store, forKey: .store)
     }
     

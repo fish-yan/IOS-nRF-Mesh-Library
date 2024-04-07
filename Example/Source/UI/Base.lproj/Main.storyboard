@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYb-mK-mH5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYb-mK-mH5">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -12,7 +11,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="zJB-dB-C0K">
             <objects>
-                <tabBarController title="Tab Bar Controller" id="BYb-mK-mH5" customClass="RootTabBarController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="RootTabBarController" title="Tab Bar Controller" id="BYb-mK-mH5" customClass="RootTabBarController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="uit-TO-OCn"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ig6-ap-aTu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
@@ -21,7 +20,6 @@
                     <connections>
                         <segue destination="W6Q-vA-YUh" kind="relationship" relationship="viewControllers" id="clg-4z-1uo"/>
                         <segue destination="V9C-H5-0cM" kind="relationship" relationship="viewControllers" id="929-bf-JFE"/>
-                        <segue destination="EAb-g1-fOy" kind="relationship" relationship="viewControllers" id="afy-Kc-reT"/>
                         <segue destination="yRV-vY-cAo" kind="relationship" relationship="viewControllers" id="VUP-40-dgT"/>
                         <segue destination="Jgl-7d-w1f" kind="relationship" relationship="viewControllers" id="64k-O6-vI9"/>
                         <segue destination="zgn-Sh-bkR" kind="relationship" relationship="viewControllers" id="bML-n5-Lan"/>

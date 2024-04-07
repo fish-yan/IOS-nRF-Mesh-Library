@@ -31,6 +31,7 @@
 import UIKit
 import os.log
 import nRFMeshProvision
+import SwiftUI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -114,6 +115,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             createNewMeshNetwork()
         }
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.overrideUserInterfaceStyle = .light
+        let rootVC = UIHostingController(rootView: MeshTabView())
+        window?.rootViewController = rootVC
+        window?.makeKeyAndVisible()
+        
         return true
     }
     
@@ -205,6 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         createDefaultScene()
         addDefaultScene()
         addDefaultGroup()
+        addDefaultZone()
     }
     
     func createDefaultApplicationKey() {
@@ -272,6 +280,57 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         _ = MeshNetworkManager.instance.save()
+    }
+    
+    func addDefaultZone() {
+        GLMeshNetworkModel.instance.zone.removeAll()
+        let zones = GLMeshNetworkModel.instance.zone
+        if zones.isEmpty {
+            let zone = GLZone(name: "All", zone: 0x0)
+            let group = MeshNetworkManager.instance.meshNetwork?.group(withAddress: MeshAddress(0xD000))
+            let scenes = group?.scenes ?? []
+            let glScene = scenes.reduce(into: [SceneNumber: GLSceneModel]()) { partialResult, scene in
+                switch scene.number {
+                case 1:
+                    let model = GLSceneModel(number: scene.number, name: "Standard Mode", detail: "Suitable for daily use scenarios", icon: "ic_scene_standard")
+                    partialResult[scene.number] = model
+                case 2:
+                    let model = GLSceneModel(number: scene.number, name: "Eco Mode", detail: "Reduced energy consumption", icon: "ic_scene_eco")
+                    partialResult[scene.number] = model
+                case 3:
+                    let model = GLSceneModel(number: scene.number, name: "Comfort Mode", detail: "Comfortable lighting experience", icon: "ic_scene_comfort")
+                    partialResult[scene.number] = model
+                case 4:
+                    let model = GLSceneModel(number: scene.number, name: "Display Mode", detail: "Demonstrate functional use", icon: "ic_scene_display")
+                    partialResult[scene.number] = model
+                default:
+                    let model = GLSceneModel(number: scene.number, name: "Custom Mode \(scene.number)", detail: "Personalised Lighting Modes")
+                    partialResult[scene.number] = model
+                }
+            }
+            var availaleSceneModels = [GLSceneModel]()
+            if let model = glScene[3] {
+                availaleSceneModels.append(model)
+            }
+            if let model = glScene[2] {
+                availaleSceneModels.append(model)
+            }
+            if let model = glScene[1] {
+                availaleSceneModels.append(model)
+            }
+            if let model = glScene[4] {
+                availaleSceneModels.append(model)
+            }
+            for scene in scenes where scene.number > 4 {
+                if let model = glScene[scene.number] {
+                    availaleSceneModels.append(model)
+                }
+            }
+            zone.scenes = glScene
+            zone.availableScenes = availaleSceneModels
+            GLMeshNetworkModel.instance.zone.append(zone)
+            MeshNetworkManager.instance.saveModel()
+        }
     }
 }
 

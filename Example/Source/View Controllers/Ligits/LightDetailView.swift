@@ -24,7 +24,7 @@ struct LightDetailView: View {
     }
     
     var body: some View {
-        let types: [MessageType] = [.onOff, .ai, .sensor, .level, .cct, .angle]
+        let types: [MessageType] = [.onOff, .sensor, .ai, .level, .glLevel, .runTime, .fadeTime, .cct, .angle, .scenes]
         ControlView(messageTypes: types, store: store, onMessageChange: send)
         .navigationTitle(node.name ?? "Unknow")
         .toolbar {
@@ -106,6 +106,8 @@ extension LightDetailView: MeshMessageDelegate {
                 store.angle = Double(level)
             default: break
             }
+        case let status as SceneStatus:
+            store.selectedScene = status.scene
         default: break
         }
     }

@@ -68,18 +68,50 @@ class ImportViewDelegate: NSObject, UIDocumentPickerDelegate {
             }
             if let sequence = json["sequence"] as? UInt32 {
                 if let element = MeshNetworkManager.instance.meshNetwork?.localProvisioner?.node?.primaryElement {
-                    MeshNetworkManager.instance.setSequenceNumber(sequence, forLocalElement: element)
+                    MeshNetworkManager.instance.setSequenceNumber(sequence + 10, forLocalElement: element)
                 }
             }
             if !isImport {
                 isImport = true
                 _ = try MeshNetworkManager.instance.import(from: data)
             }
+            
+//            setNewProvisioner()
             MeshNetworkManager.instance.saveAll()
+            MeshNetworkManager.instance.loadAll()
+            connect()
             importCompletion?()
             //                importSuccess = true
         } catch {
             print(error)
         }
     }
+    
+    private func setNewProvisioner() {
+        let manager = MeshNetworkManager.instance
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        let nextAddressRange = meshNetwork.nextAvailableUnicastAddressRange(ofSize: 0x199A)
+        let nextGroupRange = meshNetwork.nextAvailableGroupAddressRange(ofSize: 0x0C9A)
+        let nextSceneRange = meshNetwork.nextAvailableSceneRange(ofSize: 0x3334)
+        let provisioner = Provisioner(name: UIDevice.current.name,
+                                  allocatedUnicastRange: [nextAddressRange ?? AddressRange.allUnicastAddresses],
+                                  allocatedGroupRange: [nextGroupRange ?? AddressRange.allGroupAddresses],
+                                  allocatedSceneRange: [nextSceneRange ?? SceneRange.allScenes])
+        let count = max(1, UInt8(manager.localElements.count))
+        let next = manager.meshNetwork?.nextAvailableUnicastAddress(for: count, elementsUsing: provisioner) ?? 0001
+        try? meshNetwork.add(provisioner: provisioner, withAddress: next)
+        try? meshNetwork.setLocalProvisioner(provisioner)
+    }
+    
+    func connect() {
+        let manager = MeshNetworkManager.instance
+        if manager.proxyFilter.type == .acceptList,
+           let provisioner = manager.meshNetwork?.localProvisioner {
+            manager.proxyFilter.reset()
+            manager.proxyFilter.setup(for: provisioner)
+        }
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        delegate.meshNetworkDidChange()
+    }
+    
 }

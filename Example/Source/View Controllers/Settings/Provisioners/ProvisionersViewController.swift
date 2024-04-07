@@ -44,13 +44,13 @@ class ProvisionersViewController: UITableViewController, Editable {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         let hasProvisioners = MeshNetworkManager.instance.meshNetwork?.provisioners.count ?? 0 > 0
         if !hasProvisioners {
             showEmptyView()
         } else {
             hideEmptyView(false)
         }
+        tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

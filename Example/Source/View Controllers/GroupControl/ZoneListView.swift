@@ -27,6 +27,7 @@ struct ZoneListView: View {
                                     .font(.subheadline)
                                     .foregroundStyle(Color(uiColor: .secondaryLabel))
                             }
+                            .background()
                         }
                     }
                     .onDelete(perform: delete)

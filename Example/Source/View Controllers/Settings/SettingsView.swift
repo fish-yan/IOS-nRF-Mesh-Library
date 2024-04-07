@@ -129,7 +129,11 @@ struct SettingsView: View {
                         Text("Reset")
                     }
                 }
-                
+                Section {
+                    Button("Back to the new UI") {
+                        dismiss.callAsFunction()
+                    }
+                }
             }
             .navigationTitle("User Settings")
             .onAppear(perform: onAppear)
