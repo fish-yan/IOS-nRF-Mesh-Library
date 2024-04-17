@@ -43,8 +43,6 @@ class ProgressViewController: UITableViewController {
     private var alert: UIAlertController?
     private var messageHandle: MessageHandle?
     
-    var messageQueue = [MessageAction]()
-    
     // MARK: - Implementation
     
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -63,8 +61,7 @@ class ProgressViewController: UITableViewController {
     ///
     /// - parameter message: Message to be displayed to the user.
     /// - parameter completion: A completion handler.
-    @discardableResult
-    func start(_ message: String, completion: @escaping () -> Void) -> Self {
+    func start(_ message: String, completion: @escaping () -> Void) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             if let alert = self.alert {
@@ -79,30 +76,14 @@ class ProgressViewController: UITableViewController {
             
             completion()
         }
-        return self
     }
     
-    @discardableResult
-    func then(_ message: String, completion: @escaping () throws -> MessageHandle?) -> Self {
-        let messageAction = MessageAction(message: message, completion: completion)
-        self.messageQueue.append(messageAction)
-        return self
-    }
-    
-    @discardableResult
-    func thenNoHandle(_ message: String, completion: @escaping () -> Void) -> Self {
-        let messageAction = MessageAction(message: message, completion: completion)
-        self.messageQueue.append(messageAction)
-        return self
-    }
-        
     /// Displays the progress alert with specified status message
     /// and calls the completion callback.
     ///
     /// - parameter message: Message to be displayed to the user.
     /// - parameter completion: A completion handler.
-    @discardableResult
-    func start(_ message: String, completion: @escaping () throws -> MessageHandle?) -> Self {
+    func start(_ message: String, completion: @escaping () throws -> MessageHandle?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             do {
@@ -151,13 +132,12 @@ class ProgressViewController: UITableViewController {
                 }
             }
         }
-        return self
     }
     
     /// This method dismisses the progress alert dialog.
     ///
     /// - parameter completion: An optional completion handler.
-    func dissmissAlert(completion: (() -> Void)? = nil) {
+    func done(completion: (() -> Void)? = nil) {
         if let alert = alert {
             DispatchQueue.main.async {
                 alert.dismiss(animated: true, completion: completion)
@@ -168,21 +148,6 @@ class ProgressViewController: UITableViewController {
             }
         }
         alert = nil
-    }
-    
-    func done(completion: (() -> Void)? = nil) {
-        guard let messageAction = messageQueue.first else {
-            dissmissAlert(completion: completion)
-            return
-        }
-        messageQueue.removeFirst()
-        switch messageAction.completion {
-        case let completion as (() throws -> MessageHandle?):
-            start(messageAction.message, completion: completion)
-        case let completion as (() -> Void):
-            start(messageAction.message, completion: completion)
-        default: return
-        }
     }
     
 }

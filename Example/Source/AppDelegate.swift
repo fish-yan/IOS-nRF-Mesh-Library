@@ -208,6 +208,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         connection!.open()
         
         createDefaultApplicationKey()
+        bindKeyToLocalProvisioner()
         createDefaultGroup()
         createDefaultScene()
         addDefaultScene()
@@ -227,6 +228,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try? key.bind(to: netowrkKey)
         }
         let _ = meshNetworkManager.save()
+    }
+    
+    func bindKeyToLocalProvisioner() {
+        let network = meshNetworkManager.meshNetwork!
+        guard let applicationKey = network.applicationKey,
+              let node = network.localProvisioner?.node else {
+            return
+        }
+        node.elements.forEach { element in
+            element.models.forEach { model in
+                let message = ConfigModelAppBind(applicationKey: applicationKey, to: model)!
+                _ = try? MeshNetworkManager.instance.send(message, to: node)
+            }
+        }
     }
     
     func createDefaultGroup() {
@@ -286,51 +301,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GLMeshNetworkModel.instance.zone.removeAll()
         let zones = GLMeshNetworkModel.instance.zone
         if zones.isEmpty {
-            let zone = GLZone(name: "All", zone: 0x0)
-            let group = MeshNetworkManager.instance.meshNetwork?.group(withAddress: MeshAddress(0xD000))
-            let scenes = group?.scenes ?? []
-            let glScene = scenes.reduce(into: [SceneNumber: GLSceneModel]()) { partialResult, scene in
-                switch scene.number {
-                case 1:
-                    let model = GLSceneModel(number: scene.number, name: "Standard Mode", detail: "Suitable for daily use scenarios", icon: "ic_scene_standard")
-                    partialResult[scene.number] = model
-                case 2:
-                    let model = GLSceneModel(number: scene.number, name: "Eco Mode", detail: "Reduced energy consumption", icon: "ic_scene_eco")
-                    partialResult[scene.number] = model
-                case 3:
-                    let model = GLSceneModel(number: scene.number, name: "Comfort Mode", detail: "Comfortable lighting experience", icon: "ic_scene_comfort")
-                    partialResult[scene.number] = model
-                case 4:
-                    let model = GLSceneModel(number: scene.number, name: "Display Mode", detail: "Demonstrate functional use", icon: "ic_scene_display")
-                    partialResult[scene.number] = model
-                default:
-                    let model = GLSceneModel(number: scene.number, name: "Custom Mode \(scene.number)", detail: "Personalised Lighting Modes")
-                    partialResult[scene.number] = model
-                }
-            }
-            var availaleSceneModels = [GLSceneModel]()
-            if let model = glScene[3] {
-                availaleSceneModels.append(model)
-            }
-            if let model = glScene[2] {
-                availaleSceneModels.append(model)
-            }
-            if let model = glScene[1] {
-                availaleSceneModels.append(model)
-            }
-            if let model = glScene[4] {
-                availaleSceneModels.append(model)
-            }
-            for scene in scenes where scene.number > 4 {
-                if let model = glScene[scene.number] {
-                    availaleSceneModels.append(model)
-                }
-            }
-            zone.scenes = glScene
-            zone.availableScenes = availaleSceneModels
-            GLMeshNetworkModel.instance.zone.append(zone)
+            let all = createZone(name: "All", zone: 0x0, group: 0xD000)
+            GLMeshNetworkModel.instance.zone.append(all)
             MeshNetworkManager.instance.saveModel()
         }
+    }
+    
+    func createZone(name: String, zone: UInt8, group: Address) -> GLZone {
+        let zone = GLZone(name: name, zone: zone)
+        let group = MeshNetworkManager.instance.meshNetwork?.group(withAddress: MeshAddress(group))
+        let scenes = group?.scenes ?? []
+        let glScene = scenes.reduce(into: [SceneNumber: GLSceneModel]()) { partialResult, scene in
+            switch scene.number {
+            case 1:
+                let model = GLSceneModel(number: scene.number, name: "Standard Mode", detail: "Suitable for daily use scenarios", icon: "ic_scene_standard")
+                partialResult[scene.number] = model
+            case 2:
+                let model = GLSceneModel(number: scene.number, name: "Eco Mode", detail: "Reduced energy consumption", icon: "ic_scene_eco")
+                partialResult[scene.number] = model
+            case 3:
+                let model = GLSceneModel(number: scene.number, name: "Comfort Mode", detail: "Comfortable lighting experience", icon: "ic_scene_comfort")
+                partialResult[scene.number] = model
+            case 4:
+                let model = GLSceneModel(number: scene.number, name: "Display Mode", detail: "Demonstrate functional use", icon: "ic_scene_display")
+                partialResult[scene.number] = model
+            default:
+                let model = GLSceneModel(number: scene.number, name: "Custom Mode \(scene.number)", detail: "Personalised Lighting Modes")
+                partialResult[scene.number] = model
+            }
+        }
+        var availaleSceneModels = [GLSceneModel]()
+        if let model = glScene[3] {
+            availaleSceneModels.append(model)
+        }
+        if let model = glScene[2] {
+            availaleSceneModels.append(model)
+        }
+        if let model = glScene[1] {
+            availaleSceneModels.append(model)
+        }
+        if let model = glScene[4] {
+            availaleSceneModels.append(model)
+        }
+        for scene in scenes where scene.number > 4 {
+            if let model = glScene[scene.number] {
+                availaleSceneModels.append(model)
+            }
+        }
+        zone.scenes = glScene
+        zone.availableScenes = availaleSceneModels
+        return zone
     }
 }
 

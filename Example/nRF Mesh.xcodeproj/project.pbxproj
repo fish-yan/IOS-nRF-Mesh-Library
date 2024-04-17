@@ -64,6 +64,7 @@
 		2CB620542BBAB2AA002804D3 /* PathManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620532BBAB2AA002804D3 /* PathManager.swift */; };
 		2CB620582BBC051A002804D3 /* COnOffItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620572BBC051A002804D3 /* COnOffItemView.swift */; };
 		2CB6205C2BBC2C0E002804D3 /* MeshSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */; };
+		2CB620642BC57924002804D3 /* MeshTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620632BC57924002804D3 /* MeshTaskManager.swift */; };
 		2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */; };
 		2CCF5E8D2ABC889000039B06 /* DirectionControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */; };
 		2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */; };
@@ -337,6 +338,7 @@
 		2CB620532BBAB2AA002804D3 /* PathManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathManager.swift; sourceTree = "<group>"; };
 		2CB620572BBC051A002804D3 /* COnOffItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COnOffItemView.swift; sourceTree = "<group>"; };
 		2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSegmentView.swift; sourceTree = "<group>"; };
+		2CB620632BC57924002804D3 /* MeshTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshTaskManager.swift; sourceTree = "<group>"; };
 		2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshNetwork+Extension.swift"; sourceTree = "<group>"; };
 		2CCF5E8C2ABC889000039B06 /* DirectionControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionControlView.swift; sourceTree = "<group>"; };
 		2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAiMessage.swift; sourceTree = "<group>"; };
@@ -1191,6 +1193,7 @@
 			children = (
 				F09DE4CE29E5A0BF0073969A /* MeshTask.swift */,
 				F09DE4D029E5A2180073969A /* MeshTaskStatus.swift */,
+				2CB620632BC57924002804D3 /* MeshTaskManager.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -1655,6 +1658,7 @@
 				522AFFDE22BBBC6400521EDC /* NodeFeaturesCell.swift in Sources */,
 				523F776E22C63EAD0030EA6A /* NodeAddAppKeyViewController.swift in Sources */,
 				2C2277022AD6DD6E0062CACD /* SettingsView.swift in Sources */,
+				2CB620642BC57924002804D3 /* MeshTaskManager.swift in Sources */,
 				2C18503A2AF7C3FE00900348 /* GLRelayViewCell.swift in Sources */,
 				529B7643225222E8008F1CE7 /* Address+String.swift in Sources */,
 				52248CDC251E21F000B10250 /* ExportViewController.swift in Sources */,
@@ -1922,7 +1926,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 202404072218;
+				CURRENT_PROJECT_VERSION = 202404101930;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
@@ -1957,7 +1961,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 202404072218;
+				CURRENT_PROJECT_VERSION = 202404101930;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;

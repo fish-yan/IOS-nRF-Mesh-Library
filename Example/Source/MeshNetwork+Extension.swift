@@ -96,7 +96,9 @@ extension MeshNetwork {
     }
     
     var defaultGroups: [Group] {
-        MeshNetworkManager.defaultGroupAddresses.map { try! Group(name: String($0, radix: 16), address: $0)}
+        let network = MeshNetworkManager.instance.meshNetwork!
+        let defaultAddress = MeshNetworkManager.defaultGroupAddresses
+        return network.groups.filter { defaultAddress.contains($0.address.address) }
     }
     
     var customGroups: [Group] {
@@ -166,6 +168,10 @@ extension Node {
         return nil
     }
     
+    var sceneClientModel: Model? {
+        primaryElement?.model(withSigModelId: .sceneClientModelId)
+    }
+    
     var sceneModel: Model? {
         primaryElement?.model(withSigModelId: .sceneServerModelId)
     }
@@ -179,7 +185,16 @@ extension Node {
     }
     
     var usefulModels: [Model] {
-        return [onOffModel, levelModel, cctModel, vendorModel, angleModel, sceneModel, sceneSetupModel].compactMap { $0 }
+        return [
+            onOffModel,
+            levelModel,
+            cctModel,
+            angleModel,
+            sceneClientModel,
+            sceneModel,
+            sceneSetupModel,
+            vendorModel
+        ].compactMap { $0 }
     }
 }
 

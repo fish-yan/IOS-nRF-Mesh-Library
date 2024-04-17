@@ -137,11 +137,19 @@ struct SettingsView: View {
             }
             .navigationTitle("User Settings")
             .onAppear(perform: onAppear)
-            .textFieldAlert(isPresented: $isPresented, title: "Please enter code", text: "", placeholder: "enter code", isSecured: true, action: { text in
-                if let text {
-                    checkCode(text)
+            .alert("Please enter code", isPresented: $isPresented, actions: {
+                SecureField("enter code", text: $code)
+                    
+                Button("Cancel", role: .cancel){}
+                Button("OK") {
+                    checkCode(code)
                 }
             })
+//            .textFieldAlert(isPresented: $isPresented, title: "Please enter code", text: "", placeholder: "enter code", isSecured: true, action: { text in
+//                if let text {
+//                    checkCode(text)
+//                }
+//            })
             .alert("Error", isPresented: $isErrorPresented) {
                 Button("OK", role: .cancel){}
             } message: {

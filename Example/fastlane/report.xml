@@ -5,7 +5,7 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000179">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000184">
         
       </testcase>
     
@@ -15,22 +15,22 @@
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: increment_build_number" time="0.190775">
+      <testcase classname="fastlane.lanes" name="2: increment_build_number" time="0.208666">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: gym" time="51.17942">
+      <testcase classname="fastlane.lanes" name="3: gym" time="72.19341">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: Switch to ios uploadpgy lane" time="8.7e-05">
+      <testcase classname="fastlane.lanes" name="4: Switch to ios uploadpgy lane" time="0.000107">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: pgyer" time="5.604031">
+      <testcase classname="fastlane.lanes" name="5: pgyer" time="8.416673">
         
       </testcase>
     

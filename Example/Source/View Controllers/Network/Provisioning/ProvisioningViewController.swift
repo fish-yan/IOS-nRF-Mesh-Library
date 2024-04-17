@@ -588,16 +588,14 @@ extension ProvisioningViewController: MeshNetworkDelegate {
             }
 //        case is ConfigModelSubscriptionStatus:
         case is ConfigModelAppStatus:
-            if messageQueue.isEmpty {
-                let destination = UIStoryboard(name: "Network", bundle: nil).instantiateViewController(withIdentifier: "NodeViewController") as! NodeViewController
-                destination.node = node
-                
-                self.navigationController?.pushViewController(destination, animated: true)
-                CATransaction.setCompletionBlock {
-                    if let root = self.navigationController?.viewControllers.first {
-                        self.navigationController?.viewControllers = [root, destination]
-                    }
-                }                
+            let destination = UIStoryboard(name: "Network", bundle: nil).instantiateViewController(withIdentifier: "NodeViewController") as! NodeViewController
+            destination.node = node
+            
+            self.navigationController?.pushViewController(destination, animated: true)
+            CATransaction.setCompletionBlock {
+                if let root = self.navigationController?.viewControllers.first {
+                    self.navigationController?.viewControllers = [root, destination]
+                }
             }
         default:
             break

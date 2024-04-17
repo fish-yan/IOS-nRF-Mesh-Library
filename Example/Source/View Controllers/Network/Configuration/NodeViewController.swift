@@ -36,6 +36,10 @@ class NodeViewController: ProgressViewController {
     // MARK: - Public properties
     
     var node: Node!
+    
+    private let taskManager = MeshTaskManager()
+    private var needConfigMore = false
+    
     /// If this object is set, the app will try to reconfigure the `node` to match the configuration
     /// of this original Node.
     ///
@@ -89,17 +93,11 @@ class NodeViewController: ProgressViewController {
             return
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            // If the Composition Data were never obtained, get them now.
-            if !self.node.isCompositionDataReceived {
-                // This will request Composition Data when the bearer is open.
-                self.getCompositionData()
-                // performSegue(withIdentifier: "reconfigure", sender: nil)
-            } else if self.node.defaultTTL == nil {
-                self.getTtl()
-                self.addDefaultGroup()
-            } else {
+            self.configure()
+            if self.taskManager.tasks.isEmpty {
                 self.configureButton.isEnabled = self.node.deviceKey != nil
-                self.addDefaultGroup()
+            } else {
+                self.executeNext()
             }
         }
     }
@@ -450,107 +448,131 @@ private extension NodeViewController {
         }
     }
     
-    @objc func getCompositionData() {
-        addDefaultSceneAddresses()
-        guard let node = node, MeshNetworkManager.bearer.isOpen else {
-            refreshControl?.endRefreshing()
-            return
+    func configure() {
+        if !node.isCompositionDataReceived {
+            needConfigMore = true
+            taskManager.append(.getCompositionData(page: 0))
+        } else {
+            configureMore()
         }
+        
+        if node.defaultTTL == nil {
+            taskManager.append(.getDefaultTtl)
+        }
+    }
+    
+    func configureMore() {
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-        let applicationKey = meshNetwork.applicationKeys.notKnownTo(node: node).filter{ [weak self] in
-            guard let self = self else { return false }
-            return self.node.knows(networkKey: $0.boundNetworkKey)
-        }.first
-        start("Requesting Composition Data...") {
-            let message = ConfigCompositionDataGet()
-            return try MeshNetworkManager.instance.send(message, to: node)
-        }
-        .thenNoHandle("Adding Application Key...", completion: { [weak self] in
-            self?.addDefaultApplicationKey(applicationKey)
-        })
-        .thenNoHandle("Bind Application Key...") { [weak self] in
-            self?.bindApplicationKey(applicationKey)
-        }
-    }
-    
-    func addDefaultApplicationKey(_ key: ApplicationKey?) {
-        guard let key else {
-            done()
+        guard let applicationKey = meshNetwork.applicationKey else {
             return
         }
-        let message = ConfigAppKeyAdd(applicationKey: key)
-        let _ = try? MeshNetworkManager.instance.send(message, to: node)
-    }
-    
-    func bindApplicationKey(_ key: ApplicationKey?)  {
-        guard let key else {
-            done()
-            return
+        
+        // add default applicationKey
+        if !node.knows(applicationKey: applicationKey) {
+            taskManager.append(.sendApplicationKey(applicationKey))
         }
-            
-        for element in node.elements {
-            element.models.forEach { model in
-                if let message = ConfigModelAppBind(applicationKey: key, to: model) {
-                    then("Bind Application Key...") { [weak self] in
-                        guard let self = self else { return nil }
-                        return try MeshNetworkManager.instance.send(message, to: self.node.primaryUnicastAddress)
-                    }
-                }
+        
+        // bind applicationKey
+        for model in node.usefulModels where !model.isBoundTo(applicationKey) {
+            taskManager.append(.bind(applicationKey, to: model))
+        }
+        
+        // Subscriptions.
+        for group in meshNetwork.defaultGroups {
+            for model in node.usefulModels where !model.isSubscribed(to: group) {
+                taskManager.append(.subscribe(model, to: group))
             }
         }
-        done()
-    }
-    
-    func addDefaultGroup() {
-        let groups = MeshNetworkManager.instance.meshNetwork!.defaultGroups
-        groups.forEach { group in
-            node.usefulModels.forEach { model in
-                model.subscribe(to: group)
-            }
-        }
-        _ = MeshNetworkManager.instance.save()
-    }
-    
-    func addDefaultSceneAddresses() {
-        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork,
-              let address = node?.primaryUnicastAddress else {
+        
+        // Add scenes
+        guard let address = node?.primaryUnicastAddress else {
             return
         }
         for scene in meshNetwork.scenes where scene.number <= 4 {
             scene.add(address: address)
         }
         _ = MeshNetworkManager.instance.save()
+        
+        needConfigMore = false
     }
     
-    func getTtl() {
-        guard let node = node else {
+    func executeNext() {
+
+        // Are we done?
+        guard let task = taskManager.nextTask else {
+            completed()
             return
         }
-        start("Requesting default TTL...") {
-            let message = ConfigDefaultTtlGet()
-            return try MeshNetworkManager.instance.send(message, to: node)
+        
+        // Display the title of the current task.
+        taskManager.update(status: .inProgress)
+                
+        var skipped: Bool!
+        switch task {
+        // Skip application keys if a network key was not sent.
+        case .sendApplicationKey(let applicationKey):
+            skipped = !node.knows(networkKey: applicationKey.boundNetworkKey)
+        // Skip binding models to Application Keys not known to the Node.
+        case .bind(let applicationKey, to: _):
+            skipped = !node.knows(applicationKey: applicationKey)
+        // Skip publication with keys that failed to be sent.
+        case .setPublication(let publish, to: _):
+            skipped = !node.knows(applicationKeyIndex: publish.index)
+        default:
+            skipped = false
         }
+        
+        guard !skipped else {
+            taskManager.update(status: .skipped)
+            executeNext()
+            return
+        }
+        
+        // Send the message.
+        let manager = MeshNetworkManager.instance
+        switch task {
+            // Publication Set message can be sent to a different node in some cases.
+        case .setPublication(_, to: let model):
+            guard let address = model.parentElement?.parentNode?.primaryUnicastAddress else {
+                fallthrough
+            }
+            start(task.title) {
+                return try manager.send(task.message, to: address)
+            }
+        default:
+            let node = node!
+            start(task.title) {
+                return try manager.send(task.message, to: node.primaryUnicastAddress)
+            }
+        }
+    }
+    
+    func completed() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        if needConfigMore {
+            configureMore()
+            executeNext()
+        } else {
+            done()
+        }
+    }
+    
+    @objc func getCompositionData() {
+        taskManager.append(.getCompositionData(page: 0))
+        executeNext()
     }
     
     func setTtl(_ ttl: UInt8) {
-        guard let node = node else {
-            return
-        }
-        start("Setting TTL to \(ttl)...") {
-            let message = ConfigDefaultTtlSet(ttl: ttl)
-            return try MeshNetworkManager.instance.send(message, to: node)
-        }
+        taskManager.append(.setDefaultTtl(ttl))
+        executeNext()
     }
     
     /// Sends a message to the node that will reset its state to unprovisioned.
     func resetNode() {
-        guard let node = node else {
-            return
-        }
-        start("Resetting node...") {
-            let message = ConfigNodeReset()
-            return try MeshNetworkManager.instance.send(message, to: node)
-        }
+        taskManager.append(.nodeReset)
+        executeNext()
     }
     
     /// Removes the Node from the local database and pops the Navigation Controller.
@@ -601,23 +623,19 @@ extension NodeViewController: MeshNetworkDelegate {
                 }
                 return
             }
-            self.getTtl()
-            addDefaultGroup()
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
             
         case is ConfigDefaultTtlStatus:
-            done {
-                self.tableView.reloadRows(at: [.ttl], with: .automatic)
-                self.refreshControl?.endRefreshing()
-                self.configureButton.isEnabled = true
-            }
+            self.tableView.reloadRows(at: [.ttl], with: .automatic)
+            self.refreshControl?.endRefreshing()
+            self.configureButton.isEnabled = true
+            
         case is ConfigModelAppStatus:
-            done {
-                self.refreshControl?.endRefreshing()
-                self.tableView.reloadData()
-            }
+            self.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+            
         case is ConfigNodeResetStatus:
             done {
                 self.navigationController?.popToRootViewController(animated: true)
@@ -625,9 +643,18 @@ extension NodeViewController: MeshNetworkDelegate {
                     self.resetCallback?()
                 }
             }
+            
         default:
-            done()
             break
+        }
+        if let task = taskManager.task,
+            message.opCode == task.message.responseOpCode {
+            if let status = message as? ConfigStatusMessage {
+                taskManager.update(status: .resultOf(status))
+            } else {
+                taskManager.update(status: .success)
+            }
+            executeNext()
         }
     }
     
@@ -635,6 +662,8 @@ extension NodeViewController: MeshNetworkDelegate {
                             failedToSendMessage message: MeshMessage,
                             from localElement: Element, to destination: MeshAddress,
                             error: Error) {
+        taskManager.update(status: .failed(error))
+        completed()
         // Ignore messages sent using model publication.
         guard message is ConfigMessage else {
             return
