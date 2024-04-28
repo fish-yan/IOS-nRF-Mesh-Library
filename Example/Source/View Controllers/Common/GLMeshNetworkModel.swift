@@ -137,7 +137,7 @@ class MessageDetailStore: NSObject, ObservableObject, Codable {
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        isOn = try values.decode(Bool.self, forKey: .isOn)
+        isOn = try? values.decode(Bool.self, forKey: .isOn)
         isAi = try values.decode(Bool.self, forKey: .isAi)
         isSensor = try values.decode(Bool.self, forKey: .isSensor)
         emergencyOnOff = try values.decode(Bool.self, forKey: .emergencyOnOff)

@@ -124,14 +124,14 @@ extension CScenesView {
     }
     
     func onOffSet(onOff: Bool, group: nRFMeshProvision.Group) {
-        let message = GenericOnOffSetUnacknowledged(onOff)
+        let message = GenericOnOffSet(onOff)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
         MeshNetworkManager.instance.saveModel()
     }
 
     func sceneRecallSet() {
-        let message = SceneRecallUnacknowledged(zone.store.selectedScene)
-        _ = try? MeshNetworkManager.instance.send(message, to: D002)
+        let message = SceneRecall(zone.store.selectedScene)
+        _ = try? MeshNetworkManager.instance.send(message, to: D000)
         MeshNetworkManager.instance.saveModel()
     }
     
