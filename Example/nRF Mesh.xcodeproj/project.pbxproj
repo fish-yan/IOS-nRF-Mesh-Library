@@ -27,13 +27,11 @@
 		2C42B5072AE76BC7006887FF /* GLMessageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */; };
 		2C5BBC852B61480C00FBA1AA /* LightControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BBC842B61480C00FBA1AA /* LightControlView.swift */; };
 		2C72D6102B0EEB30004625CA /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D60F2B0EEB30004625CA /* ControlView.swift */; };
-		2C72D6122B0EEB88004625CA /* CustomControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6112B0EEB88004625CA /* CustomControlView.swift */; };
 		2C72D6142B0F2EB2004625CA /* DestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6132B0F2EB2004625CA /* DestinationView.swift */; };
 		2C72D6162B0F3C45004625CA /* GroupsSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6152B0F3C45004625CA /* GroupsSendView.swift */; };
 		2C72D6182B0F3C4E004625CA /* LightsSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C72D6172B0F3C4E004625CA /* LightsSendView.swift */; };
 		2C798F162ABDD85600156CAA /* LightsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C798F152ABDD85600156CAA /* LightsManagerView.swift */; };
 		2C7BE3732B148F40006376F7 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */; };
-		2C7BE3752B14977C006376F7 /* DraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3742B14977C006376F7 /* DraftsView.swift */; };
 		2C7BE3772B14D72F006376F7 /* DraftControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3762B14D72F006376F7 /* DraftControlView.swift */; };
 		2C7D864E2B22172C0027932B /* ZoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7D864D2B22172C0027932B /* ZoneListView.swift */; };
 		2C7D86502B2218530027932B /* AddZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7D864F2B2218520027932B /* AddZoneView.swift */; };
@@ -301,13 +299,11 @@
 		2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMessageDelegate.swift; sourceTree = "<group>"; };
 		2C5BBC842B61480C00FBA1AA /* LightControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightControlView.swift; sourceTree = "<group>"; };
 		2C72D60F2B0EEB30004625CA /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
-		2C72D6112B0EEB88004625CA /* CustomControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomControlView.swift; sourceTree = "<group>"; };
 		2C72D6132B0F2EB2004625CA /* DestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationView.swift; sourceTree = "<group>"; };
 		2C72D6152B0F3C45004625CA /* GroupsSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsSendView.swift; sourceTree = "<group>"; };
 		2C72D6172B0F3C4E004625CA /* LightsSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsSendView.swift; sourceTree = "<group>"; };
 		2C798F152ABDD85600156CAA /* LightsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightsManagerView.swift; sourceTree = "<group>"; };
 		2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
-		2C7BE3742B14977C006376F7 /* DraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftsView.swift; sourceTree = "<group>"; };
 		2C7BE3762B14D72F006376F7 /* DraftControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftControlView.swift; sourceTree = "<group>"; };
 		2C7D864D2B22172C0027932B /* ZoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneListView.swift; sourceTree = "<group>"; };
 		2C7D864F2B2218520027932B /* AddZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddZoneView.swift; sourceTree = "<group>"; };
@@ -877,12 +873,10 @@
 				2C2277012AD6DD6E0062CACD /* SettingsView.swift */,
 				2CFCE5A22B48D9B600CF2491 /* ExportView.swift */,
 				2C315D282B9F44ED0040271E /* ImportView.swift */,
-				2C72D6112B0EEB88004625CA /* CustomControlView.swift */,
 				2C72D60F2B0EEB30004625CA /* ControlView.swift */,
 				2C72D6132B0F2EB2004625CA /* DestinationView.swift */,
 				2C72D6172B0F3C4E004625CA /* LightsSendView.swift */,
 				2C72D6152B0F3C45004625CA /* GroupsSendView.swift */,
-				2C7BE3742B14977C006376F7 /* DraftsView.swift */,
 				2C7BE3762B14D72F006376F7 /* DraftControlView.swift */,
 				529B756F223FF1AE008F1CE7 /* SettingsViewController.swift */,
 				529B759B2243BA10008F1CE7 /* NetworkKeysViewController.swift */,
@@ -1558,7 +1552,6 @@
 				523F776822C615CE0030EA6A /* NodeAppKeysViewController.swift in Sources */,
 				523F777922CB57190030EA6A /* ModelViewController.swift in Sources */,
 				522AFFE022C2376C00521EDC /* ElementViewController.swift in Sources */,
-				2C72D6122B0EEB88004625CA /* CustomControlView.swift in Sources */,
 				5288C20E2371A91900321ED3 /* SimpleOnOffSet.swift in Sources */,
 				523F779722CE2BF60030EA6A /* SetPublicationDestinationsViewController.swift in Sources */,
 				2C32D7372ADAE2E600915E1D /* MeshMessageManager.swift in Sources */,
@@ -1580,7 +1573,6 @@
 				528445C924EEA765002168A1 /* HeartbeatSubscriptionCell.swift in Sources */,
 				5231403F2301761C0074325A /* ConfigurationServerViewCell.swift in Sources */,
 				2C72D6162B0F3C45004625CA /* GroupsSendView.swift in Sources */,
-				2C7BE3752B14977C006376F7 /* DraftsView.swift in Sources */,
 				2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */,
 				52A8EA9624EE704A004C14C7 /* SetHeartbeatSubscriptionViewController.swift in Sources */,
 				52547EFB231800F30002AA7B /* GroupTargetModelsViewController.swift in Sources */,

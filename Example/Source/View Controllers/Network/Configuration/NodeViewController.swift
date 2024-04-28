@@ -476,7 +476,10 @@ private extension NodeViewController {
         for model in node.usefulModels where !model.isBoundTo(applicationKey) {
             taskManager.append(.bind(applicationKey, to: model))
         }
-        
+        if node.companyIdentifier == 0x004c {
+            needConfigMore = false
+            return
+        }
         // Subscriptions.
         for group in meshNetwork.defaultGroups {
             for model in node.usefulModels where !model.isSubscribed(to: group) {

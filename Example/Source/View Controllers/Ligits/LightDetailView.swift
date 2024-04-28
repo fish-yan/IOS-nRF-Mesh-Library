@@ -25,7 +25,7 @@ struct LightDetailView: View {
     
     var body: some View {
         let types: [MessageType] = [.onOff, .sensor, .ai, .level, .glLevel, .runTime, .fadeTime, .cct, .angle, .scenes]
-        ControlView(messageTypes: types, store: store, onMessageChange: send)
+        ControlView(messageTypes: types, node: node, store: store, onMessageChange: send)
         .navigationTitle(node.name ?? "Unknow")
         .toolbar {
             NavigationLink("Advance", destination: {

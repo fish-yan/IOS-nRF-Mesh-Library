@@ -134,8 +134,8 @@ private extension CLightView {
         messageManager = MeshMessageManager()
         messageManager.remove()
         messageManager.delegate = self
-//        guard let onOffModel = node.onOffModel else { return }
-//        _ = try? MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
+        guard let onOffModel = node.onOffModel else { return }
+        _ = try? MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
     }
     
     func checkConnect() async -> Bool {
@@ -166,27 +166,27 @@ private extension CLightView {
     }
     
     func onOffSet(isOn: Bool) {
-        let message = GenericOnOffSetUnacknowledged(isOn)
+        let message = GenericOnOffSet(isOn)
         guard let onOffModel = node.onOffModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: onOffModel)
     }
     
     func levelSet() {
         let level = Int16(min(32767, -32768 + 65536 * dim)) // -32768...32767
-        let message = GenericLevelSetUnacknowledged(level: level)
+        let message = GenericLevelSet(level: level)
         guard let levelModel = node.levelModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
     }
     
     func cctSet() {
         let level = Int16(min(32767, -32768 + 65536 * cct)) // -32768...32767
-        let message = GenericLevelSetUnacknowledged(level: level)
+        let message = GenericLevelSet(level: level)
         guard let cctModel = node.cctModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: cctModel)
     }
     func angleSet() {
         let level = Int16(min(32767, -32768 + 65536 * (1 - angle))) // -32768...32767
-        let message = GenericLevelSetUnacknowledged(level: level)
+        let message = GenericLevelSet(level: level)
         guard let angleModel = node.angleModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: angleModel)
     }
@@ -201,7 +201,7 @@ extension CLightView: MeshMessageDelegate {
             switch source {
             case node.onOffModel?.parentElement?.unicastAddress:
                 isOn = status.isOn
-//                readLevelStatus()
+                readLevelStatus()
             default: break
             }
         case let status as GenericLevelStatus:

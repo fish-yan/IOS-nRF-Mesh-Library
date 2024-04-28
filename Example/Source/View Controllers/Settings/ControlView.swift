@@ -55,8 +55,11 @@ struct ControlView: View {
         
     @State private var onMessageChange: ((GLMessageModel) -> Void)
     
-    init(messageTypes: [MessageType], store: MessageDetailStore, onMessageChange: @escaping (GLMessageModel) -> Void = { _ in }) {
+    @State private var node: Node?
+    
+    init(messageTypes: [MessageType], node: Node? = nil, store: MessageDetailStore, onMessageChange: @escaping (GLMessageModel) -> Void = { _ in }) {
         self.messageTypes = messageTypes
+        self.node = node
         self.store = store
         self.onMessageChange = onMessageChange
     }
@@ -229,7 +232,9 @@ struct ControlView: View {
                 Text("Scene")
                 Spacer()
                 NavigationLink {
-//                    LightStoreSceneView(group: group, selectedScene: $store.selectedScene)
+                    if let node {
+                        LightStoreSceneView(node: node, selectedScene: $store.selectedScene)
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }

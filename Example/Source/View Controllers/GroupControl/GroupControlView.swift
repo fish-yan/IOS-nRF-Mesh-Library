@@ -28,7 +28,11 @@ struct GroupControlView: View {
                 VStack {
                     HStack {
                         onOffButton(onOff: store.isOn == true, title: "总开关", text: "On 开灯, AI 动作, Off 关灯,AI 不动作") {
-                            store.isOn?.toggle()
+                            if store.isOn == true {
+                                store.isOn = false
+                            } else {
+                                store.isOn = true
+                            }
                             onOffSet(onOff: store.isOn == true, group: D000)
                         }
                         onOffButton(onOff: store.emergencyOnOff, title: "紧急照明", text: "On 所有灯全亮, AI 不动作, Off 回到正常") {
@@ -39,11 +43,13 @@ struct GroupControlView: View {
                     HStack {
                         onOffButton(onOff: store.isSensor, title: "PIR(微波)开关", text: "On 打开, PIR 动作, Off 关掉,PIR 不动作, (内订 PIR 为打开)") {
                             store.isSensor.toggle()
-                            onOffSet(onOff: store.isSensor, group: D005)
+                            pirOnOff(onOff: store.isSensor)
+//                            onOffSet(onOff: store.isSensor, group: D005)
                         }
                         onOffButton(onOff: store.isAi, title: "AI 联动开关", text: " On 打开 AI, AI 动作, Off 关掉 AI,AI 不动作, (内订 AI 为打开)") {
                             store.isAi.toggle()
-                            onOffSet(onOff: store.isAi, group: D006)
+                            aiOnOff(onOff: store.isAi)
+//                            onOffSet(onOff: store.isAi, group: D006)
                         }
                     }
                 }
@@ -174,6 +180,20 @@ extension GroupControlView {
     func onOffSet(onOff: Bool, group: nRFMeshProvision.Group) {
         let message = GenericOnOffSet(onOff)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
+        MeshNetworkManager.instance.saveModel()
+    }
+    
+    func pirOnOff(onOff: Bool) {
+        let status = GLSimpleStatus(bool: onOff)
+        let message = GLSensorMessage(status: status)
+        _ = try? MeshNetworkManager.instance.send(message, to: D000)
+        MeshNetworkManager.instance.saveModel()
+    }
+    
+    func aiOnOff(onOff: Bool) {
+        let status = GLSimpleStatus(bool: onOff)
+        let message = GLAiMessage(status: status)
+        _ = try? MeshNetworkManager.instance.send(message, to: D000)
         MeshNetworkManager.instance.saveModel()
     }
     

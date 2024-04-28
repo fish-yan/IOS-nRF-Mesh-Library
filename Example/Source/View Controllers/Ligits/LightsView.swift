@@ -17,7 +17,7 @@ struct LightsView: View {
             List {
                 Section {
                     ForEach(nodes, id: \.primaryUnicastAddress.hex) { node in
-                        NavigationLink(destination: LightControlView(node: node)) {
+                        NavigationLink(destination: LightDetailView(node: node)) {
                             ItemView(resource: .meshIcon, title: node.name ?? "Unknow", detail: "Address: 0x\(node.primaryUnicastAddress.hex)")
                         }
                     }

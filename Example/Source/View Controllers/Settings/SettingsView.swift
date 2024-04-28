@@ -77,7 +77,7 @@ struct SettingsView: View {
                             Text("Set Sequence")
                             Spacer()
                             TextField("Sequence", text: $sequence)
-                                .frame(width: 50)
+                                .frame(width: 100)
                                 .multilineTextAlignment(.trailing)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                             Button("Save") {
@@ -173,6 +173,7 @@ struct SettingsView: View {
                     onAppear()
                 }
             }
+            .scrollDismissesKeyboard(.automatic)
         }
     }
     
