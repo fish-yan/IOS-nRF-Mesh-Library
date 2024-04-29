@@ -311,45 +311,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let zone = GLZone(name: name, zone: zone)
         let group = MeshNetworkManager.instance.meshNetwork?.group(withAddress: MeshAddress(group))
         let scenes = group?.scenes ?? []
-        let glScene = scenes.reduce(into: [SceneNumber: GLSceneModel]()) { partialResult, scene in
+        scenes.forEach { scene in
             switch scene.number {
             case 1:
-                let model = GLSceneModel(number: scene.number, name: "Standard Mode", detail: "Suitable for daily use scenarios", icon: "ic_scene_standard")
-                partialResult[scene.number] = model
+                scene.name = "Standard Mode"
+                scene.detail = "Suitable for daily use scenarios"
             case 2:
-                let model = GLSceneModel(number: scene.number, name: "Eco Mode", detail: "Reduced energy consumption", icon: "ic_scene_eco")
-                partialResult[scene.number] = model
+                scene.name = "Eco Mode"
+                scene.detail = "Reduced energy consumption"
             case 3:
-                let model = GLSceneModel(number: scene.number, name: "Comfort Mode", detail: "Comfortable lighting experience", icon: "ic_scene_comfort")
-                partialResult[scene.number] = model
+                scene.name = "Comfort Mode"
+                scene.detail = "Comfortable lighting experience"
             case 4:
-                let model = GLSceneModel(number: scene.number, name: "Display Mode", detail: "Demonstrate functional use", icon: "ic_scene_display")
-                partialResult[scene.number] = model
+                scene.name = "Display Mode"
+                scene.detail = "Demonstrate functional use"
             default:
-                let model = GLSceneModel(number: scene.number, name: "Custom Mode \(scene.number)", detail: "Personalised Lighting Modes")
-                partialResult[scene.number] = model
+                scene.name = "Custom Mode \(scene.number)"
+                scene.detail = "Personalised Lighting Modes"
             }
         }
-        var availaleSceneModels = [GLSceneModel]()
-        if let model = glScene[3] {
-            availaleSceneModels.append(model)
-        }
-        if let model = glScene[2] {
-            availaleSceneModels.append(model)
-        }
-        if let model = glScene[1] {
-            availaleSceneModels.append(model)
-        }
-        if let model = glScene[4] {
-            availaleSceneModels.append(model)
-        }
-        for scene in scenes where scene.number > 4 {
-            if let model = glScene[scene.number] {
-                availaleSceneModels.append(model)
-            }
-        }
-        zone.scenes = glScene
-        zone.availableScenes = availaleSceneModels
+        
+        let sceneNumbers = scenes
+            .filter { $0.number > 4 }
+            .map { $0.number }
+        
+        zone.sceneNumbers = [3, 2, 1, 4] + sceneNumbers
         return zone
     }
 }

@@ -1,5 +1,4 @@
 //
-//  GLSceneModel.swift
 //  nRF Mesh
 //
 //  Created by yan on 2023/10/28.
@@ -9,92 +8,6 @@
 import UIKit
 import Combine
 import nRFMeshProvision
-
-class GLSceneModel: ObservableObject, Codable, Hashable {
-    @Published var number: SceneNumber = 1
-    @Published var name: String = ""
-    @Published var detail: String = ""
-    @Published var icon: String = "ic_scene_custom"
-    
-    enum CodingKeys: String, CodingKey {
-        case number, name, detail, icon
-    }
-    
-    init(number: SceneNumber, name: String, detail: String, icon: String = "ic_scene_custom") {
-        self.number = number
-        self.name = name
-        self.detail = detail
-        self.icon = icon
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        number = try values.decode(SceneNumber.self, forKey: .number)
-        name = try values.decode(String.self, forKey: .name)
-        detail = try values.decode(String.self, forKey: .detail)
-        icon = try values.decode(String.self, forKey: .icon)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(number, forKey: .number)
-        try container.encode(name, forKey: .name)
-        try container.encode(detail, forKey: .detail)
-        try container.encode(icon, forKey: .icon)
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(number)
-    }
-    
-    static func == (lhs: GLSceneModel, rhs: GLSceneModel) -> Bool {
-        lhs.hashValue == rhs.hashValue
-    }
-}
-
-class GLNodeModel: ObservableObject, Codable {
-    @Published var scenes: [SceneNumber: GLSceneModel] = [:]
-    @Published var selectedScene: SceneNumber = 0
-    
-    enum CodingKeys: String, CodingKey {
-        case scenes, selectedScene
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        scenes = try values.decode([SceneNumber: GLSceneModel].self, forKey: .scenes)
-        selectedScene = try values.decode(SceneNumber.self, forKey: .selectedScene)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(scenes, forKey: .scenes)
-        try container.encode(selectedScene, forKey: .selectedScene)
-    }
-}
-
-class GLGroupModel: ObservableObject, Codable {
-    @Published var scenes: [SceneNumber: GLSceneModel] = [:]
-    @Published var selectedScene: SceneNumber = 0
-    
-    enum CodingKeys: String, CodingKey {
-        case scenes, selectedScene
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        scenes = try values.decode([SceneNumber: GLSceneModel].self, forKey: .scenes)
-        selectedScene = try values.decode(SceneNumber.self, forKey: .selectedScene)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(scenes, forKey: .scenes)
-        try container.encode(selectedScene, forKey: .selectedScene)
-    }
-    
-}
-
 
 class MessageDetailStore: NSObject, ObservableObject, Codable {
     
@@ -187,51 +100,13 @@ class GLMessageModel: ObservableObject {
     }
 }
 
-class GLDraftModel: ObservableObject, Codable, Hashable {
-    
-    @Published var name: String = "Draft"
-    @Published var store: MessageDetailStore = MessageDetailStore()
-    @Published var messageTypes: [MessageType] = []
-    
-    init(name: String, store: MessageDetailStore, messageTypes: [MessageType]) {
-        self.name = name
-        self.store = store
-        self.messageTypes = messageTypes
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case name, store, messageTypes
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        name = try values.decode(String.self, forKey: .name)
-        store = try values.decode(MessageDetailStore.self, forKey: .store)
-        messageTypes = try values.decode([MessageType].self, forKey: .messageTypes)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(name, forKey: .name)
-        try container.encode(store, forKey: .store)
-        try container.encode(messageTypes, forKey: .messageTypes)
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(store)
-    }
-    
-    static func == (lhs: GLDraftModel, rhs: GLDraftModel) -> Bool {
-        lhs.hashValue == rhs.hashValue
-    }
-}
-
 class GLZone: ObservableObject, Codable, Hashable {
     @Published var name: String = "Zone"
     @Published var zone: UInt8 = 0x0
-    @Published var scenes: [SceneNumber: GLSceneModel] = [:]
-    @Published var availableScenes: [GLSceneModel] = []
-    @Published var store: MessageDetailStore = MessageDetailStore()
+    @Published var nodeAddresses: [Address] = [] // 关联node
+    @Published var sceneNumbers: [SceneNumber] = [] // 关联 scene
+    
+    @Published var store: MessageDetailStore = MessageDetailStore() // 去掉
     
     private var anyCancellable: AnyCancellable?
     
@@ -251,8 +126,6 @@ class GLZone: ObservableObject, Codable, Hashable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         name = try values.decode(String.self, forKey: .name)
         zone = try values.decode(UInt8.self, forKey: .zone)
-        scenes = try values.decode([SceneNumber: GLSceneModel].self, forKey: .scenes)
-        availableScenes = try values.decode([GLSceneModel].self, forKey: .availableScenes)
         store = try values.decode(MessageDetailStore.self, forKey: .store)
     }
     
@@ -260,8 +133,6 @@ class GLZone: ObservableObject, Codable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(zone, forKey: .zone)
-        try container.encode(scenes, forKey: .scenes)
-        try container.encode(availableScenes, forKey: .availableScenes)
         try container.encode(store, forKey: .store)
     }
     
@@ -278,11 +149,6 @@ class GLMeshNetworkModel: ObservableObject, Codable {
     static let instance: GLMeshNetworkModel = GLMeshNetworkModel()
     private init() { }
     
-    @Published var nodes: [Address: GLNodeModel] = [:]
-    @Published var groups: [Address: GLGroupModel] = [:]
-    @Published var scenes: [SceneNumber: GLSceneModel] = [:]
-    
-    @Published var drafts: [GLDraftModel] = []
     @Published var zone: [GLZone] = []
     
     enum CodingKeys: String, CodingKey {
@@ -291,27 +157,15 @@ class GLMeshNetworkModel: ObservableObject, Codable {
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        nodes = try values.decode([Address: GLNodeModel].self, forKey: .nodes)
-        groups = try values.decode([Address: GLGroupModel].self, forKey: .groups)
-        scenes = try values.decode([SceneNumber: GLSceneModel].self, forKey: .scenes)
-        drafts = try values.decode([GLDraftModel].self, forKey: .drafts)
         zone = try values.decode([GLZone].self, forKey: .zone)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(nodes, forKey: .nodes)
-        try container.encode(groups, forKey: .groups)
-        try container.encode(scenes, forKey: .scenes)
-        try container.encode(drafts, forKey: .drafts)
         try container.encode(zone, forKey: .zone)
     }
     
     func reset() {
-        nodes.removeAll()
-        groups.removeAll()
-        scenes.removeAll()
-        drafts.removeAll()
         zone.removeAll()
     }
     
@@ -340,10 +194,6 @@ extension MeshNetworkManager {
         decoder.dateDecodingStrategy = .iso8601
         if let data = storage.load(),
             let model = try? decoder.decode(GLMeshNetworkModel.self, from: data) {
-            GLMeshNetworkModel.instance.groups = model.groups
-            GLMeshNetworkModel.instance.nodes = model.nodes
-            GLMeshNetworkModel.instance.scenes = model.scenes
-            GLMeshNetworkModel.instance.drafts = model.drafts
             GLMeshNetworkModel.instance.zone = model.zone
             print("model load success")
             return true
@@ -378,10 +228,6 @@ extension MeshNetworkManager {
         }
         
         let model = try decoder.decode(GLMeshNetworkModel.self, from: data)
-        GLMeshNetworkModel.instance.groups = model.groups
-        GLMeshNetworkModel.instance.nodes = model.nodes
-        GLMeshNetworkModel.instance.scenes = model.scenes
-        GLMeshNetworkModel.instance.drafts = model.drafts
         GLMeshNetworkModel.instance.zone = model.zone
         return model
     }
@@ -420,18 +266,6 @@ extension MeshNetworkManager {
     }
 }
 
-extension nRFMeshProvision.Scene {
-    var model: GLSceneModel? {
-        get {
-            GLMeshNetworkModel.instance.scenes[number]
-        }
-        set {
-            if let newValue {
-                GLMeshNetworkModel.instance.scenes.updateValue(newValue, forKey: number)
-            }
-        }
-    }
-}
 
 enum ErrorType {
     case none

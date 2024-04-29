@@ -221,3 +221,15 @@ public extension Group {
         scenes.filter { !MeshNetworkManager.defaultSceneAddresses.contains($0.number) }
     }
 }
+
+public extension Scene {
+    var icon: String {
+        switch number {
+        case 1: "ic_scene_standard"
+        case 2: "ic_scene_eco"
+        case 3: "ic_scene_comfort"
+        case 4: "ic_scene_display"
+        default: "ic_scene_custom"
+        }
+    }
+}

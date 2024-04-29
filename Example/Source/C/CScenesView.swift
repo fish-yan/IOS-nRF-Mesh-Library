@@ -13,10 +13,10 @@ struct CScenesView: View {
     @ObservedObject var zone: GLZone
     @State private var columns = [GridItem(.adaptive(minimum: 170, maximum: 200))]
     
-    @State private var scenes: [GLSceneModel] = []
+    @State private var scenes: [nRFMeshProvision.Scene] = []
     
     var body: some View {
-        ScrollView(.vertical) {
+        ScrollView(.vertical) { 
             VStack(spacing: 10) {
                 HStack(spacing: 40) {
                     COnOffItemView(isSelected: zone.store.isOn == false, icon: .icAllOff, title: "All Close") {
@@ -119,7 +119,12 @@ struct CScenesView: View {
 extension CScenesView {
     
     func onAppera() {
-        scenes = zone.availableScenes
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        scenes = zone.sceneNumbers.compactMap({ number in
+            meshNetwork.scenes.first { scene in
+                return scene.number == number
+            }
+        })
         columns = scenes.count <= 2 ? [GridItem()] : [GridItem(.adaptive(minimum: 170, maximum: 200))]
     }
     
