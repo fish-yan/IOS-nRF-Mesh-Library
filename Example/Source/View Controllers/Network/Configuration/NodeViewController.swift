@@ -480,10 +480,11 @@ private extension NodeViewController {
             needConfigMore = false
             return
         }
+        /*
         // Subscriptions.
         for group in meshNetwork.defaultGroups {
             for model in node.usefulModels where !model.isSubscribed(to: group) {
-                taskManager.append(.subscribe(model, to: group))
+                model.subscribe(to: group)
             }
         }
         
@@ -494,6 +495,7 @@ private extension NodeViewController {
         for scene in meshNetwork.scenes where scene.number <= 4 {
             scene.add(address: address)
         }
+         */
         _ = MeshNetworkManager.instance.save()
         
         needConfigMore = false

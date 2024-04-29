@@ -216,6 +216,28 @@ internal class NetworkManager {
                 accessLayer.send(message, from: element, to: destination,
                                  withTtl: initialTtl, using: applicationKey,
                                  retransmit: false)
+                // If retransmission was configured, start the timer that will retransmit.
+                // There is no need to retransmit acknowledged messages, as they have their
+                // own retransmission mechanism.
+                if !(message is AcknowledgedMeshMessage) {
+                    var count = publish.retransmit.count
+                    if count > 0 {
+                        let interval: TimeInterval = Double(publish.retransmit.interval) / 1000
+                        BackgroundTimer.scheduledTimer(withTimeInterval: interval,
+                                                       repeats: count > 0) { [weak self] timer in
+                            guard let self = self else {
+                                timer.invalidate()
+                                return
+                            }
+                            self.accessLayer.send(message, from: localElement, to: publish.publicationAddress,
+                                                  withTtl: ttl, using: applicationKey, retransmit: true)
+                            count -= 1
+                            if count == 0 {
+                                timer.invalidate()
+                            }
+                        }
+                    }
+                }
             }
         } onCancel: {
             cancel(messageWithHandler: MessageHandle(for: message, sentFrom: element.unicastAddress,

@@ -117,6 +117,9 @@ class SettingsViewController: UITableViewController {
                 UIApplication.shared.open(url)
             }
         }
+        if indexPath.isBackToNewUI {
+            dismiss(animated: true)
+        }
     }
     
     override func tableView(_ tableView: UITableView,
@@ -396,6 +399,7 @@ private extension IndexPath {
     static let dateSection    = 2
     static let actionsSection = 3
     static let aboutSection   = 4
+    static let backToNewUI    = 5
     
     /// Returns whether the IndexPath points to the mesh network name row.
     var isNetworkName: Bool {
@@ -420,6 +424,10 @@ private extension IndexPath {
     /// Returns whether the IndexPath points to the Issues on GitHub.
     var isLinkToIssues: Bool {
         return section == IndexPath.aboutSection && row == 3
+    }
+    
+    var isBackToNewUI: Bool {
+        return section == IndexPath.backToNewUI && row == 0
     }
     
     static let name = IndexPath(row: 0, section: IndexPath.nameSection)
