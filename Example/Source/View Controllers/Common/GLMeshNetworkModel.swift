@@ -103,10 +103,10 @@ class GLMessageModel: ObservableObject {
 class GLZone: ObservableObject, Codable, Hashable {
     @Published var name: String = "Zone"
     @Published var zone: UInt8 = 0x0
-    @Published var nodeAddresses: [Address] = [] // 关联node
+    @Published var nodeAddresses: [Address] = [] // 关联 node
     @Published var sceneNumbers: [SceneNumber] = [] // 关联 scene
     
-    @Published var store: MessageDetailStore = MessageDetailStore() // 去掉
+    @Published var store: MessageDetailStore = MessageDetailStore() // zone 中操作状态保存
     
     private var anyCancellable: AnyCancellable?
     

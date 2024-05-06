@@ -117,7 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.overrideUserInterfaceStyle = .light
-        let rootVC = UIHostingController(rootView: MeshTabView())
+        let rootVC = UIHostingController(rootView: CTabView())
         window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
         

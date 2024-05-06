@@ -15,4 +15,6 @@ class PathManager: Observable, ObservableObject {
 
 enum NavPath: Hashable {
     case cLightView(node: Node)
+    case bSceneDetail(scene: nRFMeshProvision.Scene)
+    case bZoneView(zone: GLZone)
 }

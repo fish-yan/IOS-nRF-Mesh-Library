@@ -45,6 +45,12 @@
 		2CA1A4D22ABB28DD00BB135A /* LightHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */; };
 		2CA1A50B2ABBC12D00BB135A /* LightDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */; };
 		2CA1A50D2ABBC23100BB135A /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1A50C2ABBC23100BB135A /* SliderView.swift */; };
+		2CA679DC2BE90A9D00BA1596 /* BScenesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679DB2BE90A9D00BA1596 /* BScenesView.swift */; };
+		2CA679DE2BE90B2A00BA1596 /* BTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679DD2BE90B2A00BA1596 /* BTabView.swift */; };
+		2CA679E02BE911CD00BA1596 /* BSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679DF2BE911CD00BA1596 /* BSetView.swift */; };
+		2CA679E42BE91B5A00BA1596 /* BLightListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679E32BE91B5A00BA1596 /* BLightListView.swift */; };
+		2CA679E62BE91B7200BA1596 /* BZoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679E52BE91B7200BA1596 /* BZoneListView.swift */; };
+		2CA679E92BE924FE00BA1596 /* TooBarBackItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679E82BE924FE00BA1596 /* TooBarBackItem.swift */; };
 		2CA6A1E92B1A13CC0073E7BF /* GroupControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */; };
 		2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */; };
 		2CB620202BB7B30C002804D3 /* Color+Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */; };
@@ -57,7 +63,7 @@
 		2CB620452BB943F3002804D3 /* CLightListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620422BB943F3002804D3 /* CLightListView.swift */; };
 		2CB620482BB946D5002804D3 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB620462BB94533002804D3 /* Colors.xcassets */; };
 		2CB6204E2BBA53CD002804D3 /* MeshApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6204D2BBA53CD002804D3 /* MeshApp.swift */; };
-		2CB620502BBA542B002804D3 /* MeshTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6204F2BBA542B002804D3 /* MeshTabView.swift */; };
+		2CB620502BBA542B002804D3 /* CTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6204F2BBA542B002804D3 /* CTabView.swift */; };
 		2CB620522BBAAB33002804D3 /* UINavigationController+SwipBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620512BBAAB33002804D3 /* UINavigationController+SwipBack.swift */; };
 		2CB620542BBAB2AA002804D3 /* PathManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620532BBAB2AA002804D3 /* PathManager.swift */; };
 		2CB620582BBC051A002804D3 /* COnOffItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620572BBC051A002804D3 /* COnOffItemView.swift */; };
@@ -317,6 +323,12 @@
 		2CA1A4D12ABB28DD00BB135A /* LightHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightHostViewController.swift; sourceTree = "<group>"; };
 		2CA1A50A2ABBC12D00BB135A /* LightDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightDetailView.swift; sourceTree = "<group>"; };
 		2CA1A50C2ABBC23100BB135A /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		2CA679DB2BE90A9D00BA1596 /* BScenesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BScenesView.swift; sourceTree = "<group>"; };
+		2CA679DD2BE90B2A00BA1596 /* BTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTabView.swift; sourceTree = "<group>"; };
+		2CA679DF2BE911CD00BA1596 /* BSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSetView.swift; sourceTree = "<group>"; };
+		2CA679E32BE91B5A00BA1596 /* BLightListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLightListView.swift; sourceTree = "<group>"; };
+		2CA679E52BE91B7200BA1596 /* BZoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BZoneListView.swift; sourceTree = "<group>"; };
+		2CA679E82BE924FE00BA1596 /* TooBarBackItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooBarBackItem.swift; sourceTree = "<group>"; };
 		2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlView.swift; sourceTree = "<group>"; };
 		2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMeshNetworkModel.swift; sourceTree = "<group>"; };
 		2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Mesh.swift"; sourceTree = "<group>"; };
@@ -329,7 +341,7 @@
 		2CB620422BB943F3002804D3 /* CLightListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLightListView.swift; sourceTree = "<group>"; };
 		2CB620462BB94533002804D3 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		2CB6204D2BBA53CD002804D3 /* MeshApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshApp.swift; sourceTree = "<group>"; };
-		2CB6204F2BBA542B002804D3 /* MeshTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshTabView.swift; sourceTree = "<group>"; };
+		2CB6204F2BBA542B002804D3 /* CTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTabView.swift; sourceTree = "<group>"; };
 		2CB620512BBAAB33002804D3 /* UINavigationController+SwipBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+SwipBack.swift"; sourceTree = "<group>"; };
 		2CB620532BBAB2AA002804D3 /* PathManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathManager.swift; sourceTree = "<group>"; };
 		2CB620572BBC051A002804D3 /* COnOffItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COnOffItemView.swift; sourceTree = "<group>"; };
@@ -615,6 +627,28 @@
 			path = Messages;
 			sourceTree = "<group>";
 		};
+		2CA679DA2BE906E900BA1596 /* B */ = {
+			isa = PBXGroup;
+			children = (
+				2CA679DD2BE90B2A00BA1596 /* BTabView.swift */,
+				2CA679DB2BE90A9D00BA1596 /* BScenesView.swift */,
+				2CA679DF2BE911CD00BA1596 /* BSetView.swift */,
+				2CA679E52BE91B7200BA1596 /* BZoneListView.swift */,
+				2CA679E32BE91B5A00BA1596 /* BLightListView.swift */,
+			);
+			path = B;
+			sourceTree = "<group>";
+		};
+		2CA679E72BE924DA00BA1596 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				2CB620412BB943F2002804D3 /* MeshSliderView.swift */,
+				2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */,
+				2CA679E82BE924FE00BA1596 /* TooBarBackItem.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		2CA6A1E72B1A13A60073E7BF /* GroupControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -628,13 +662,12 @@
 		2CB620232BB7BA47002804D3 /* C */ = {
 			isa = PBXGroup;
 			children = (
+				2CB6204F2BBA542B002804D3 /* CTabView.swift */,
 				2CB620292BB7BD99002804D3 /* CScenesPageView.swift */,
 				2CB620272BB7BCC6002804D3 /* CScenesView.swift */,
 				2CB620572BBC051A002804D3 /* COnOffItemView.swift */,
 				2CB620422BB943F3002804D3 /* CLightListView.swift */,
 				2CB620402BB943F2002804D3 /* CLightView.swift */,
-				2CB620412BB943F2002804D3 /* MeshSliderView.swift */,
-				2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -1076,8 +1109,9 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				2CB6204D2BBA53CD002804D3 /* MeshApp.swift */,
-				2CB6204F2BBA542B002804D3 /* MeshTabView.swift */,
 				2CB620532BBAB2AA002804D3 /* PathManager.swift */,
+				2CA679E72BE924DA00BA1596 /* Common */,
+				2CA679DA2BE906E900BA1596 /* B */,
 				2CB620232BB7BA47002804D3 /* C */,
 				2C42B5012AE66EA1006887FF /* Messages */,
 				52DF5D8D22968F7C00C297C1 /* Mesh Network */,
@@ -1493,12 +1527,13 @@
 				2C8C0C2E2AC06DFF00BC0156 /* LightSelectedView.swift in Sources */,
 				528AB9FA228D856C000BE9DC /* ProvisioningViewDelegate.swift in Sources */,
 				2CEFBCCC2B664EAA00948F93 /* DotView.swift in Sources */,
-				2CB620502BBA542B002804D3 /* MeshTabView.swift in Sources */,
+				2CB620502BBA542B002804D3 /* CTabView.swift in Sources */,
 				5288C2162371BC1300321ED3 /* SimpleOnOffClientCell.swift in Sources */,
 				5288C20423704EF300321ED3 /* ConnectionModeCell.swift in Sources */,
 				52547F28232A3F470002AA7B /* RangeView.swift in Sources */,
 				2CB620582BBC051A002804D3 /* COnOffItemView.swift in Sources */,
 				52314041230192C50074325A /* ModelViewCell.swift in Sources */,
+				2CA679E02BE911CD00BA1596 /* BSetView.swift in Sources */,
 				527596302A138ECC00B04C6F /* SelectPublicationDestintionsViewController.swift in Sources */,
 				5283524822733BCF0097B949 /* EditKeyViewController.swift in Sources */,
 				529EC8D62A29F7A10056BB48 /* ModalNavigationController.swift in Sources */,
@@ -1518,6 +1553,7 @@
 				52547F29232A3F470002AA7B /* FabView.swift in Sources */,
 				2C93E3762ADF79A900B392DB /* GlobalConfig.swift in Sources */,
 				F09DE4D729EEBEAD0073969A /* SelectModelsForSubscriptionViewController.swift in Sources */,
+				2CA679E62BE91B7200BA1596 /* BZoneListView.swift in Sources */,
 				52A9C17D230EB9490036792A /* GenericOnOffViewCell.swift in Sources */,
 				5292F8A5250237A600EA0F2A /* NodeStoreSceneViewController.swift in Sources */,
 				52E54CD62343875400478F05 /* GenericLevelClientCell.swift in Sources */,
@@ -1551,6 +1587,7 @@
 				2CFE86522AEAA18400A1CF7D /* GLBeaconOnOffMessage.swift in Sources */,
 				523F776822C615CE0030EA6A /* NodeAppKeysViewController.swift in Sources */,
 				523F777922CB57190030EA6A /* ModelViewController.swift in Sources */,
+				2CA679DE2BE90B2A00BA1596 /* BTabView.swift in Sources */,
 				522AFFE022C2376C00521EDC /* ElementViewController.swift in Sources */,
 				5288C20E2371A91900321ED3 /* SimpleOnOffSet.swift in Sources */,
 				523F779722CE2BF60030EA6A /* SetPublicationDestinationsViewController.swift in Sources */,
@@ -1563,6 +1600,7 @@
 				2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */,
 				52E54CE72345EDA700478F05 /* GenericState.swift in Sources */,
 				52B6C50F2811712D00F6E0F3 /* UITableViewCell+Disabled.swift in Sources */,
+				2CA679E42BE91B5A00BA1596 /* BLightListView.swift in Sources */,
 				2CFE865C2AEAA84F00A1CF7D /* GLSceneRecallMessage.swift in Sources */,
 				52DF5D8A228DA78A00C297C1 /* NodeViewController.swift in Sources */,
 				521215292315290F0059FB3D /* GroupControlViewController.swift in Sources */,
@@ -1579,6 +1617,7 @@
 				5217D2E0250F522A004FDE79 /* GenericDefaultTransitionTimeServerDelegate.swift in Sources */,
 				2C7D86502B2218530027932B /* AddZoneView.swift in Sources */,
 				F09DE4C729D771F20073969A /* Model+Name.swift in Sources */,
+				2CA679DC2BE90A9D00BA1596 /* BScenesView.swift in Sources */,
 				2C93E3742ADE23EC00B392DB /* Debouncer.swift in Sources */,
 				2C1193A32B0B9367004F0CFF /* LightStoreSceneView.swift in Sources */,
 				52E54CD42343874000478F05 /* GenericOnOffServerCell.swift in Sources */,
@@ -1640,6 +1679,7 @@
 				529B759C2243BA10008F1CE7 /* NetworkKeysViewController.swift in Sources */,
 				2C42B5052AE676FC006887FF /* GLAngleMessage.swift in Sources */,
 				2C2277002AD6D9890062CACD /* SettingsView1.swift in Sources */,
+				2CA679E92BE924FE00BA1596 /* TooBarBackItem.swift in Sources */,
 				521599D525E91F9300F602FA /* SensorValueCell.swift in Sources */,
 				52518B3122E0B18400A1FD1E /* GroupsViewController.swift in Sources */,
 				52A8EA9424EE6D18004C14C7 /* HeartbeatSubscriptionPeriodCell.swift in Sources */,

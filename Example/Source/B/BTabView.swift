@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct MeshTabView: View {
+struct BTabView: View {
     @StateObject var pathManager = PathManager()
     @State var selection = 0
     var body: some View {
@@ -16,14 +16,21 @@ struct MeshTabView: View {
             VStack(spacing: 0) {
                 switch selection {
                 case 0:
-                    CScenesPageView()
+                    BScenesView()
                 case 1:
-                    CLightListView()
+                    BSetView()
                 default: Text("a")
                 }
                 tabbar()
             }
             .background(Color.groupedBackground)
+            .navigationDestination(for: NavPath.self) { target in
+                switch target {
+                case .bSceneDetail(let scene):
+                    Text(scene.name)
+                default: Text("")
+                }
+            }
         }
         .environment(pathManager)
     }
@@ -34,8 +41,8 @@ struct MeshTabView: View {
                 .fill(.tabBar)
                 .ignoresSafeArea()
             HStack {
-                tabItem(title: "Main", image: .icTabMainNormal, selectedImage :.icTabMainSelected, tag: 0)
-                tabItem(title: "Lights", image: .icTabLightsNormal, selectedImage: .icTabLightsSelected, tag: 1)
+                tabItem(title: "Scene", image: .icTabMainNormal, selectedImage :.icTabMainSelected, tag: 0)
+                tabItem(title: "Set", image: .icTabLightsNormal, selectedImage: .icTabLightsSelected, tag: 1)
             }
         }
         .frame(height: 48)
@@ -61,5 +68,5 @@ struct MeshTabView: View {
 }
 
 #Preview {
-    MeshTabView()
+    BTabView()
 }

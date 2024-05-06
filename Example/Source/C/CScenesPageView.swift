@@ -51,7 +51,7 @@ struct CScenesPageView: View {
         }
         .onAppear(perform: onAppera)
         .fullScreenCover(isPresented: $isPresented, content: {
-            RootView()
+            BTabView()
                 .ignoresSafeArea()
         })
     }
