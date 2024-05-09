@@ -27,7 +27,7 @@ struct CLightListView: View {
                 NavigationLink(value: NavPath.cLightView(node: node)) {
                     VStack(alignment: .leading, spacing: 13) {
                         Text(node.name ?? "Unknow")
-                            .font(.label)
+                            .font(.labelTitle)
                             .foregroundStyle(Color.accent)
                         Text("Address: 0x\(node.primaryUnicastAddress.hex)")
                             .font(.secondaryLabel)

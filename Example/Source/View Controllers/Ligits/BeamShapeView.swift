@@ -26,9 +26,10 @@ struct BeamShapeView: View {
             GeometryReader(content: { geometry in
                 let y: CGFloat = 80
                 let centerX = geometry.size.width / 2
-                let height: Double = geometry.size.height - y - 50.0
+                let tempHeight: Double = geometry.size.height - y
                 let degress = angle.wrappedValue * 50 + 10
-                let harfWidth = tan(Angle(degrees: degress/2).radians) * height
+                let harfWidth = tan(Angle(degrees: degress/2).radians) * tempHeight
+                let height: Double = geometry.size.height - y - harfWidth/4 - 10
                 let s = hue * 0.4
                 let color = Color(hue: 0.08, saturation: s, brightness: 1)
                 ZStack {
@@ -47,20 +48,11 @@ struct BeamShapeView: View {
                 .animation(.easeInOut, value: angle.wrappedValue)
             })
         }
-//        .gesture(
-//            MagnifyGesture()
-//                .onChanged({ magnifyValue in
-//                    if startLocation != magnifyValue.startLocation {
-//                        startLocation = magnifyValue.startLocation
-//                        startValue = angle.wrappedValue
-//                    }
-//                    let value = startValue * magnifyValue.magnification
-//                    angle.wrappedValue = max(min(value, 1), 0.1667)
-//                })
-//        )
     }
 }
 
 #Preview {
     BeamShapeView(angle: .constant(1))
+        .frame(height: 300)
+        .background(.black)
 }

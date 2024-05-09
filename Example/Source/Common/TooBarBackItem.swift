@@ -11,19 +11,16 @@ import SwiftUI
 struct TooBarBackItem: ToolbarContent {
     @Environment(\.dismiss) var dismiss
     @State var title: String?
-    init(title: String? = nil) {
-        self.title = title
-    }
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             HStack {
                 Image(systemName: "chevron.left")
                 if let title {
-                    Text("Back")
+                    Text(title)
                 }
             }
-            .font(.label)
+            .font(.labelTitle)
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
             .background(
                 Color.tertiaryBackground

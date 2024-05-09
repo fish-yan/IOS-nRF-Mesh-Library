@@ -9,12 +9,16 @@
 import SwiftUI
 import nRFMeshProvision
 
-class PathManager: Observable, ObservableObject {
+class CPathManager: Observable, ObservableObject {
+    @Published var path: [NavPath] = []
+}
+
+class BPathManager: Observable, ObservableObject {
     @Published var path: [NavPath] = []
 }
 
 enum NavPath: Hashable {
     case cLightView(node: Node)
-    case bSceneDetail(scene: nRFMeshProvision.Scene)
     case bZoneView(zone: GLZone)
+    case bSceneEditView(scene: nRFMeshProvision.Scene?)
 }

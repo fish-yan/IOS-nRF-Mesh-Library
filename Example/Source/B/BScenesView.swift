@@ -17,7 +17,7 @@ struct BScenesView: View {
         ScrollView(.vertical) {
             LazyVGrid(columns: columns) {
                 ForEach(scenes, id: \.self) { model in
-                    NavigationLink(value: NavPath.bSceneDetail(scene: model)) {
+                    NavigationLink(value: NavPath.bSceneEditView(scene: model)) {
                         sceneItem(image: model.icon, title: model.name, des: model.detail)
                     }
                 }
@@ -30,6 +30,13 @@ struct BScenesView: View {
         .onAppear(perform: onAppera)
         .toolbar {
             TooBarBackItem()
+        }
+        .navigationDestination(for: NavPath.self) { target in
+            switch target {
+            case .bSceneEditView(let scene):
+                BSceneEditView(scene: scene)
+            default: Text("")
+            }
         }
     }
     
@@ -46,7 +53,7 @@ struct BScenesView: View {
                 Spacer()
                     .frame(height: 10)
                 Text(title)
-                    .font(.label)
+                    .font(.labelTitle)
                     .foregroundStyle(Color.accent)
                 Text(des)
                     .font(.secondaryLabel)

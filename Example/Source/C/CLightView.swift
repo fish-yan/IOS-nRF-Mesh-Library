@@ -15,6 +15,8 @@ struct CLightView: View {
     @State var dim: Double = 1
     @State var cct: Double = 0.5
     @State var angle: Double = 0.5
+    @State var runTime: Double = 0
+    @State var fadeTime: Double = 0
     
     @State private var sliderType: MeshSliderType = .dim
     
@@ -23,17 +25,9 @@ struct CLightView: View {
     private let taskManager = MeshTaskManager()
     
     let node: Node
+    var isB = false
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Spacer()
-                .frame(height: 10)
-            Button("Lights", systemImage: "chevron.left", action: backAction)
-                .font(.label)
-                .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                .background(
-                    Color.tertiaryBackground
-                        .clipShape(.rect(bottomTrailingRadius: 16, topTrailingRadius: 16))
-                )
             GeometryReader { reader in
                 ZStack(alignment: .top) {
                     Image(.icLightLogo)
@@ -46,28 +40,54 @@ struct CLightView: View {
             controlView
         }
         .background(.black)
-        .toolbar(.hidden, for: .navigationBar)
+        .toolbar {
+            TooBarBackItem(title: "Lights")
+        }
+        .navigationBarBackButtonHidden(true)
         .onAppear(perform: onAppear)
     }
     
     var controlView: some View {
-        VStack(alignment: .leading, spacing: 30) {
-            HStack(spacing: 40) {
-                COnOffItemView(isSelected: isOn == false, icon: .icAllOff, title: "Close") {
-                    isOn = false
-                    onOffSet(isOn: false)
+        VStack(alignment: .leading, spacing: 20) {
+            Spacer()
+                .frame(height: 0)
+            if isB {
+                VStack(spacing: 10) {
+                    sliderView(title: "Run time", value: $runTime, in: 0...900) {_ in
+                        runtimeSet()
+                    }
+                    sliderView(title: "Fade time", value: $fadeTime, in: 0...60) {_ in
+                        fadetimeSet()
+                    }
                 }
-                Color.accent
-                    .frame(width: 1)
-                COnOffItemView(isSelected: isOn == true, icon: .icAllOn, title: "Open") {
-                    isOn = true
-                    onOffSet(isOn: true)
+            } else {
+                HStack(spacing: 40) {
+                    COnOffItemView(isSelected: isOn == false, icon: .icAllOff, title: "Close") {
+                        isOn = false
+                        onOffSet(isOn: false)
+                    }
+                    Color.accent
+                        .frame(width: 1)
+                    COnOffItemView(isSelected: isOn == true, icon: .icAllOn, title: "Open") {
+                        isOn = true
+                        onOffSet(isOn: true)
+                    }
                 }
+                .padding(20)
+                .frame(height: 50)
+                .frame(maxWidth: .infinity)
+                .background(Color(uiColor: UIColor(resource: .itemBackground)))
+                .clipShape(.buttonBorder)
             }
-            .frame(maxWidth: .infinity)
-            .padding(20)
-            .background(Color(uiColor: UIColor(resource: .itemBackground)))
-            .clipShape(.buttonBorder)
+            
+            VStack(spacing: 0) {
+                Text("Mode Parameters")
+                    .font(.section)
+                Text("Drag to adjust the parameters of the light")
+                    .font(.secondaryLabel)
+                    .foregroundStyle(.secondaryLabel)
+            }
+            
             switch sliderType {
             case .dim:
                 MeshSliderView(value: $dim, type: sliderType) {
@@ -83,21 +103,23 @@ struct CLightView: View {
                 }
             }
             
-            Text("Mode")
-                .font(.section)
-            HStack() {
+            HStack(spacing: 0) {
+                Spacer()
                 item(image: .icDim, title: MeshSliderType.dim.title, isSelected: sliderType == .dim) {
                     sliderType = .dim
                 }
+                Spacer()
                 item(image: .icCct, title:  MeshSliderType.cct.title, isSelected: sliderType == .cct) {
                     sliderType = .cct
                 }
+                Spacer()
                 item(image: .icAngle, title:  MeshSliderType.angle.title, isSelected: sliderType == .angle) {
                     sliderType = .angle
                 }
+                Spacer()
             }
         }
-        .padding(20)
+        .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.tertiaryBackground)
@@ -106,21 +128,41 @@ struct CLightView: View {
     }
     
     func item(image: ImageResource, title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Rectangle()
-            .fill(isSelected ? Color.accent : Color.itemBackground)
-            .overlay {
-                VStack(spacing: 20) {
-                    Image(image)
-                        .resizable()
-                        .frame(width: 28, height: 28)
-                    Text(title)
-                        .font(.secondaryLabel)
+        VStack(spacing: 10) {
+            Rectangle()
+                .fill(isSelected ? Color.accent : Color.itemBackground)
+                .overlay {
+                        Image(image)
+                            .resizable()
+                            .frame(width: 28, height: 28)
+                            .foregroundStyle(isSelected ? Color.whiteLabel : Color.secondaryLabel)
                 }
-                .foregroundStyle(isSelected ? Color.whiteLabel : Color.secondaryLabel)
+                .frame(width: 66, height: 66)
+                .clipShape(.rect(cornerRadius: 18))
+                .onTapGesture(perform: action)
+            Text(title)
+                .font(.secondaryLabel)
+                .foregroundStyle(Color.secondaryLabel)
+                
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    func sliderView(title: String, value: Binding<Double>, in range: ClosedRange<Double>, onEnded: @escaping (Double) -> Void) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("\(title): \(Int(value.wrappedValue))s")
+                .font(.subheadline)
+            Spacer()
+                .frame(height: 3)
+            CustomSlider(value: value, range: range, onEnded: onEnded)
+            HStack {
+                Text("\(Int(range.lowerBound))s")
+                Spacer()
+                Text("\(Int(range.upperBound))s")
             }
-        .frame(height: 140)
-        .clipShape(.rect(cornerRadius: 18))
-        .onTapGesture(perform: action)
+            .foregroundStyle(.secondary)
+            .font(.footnote)
+        }
     }
 }
 
@@ -184,11 +226,24 @@ private extension CLightView {
         guard let cctModel = node.cctModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: cctModel)
     }
+    
     func angleSet() {
         let level = Int16(min(32767, -32768 + 65536 * (1 - angle))) // -32768...32767
         let message = GenericLevelSetUnacknowledged(level: level)
         guard let angleModel = node.angleModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: angleModel)
+    }
+    
+    func runtimeSet() {
+        guard let vendorModel = node.vendorModel else { return }
+        let message = GLRunTimeMessage(time: Int(runTime))
+        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+    }
+    
+    func fadetimeSet() {
+        guard let vendorModel = node.vendorModel else { return }
+        let message = GLFadeTimeMessage(time: Int(fadeTime))
+        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
     }
 }
 
@@ -225,9 +280,6 @@ extension CLightView: MeshMessageDelegate {
         }
     }
 }
-
-
-
 
 #Preview {
     CLightView(node: MeshNetworkManager.instance.meshNetwork!.nodes.first!)

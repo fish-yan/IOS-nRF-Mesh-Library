@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct CTabView: View {
-    @StateObject var pathManager = PathManager()
+    @StateObject var pathManager = CPathManager()
     @State var selection = 0
     var body: some View {
         NavigationStack(path: $pathManager.path) {

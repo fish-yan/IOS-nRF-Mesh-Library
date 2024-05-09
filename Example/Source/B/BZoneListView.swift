@@ -19,7 +19,7 @@ struct BZoneListView: View {
             NavigationLink(value: NavPath.bZoneView(zone: zone)) {
                 VStack(alignment: .leading, spacing: 13) {
                     Text(zone.name)
-                        .font(.label)
+                        .font(.labelTitle)
                         .foregroundStyle(Color.accent)
                     Text("Address: 0x\(String(zone.zone, radix: 16))")
                         .font(.secondaryLabel)
@@ -37,8 +37,8 @@ struct BZoneListView: View {
         .onAppear(perform: onAppera)
         .navigationDestination(for: NavPath.self) { target in
             switch target {
-            case .cLightView(let node):
-                CLightView(node: node)
+            case .bZoneView(let zone):
+                BZoneView(zone: zone)
             default: Text("")
             }
         }
@@ -48,7 +48,6 @@ struct BZoneListView: View {
 private extension BZoneListView {
     func onAppera() {
         zones = GLMeshNetworkModel.instance.zone
-        //        selectedNode = nodes.first
     }
 }
 

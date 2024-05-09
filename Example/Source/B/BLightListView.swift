@@ -19,7 +19,7 @@ struct BLightListView: View {
             NavigationLink(value: NavPath.cLightView(node: node)) {
                 VStack(alignment: .leading, spacing: 13) {
                     Text(node.name ?? "Unknow")
-                        .font(.label)
+                        .font(.labelTitle)
                         .foregroundStyle(Color.accent)
                     Text("Address: 0x\(node.primaryUnicastAddress.hex)")
                         .font(.secondaryLabel)
@@ -28,7 +28,6 @@ struct BLightListView: View {
             }
             .listRowSeparator(.hidden)
             .listSectionSpacing(0)
-            
             .listRowBackground(
                 Color.tertiaryBackground
             )
@@ -39,7 +38,7 @@ struct BLightListView: View {
         .navigationDestination(for: NavPath.self) { target in
             switch target {
             case .cLightView(let node):
-                CLightView(node: node)
+                CLightView(node: node, isB: true)
             default: Text("")
             }
         }

@@ -51,6 +51,12 @@
 		2CA679E42BE91B5A00BA1596 /* BLightListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679E32BE91B5A00BA1596 /* BLightListView.swift */; };
 		2CA679E62BE91B7200BA1596 /* BZoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679E52BE91B7200BA1596 /* BZoneListView.swift */; };
 		2CA679E92BE924FE00BA1596 /* TooBarBackItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679E82BE924FE00BA1596 /* TooBarBackItem.swift */; };
+		2CA679EE2BEA599600BA1596 /* BSceneEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679ED2BEA599600BA1596 /* BSceneEditView.swift */; };
+		2CA679F02BEA5A6F00BA1596 /* InputItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679EF2BEA5A6F00BA1596 /* InputItemView.swift */; };
+		2CA679FA2BEB195A00BA1596 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679F92BEB195A00BA1596 /* CustomSlider.swift */; };
+		2CA679FC2BEBC20900BA1596 /* BZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679FB2BEBC20900BA1596 /* BZoneView.swift */; };
+		2CA67A062BECDDC600BA1596 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A052BECDDC600BA1596 /* ViewExtension.swift */; };
+		2CA67A082BECE54600BA1596 /* LevelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A072BECE54600BA1596 /* LevelPickerView.swift */; };
 		2CA6A1E92B1A13CC0073E7BF /* GroupControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */; };
 		2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */; };
 		2CB620202BB7B30C002804D3 /* Color+Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */; };
@@ -329,6 +335,12 @@
 		2CA679E32BE91B5A00BA1596 /* BLightListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLightListView.swift; sourceTree = "<group>"; };
 		2CA679E52BE91B7200BA1596 /* BZoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BZoneListView.swift; sourceTree = "<group>"; };
 		2CA679E82BE924FE00BA1596 /* TooBarBackItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooBarBackItem.swift; sourceTree = "<group>"; };
+		2CA679ED2BEA599600BA1596 /* BSceneEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSceneEditView.swift; sourceTree = "<group>"; };
+		2CA679EF2BEA5A6F00BA1596 /* InputItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputItemView.swift; sourceTree = "<group>"; };
+		2CA679F92BEB195A00BA1596 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
+		2CA679FB2BEBC20900BA1596 /* BZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BZoneView.swift; sourceTree = "<group>"; };
+		2CA67A052BECDDC600BA1596 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		2CA67A072BECE54600BA1596 /* LevelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelPickerView.swift; sourceTree = "<group>"; };
 		2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlView.swift; sourceTree = "<group>"; };
 		2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMeshNetworkModel.swift; sourceTree = "<group>"; };
 		2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Mesh.swift"; sourceTree = "<group>"; };
@@ -635,6 +647,8 @@
 				2CA679DF2BE911CD00BA1596 /* BSetView.swift */,
 				2CA679E52BE91B7200BA1596 /* BZoneListView.swift */,
 				2CA679E32BE91B5A00BA1596 /* BLightListView.swift */,
+				2CA679ED2BEA599600BA1596 /* BSceneEditView.swift */,
+				2CA679FB2BEBC20900BA1596 /* BZoneView.swift */,
 			);
 			path = B;
 			sourceTree = "<group>";
@@ -645,6 +659,10 @@
 				2CB620412BB943F2002804D3 /* MeshSliderView.swift */,
 				2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */,
 				2CA679E82BE924FE00BA1596 /* TooBarBackItem.swift */,
+				2CA679EF2BEA5A6F00BA1596 /* InputItemView.swift */,
+				2CA679F92BEB195A00BA1596 /* CustomSlider.swift */,
+				2CA67A052BECDDC600BA1596 /* ViewExtension.swift */,
+				2CA67A072BECE54600BA1596 /* LevelPickerView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1483,6 +1501,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CA679EE2BEA599600BA1596 /* BSceneEditView.swift in Sources */,
 				2C7D864E2B22172C0027932B /* ZoneListView.swift in Sources */,
 				52DE3ABA25DA871800268D7D /* SensorClientDelegate.swift in Sources */,
 				5275962E2A138D9700B04C6F /* SelectPublicationViewController.swift in Sources */,
@@ -1522,8 +1541,10 @@
 				521215312316C36B0059FB3D /* GenericLevelGroupCell.swift in Sources */,
 				52E54CDD23438B2E00478F05 /* GenericOnOffClientDelegate.swift in Sources */,
 				2C2276FE2AD6D8760062CACD /* SettingsHostViewController.swift in Sources */,
+				2CA679F02BEA5A6F00BA1596 /* InputItemView.swift in Sources */,
 				52DF5D8C228DAA0500C297C1 /* NodeViewCell.swift in Sources */,
 				52CD0A50232FA6CD00A9A181 /* ProxyViewController.swift in Sources */,
+				2CA679FA2BEB195A00BA1596 /* CustomSlider.swift in Sources */,
 				2C8C0C2E2AC06DFF00BC0156 /* LightSelectedView.swift in Sources */,
 				528AB9FA228D856C000BE9DC /* ProvisioningViewDelegate.swift in Sources */,
 				2CEFBCCC2B664EAA00948F93 /* DotView.swift in Sources */,
@@ -1557,6 +1578,7 @@
 				52A9C17D230EB9490036792A /* GenericOnOffViewCell.swift in Sources */,
 				5292F8A5250237A600EA0F2A /* NodeStoreSceneViewController.swift in Sources */,
 				52E54CD62343875400478F05 /* GenericLevelClientCell.swift in Sources */,
+				2CA67A082BECE54600BA1596 /* LevelPickerView.swift in Sources */,
 				529B76492252499E008F1CE7 /* UIColor+Nordic.swift in Sources */,
 				2CFE86502AEA9CDC00A1CF7D /* GLFadeTimeMessage.swift in Sources */,
 				2CFE86602AEAA96A00A1CF7D /* GLRelayMessage.swift in Sources */,
@@ -1574,6 +1596,7 @@
 				523F776622C609D90030EA6A /* NodeNetworkKeysViewController.swift in Sources */,
 				5211EAD5250777E100089FF2 /* SceneServerDelegate.swift in Sources */,
 				2CFE86562AEAA2A200A1CF7D /* GLBeaconTimeIntervalMessage.swift in Sources */,
+				2CA67A062BECDDC600BA1596 /* ViewExtension.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				2C72D6142B0F2EB2004625CA /* DestinationView.swift in Sources */,
 				2C2277062AD794C10062CACD /* GroupsView.swift in Sources */,
@@ -1647,6 +1670,7 @@
 				F063C01D29C27EAB00A445A9 /* IntroViewController.swift in Sources */,
 				5292F8A325021B8F00EA0F2A /* ModelIdentifiers.swift in Sources */,
 				52835258227AEDA30097B949 /* DeviceCell.swift in Sources */,
+				2CA679FC2BEBC20900BA1596 /* BZoneView.swift in Sources */,
 				2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */,
 				52E54CD82343876000478F05 /* GenericLevelServerCell.swift in Sources */,
 				A7B526A7277B210000F5C60D /* GenericPowerOnOffSetupViewCell.swift in Sources */,

@@ -20,7 +20,7 @@ struct COnOffItemView: View {
                 .resizable()
                 .frame(width: 18, height: 18)
             Text(title)
-                .font(.label)
+                .font(.labelTitle)
         }
         .foregroundStyle(isSelected ? Color.red : Color.accent)
         .frame(maxWidth: .infinity)

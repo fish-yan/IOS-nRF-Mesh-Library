@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct BTabView: View {
-    @StateObject var pathManager = PathManager()
+    @StateObject var pathManager = BPathManager()
     @State var selection = 0
     var body: some View {
         NavigationStack(path: $pathManager.path) {
@@ -24,13 +24,6 @@ struct BTabView: View {
                 tabbar()
             }
             .background(Color.groupedBackground)
-            .navigationDestination(for: NavPath.self) { target in
-                switch target {
-                case .bSceneDetail(let scene):
-                    Text(scene.name)
-                default: Text("")
-                }
-            }
         }
         .environment(pathManager)
     }

@@ -65,7 +65,7 @@ struct CScenesView: View {
                 Spacer()
                     .frame(height: 10)
                 Text(title)
-                    .font(.label)
+                    .font(.labelTitle)
                     .foregroundStyle(isSelected ? Color.whiteLabel : Color.accent)
                 Text(des)
                     .font(.secondaryLabel)
