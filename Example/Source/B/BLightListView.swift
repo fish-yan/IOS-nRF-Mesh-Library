@@ -9,7 +9,6 @@ import SwiftUI
 import nRFMeshProvision
 
 struct BLightListView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     
     @State var nodes: [Node] = []
     @State private var isShowSetting = false

@@ -9,7 +9,6 @@ import SwiftUI
 import nRFMeshProvision
 
 struct CLightView: View {
-    @Environment(\.dismiss) var dismiss
     
     @State var isOn: Bool?
     @State var dim: Double = 1
@@ -42,6 +41,16 @@ struct CLightView: View {
         .background(.black)
         .toolbar {
             TooBarBackItem(title: "Lights")
+        }
+        .toolbar {
+            if isB {
+                Button(action: {}, label: {
+                    Text("Save")
+                        .underline()
+                        .font(.label)
+                        .foregroundStyle(.white)
+                })
+            }
         }
         .navigationBarBackButtonHidden(true)
         .onAppear(perform: onAppear)
@@ -80,7 +89,7 @@ struct CLightView: View {
                 .clipShape(.buttonBorder)
             }
             
-            VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text("Mode Parameters")
                     .font(.section)
                 Text("Drag to adjust the parameters of the light")
@@ -167,11 +176,7 @@ struct CLightView: View {
 }
 
 private extension CLightView {
-    
-    func backAction() {
-        dismiss.callAsFunction()
-    }
-    
+
     func onAppear() {
         messageManager = MeshMessageManager()
         messageManager.remove()

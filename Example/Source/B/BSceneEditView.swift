@@ -10,11 +10,19 @@ import SwiftUI
 import nRFMeshProvision
 
 struct BSceneEditView: View {
-    @State private var scene: nRFMeshProvision.Scene?
+    @EnvironmentObject var pathManager: BPathManager
+    @EnvironmentObject var sceneStoreManager: BSceneStoreManager
+    
+    private let scene: nRFMeshProvision.Scene?
     @State private var nameText: String = ""
-    @State private var describeText: String = ""
+    @State private var describeText: String = "Personalised Lighting Modes"
     @State private var numberText: String = ""
+    
     private var title: String = ""
+    @State private var sceneNumber: SceneNumber = 0x0
+    
+    @State private var isPresented: Bool = false
+    @State private var isDeleteSceneAlert: Bool = false
     
     init(scene: nRFMeshProvision.Scene? = nil) {
         self.scene = scene
@@ -32,10 +40,19 @@ struct BSceneEditView: View {
             InputItemView(title: "Number", placehoder: "Scene number", text: $numberText)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                .disabled(true)
             Spacer()
                 .frame(height: 50)
             Button(action: {
-                
+                let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+                if let scene {
+                    scene.name = nameText
+                    scene.detail = describeText
+                } else {
+                    try? meshNetwork.add(scene: sceneNumber, name: nameText, detail: describeText)
+                }
+                MeshNetworkManager.instance.saveAll()
+                isPresented = true
             }, label: {
                 Text("Save")
                     .frame(maxWidth: .infinity)
@@ -45,9 +62,20 @@ struct BSceneEditView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             })
             Button(action: {
-                
+                if let scene {
+                    if scene.isUsed {
+                        isDeleteSceneAlert = true
+                    } else {
+                        MeshNetworkManager.instance.meshNetwork?.forceRemove(scene: scene.number)
+                        MeshNetworkManager.instance.saveAll()
+                        pathManager.path.removeLast()
+                    }
+                } else {
+                    pathManager.path.removeLast()
+                }
             }, label: {
-                Text("Cancel")
+                Text(scene == nil ? "Cancel" : "Delete")
+                    .foregroundStyle(scene == nil ? .black : .red)
                     .frame(height: 50)
                     .frame(maxWidth: .infinity)
                     .overlay {
@@ -60,11 +88,46 @@ struct BSceneEditView: View {
         .padding(20)
         .navigationTitle(title)
         .toolbar {
-            TooBarBackItem()
+            TooBarBackItem(title: "Scenes")
         }
         .background(Color.secondaryBackground)
         .navigationBarBackButtonHidden(true)
         .ignoresSafeArea(.keyboard)
+        .alert(isPresented: $isPresented) {
+            Alert(title: Text("Remind"),
+                  message: Text("Select light or zone to continue setting the scene?"),
+                  primaryButton: .default(Text("Continue")) {
+                pathManager.path.removeAll()
+                pathManager.selectedTab = 1
+            }, secondaryButton: .cancel() {
+                pathManager.path.removeLast()
+            })
+        }
+        .alert(isPresented: $isDeleteSceneAlert) {
+            Alert(title: Text("Warning"),
+                  message: Text("This scene is in use, delete or not?"),
+                  primaryButton: .destructive(Text("Delete")) {
+                if let scene {
+                    MeshNetworkManager.instance.meshNetwork?.forceRemove(scene: scene.number)
+                    MeshNetworkManager.instance.saveAll()
+                }
+                pathManager.path.removeLast()
+            }, secondaryButton: .cancel())
+        }
+        .onAppear(perform: onAppear)
+    }
+}
+
+private extension BSceneEditView {
+    func onAppear() {
+        if let scene {
+            nameText = scene.name
+            describeText = scene.detail
+            numberText = "0x" + String(scene.number, radix: 16)
+        } else {
+            sceneNumber = MeshNetworkManager.instance.meshNetwork?.nextAvailableScene() ?? 0
+            numberText = "0x" + String(sceneNumber, radix: 16)
+        }
     }
 }
 

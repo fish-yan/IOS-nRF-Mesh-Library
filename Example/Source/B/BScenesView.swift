@@ -24,12 +24,19 @@ struct BScenesView: View {
             }
             .padding(EdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20))
         }
-        .navigationTitle("Scene")
+        .navigationTitle("Scenes")
         .navigationBarTitleDisplayMode(.inline)
         .scrollIndicators(.hidden)
         .onAppear(perform: onAppera)
         .toolbar {
             TooBarBackItem()
+        }
+        .toolbar {
+            NavigationLink(value: NavPath.bSceneEditView(scene: nil)) {
+                Text("Add scene")
+                    .underline()
+                    .font(.label)
+            }
         }
         .navigationDestination(for: NavPath.self) { target in
             switch target {

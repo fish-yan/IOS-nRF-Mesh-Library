@@ -22,8 +22,9 @@ struct LevelPickerView: View {
                     onCanceled?()
                 }
                 .font(.label)
+                .frame(width: 50)
                 Text("Select Levels")
-                    .font(.section)
+                    .font(.labelTitle)
                     .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
                     
@@ -31,6 +32,7 @@ struct LevelPickerView: View {
                     onConfirmed?([level0, level1, level2, level3])
                 }
                 .font(.labelTitle)
+                .frame(width: 50)
             }
             .padding()
             .padding(.top, 10)

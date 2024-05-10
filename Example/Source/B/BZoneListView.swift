@@ -9,7 +9,6 @@ import SwiftUI
 import nRFMeshProvision
 
 struct BZoneListView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     
     @State var zones: [GLZone] = []
     @State private var isShowSetting = false

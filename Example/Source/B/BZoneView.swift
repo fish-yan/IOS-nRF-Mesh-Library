@@ -10,7 +10,6 @@ import SwiftUI
 import nRFMeshProvision
 
 struct BZoneView: View {
-    @Environment(\.dismiss) var dismiss
     
     @State private var isOn: Bool?
     @State private var dim: Double = 1
@@ -30,6 +29,7 @@ struct BZoneView: View {
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
                     Text("Dynamic mode")
+                        .font(.label)
                     Spacer()
                     Button(action: {
                         withAnimation {
@@ -43,6 +43,7 @@ struct BZoneView: View {
                     Divider()
                     HStack {
                         Text("Level")
+                            .font(.secondaryLabel)
                         Spacer()
                         Button {
                             isPresented = true
@@ -131,6 +132,13 @@ struct BZoneView: View {
         .toolbar {
             TooBarBackItem(title: "Zones")
         }
+        .toolbar {
+            Button(action: {}, label: {
+                Text("Save")
+                    .underline()
+                    .font(.label)
+            })
+        }
         .navigationBarBackButtonHidden(true)
     }
     
@@ -158,7 +166,7 @@ struct BZoneView: View {
     func sliderView(title: String, value: Binding<Double>, in range: ClosedRange<Double>, onEnded: @escaping (Double) -> Void) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("\(title): \(Int(value.wrappedValue))s")
-                .font(.subheadline)
+                .font(.secondaryLabel)
             Spacer()
                 .frame(height: 3)
             CustomSlider(value: value, range: range, onEnded: onEnded)
@@ -209,10 +217,6 @@ struct BZoneView: View {
 }
 
 private extension BZoneView {
-    
-    func backAction() {
-        dismiss.callAsFunction()
-    }
     
     func checkConnect() async -> Bool {
         for _ in 0..<30 {

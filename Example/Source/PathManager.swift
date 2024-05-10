@@ -11,10 +11,12 @@ import nRFMeshProvision
 
 class CPathManager: Observable, ObservableObject {
     @Published var path: [NavPath] = []
+    @Published var selectedTab: Int = 0
 }
 
 class BPathManager: Observable, ObservableObject {
     @Published var path: [NavPath] = []
+    @Published var selectedTab: Int = 0
 }
 
 enum NavPath: Hashable {
