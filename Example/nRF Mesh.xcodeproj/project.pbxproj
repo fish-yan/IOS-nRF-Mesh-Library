@@ -58,6 +58,7 @@
 		2CA67A062BECDDC600BA1596 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A052BECDDC600BA1596 /* ViewExtension.swift */; };
 		2CA67A082BECE54600BA1596 /* LevelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A072BECE54600BA1596 /* LevelPickerView.swift */; };
 		2CA67A152BEE6BFA00BA1596 /* BSceneStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A142BEE6BF900BA1596 /* BSceneStoreManager.swift */; };
+		2CA67A172BEF065D00BA1596 /* BSceneStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A162BEF065D00BA1596 /* BSceneStoreView.swift */; };
 		2CA6A1E92B1A13CC0073E7BF /* GroupControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */; };
 		2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */; };
 		2CB620202BB7B30C002804D3 /* Color+Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */; };
@@ -343,6 +344,7 @@
 		2CA67A052BECDDC600BA1596 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		2CA67A072BECE54600BA1596 /* LevelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelPickerView.swift; sourceTree = "<group>"; };
 		2CA67A142BEE6BF900BA1596 /* BSceneStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSceneStoreManager.swift; sourceTree = "<group>"; };
+		2CA67A162BEF065D00BA1596 /* BSceneStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSceneStoreView.swift; sourceTree = "<group>"; };
 		2CA6A1E82B1A13CC0073E7BF /* GroupControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupControlView.swift; sourceTree = "<group>"; };
 		2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMeshNetworkModel.swift; sourceTree = "<group>"; };
 		2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Mesh.swift"; sourceTree = "<group>"; };
@@ -644,14 +646,15 @@
 		2CA679DA2BE906E900BA1596 /* B */ = {
 			isa = PBXGroup;
 			children = (
+				2CA67A142BEE6BF900BA1596 /* BSceneStoreManager.swift */,
 				2CA679DD2BE90B2A00BA1596 /* BTabView.swift */,
 				2CA679DB2BE90A9D00BA1596 /* BScenesView.swift */,
 				2CA679DF2BE911CD00BA1596 /* BSetView.swift */,
 				2CA679E52BE91B7200BA1596 /* BZoneListView.swift */,
 				2CA679E32BE91B5A00BA1596 /* BLightListView.swift */,
-				2CA679ED2BEA599600BA1596 /* BSceneEditView.swift */,
 				2CA679FB2BEBC20900BA1596 /* BZoneView.swift */,
-				2CA67A142BEE6BF900BA1596 /* BSceneStoreManager.swift */,
+				2CA679ED2BEA599600BA1596 /* BSceneEditView.swift */,
+				2CA67A162BEF065D00BA1596 /* BSceneStoreView.swift */,
 			);
 			path = B;
 			sourceTree = "<group>";
@@ -1723,6 +1726,7 @@
 				529B7643225222E8008F1CE7 /* Address+String.swift in Sources */,
 				52248CDC251E21F000B10250 /* ExportViewController.swift in Sources */,
 				5288C2062370571100321ED3 /* ProxySelectorViewController.swift in Sources */,
+				2CA67A172BEF065D00BA1596 /* BSceneStoreView.swift in Sources */,
 				2C72D6102B0EEB30004625CA /* ControlView.swift in Sources */,
 				2C2277042AD794920062CACD /* GroupsHostViewController.swift in Sources */,
 				2CB620522BBAAB33002804D3 /* UINavigationController+SwipBack.swift in Sources */,

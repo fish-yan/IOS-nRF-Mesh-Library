@@ -24,8 +24,13 @@ struct BSceneEditView: View {
     @State private var isPresented: Bool = false
     @State private var isDeleteSceneAlert: Bool = false
     
-    init(scene: nRFMeshProvision.Scene? = nil) {
+    var zone: GLZone?
+    var node: Node?
+    
+    init(scene: nRFMeshProvision.Scene? = nil, node: Node? = nil, zone: GLZone? = nil) {
         self.scene = scene
+        self.zone = zone
+        self.node = node
         title = scene == nil ? "New Scene" : "Modifying Scene"
     }
     
@@ -43,17 +48,7 @@ struct BSceneEditView: View {
                 .disabled(true)
             Spacer()
                 .frame(height: 50)
-            Button(action: {
-                let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-                if let scene {
-                    scene.name = nameText
-                    scene.detail = describeText
-                } else {
-                    try? meshNetwork.add(scene: sceneNumber, name: nameText, detail: describeText)
-                }
-                MeshNetworkManager.instance.saveAll()
-                isPresented = true
-            }, label: {
+            Button(action: saveAction, label: {
                 Text("Save")
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
@@ -123,10 +118,42 @@ private extension BSceneEditView {
         if let scene {
             nameText = scene.name
             describeText = scene.detail
+            sceneNumber = scene.number
             numberText = "0x" + String(scene.number, radix: 16)
         } else {
             sceneNumber = MeshNetworkManager.instance.meshNetwork?.nextAvailableScene() ?? 0
             numberText = "0x" + String(sceneNumber, radix: 16)
+        }
+    }
+    
+    func saveAction() {
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        if let scene {
+            scene.name = nameText
+            scene.detail = describeText
+        } else {
+            try? meshNetwork.add(scene: sceneNumber, name: nameText, detail: describeText)
+        }
+        MeshNetworkManager.instance.saveAll()
+        storeScene()
+    }
+    
+    func storeScene() {
+        let message = SceneStore(sceneNumber)
+        if let node {
+            guard let sceneSetupModel = node.sceneSetupModel else {
+                return
+            }
+            _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
+            pathManager.path.removeLast()
+        } else if let zone {
+            let address = UInt16(zone.zone) * 16 + 0xD000
+            if let group = MeshNetworkManager.instance.meshNetwork!.group(withAddress: MeshAddress(address)) {
+                _ = try? MeshNetworkManager.instance.send(message, to: group)
+            }
+            pathManager.path.removeLast()
+        } else {
+            isPresented = true
         }
     }
 }

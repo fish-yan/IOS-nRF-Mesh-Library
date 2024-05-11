@@ -23,4 +23,6 @@ enum NavPath: Hashable {
     case cLightView(node: Node)
     case bZoneView(zone: GLZone)
     case bSceneEditView(scene: nRFMeshProvision.Scene?)
+    case bSceneStoreNodeView
+    case bSceneStoreZoneView
 }

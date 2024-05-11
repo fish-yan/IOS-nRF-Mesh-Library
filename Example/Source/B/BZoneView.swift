@@ -26,51 +26,7 @@ struct BZoneView: View {
     let zone: GLZone
     var body: some View {
         VStack {
-            VStack(alignment: .leading, spacing: 20) {
-                HStack {
-                    Text("Dynamic mode")
-                        .font(.label)
-                    Spacer()
-                    Button(action: {
-                        withAnimation {
-                            isDynamicMode.toggle()
-                        }
-                    }, label: {
-                        Image(isDynamicMode ? .icSceneOnDark : .icSceneOff)
-                    })
-                }
-                if isDynamicMode {
-                    Divider()
-                    HStack {
-                        Text("Level")
-                            .font(.secondaryLabel)
-                        Spacer()
-                        Button {
-                            isPresented = true
-                        } label: {
-                            let levelStr = levels.map({"\($0)%"}).joined(separator: " ")
-                            HStack {
-                                Text(levelStr)
-                                    .foregroundStyle(Color.secondary)
-                                Image(systemName: "chevron.right")
-                            }
-                        }
-                        .font(.secondaryLabel)
-                    }
-                    Divider()
-                    VStack(spacing: 10) {
-                        sliderView(title: "Run time", value: $runTime, in: 0...900) {_ in
-                            runtimeSet()
-                        }
-                        sliderView(title: "Fade time", value: $fadeTime, in: 0...60) {_ in
-                            fadetimeSet()
-                        }
-                    }
-                }
-            }
-            .padding(20)
-            .background(RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white).ignoresSafeArea())
+            dynamicModelView
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment:.leading, spacing: 0) {
                     Text("Mode Parameters")
@@ -124,6 +80,7 @@ struct BZoneView: View {
             }, onConfirmed: { value in
                 isPresented = false
                 levels = value
+                glLevelsSet()
             })
             .background(RoundedRectangle(cornerRadius: 20)
                 .fill(Color.white).ignoresSafeArea())
@@ -133,13 +90,69 @@ struct BZoneView: View {
             TooBarBackItem(title: "Zones")
         }
         .toolbar {
-            Button(action: {}, label: {
+            NavigationLink(value: NavPath.bSceneStoreZoneView) {
                 Text("Save")
                     .underline()
                     .font(.label)
-            })
+            }
         }
         .navigationBarBackButtonHidden(true)
+        .navigationDestination(for: NavPath.self) { target in
+            switch target {
+            case .bSceneStoreZoneView:
+                BSceneStoreView(zone: zone)
+            default: Text("")
+            }
+        }
+    }
+    
+    var dynamicModelView: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                Text("Dynamic mode")
+                    .font(.label)
+                Spacer()
+                Button(action: {
+                    withAnimation {
+                        isDynamicMode.toggle()
+                        pirOnOff(onOff: isDynamicMode)
+                    }
+                }, label: {
+                    Image(isDynamicMode ? .icSceneOnDark : .icSceneOff)
+                })
+            }
+            if isDynamicMode {
+                Divider()
+                HStack {
+                    Text("Level")
+                        .font(.secondaryLabel)
+                    Spacer()
+                    Button {
+                        isPresented = true
+                    } label: {
+                        let levelStr = levels.map({"\($0)%"}).joined(separator: " ")
+                        HStack {
+                            Text(levelStr)
+                                .foregroundStyle(Color.secondary)
+                            Image(systemName: "chevron.right")
+                        }
+                    }
+                    .font(.secondaryLabel)
+                }
+                Divider()
+                VStack(spacing: 10) {
+                    sliderView(title: "Run time", value: $runTime, in: 0...900) {_ in
+                        runtimeSet()
+                    }
+                    sliderView(title: "Fade time", value: $fadeTime, in: 0...60) {_ in
+                        fadetimeSet()
+                    }
+                }
+            }
+        }
+        .padding(20)
+        .background(RoundedRectangle(cornerRadius: 20)
+            .fill(Color.white).ignoresSafeArea())
     }
     
     func item(image: ImageResource, title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
@@ -194,58 +207,13 @@ struct BZoneView: View {
         let address = UInt16(zone.zone) * 16 + 0xD002
         return try! nRFMeshProvision.Group(name: "", address: address)
     }
-    
-    var D003: nRFMeshProvision.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD003
-        return try! nRFMeshProvision.Group(name: "", address: address)
-    }
-    
-    var D004: nRFMeshProvision.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD004
-        return try! nRFMeshProvision.Group(name: "", address: address)
-    }
-    
-    var D005: nRFMeshProvision.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD005
-        return try! nRFMeshProvision.Group(name: "", address: address)
-    }
-    
-    var D006: nRFMeshProvision.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD006
-        return try! nRFMeshProvision.Group(name: "", address: address)
-    }
 }
 
 private extension BZoneView {
     
-    func checkConnect() async -> Bool {
-        for _ in 0..<30 {
-            let connect = MeshNetworkManager.bearer.isConnected
-            if connect {
-                return true
-            }
-            try? await Task.sleep(nanoseconds: 1000000000)
-        }
-        return false
-    }
-  
-    
-    func onOffSet(onOff: Bool, group: nRFMeshProvision.Group) {
-        let message = GenericOnOffSet(onOff)
-        _ = try? MeshNetworkManager.instance.send(message, to: group)
-        MeshNetworkManager.instance.saveModel()
-    }
-    
     func pirOnOff(onOff: Bool) {
         let status = GLSimpleStatus(bool: onOff)
         let message = GLSensorMessage(status: status)
-        _ = try? MeshNetworkManager.instance.send(message, to: D000)
-        MeshNetworkManager.instance.saveModel()
-    }
-    
-    func aiOnOff(onOff: Bool) {
-        let status = GLSimpleStatus(bool: onOff)
-        let message = GLAiMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
         MeshNetworkManager.instance.saveModel()
     }
@@ -255,6 +223,12 @@ private extension BZoneView {
         let message = GenericLevelSet(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
         MeshNetworkManager.instance.saveModel()
+    }
+    
+    func glLevelsSet() {
+        let levels = self.levels.map({UInt8($0)})
+        let message = GLLevelMessage(levels: levels)
+        _ = try? MeshNetworkManager.instance.send(message, to: D000)
     }
     
     func runtimeSet() {
