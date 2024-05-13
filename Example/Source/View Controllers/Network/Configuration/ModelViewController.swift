@@ -154,6 +154,7 @@ class ModelViewController: ProgressViewController {
         super.viewDidAppear(animated)
         
         MeshNetworkManager.instance.delegate = self
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -633,6 +634,8 @@ extension ModelViewController: ModelViewCellDelegate {
             case let request as AcknowledgedMeshMessage:
                 return try MeshNetworkManager.instance.send(request, to: model)
             case let command as UnacknowledgedMeshMessage:
+                return try MeshNetworkManager.instance.send(command, to: model)
+            case let command as RuntimeVendorMessage:
                 return try MeshNetworkManager.instance.send(command, to: model)
             default:
                 return nil

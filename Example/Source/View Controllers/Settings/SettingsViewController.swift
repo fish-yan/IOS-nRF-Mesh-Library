@@ -117,6 +117,10 @@ class SettingsViewController: UITableViewController {
                 UIApplication.shared.open(url)
             }
         }
+        if indexPath.isBackToNewUI {
+            let tabVC = self.tabBarController as? RootTabBarController
+            tabVC?.backCallback?()
+        }
     }
     
     override func tableView(_ tableView: UITableView,
@@ -169,9 +173,9 @@ extension SettingsViewController: WizardDelegate {
             _ = try? network.add(applicationKey: key, name: "Application Key \(i + 1)")
         }
         // Add groups and scenes.
-        for i in 0..<groups {
+        for _ in 0..<groups {
             if let address = network.nextAvailableGroupAddress() {
-                _ = try? network.add(group: Group(name: "Group \(i + 1)", address: address))
+                _ = try? network.add(group: Group(name: String(address, radix: 16, uppercase: true), address: address))
             }
         }
         for i in 0..<virtualGroups {
@@ -218,7 +222,7 @@ private extension SettingsViewController {
                                              + "Make sure you exported it first.",
                                       preferredStyle: .actionSheet)
         let resetAction = UIAlertAction(title: "Reset", style: .destructive) { [weak self] _ in
-            _ = MeshNetworkManager.instance.clear()
+            _ = MeshNetworkManager.instance.clearAll()
             self?.openNewNetworkWizard()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -279,12 +283,24 @@ private extension SettingsViewController {
             .forEach { $0.popToRootViewController(animated: false) }
     }
     
+    func connect() {
+        let manager = MeshNetworkManager.instance
+        if manager.proxyFilter.type == .acceptList,
+           let provisioner = manager.meshNetwork?.localProvisioner {
+            manager.proxyFilter.reset()
+            manager.proxyFilter.setup(for: provisioner)
+        }
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        delegate.meshNetworkDidChange()
+    }
+    
     /// Saves mesh network configuration and reloads network data on success.
     func saveAndReload() {
         if MeshNetworkManager.instance.save() {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 (UIApplication.shared.delegate as! AppDelegate).meshNetworkDidChange()
+                self.connect()
                 self.reload()
                 self.resetViews()
                 self.presentAlert(title: "Success", message: "Mesh Network configuration imported.")
@@ -304,9 +320,39 @@ extension SettingsViewController: UIDocumentPickerDelegate {
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
+            guard url.startAccessingSecurityScopedResource() else { // Notice this line right here
+                 return
+            }
             do {
                 let data = try Data(contentsOf: url)
-                let meshNetwork = try manager.import(from: data)
+                let somejson = try JSONSerialization.jsonObject(with: data)
+                guard let json = somejson as? [String: Any] else {
+                    return
+                }
+                var isImport = false
+                var meshNetwork: MeshNetwork?
+                if let meshJson = json["meshData"] {
+                    isImport = true
+                    let meshData = try JSONSerialization.data(withJSONObject: meshJson)
+                    meshNetwork = try manager.import(from: meshData)
+                }
+                if let glJson = json["glData"] {
+                    isImport = true
+                    let glData = try JSONSerialization.data(withJSONObject: glJson)
+                    _ = try manager.importGLModel(from: glData)
+                }
+                if let sequence = json["sequence"] as? UInt32 {
+                    if let element = manager.meshNetwork?.localProvisioner?.node?.primaryElement {
+                        manager.setSequenceNumber(sequence + 10, forLocalElement: element)
+                    }
+                }
+                if !isImport {
+                    isImport = true
+                    meshNetwork = try manager.import(from: data)
+                }
+                manager.saveAll()
+                manager.loadAll()
+                guard let meshNetwork else { return }
                 // Try restoring the Provisioner used last time on this device.
                 if !meshNetwork.restoreLocalProvisioner() {
                     // If it's a new network and has only one Provisioner, just save it.
@@ -393,6 +439,7 @@ private extension IndexPath {
     static let dateSection    = 2
     static let actionsSection = 3
     static let aboutSection   = 4
+    static let backToNewUI    = 5
     
     /// Returns whether the IndexPath points to the mesh network name row.
     var isNetworkName: Bool {
@@ -417,6 +464,10 @@ private extension IndexPath {
     /// Returns whether the IndexPath points to the Issues on GitHub.
     var isLinkToIssues: Bool {
         return section == IndexPath.aboutSection && row == 3
+    }
+    
+    var isBackToNewUI: Bool {
+        return section == IndexPath.backToNewUI && row == 0
     }
     
     static let name = IndexPath(row: 0, section: IndexPath.nameSection)

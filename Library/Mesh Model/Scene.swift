@@ -49,18 +49,21 @@ public class Scene: Codable {
     public let number: SceneNumber
     /// UTF-8 human-readable name of the Scene.
     public var name: String
+    public var detail: String
     /// Addresses of Elements whose Scene Register state contains this Scene.
     public internal(set) var addresses: [Address]
     
-    internal init(_ number: SceneNumber, name: String) {
+    internal init(_ number: SceneNumber, name: String, detail: String = "Personalised Lighting Modes") {
         self.number = number
         self.name = name
+        self.detail = detail
         self.addresses = []
     }
     
     internal init(copy scene: Scene, andTruncateTo nodes: [Node]) {
         self.number = scene.number
         self.name = scene.name
+        self.detail = scene.detail
         self.addresses = scene.addresses
             .filter { address in nodes.contains { node in node.contains(elementWithAddress: address) } }
     }
@@ -71,6 +74,7 @@ public class Scene: Codable {
         case scene // 3.0-beta1 was using 'scene' instead of 'number'.
         case number
         case name
+        case detail
         case addresses
     }
     
@@ -87,6 +91,7 @@ public class Scene: Codable {
         }
         self.number = number
         self.name = try container.decode(String.self, forKey: .name)
+        self.detail = (try? container.decode(String.self, forKey: .detail)) ?? "Personalised Lighting Modes"
         self.addresses = []
         let addressesStrings = try container.decode([String].self, forKey: .addresses)
         try addressesStrings.forEach {
@@ -107,11 +112,12 @@ public class Scene: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(number.hex, forKey: .number)
         try container.encode(name, forKey: .name)
+        try container.encode(detail, forKey: .detail)
         try container.encode(addresses.map { $0.hex }, forKey: .addresses)
     }
 }
 
-internal extension Scene {
+public extension Scene {
     
     /// Adds the Unicast Address to the Scene object.
     ///

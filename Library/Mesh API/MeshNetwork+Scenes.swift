@@ -42,11 +42,11 @@ public extension MeshNetwork {
     ///   - name: The human-readable name of the Scene.
     /// - throws: This method throws an error if a Scene with the same number
     ///           already exists in the mesh network.
-    func add(scene: SceneNumber, name: String) throws {
+    func add(scene: SceneNumber, name: String, detail: String = "Personalised Lighting Modes") throws {
         guard scenes[scene] == nil else {
             throw MeshNetworkError.sceneAlreadyExists
         }
-        add(scene: Scene(scene, name: name))
+        add(scene: Scene(scene, name: name, detail: detail))
     }
     
     /// Removes the given Scene from the network.
@@ -61,6 +61,13 @@ public extension MeshNetwork {
             if scenes[index].isUsed {
                 throw MeshNetworkError.sceneInUse
             }
+            scenes.remove(at: index).meshNetwork = nil
+            timestamp = Date()
+        }
+    }
+    
+    func forceRemove(scene: SceneNumber) {
+        if let index = scenes.firstIndex(where: { $0.number == scene }) {
             scenes.remove(at: index).meshNetwork = nil
             timestamp = Date()
         }

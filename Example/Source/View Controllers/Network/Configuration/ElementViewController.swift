@@ -38,12 +38,16 @@ class ElementViewController: UITableViewController {
     
     var element: Element!
     
+    var filterModels = [Model]()
+    
     // MARK: - View Controller
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = element.name ?? "Element \(element.index + 1)"
+        
+        filterModels = element.models
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -55,7 +59,7 @@ class ElementViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showModel" {
             let indexPath = sender as! IndexPath
-            let model = element.models[indexPath.row]
+            let model = filterModels[indexPath.row]
             let destination = segue.destination as! ModelViewController
             destination.model = model
         }
@@ -64,7 +68,7 @@ class ElementViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if element.models.isEmpty {
+        if filterModels.isEmpty {
             return IndexPath.numberOfSection - 1
         }
         return IndexPath.numberOfSection
@@ -77,7 +81,7 @@ class ElementViewController: UITableViewController {
         case IndexPath.detailsSection:
             return IndexPath.detailsTitles.count
         case IndexPath.modelsSection:
-            return element.models.count
+            return filterModels.count
         default:
             return 0
         }
@@ -115,7 +119,7 @@ class ElementViewController: UITableViewController {
             }
         }
         if indexPath.isModelsSection {
-            let model = element.models[indexPath.row]
+            let model = filterModels[indexPath.row]
             cell.textLabel?.text = model.modelName
             cell.detailTextLabel?.text = model.companyName
         }
@@ -194,7 +198,7 @@ private extension IndexPath {
     ]
     
     static let detailsTitles = [
-        "Unicast Address", "Location"
+        "Unicast Address" // , "Location"
     ]
     
     var cellIdentifier: String {

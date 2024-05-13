@@ -51,8 +51,12 @@ class NodeStoreSceneViewController: ProgressViewController {
         guard let selectedIndexPath = selectedIndexPath else {
             return
         }
-        let selectedScene = selectedIndexPath.section == 0 ?
-            newScenes[selectedIndexPath.row] : currentScenes[selectedIndexPath.row]
+        let selectedScene: Scene
+        if selectedIndexPath.section == 0 && !newScenes.isEmpty {
+            selectedScene = newScenes[selectedIndexPath.row]
+        } else {
+            selectedScene = currentScenes[selectedIndexPath.row]
+        }
         storeScene(selectedScene.number)
     }
     

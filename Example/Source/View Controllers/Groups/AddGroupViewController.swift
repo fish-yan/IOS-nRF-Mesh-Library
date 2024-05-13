@@ -52,7 +52,18 @@ class AddGroupViewController: UITableViewController {
     
     // MARK: - Properties
     
-    var group: Group?
+    var group: Group? {
+        didSet {
+            if let group {
+                title = "Edit Group"
+                name = group.name
+                address = group.address
+                if !canModifyAddress {
+                    addressCell.accessoryType = .none
+                }
+            }
+        }
+    }
     var delegate: GroupDelegate?
     var canModifyAddress: Bool = false
     
@@ -127,6 +138,10 @@ class AddGroupViewController: UITableViewController {
             presentGroupAddressDialog()
         }
     }
+    
+    func doneSave() {
+        save()
+    }
 
 }
 
@@ -166,7 +181,12 @@ private extension AddGroupViewController {
                     delegate?.groupChanged(group)
                 }
                 if MeshNetworkManager.instance.save() {
-                    dismiss(animated: true)
+                    if presentingViewController != nil {
+                        dismiss(animated: true)
+                    } else {
+                        navigationController?.popViewController(animated: true)
+                    }
+                    
                 } else {
                     presentAlert(title: "Error", message: "Mesh configuration could not be saved.")
                 }

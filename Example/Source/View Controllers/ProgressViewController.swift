@@ -31,6 +31,11 @@
 import UIKit
 import NordicMesh
 
+struct MessageAction {
+    let message: String
+    let completion: Any
+}
+
 class ProgressViewController: UITableViewController {
     
     // MARK: - Properties

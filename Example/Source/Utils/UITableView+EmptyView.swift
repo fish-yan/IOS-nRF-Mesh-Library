@@ -202,20 +202,20 @@ protocol Editable {
 extension Editable where Self: UIViewController {
     
     func showEmptyView() {
-        if navigationItem.rightBarButtonItems!.contains(editButtonItem) {
-            navigationItem.rightBarButtonItems!.removeAll {
-                $0 == self.editButtonItem
-            }
-        }
+//        if navigationItem.rightBarButtonItems!.contains(editButtonItem) {
+//            navigationItem.rightBarButtonItems!.removeAll {
+//                $0 == self.editButtonItem
+//            }
+//        }
         tableView.showEmptyView()
         setEditing(false, animated: false)
         tableView.setEditing(false, animated: false)
     }
     
     func hideEmptyView(_ animated: Bool = true) {
-        if !navigationItem.rightBarButtonItems!.contains(editButtonItem) {
-            navigationItem.rightBarButtonItems!.append(editButtonItem)
-        }
+//        if !navigationItem.rightBarButtonItems!.contains(editButtonItem) {
+//            navigationItem.rightBarButtonItems!.append(editButtonItem)
+//        }
         tableView.hideEmptyView(animated)
     }
     

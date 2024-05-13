@@ -59,6 +59,7 @@ enum MeshTask {
     case bind(_ applicationKey: ApplicationKey, to: Model)
     case subscribe(_ model: Model, to: Group)
     case setPublication(_ publish: Publish, to: Model)
+    case nodeReset
     
     var title: String {
         switch self {
@@ -110,6 +111,8 @@ enum MeshTask {
             return "Subscribe \(model) to \(group.name)"
         case .setPublication(_, let model):
             return "Set Publication to \(model)"
+        case .nodeReset:
+            return "Reset Node"
         }
     }
     
@@ -147,6 +150,8 @@ enum MeshTask {
              .setHeartbeatSubscription,
              .readHeartbeatPublication,
              .setHeartbeatPublication:
+            return #imageLiteral(resourceName: "ic_heartbeat_24pt")
+        default:
             return #imageLiteral(resourceName: "ic_heartbeat_24pt")
         }
     }
@@ -220,6 +225,8 @@ enum MeshTask {
             } else {
                 return ConfigModelPublicationVirtualAddressSet(publish, to: model)!
             }
+        case .nodeReset:
+            return ConfigNodeReset()
         }
     }
 }

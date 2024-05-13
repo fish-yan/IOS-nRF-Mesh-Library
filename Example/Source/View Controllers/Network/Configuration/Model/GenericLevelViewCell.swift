@@ -227,12 +227,6 @@ private extension GenericLevelViewCell {
     ///
     /// - parameter level: The target level of Generic Level state.
     func sendGenericLevelSetMessage(level: Int16) {
-        guard !model.boundApplicationKeys.isEmpty else {
-            parentViewController?.presentAlert(
-                title: "Bound key required",
-                message: "Bind at least one Application Key before sending the message.")
-            return
-        }
         
         // Clear the response fields.
         currentStatusLabel.text = nil
@@ -264,12 +258,6 @@ private extension GenericLevelViewCell {
     ///
     /// - parameter delta: The relative level of Generic Level state.
     func sendGenericDeltaSetMessage(delta: Int32) {
-        guard !model.boundApplicationKeys.isEmpty else {
-            parentViewController?.presentAlert(
-                title: "Bound key required",
-                message: "Bind at least one Application Key before sending the message.")
-            return
-        }
         
         // Clear the response fields.
         currentStatusLabel.text = nil
@@ -302,12 +290,6 @@ private extension GenericLevelViewCell {
     /// - parameter level: The Delta Level step to calculate Move speed for
     ///                    the Generic Level state.
     func sendGenericMoveSetMessage(level: Int16) {
-        guard !model.boundApplicationKeys.isEmpty else {
-            parentViewController?.presentAlert(
-                title: "Bound key required",
-                message: "Bind at least one Application Key before sending the message.")
-            return
-        }
         
         // Clear the response fields.
         currentStatusLabel.text = nil

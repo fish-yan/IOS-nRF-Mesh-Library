@@ -28,7 +28,7 @@
 * POSSIBILITY OF SUCH DAMAGE.
 */
 
-internal extension Array where Element: Hashable {
+public extension Array where Element: Hashable {
     
     func uniqued() -> [Element] {
         var seen: Set<Element> = []

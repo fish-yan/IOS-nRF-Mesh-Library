@@ -31,6 +31,7 @@
 import UIKit
 import os.log
 import NordicMesh
+import SwiftUI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -109,16 +110,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         meshNetworkManager.logger = self
         
         // Try loading the saved configuration.
-        do {
-            if try meshNetworkManager.load() {
-                meshNetworkDidChange()
-            }
-            // else {
-            //    A New Network Wizard will be shown.
-            // }
-        } catch {
-            print(error)
+        if meshNetworkManager.loadAll() {
+            meshNetworkDidChange()
+        } else {
+            createNewMeshNetwork()
         }
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.overrideUserInterfaceStyle = .light
+        let rootVC = UIHostingController(rootView: RootView())
+        window?.rootViewController = rootVC
+        window?.makeKeyAndVisible()
         
         return true
     }
@@ -129,10 +130,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// When done, calls ``AppDelegate/meshNetworkDidChange()``.
     ///
     /// - returns: The newly created mesh network.
+    @discardableResult
     func createNewMeshNetwork() -> MeshNetwork {
         let provisioner = Provisioner(name: UIDevice.current.name,
                                       allocatedUnicastRange: [AddressRange(0x0001...0x199A)],
-                                      allocatedGroupRange:   [AddressRange(0xC000...0xCC9A)],
+                                      allocatedGroupRange:   [AddressRange(0xD000...0xDC9A)],
                                       allocatedSceneRange:   [SceneRange(0x0001...0x3333)])
         let network = meshNetworkManager.createNewMeshNetwork(withName: "nRF Mesh Network", by: provisioner)
         _ = meshNetworkManager.save()
@@ -205,31 +207,118 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         connection!.logger = self
         meshNetworkManager.transmitter = connection
         connection!.open()
+        
+        createDefaultApplicationKey()
+        createDefaultGroup()
+        createDefaultScene()
+        addDefaultScene()
+        addDefaultGroup()
+        addDefaultZone()
     }
-}
-
-extension MeshNetworkManager {
     
-    static var instance: MeshNetworkManager {
-        if Thread.isMainThread {
-            return (UIApplication.shared.delegate as! AppDelegate).meshNetworkManager
-        } else {
-            return DispatchQueue.main.sync {
-                return (UIApplication.shared.delegate as! AppDelegate).meshNetworkManager
+    func createDefaultApplicationKey() {
+        let network = meshNetworkManager.meshNetwork!
+        let keys = network.applicationKeys
+        guard keys.isEmpty else { return }
+        let keyName = "App Key 1"
+        let keyIndex: KeyIndex = 0
+        let newKey = Data.random128BitKey()
+        let key = try! network.add(applicationKey: newKey, withIndex: keyIndex, name: keyName)
+        if let netowrkKey = network.networkKeys.first {
+            try? key.bind(to: netowrkKey)
+        }
+        let _ = meshNetworkManager.save()
+    }
+    
+    func createDefaultGroup() {
+        let network = meshNetworkManager.meshNetwork!
+        let defaultAddress = MeshNetworkManager.defaultGroupAddresses
+        let unAddaddress = defaultAddress.filter { add in !network.groups.contains(where: { $0.address.address == add })}
+        if unAddaddress.isEmpty { return }
+        unAddaddress.forEach {
+            let group = try! Group(name: String($0, radix: 16, uppercase: true), address: $0)
+            try? network.add(group: group)
+        }
+        let _ = meshNetworkManager.save()
+    }
+    
+    func createDefaultScene() {
+        let network = meshNetworkManager.meshNetwork!
+        let defaultScenes: [SceneNumber] = MeshNetworkManager.defaultSceneAddresses
+        let unAddScene = defaultScenes.filter {number in !network.scenes.contains(where: { $0.number == number }) }
+        unAddScene.forEach { number in
+            try? network.add(scene: number, name: "Scene \(number)")
+        }
+        let _ = meshNetworkManager.save()
+    }
+    
+    func addDefaultScene() {
+        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
+            return
+        }
+        let nodes = meshNetwork.nodes.filter { !$0.isProvisioner }
+        let defaultScenes: [SceneNumber] = MeshNetworkManager.defaultSceneAddresses
+        nodes.forEach { node in
+            let address = node.primaryUnicastAddress
+            for scene in meshNetwork.scenes where defaultScenes.contains(scene.number) {
+                scene.add(address: address)
             }
+        }
+        _ = MeshNetworkManager.instance.save()
+    }
+    
+    func addDefaultGroup() {
+        guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
+            return
+        }
+        let defaultAddress = MeshNetworkManager.defaultGroupAddresses
+        let nodes = meshNetwork.nodes.filter { !$0.isProvisioner }
+        nodes.forEach { node in
+            node.usefulModels.forEach { model in
+                for group in meshNetwork.groups where defaultAddress.contains(group.address.address) {
+                    model.subscribe(to: group)
+                }
+            }
+        }
+        _ = MeshNetworkManager.instance.save()
+    }
+    
+    func addDefaultZone() {
+        let zones = GLMeshNetworkModel.instance.zone
+        if zones.isEmpty {
+            let all = createZone(name: "All", zone: 0x0)
+            GLMeshNetworkModel.instance.zone.append(all)
+            MeshNetworkManager.instance.saveModel()
         }
     }
     
-    static var bearer: NetworkConnection! {
-        if Thread.isMainThread {
-            return (UIApplication.shared.delegate as! AppDelegate).connection
-        } else {
-            return DispatchQueue.main.sync {
-                return (UIApplication.shared.delegate as! AppDelegate).connection
+    func createZone(name: String, zone: UInt8) -> GLZone {
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        let zone = GLZone(name: name, zone: zone)
+        let nodes = meshNetwork.nodes
+        let scenes = nodes.flatMap({$0.scenes}).uniqued()
+        scenes.forEach { scene in
+            switch scene.number {
+            case 1:
+                scene.name = "Standard Mode"
+                scene.detail = "Suitable for daily use scenarios"
+            case 2:
+                scene.name = "Eco Mode"
+                scene.detail = "Reduced energy consumption"
+            case 3:
+                scene.name = "Comfort Mode"
+                scene.detail = "Comfortable lighting experience"
+            case 4:
+                scene.name = "Display Mode"
+                scene.detail = "Demonstrate functional use"
+            default:
+                scene.name = "Custom Mode \(scene.number)"
+                scene.detail = "Personalised Lighting Modes"
             }
         }
+        zone.nodeAddresses = nodes.map({$0.primaryUnicastAddress})
+        return zone
     }
-    
 }
 
 // MARK: - Logger
