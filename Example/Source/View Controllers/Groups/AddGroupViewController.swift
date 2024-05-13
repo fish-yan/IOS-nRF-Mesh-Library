@@ -52,18 +52,7 @@ class AddGroupViewController: UITableViewController {
     
     // MARK: - Properties
     
-    var group: Group? {
-        didSet {
-            if let group {
-                title = "Edit Group"
-                name = group.name
-                address = group.address
-                if !canModifyAddress {
-                    addressCell.accessoryType = .none
-                }
-            }
-        }
-    }
+    var group: Group?
     var delegate: GroupDelegate?
     var canModifyAddress: Bool = false
     
