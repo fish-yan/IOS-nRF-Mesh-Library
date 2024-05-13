@@ -32,6 +32,7 @@ import UIKit
 import nRFMeshProvision
 
 class RootTabBarController: UITabBarController {
+    var backCallback: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()

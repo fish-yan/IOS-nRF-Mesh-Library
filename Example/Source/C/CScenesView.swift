@@ -120,22 +120,18 @@ extension CScenesView {
     
     func onAppera() {
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-        scenes = zone.sceneNumbers.compactMap({ number in
-            meshNetwork.scenes.first { scene in
-                return scene.number == number
-            }
-        })
+        scenes = zone.scenes()
         columns = scenes.count <= 2 ? [GridItem()] : [GridItem(.adaptive(minimum: 170, maximum: 200))]
     }
     
     func onOffSet(onOff: Bool, group: nRFMeshProvision.Group) {
-        let message = GenericOnOffSetUnacknowledged(onOff)
+        let message = GenericOnOffSet(onOff)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
         MeshNetworkManager.instance.saveModel()
     }
 
     func sceneRecallSet() {
-        let message = SceneRecallUnacknowledged(zone.store.selectedScene)
+        let message = SceneRecall(zone.store.selectedScene)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
         MeshNetworkManager.instance.saveModel()
     }

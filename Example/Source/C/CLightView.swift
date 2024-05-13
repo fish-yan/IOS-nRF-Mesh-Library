@@ -44,23 +44,16 @@ struct CLightView: View {
         }
         .toolbar {
             if isB {
-                NavigationLink(value: NavPath.bSceneStoreNodeView) {
+                NavigationLink(value: NavPath.bSceneStoreNodeView(node: node)) {
                     Text("Save")
                         .underline()
                         .font(.label)
+                        .foregroundStyle(.white)
                 }
             }
         }
         .navigationBarBackButtonHidden(true)
         .onAppear(perform: onAppear)
-        .navigationDestination(for: NavPath.self) { target in
-            switch target {
-            case .bSceneStoreNodeView:
-                Text("")
-                BSceneStoreView(node: node)
-            default: Text("")
-            }
-        }
     }
     
     var controlView: some View {

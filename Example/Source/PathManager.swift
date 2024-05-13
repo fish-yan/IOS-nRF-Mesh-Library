@@ -8,6 +8,23 @@
 
 import SwiftUI
 import nRFMeshProvision
+import Combine
+
+class AppManager: Observable, ObservableObject {
+    @Published var c = CPathManager()
+    @Published var b = CPathManager()
+    @Published var userRole: UserRole = .normal
+    
+    private var anyCancellable: AnyCancellable?
+    init() {
+        anyCancellable = self.c.objectWillChange.sink {
+            self.objectWillChange.send()
+        }
+        anyCancellable = self.b.objectWillChange.sink {
+            self.objectWillChange.send()
+        }
+    }
+}
 
 class CPathManager: Observable, ObservableObject {
     @Published var path: [NavPath] = []
@@ -23,6 +40,10 @@ enum NavPath: Hashable {
     case cLightView(node: Node)
     case bZoneView(zone: GLZone)
     case bSceneEditView(scene: nRFMeshProvision.Scene?)
-    case bSceneStoreNodeView
-    case bSceneStoreZoneView
+    case bSceneStoreNodeView(node: Node)
+    case bSceneStoreZoneView(zone: GLZone)
+}
+
+func hideKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 }

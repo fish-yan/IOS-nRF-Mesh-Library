@@ -13,10 +13,9 @@ private class CScenesPageStore: ObservableObject {
 }
 
 struct CScenesPageView: View {
+    @EnvironmentObject var appManager: AppManager
     @ObservedObject private var store = CScenesPageStore()
-
     @State private var zones: [GLZone] = []
-    @State private var isPresented = false
     
     var body: some View {
         VStack(spacing: 15) {
@@ -27,7 +26,7 @@ struct CScenesPageView: View {
                         .foregroundStyle(Color.secondaryLabel)
                     Spacer()
                     Button {
-                        isPresented = true
+                        appManager.userRole = .supervisor
                     } label: {
                         Image(.icSetting)
                     }
@@ -50,10 +49,6 @@ struct CScenesPageView: View {
             .animation(.easeInOut, value: store.selectedIndex)
         }
         .onAppear(perform: onAppera)
-        .fullScreenCover(isPresented: $isPresented, content: {
-            BTabView()
-                .ignoresSafeArea()
-        })
     }
 }
 
@@ -66,22 +61,4 @@ private extension CScenesPageView {
 #Preview {
     CScenesPageView()
         .background(Color(UIColor.systemGroupedBackground))
-}
-
-
-
-struct RootView: UIViewControllerRepresentable {
-    
-    func makeUIViewController(context: Context) -> RootTabBarController {
-        let root = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "RootTabBarController") as! RootTabBarController
-        return root
-    }
-    
-    func updateUIViewController(_ uiViewController: RootTabBarController, context: Context) {
-        
-    }
-    
-    typealias UIViewControllerType = RootTabBarController
-    
-    
 }

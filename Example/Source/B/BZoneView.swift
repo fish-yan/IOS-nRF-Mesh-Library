@@ -90,20 +90,13 @@ struct BZoneView: View {
             TooBarBackItem(title: "Zones")
         }
         .toolbar {
-            NavigationLink(value: NavPath.bSceneStoreZoneView) {
+            NavigationLink(value: NavPath.bSceneStoreZoneView(zone: zone)) {
                 Text("Save")
                     .underline()
                     .font(.label)
             }
         }
         .navigationBarBackButtonHidden(true)
-        .navigationDestination(for: NavPath.self) { target in
-            switch target {
-            case .bSceneStoreZoneView:
-                BSceneStoreView(zone: zone)
-            default: Text("")
-            }
-        }
     }
     
     var dynamicModelView: some View {
@@ -219,7 +212,7 @@ private extension BZoneView {
     }
     
     func levelSet(value: Double, group: nRFMeshProvision.Group) {
-        let level = Int16(min(32767, -32768 + 655.36 * value)) // -32768...32767
+        let level = Int16(min(32767, -32768 + 65536 * value)) // -32768...32767
         let message = GenericLevelSet(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
         MeshNetworkManager.instance.saveModel()

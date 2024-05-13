@@ -34,13 +34,6 @@ struct BZoneListView: View {
         .listRowSpacing(10)
         .contentMargins(.top, 10)
         .onAppear(perform: onAppera)
-        .navigationDestination(for: NavPath.self) { target in
-            switch target {
-            case .bZoneView(let zone):
-                BZoneView(zone: zone)
-            default: Text("")
-            }
-        }
     }
 }
 

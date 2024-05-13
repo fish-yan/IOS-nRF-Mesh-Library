@@ -11,6 +11,7 @@ import SwiftUI
 struct TooBarBackItem: ToolbarContent {
     @Environment(\.dismiss) var dismiss
     @State var title: String?
+    var backCallback: (()->Void)?
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
@@ -27,7 +28,7 @@ struct TooBarBackItem: ToolbarContent {
                     .clipShape(.rect(bottomTrailingRadius: 16, topTrailingRadius: 16))
             )
             .offset(x: -15)
-            .onTapGesture(perform: backAction)
+            .onTapGesture(perform: backCallback ?? backAction)
         }
     }
     

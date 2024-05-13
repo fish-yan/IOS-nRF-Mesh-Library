@@ -118,7 +118,8 @@ class SettingsViewController: UITableViewController {
             }
         }
         if indexPath.isBackToNewUI {
-            dismiss(animated: true)
+            let tabVC = self.tabBarController as? RootTabBarController
+            tabVC?.backCallback?()
         }
     }
     
@@ -282,12 +283,24 @@ private extension SettingsViewController {
             .forEach { $0.popToRootViewController(animated: false) }
     }
     
+    func connect() {
+        let manager = MeshNetworkManager.instance
+        if manager.proxyFilter.type == .acceptList,
+           let provisioner = manager.meshNetwork?.localProvisioner {
+            manager.proxyFilter.reset()
+            manager.proxyFilter.setup(for: provisioner)
+        }
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        delegate.meshNetworkDidChange()
+    }
+    
     /// Saves mesh network configuration and reloads network data on success.
     func saveAndReload() {
         if MeshNetworkManager.instance.save() {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 (UIApplication.shared.delegate as! AppDelegate).meshNetworkDidChange()
+                self.connect()
                 self.reload()
                 self.resetViews()
                 self.presentAlert(title: "Success", message: "Mesh Network configuration imported.")
@@ -312,7 +325,34 @@ extension SettingsViewController: UIDocumentPickerDelegate {
             }
             do {
                 let data = try Data(contentsOf: url)
-                let meshNetwork = try manager.import(from: data)
+                let somejson = try JSONSerialization.jsonObject(with: data)
+                guard let json = somejson as? [String: Any] else {
+                    return
+                }
+                var isImport = false
+                var meshNetwork: MeshNetwork?
+                if let meshJson = json["meshData"] {
+                    isImport = true
+                    let meshData = try JSONSerialization.data(withJSONObject: meshJson)
+                    meshNetwork = try manager.import(from: meshData)
+                }
+                if let glJson = json["glData"] {
+                    isImport = true
+                    let glData = try JSONSerialization.data(withJSONObject: glJson)
+                    _ = try manager.importGLModel(from: glData)
+                }
+                if let sequence = json["sequence"] as? UInt32 {
+                    if let element = manager.meshNetwork?.localProvisioner?.node?.primaryElement {
+                        manager.setSequenceNumber(sequence + 10, forLocalElement: element)
+                    }
+                }
+                if !isImport {
+                    isImport = true
+                    meshNetwork = try manager.import(from: data)
+                }
+                manager.saveAll()
+                manager.loadAll()
+                guard let meshNetwork else { return }
                 // Try restoring the Provisioner used last time on this device.
                 if !meshNetwork.restoreLocalProvisioner() {
                     // If it's a new network and has only one Provisioner, just save it.

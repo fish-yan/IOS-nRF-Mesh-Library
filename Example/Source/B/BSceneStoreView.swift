@@ -10,7 +10,7 @@ import SwiftUI
 import nRFMeshProvision
 
 struct BSceneStoreView: View {
-    @EnvironmentObject private var pathManager: BPathManager
+    @EnvironmentObject private var appManager: AppManager
     var node: Node?
     var zone: GLZone?
     
@@ -124,7 +124,11 @@ extension BSceneStoreView: MeshMessageDelegate {
     func meshNetworkManager(_ manager: nRFMeshProvision.MeshNetworkManager, didReceiveMessage message: nRFMeshProvision.MeshMessage, sentFrom source: nRFMeshProvision.Address, to destination: nRFMeshProvision.MeshAddress) {
         switch message {
         case _ as SceneRegisterStatus:
-            pathManager.path.removeLast()
+            if let node {
+            } else if let zone {
+                
+            }
+            appManager.b.path.removeLast()
         default: break
         }
     }

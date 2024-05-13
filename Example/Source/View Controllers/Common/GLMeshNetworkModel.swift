@@ -104,7 +104,17 @@ class GLZone: ObservableObject, Codable, Hashable {
     @Published var name: String = "Zone"
     @Published var zone: UInt8 = 0x0
     @Published var nodeAddresses: [Address] = [] // 关联 node
-    @Published var sceneNumbers: [SceneNumber] = [] // 关联 scene
+    func scenes() -> [Scene] {
+        let scenes = MeshNetworkManager.instance.meshNetwork?.nodes.filter({nodeAddresses.contains($0.primaryUnicastAddress)})
+            .flatMap({$0.scenes})
+            .uniqued() ?? []
+        let others = scenes
+            .filter { $0.number > 4 }
+        let defaultScenes =  [3, 2, 1, 4].compactMap { num in
+            scenes.first(where: {$0.number == num})
+        }
+        return defaultScenes + others
+    }
     
     @Published var store: MessageDetailStore = MessageDetailStore() // zone 中操作状态保存
     
@@ -119,7 +129,7 @@ class GLZone: ObservableObject, Codable, Hashable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case name, zone, scenes, availableScenes, store
+        case name, zone, nodeAddresses, store
     }
     
     required init(from decoder: Decoder) throws {
@@ -127,6 +137,7 @@ class GLZone: ObservableObject, Codable, Hashable {
         name = try values.decode(String.self, forKey: .name)
         zone = try values.decode(UInt8.self, forKey: .zone)
         store = try values.decode(MessageDetailStore.self, forKey: .store)
+        nodeAddresses = try values.decode([Address].self, forKey: .nodeAddresses)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -134,6 +145,7 @@ class GLZone: ObservableObject, Codable, Hashable {
         try container.encode(name, forKey: .name)
         try container.encode(zone, forKey: .zone)
         try container.encode(store, forKey: .store)
+        try container.encode(nodeAddresses, forKey: .nodeAddresses)
     }
     
     func hash(into hasher: inout Hasher) {

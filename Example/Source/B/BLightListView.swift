@@ -34,13 +34,6 @@ struct BLightListView: View {
         .listRowSpacing(10)
         .contentMargins(.top, 10)
         .onAppear(perform: onAppera)
-        .navigationDestination(for: NavPath.self) { target in
-            switch target {
-            case .cLightView(let node):
-                CLightView(node: node, isB: true)
-            default: Text("")
-            }
-        }
     }
 }
 

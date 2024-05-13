@@ -10,7 +10,7 @@ import SwiftUI
 import nRFMeshProvision
 
 struct BSceneEditView: View {
-    @EnvironmentObject var pathManager: BPathManager
+    @EnvironmentObject var appManager: AppManager
     @EnvironmentObject var sceneStoreManager: BSceneStoreManager
     
     private let scene: nRFMeshProvision.Scene?
@@ -56,17 +56,19 @@ struct BSceneEditView: View {
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             })
+            
             Button(action: {
+                hideKeyboard()
                 if let scene {
                     if scene.isUsed {
                         isDeleteSceneAlert = true
                     } else {
                         MeshNetworkManager.instance.meshNetwork?.forceRemove(scene: scene.number)
                         MeshNetworkManager.instance.saveAll()
-                        pathManager.path.removeLast()
+                        appManager.b.path.removeLast()
                     }
                 } else {
-                    pathManager.path.removeLast()
+                    appManager.b.path.removeLast()
                 }
             }, label: {
                 Text(scene == nil ? "Cancel" : "Delete")
@@ -88,27 +90,35 @@ struct BSceneEditView: View {
         .background(Color.secondaryBackground)
         .navigationBarBackButtonHidden(true)
         .ignoresSafeArea(.keyboard)
-        .alert(isPresented: $isPresented) {
-            Alert(title: Text("Remind"),
-                  message: Text("Select light or zone to continue setting the scene?"),
-                  primaryButton: .default(Text("Continue")) {
-                pathManager.path.removeAll()
-                pathManager.selectedTab = 1
-            }, secondaryButton: .cancel() {
-                pathManager.path.removeLast()
-            })
-        }
-        .alert(isPresented: $isDeleteSceneAlert) {
-            Alert(title: Text("Warning"),
-                  message: Text("This scene is in use, delete or not?"),
-                  primaryButton: .destructive(Text("Delete")) {
+        .alert("Remind", isPresented: $isPresented, actions: {
+            Button(role: .cancel) {
+                appManager.b.path.removeLast()
+            } label: {
+                Text("Cancel")
+            }
+            Button("Continue") {
+                appManager.b.path.removeAll()
+                appManager.b.selectedTab = 1
+            }
+        }, message: {
+            Text("Select light or zone to continue setting the scene?")
+        })
+        .alert("Warning", isPresented: $isDeleteSceneAlert, actions: {
+            Button(role: .cancel) {} label: {
+                Text("Cancel")
+            }
+            Button(role: .destructive) {
                 if let scene {
                     MeshNetworkManager.instance.meshNetwork?.forceRemove(scene: scene.number)
                     MeshNetworkManager.instance.saveAll()
                 }
-                pathManager.path.removeLast()
-            }, secondaryButton: .cancel())
-        }
+                appManager.b.path.removeLast()
+            } label: {
+                Text("Delete")
+            }
+        }, message: {
+            Text("This scene is in use, delete or not?")
+        })
         .onAppear(perform: onAppear)
     }
 }
@@ -127,6 +137,7 @@ private extension BSceneEditView {
     }
     
     func saveAction() {
+        hideKeyboard()
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
         if let scene {
             scene.name = nameText
@@ -145,13 +156,13 @@ private extension BSceneEditView {
                 return
             }
             _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
-            pathManager.path.removeLast()
+            appManager.b.path.removeLast()
         } else if let zone {
             let address = UInt16(zone.zone) * 16 + 0xD000
             if let group = MeshNetworkManager.instance.meshNetwork!.group(withAddress: MeshAddress(address)) {
                 _ = try? MeshNetworkManager.instance.send(message, to: group)
             }
-            pathManager.path.removeLast()
+            appManager.b.path.removeLast()
         } else {
             isPresented = true
         }

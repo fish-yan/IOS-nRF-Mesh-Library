@@ -10,6 +10,7 @@ import SwiftUI
 import nRFMeshProvision
 
 struct BScenesView: View {
+    @EnvironmentObject var appManager: AppManager
     @State private var columns = [GridItem(.adaptive(minimum: 170, maximum: 200))]
     @State private var scenes: [nRFMeshProvision.Scene] = []
     
@@ -29,7 +30,9 @@ struct BScenesView: View {
         .scrollIndicators(.hidden)
         .onAppear(perform: onAppera)
         .toolbar {
-            TooBarBackItem()
+            TooBarBackItem() {
+                appManager.userRole = .normal
+            }
         }
         .toolbar {
             NavigationLink(value: NavPath.bSceneEditView(scene: nil)) {

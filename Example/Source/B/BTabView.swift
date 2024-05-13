@@ -9,12 +9,11 @@
 import SwiftUI
 
 struct BTabView: View {
-    @StateObject var pathManager = BPathManager()
-    @StateObject var sceneStoreManager = BSceneStoreManager()
+    @EnvironmentObject var appManager: AppManager
     var body: some View {
-        NavigationStack(path: $pathManager.path) {
+        NavigationStack(path: $appManager.b.path) {
             VStack(spacing: 0) {
-                switch pathManager.selectedTab {
+                switch appManager.b.selectedTab {
                 case 0:
                     BScenesView()
                 case 1:
@@ -25,8 +24,6 @@ struct BTabView: View {
             }
             .background(Color.groupedBackground)
         }
-        .environment(pathManager)
-        .environment(sceneStoreManager)
         .tint(.primary)
     }
     
@@ -48,16 +45,16 @@ struct BTabView: View {
         VStack {
             Spacer()
                 .frame(height: 10)
-            Image(pathManager.selectedTab == tag ? selectedImage : image)
+            Image(appManager.b.selectedTab == tag ? selectedImage : image)
             Spacer()
                 .frame(height: 5)
             Text(title)
                 .font(.system(size: 12))
-                .foregroundStyle(pathManager.selectedTab == tag ? Color.primary : Color.secondaryLabel)
+                .foregroundStyle(appManager.b.selectedTab == tag ? Color.primary : Color.secondaryLabel)
         }
         .frame(maxWidth: .infinity)
         .gesture(TapGesture().onEnded({ _ in
-            pathManager.selectedTab = tag
+            appManager.b.selectedTab = tag
         }))
     }
 }

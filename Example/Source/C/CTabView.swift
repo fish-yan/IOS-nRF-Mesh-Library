@@ -9,10 +9,10 @@
 import SwiftUI
 
 struct CTabView: View {
-    @StateObject var pathManager = CPathManager()
+    @EnvironmentObject var appManager: AppManager
     @State var selection = 0
     var body: some View {
-        NavigationStack(path: $pathManager.path) {
+        NavigationStack(path: $appManager.c.path) {
             VStack(spacing: 0) {
                 switch selection {
                 case 0:
@@ -25,7 +25,6 @@ struct CTabView: View {
             }
             .background(Color.groupedBackground)
         }
-        .environment(pathManager)
     }
     
     func tabbar() -> some View {

@@ -117,7 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.overrideUserInterfaceStyle = .light
-        let rootVC = UIHostingController(rootView: BTabView())
+        let rootVC = UIHostingController(rootView: RootView())
         window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
         
@@ -208,7 +208,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         connection!.open()
         
         createDefaultApplicationKey()
-        bindKeyToLocalProvisioner()
         createDefaultGroup()
         createDefaultScene()
         addDefaultScene()
@@ -228,20 +227,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try? key.bind(to: netowrkKey)
         }
         let _ = meshNetworkManager.save()
-    }
-    
-    func bindKeyToLocalProvisioner() {
-        let network = meshNetworkManager.meshNetwork!
-        guard let applicationKey = network.applicationKey,
-              let node = network.localProvisioner?.node else {
-            return
-        }
-        node.elements.forEach { element in
-            element.models.forEach { model in
-                let message = ConfigModelAppBind(applicationKey: applicationKey, to: model)!
-                _ = try? MeshNetworkManager.instance.send(message, to: node)
-            }
-        }
     }
     
     func createDefaultGroup() {
@@ -298,19 +283,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func addDefaultZone() {
-        GLMeshNetworkModel.instance.zone.removeAll()
         let zones = GLMeshNetworkModel.instance.zone
         if zones.isEmpty {
-            let all = createZone(name: "All", zone: 0x0, group: 0xD000)
+            let all = createZone(name: "All", zone: 0x0)
             GLMeshNetworkModel.instance.zone.append(all)
             MeshNetworkManager.instance.saveModel()
         }
     }
     
-    func createZone(name: String, zone: UInt8, group: Address) -> GLZone {
+    func createZone(name: String, zone: UInt8) -> GLZone {
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
         let zone = GLZone(name: name, zone: zone)
-        let group = MeshNetworkManager.instance.meshNetwork?.group(withAddress: MeshAddress(group))
-        let scenes = group?.scenes ?? []
+        let nodes = meshNetwork.nodes
+        let scenes = nodes.flatMap({$0.scenes}).uniqued()
         scenes.forEach { scene in
             switch scene.number {
             case 1:
@@ -330,12 +315,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 scene.detail = "Personalised Lighting Modes"
             }
         }
-        
-        let sceneNumbers = scenes
-            .filter { $0.number > 4 }
-            .map { $0.number }
-        
-        zone.sceneNumbers = [3, 2, 1, 4] + sceneNumbers
+        zone.nodeAddresses = nodes.map({$0.primaryUnicastAddress})
         return zone
     }
 }
