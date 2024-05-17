@@ -82,8 +82,7 @@ struct BZoneView: View {
                 levels = value
                 glLevelsSet()
             })
-            .background(RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white).ignoresSafeArea())
+            .presentationDetents([.height(275)])
         }
         .navigationTitle("Zone")
         .toolbar {

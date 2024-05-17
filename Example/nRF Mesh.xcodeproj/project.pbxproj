@@ -55,7 +55,6 @@
 		2CA679F02BEA5A6F00BA1596 /* InputItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679EF2BEA5A6F00BA1596 /* InputItemView.swift */; };
 		2CA679FA2BEB195A00BA1596 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679F92BEB195A00BA1596 /* CustomSlider.swift */; };
 		2CA679FC2BEBC20900BA1596 /* BZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA679FB2BEBC20900BA1596 /* BZoneView.swift */; };
-		2CA67A062BECDDC600BA1596 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A052BECDDC600BA1596 /* ViewExtension.swift */; };
 		2CA67A082BECE54600BA1596 /* LevelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A072BECE54600BA1596 /* LevelPickerView.swift */; };
 		2CA67A152BEE6BFA00BA1596 /* BSceneStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A142BEE6BF900BA1596 /* BSceneStoreManager.swift */; };
 		2CA67A172BEF065D00BA1596 /* BSceneStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA67A162BEF065D00BA1596 /* BSceneStoreView.swift */; };
@@ -347,7 +346,6 @@
 		2CA679EF2BEA5A6F00BA1596 /* InputItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputItemView.swift; sourceTree = "<group>"; };
 		2CA679F92BEB195A00BA1596 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
 		2CA679FB2BEBC20900BA1596 /* BZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BZoneView.swift; sourceTree = "<group>"; };
-		2CA67A052BECDDC600BA1596 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		2CA67A072BECE54600BA1596 /* LevelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelPickerView.swift; sourceTree = "<group>"; };
 		2CA67A142BEE6BF900BA1596 /* BSceneStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSceneStoreManager.swift; sourceTree = "<group>"; };
 		2CA67A162BEF065D00BA1596 /* BSceneStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSceneStoreView.swift; sourceTree = "<group>"; };
@@ -679,7 +677,6 @@
 				2CA679E82BE924FE00BA1596 /* TooBarBackItem.swift */,
 				2CA679EF2BEA5A6F00BA1596 /* InputItemView.swift */,
 				2CA679F92BEB195A00BA1596 /* CustomSlider.swift */,
-				2CA67A052BECDDC600BA1596 /* ViewExtension.swift */,
 				2CA67A072BECE54600BA1596 /* LevelPickerView.swift */,
 			);
 			path = Common;
@@ -1619,7 +1616,6 @@
 				523F776622C609D90030EA6A /* NodeNetworkKeysViewController.swift in Sources */,
 				5211EAD5250777E100089FF2 /* SceneServerDelegate.swift in Sources */,
 				2CFE86562AEAA2A200A1CF7D /* GLBeaconTimeIntervalMessage.swift in Sources */,
-				2CA67A062BECDDC600BA1596 /* ViewExtension.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				2C72D6142B0F2EB2004625CA /* DestinationView.swift in Sources */,
 				2C2277062AD794C10062CACD /* GroupsView.swift in Sources */,
