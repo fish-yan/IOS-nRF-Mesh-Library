@@ -31,7 +31,7 @@ struct BSceneStoreView: View {
     var body: some View {
         List {
             Section {
-                NavigationLink(value: NavPath.bSceneEditView(scene: nil)) {
+                NavigationLink(value: NavPath.bStoreSceneEditView(node: node, group: zone)) {
                     Text("Create a new scene")
                 }
                 ForEach(newScenes, id: \.number) { scene in
@@ -83,13 +83,6 @@ struct BSceneStoreView: View {
             .disabled(selectedScene < 1)
         }
         .navigationBarBackButtonHidden()
-        .navigationDestination(for: NavPath.self) { target in
-            switch target {
-            case .bSceneEditView:
-                BSceneEditView(scene: nil, node: node, zone: zone)
-            default: Text("")
-            }
-        }
     }
 }
 

@@ -12,18 +12,17 @@ struct BSetView: View {
     @EnvironmentObject var appManager: AppManager
     @State private var index = 0
     @State private var proxy: ScrollViewProxy?
-
+    
     var body: some View {
         VStack {
             ScrollViewReader { proxy in
-            HStack(spacing: 0) {
-                item(text: "Lights", tag: 0, proxy: proxy)
-                item(text: "Zones", tag: 1, proxy: proxy)
-            }
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-            
+                HStack(spacing: 0) {
+                    item(text: "Lights", tag: 0, proxy: proxy)
+                    item(text: "Zones", tag: 1, proxy: proxy)
+                }
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                 ScrollView(.horizontal) {
                     HStack {
                         BLightListView()
@@ -57,6 +56,8 @@ struct BSetView: View {
                 CLightView(node: node, isB: true)
             case .bSceneStoreNodeView(let node):
                 BSceneStoreView(node: node)
+            case .bStoreSceneEditView(let node, let zone):
+                BSceneEditView(scene: nil, node: node, zone: zone)
             default: Text("")
             }
         }
@@ -69,7 +70,7 @@ struct BSetView: View {
             .background(index == tag ? .black : .white)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .foregroundStyle(index == tag ? .white : .black)
-            .onTapGesture { 
+            .onTapGesture {
                 index = tag
                 proxy.scrollTo(tag)
             }

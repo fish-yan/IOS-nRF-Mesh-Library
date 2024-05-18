@@ -42,6 +42,7 @@ enum NavPath: Hashable {
     case bSceneEditView(scene: NordicMesh.Scene?)
     case bSceneStoreNodeView(node: Node)
     case bSceneStoreZoneView(zone: GLZone)
+    case bStoreSceneEditView(node: Node?, group: GLZone?)
 }
 
 func hideKeyboard() {

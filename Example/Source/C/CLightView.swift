@@ -9,6 +9,7 @@ import SwiftUI
 import NordicMesh
 
 struct CLightView: View {
+    @EnvironmentObject var appManager: AppManager
     
     @State var isOn: Bool?
     @State var dim: Double = 1
@@ -20,6 +21,7 @@ struct CLightView: View {
     @State private var sliderType: MeshSliderType = .dim
     
     @State private var messageManager = MeshMessageManager()
+    
     
     private let taskManager = MeshTaskManager()
     
@@ -44,7 +46,10 @@ struct CLightView: View {
         }
         .toolbar {
             if isB {
-                NavigationLink(value: NavPath.bSceneStoreNodeView(node: node)) {
+                Button {
+                    pirOnOff(onOff: false)
+                    appManager.b.path.append(NavPath.bSceneStoreNodeView(node: node))
+                } label: {
                     Text("Save")
                         .underline()
                         .font(.label)
@@ -213,28 +218,44 @@ private extension CLightView {
     }
     
     func onOffSet(isOn: Bool) {
-        let message = GenericOnOffSetUnacknowledged(isOn)
+        let message: MeshMessage
+        if fadeTime == 0 && runTime == 0 {
+            message = GenericOnOffSet(isOn)
+        } else {
+            let transitionTime = TransitionTime(fadeTime)
+            let delay = UInt8(runTime / 5)
+            message = GenericOnOffSet(isOn, transitionTime: transitionTime, delay: delay)
+        }
+        
         guard let onOffModel = node.onOffModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: onOffModel)
     }
     
     func levelSet() {
         let level = Int16(min(32767, -32768 + 65536 * dim)) // -32768...32767
-        let message = GenericLevelSetUnacknowledged(level: level)
+        let message: MeshMessage
+        if fadeTime == 0 && runTime == 0 {
+            message = GenericLevelSet(level: level)
+        } else {
+            let transitionTime = TransitionTime(fadeTime)
+            let delay = UInt8(runTime / 5)
+            message = GenericLevelSet(level: level, transitionTime: transitionTime, delay: delay)
+        }
+        
         guard let levelModel = node.levelModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
     }
     
     func cctSet() {
         let level = Int16(min(32767, -32768 + 65536 * cct)) // -32768...32767
-        let message = GenericLevelSetUnacknowledged(level: level)
+        let message = GenericLevelSet(level: level)
         guard let cctModel = node.cctModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: cctModel)
     }
     
     func angleSet() {
         let level = Int16(min(32767, -32768 + 65536 * (1 - angle))) // -32768...32767
-        let message = GenericLevelSetUnacknowledged(level: level)
+        let message = GenericLevelSet(level: level)
         guard let angleModel = node.angleModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: angleModel)
     }
@@ -249,6 +270,14 @@ private extension CLightView {
         guard let vendorModel = node.vendorModel else { return }
         let message = GLFadeTimeMessage(time: Int(fadeTime))
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+    }
+    
+    func pirOnOff(onOff: Bool) {
+        guard let vendorModel = node.vendorModel else { return }
+        let status = GLSimpleStatus(bool: onOff)
+        let message = GLSensorMessage(status: status)
+        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+        MeshNetworkManager.instance.saveModel()
     }
 }
 
