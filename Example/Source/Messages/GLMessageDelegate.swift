@@ -11,7 +11,7 @@ import NordicMesh
 
 fileprivate let companyId: Int16 = 0x0841
 
-public protocol GLMessage: StaticAcknowledgedVendorMessage {
+public protocol GLMessage: StaticUnacknowledgedVendorMessage {
     static var code: UInt32 { get }
 }
 

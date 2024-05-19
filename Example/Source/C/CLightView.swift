@@ -17,6 +17,7 @@ struct CLightView: View {
     @State var angle: Double = 0.5
     @State var runTime: Double = 0
     @State var fadeTime: Double = 0
+    @State var isDynamicMode: Bool?
     
     @State private var sliderType: MeshSliderType = .dim
     
@@ -46,10 +47,7 @@ struct CLightView: View {
         }
         .toolbar {
             if isB {
-                Button {
-                    pirOnOff(onOff: false)
-                    appManager.b.path.append(NavPath.bSceneStoreNodeView(node: node))
-                } label: {
+                NavigationLink(value: NavPath.bSceneStoreNodeView(node: node)) {
                     Text("Save")
                         .underline()
                         .font(.label)
@@ -63,16 +61,32 @@ struct CLightView: View {
     
     var controlView: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Spacer()
-                .frame(height: 0)
             if isB {
                 VStack(spacing: 10) {
-                    sliderView(title: "Run time", value: $runTime, in: 0...900) {_ in
-                        runtimeSet()
+                    HStack(spacing: 30) {
+                        COnOffItemView(isSelected: isDynamicMode == false, icon: .ibDynamicOff, title: "OFF") {
+                            isDynamicMode = false
+                            pirOnOff(onOff: false)
+                        }
+                        Text("Dynamic mode")
+                            .font(.label)
+                            .frame(width: 130)
+                        COnOffItemView(isSelected: isDynamicMode == true, icon: .ibDynamicOn, title: "ON") {
+                            isDynamicMode = true
+                            pirOnOff(onOff: true)
+                        }
                     }
-                    sliderView(title: "Fade time", value: $fadeTime, in: 0...60) {_ in
-                        fadetimeSet()
-                    }
+                    .padding(20)
+                    .frame(height: 50)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.itemBackground)
+                    .clipShape(.buttonBorder)
+//                    sliderView(title: "Run time", value: $runTime, in: 0...900) {_ in
+//                        runtimeSet()
+//                    }
+//                    sliderView(title: "Fade time", value: $fadeTime, in: 0...60) {_ in
+//                        fadetimeSet()
+//                    }
                 }
             } else {
                 HStack(spacing: 40) {
@@ -90,7 +104,7 @@ struct CLightView: View {
                 .padding(20)
                 .frame(height: 50)
                 .frame(maxWidth: .infinity)
-                .background(Color(uiColor: UIColor(resource: .itemBackground)))
+                .background(Color.itemBackground)
                 .clipShape(.buttonBorder)
             }
             
@@ -218,44 +232,36 @@ private extension CLightView {
     }
     
     func onOffSet(isOn: Bool) {
-        let message: MeshMessage
-        if fadeTime == 0 && runTime == 0 {
-            message = GenericOnOffSet(isOn)
-        } else {
-            let transitionTime = TransitionTime(fadeTime)
-            let delay = UInt8(runTime / 5)
-            message = GenericOnOffSet(isOn, transitionTime: transitionTime, delay: delay)
-        }
-        
+        let message = GenericOnOffSetUnacknowledged(isOn)
         guard let onOffModel = node.onOffModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: onOffModel)
     }
     
     func levelSet() {
         let level = Int16(min(32767, -32768 + 65536 * dim)) // -32768...32767
-        let message: MeshMessage
-        if fadeTime == 0 && runTime == 0 {
-            message = GenericLevelSet(level: level)
-        } else {
-            let transitionTime = TransitionTime(fadeTime)
-            let delay = UInt8(runTime / 5)
-            message = GenericLevelSet(level: level, transitionTime: transitionTime, delay: delay)
-        }
-        
+//        let message: MeshMessage
+//        if fadeTime == 0 && runTime == 0 {
+//            message = GenericLevelSetUnacknowledged(level: level)
+//        } else {
+//            let transitionTime = TransitionTime(fadeTime)
+//            let delay = UInt8(runTime / 5)
+//            message = GenericLevelSetUnacknowledged(level: level, transitionTime: transitionTime, delay: delay)
+//        }
+        let message = GenericLevelSetUnacknowledged(level: level)
         guard let levelModel = node.levelModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
     }
     
     func cctSet() {
         let level = Int16(min(32767, -32768 + 65536 * cct)) // -32768...32767
-        let message = GenericLevelSet(level: level)
+        let message = GenericLevelSetUnacknowledged(level: level)
         guard let cctModel = node.cctModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: cctModel)
     }
     
     func angleSet() {
         let level = Int16(min(32767, -32768 + 65536 * (1 - angle))) // -32768...32767
-        let message = GenericLevelSet(level: level)
+        let message = GenericLevelSetUnacknowledged(level: level)
         guard let angleModel = node.angleModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: angleModel)
     }
@@ -276,6 +282,18 @@ private extension CLightView {
         guard let vendorModel = node.vendorModel else { return }
         let status = GLSimpleStatus(bool: onOff)
         let message = GLSensorMessage(status: status)
+        _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
+        MeshNetworkManager.instance.saveModel()
+        Task {
+            try? await Task.sleep(nanoseconds: 7000000000)
+            aiOnOff(onOff: onOff)
+        }
+    }
+    
+    func aiOnOff(onOff: Bool) {
+        guard let vendorModel = node.vendorModel else { return }
+        let status = GLSimpleStatus(bool: onOff)
+        let message = GLAiMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
         MeshNetworkManager.instance.saveModel()
     }
@@ -316,5 +334,5 @@ extension CLightView: MeshMessageDelegate {
 }
 
 #Preview {
-    CLightView(node: MeshNetworkManager.instance.meshNetwork!.nodes.first!)
+    CLightView(node: MeshNetworkManager.instance.meshNetwork!.nodes.first!, isB: false)
 }

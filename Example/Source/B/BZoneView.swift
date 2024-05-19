@@ -17,7 +17,7 @@ struct BZoneView: View {
     @State private var angle: Double = 0.5
     @State private var runTime: Double = 0
     @State private var fadeTime: Double = 0
-    @State private var isDynamicMode = true
+    @State private var isDynamicMode: Bool?
     @State private var sliderType: MeshSliderType = .dim
     @State private var selection: Int = 0
     @State private var isPresented = false
@@ -101,19 +101,26 @@ struct BZoneView: View {
     var dynamicModelView: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
-                Text("Dynamic mode")
-                    .font(.label)
-                Spacer()
-                Button(action: {
-                    withAnimation {
-                        isDynamicMode.toggle()
-                        pirOnOff(onOff: isDynamicMode)
+                HStack(spacing: 20) {
+                    COnOffItemView(isSelected: isDynamicMode == false, icon: .ibDynamicOff, title: "OFF") {
+                        withAnimation {
+                            isDynamicMode = false
+                        }
+                        pirOnOff(onOff: false)
                     }
-                }, label: {
-                    Image(isDynamicMode ? .icSceneOnDark : .icSceneOff)
-                })
+                    Text("Dynamic mode")
+                        .font(.label)
+                        .frame(width: 130)
+                    COnOffItemView(isSelected: isDynamicMode == true, icon: .ibDynamicOn, title: "ON") {
+                        withAnimation {
+                            isDynamicMode = true
+                        }
+                        pirOnOff(onOff: true)
+                    }
+                }
+                .frame(maxWidth: .infinity)
             }
-            if isDynamicMode {
+            if isDynamicMode != false {
                 Divider()
                 HStack {
                     Text("Level")
@@ -206,6 +213,17 @@ private extension BZoneView {
     func pirOnOff(onOff: Bool) {
         let status = GLSimpleStatus(bool: onOff)
         let message = GLSensorMessage(status: status)
+        _ = try? MeshNetworkManager.instance.send(message, to: D000)
+        MeshNetworkManager.instance.saveModel()
+        Task {
+            try? await Task.sleep(nanoseconds: 7000000000)
+            aiOnOff(onOff: onOff)
+        }
+    }
+    
+    func aiOnOff(onOff: Bool) {
+        let status = GLSimpleStatus(bool: onOff)
+        let message = GLAiMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
         MeshNetworkManager.instance.saveModel()
     }

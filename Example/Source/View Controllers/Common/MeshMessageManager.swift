@@ -107,8 +107,6 @@ extension MeshMessageManager: MeshNetworkDelegate {
             }
             
             self.delegate?.meshNetworkManager(manager, didReceiveMessage: message, sentFrom: source, to: destination)
-            print("received message: \(message)")
-            
             self.done()
         }
     }
