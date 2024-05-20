@@ -115,7 +115,7 @@ struct LightControlView: View {
         } message: {
             Text("bearer is not connected")
         }
-        .loadingable(text: "connecting...")
+        .loadingable()
     }
     
     var dimDot: Double {

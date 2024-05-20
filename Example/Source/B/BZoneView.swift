@@ -96,6 +96,7 @@ struct BZoneView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .loadingable()
     }
     
     var dynamicModelView: some View {
@@ -211,6 +212,7 @@ struct BZoneView: View {
 private extension BZoneView {
     
     func pirOnOff(onOff: Bool) {
+        Loading.show()
         let status = GLSimpleStatus(bool: onOff)
         let message = GLSensorMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
@@ -226,6 +228,7 @@ private extension BZoneView {
         let message = GLAiMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
         MeshNetworkManager.instance.saveModel()
+        Loading.hidden()
     }
     
     func levelSet(value: Double, group: NordicMesh.Group) {

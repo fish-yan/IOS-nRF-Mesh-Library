@@ -18,11 +18,11 @@ struct CLightView: View {
     @State var runTime: Double = 0
     @State var fadeTime: Double = 0
     @State var isDynamicMode: Bool?
+    @State var isPresented = false
     
     @State private var sliderType: MeshSliderType = .dim
     
     @State private var messageManager = MeshMessageManager()
-    
     
     private let taskManager = MeshTaskManager()
     
@@ -57,6 +57,16 @@ struct CLightView: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear(perform: onAppear)
+        .alert("Warning", isPresented: $isPresented) {
+            Button("Cancel", role: .cancel) { }
+            Button("Confirm") {
+                isDynamicMode = false
+                pirOnOff(onOff: false)
+            }
+        } message: {
+            Text("To save the scene, you need to turn off the dynamic mode first.")
+        }
+        .loadingable()
     }
     
     var controlView: some View {
@@ -200,8 +210,12 @@ private extension CLightView {
         messageManager = MeshMessageManager()
         messageManager.remove()
         messageManager.delegate = self
-        guard let onOffModel = node.onOffModel else { return }
-        _ = try? MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
+        if isB {
+            isPresented = true
+        } else {
+            guard let onOffModel = node.onOffModel else { return }
+            _ = try? MeshNetworkManager.instance.send(GenericOnOffGet(), to: onOffModel)
+        }
     }
     
     func checkConnect() async -> Bool {
@@ -280,6 +294,7 @@ private extension CLightView {
     
     func pirOnOff(onOff: Bool) {
         guard let vendorModel = node.vendorModel else { return }
+        Loading.show()
         let status = GLSimpleStatus(bool: onOff)
         let message = GLSensorMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
@@ -296,6 +311,7 @@ private extension CLightView {
         let message = GLAiMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
         MeshNetworkManager.instance.saveModel()
+        Loading.hidden()
     }
 }
 

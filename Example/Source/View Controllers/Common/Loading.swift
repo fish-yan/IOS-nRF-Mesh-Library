@@ -13,26 +13,18 @@ struct Loading: ViewModifier {
     static let hidenNotification = Notification.Name("Loading.hidenNotification")
     @State private var isContentShowing = false
     @State private var isPresented = false
-    let text: String
     var touchable = false
     func body(content: Content) -> some View {
         ZStack {
             content
+                .disabled(!touchable && isPresented)
             if isPresented {
-                VStack {
-                    ProgressView()
-                        .tint(Color.white)
-                        .scaleEffect(2)
-                    Spacer()
-                        .frame(height: 30)
-                    Text(text)
-                        .foregroundStyle(.white)
-                        .font(.body)
-                }
-                .frame(width: 100, height: 100)
+                ProgressView()
+                    .scaleEffect(1.2)
+                .frame(width: 30, height: 30)
                 .padding(20)
-                .background(Color(white: 0.5))
-                .cornerRadius(8)
+                .background(.ultraThinMaterial)
+                .cornerRadius(12)
             }
         }.onAppear(perform: {
             isContentShowing = true
@@ -66,7 +58,7 @@ struct Loading: ViewModifier {
 }
 
 extension View {
-    func loadingable(text: String) -> some View {
-        return self.modifier(Loading(text: text))
+    func loadingable() -> some View {
+        return self.modifier(Loading())
     }
 }
