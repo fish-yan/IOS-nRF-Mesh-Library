@@ -218,7 +218,7 @@ private extension BZoneView {
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
         MeshNetworkManager.instance.saveModel()
         Task {
-            try? await Task.sleep(nanoseconds: 7000000000)
+            try? await Task.sleep(nanoseconds: 6000000000)
             aiOnOff(onOff: onOff)
         }
     }

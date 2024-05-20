@@ -300,7 +300,7 @@ private extension CLightView {
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
         MeshNetworkManager.instance.saveModel()
         Task {
-            try? await Task.sleep(nanoseconds: 7000000000)
+            try? await Task.sleep(nanoseconds: 6000000000)
             aiOnOff(onOff: onOff)
         }
     }
