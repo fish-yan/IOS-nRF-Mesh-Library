@@ -52,10 +52,11 @@ struct BSceneEditView: View {
                 Text("Save")
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
-                    .background(.black)
+                    .background(.black.opacity(nameText.isEmpty ? 0.3 : 1))
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             })
+            .disabled(nameText.isEmpty)
             
             Button(action: {
                 hideKeyboard()
