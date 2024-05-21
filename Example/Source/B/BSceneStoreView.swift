@@ -121,7 +121,7 @@ extension BSceneStoreView: MeshMessageDelegate {
     func meshNetworkManager(_ manager: NordicMesh.MeshNetworkManager, didReceiveMessage message: NordicMesh.MeshMessage, sentFrom source: NordicMesh.Address, to destination: NordicMesh.MeshAddress) {
         switch message {
         case _ as SceneRegisterStatus:
-            appManager.b.path.removeLast()
+            appManager.b.path.removeAll()
         default: break
         }
     }

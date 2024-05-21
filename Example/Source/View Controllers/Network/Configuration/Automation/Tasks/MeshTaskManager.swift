@@ -19,6 +19,7 @@ class MeshTaskManager {
     }
     
     func update(status: MeshTaskStatus) {
+        guard current < tasks.count, current >= 0 else { return }
         tasks[current].status = status
     }
     

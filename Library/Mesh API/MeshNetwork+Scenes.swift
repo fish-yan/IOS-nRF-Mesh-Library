@@ -65,14 +65,7 @@ public extension MeshNetwork {
             timestamp = Date()
         }
     }
-    
-    func forceRemove(scene: SceneNumber) {
-        if let index = scenes.firstIndex(where: { $0.number == scene }) {
-            scenes.remove(at: index).meshNetwork = nil
-            timestamp = Date()
-        }
-    }
-    
+        
     /// Returns known Nodes containing at least one Element with Scene Register
     /// storing the given Scene.
     ///

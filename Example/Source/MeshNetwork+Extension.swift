@@ -50,6 +50,19 @@ extension MeshNetworkManager {
                         completion: completion)
     }
     
+    @discardableResult
+    func send(_ message: MeshMessage, to address: Address) throws -> MessageHandle {
+        guard let meshNetwork = meshNetwork,
+              let applicationKey = meshNetwork.applicationKey else {
+            print("Error: Model is not bound to any Application Key")
+            throw AccessError.modelNotBoundToAppKey
+        }
+        return try send(message, from: nil, to: MeshAddress(address),
+                        withTtl: nil, using: applicationKey,
+                        completion: nil)
+    }
+    
+    @discardableResult
     func send(_ message: MeshMessage, to model: Model) throws -> MessageHandle {
         guard let element = model.parentElement else {
             print("Error: Element does not belong to a Node")

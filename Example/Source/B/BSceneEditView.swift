@@ -23,6 +23,8 @@ struct BSceneEditView: View {
     
     @State private var isPresented: Bool = false
     @State private var isDeleteSceneAlert: Bool = false
+    private var messageManager = MeshMessageManager()
+    private let taskManager = MeshTaskManager()
     
     var zone: GLZone?
     var node: Node?
@@ -64,7 +66,7 @@ struct BSceneEditView: View {
                     if scene.isUsed {
                         isDeleteSceneAlert = true
                     } else {
-                        MeshNetworkManager.instance.meshNetwork?.forceRemove(scene: scene.number)
+                        try? MeshNetworkManager.instance.meshNetwork?.remove(scene: scene.number)
                         MeshNetworkManager.instance.saveAll()
                         appManager.b.path.removeLast()
                     }
@@ -105,15 +107,15 @@ struct BSceneEditView: View {
             Text("Select light or zone to continue setting the scene?")
         })
         .alert("Warning", isPresented: $isDeleteSceneAlert, actions: {
-            Button(role: .cancel) {} label: {
-                Text("Cancel")
-            }
+            Button("Cancel", role: .cancel, action: {})
             Button(role: .destructive) {
                 if let scene {
-                    MeshNetworkManager.instance.meshNetwork?.forceRemove(scene: scene.number)
-                    MeshNetworkManager.instance.saveAll()
+                    scene.addresses.forEach { address in
+                        taskManager.append(.deleteScene(scene.number, to: address))
+                    }
                 }
-                appManager.b.path.removeLast()
+                executeNext()
+                Loading.show()
             } label: {
                 Text("Delete")
             }
@@ -121,6 +123,7 @@ struct BSceneEditView: View {
             Text("This scene is in use, delete or not?")
         })
         .onAppear(perform: onAppear)
+        .loadingable()
     }
 }
 
@@ -135,6 +138,7 @@ private extension BSceneEditView {
             sceneNumber = MeshNetworkManager.instance.meshNetwork?.nextAvailableScene() ?? 0
             numberText = "0x" + String(sceneNumber, radix: 16)
         }
+        messageManager.delegate = self
     }
     
     func saveAction() {
@@ -157,15 +161,52 @@ private extension BSceneEditView {
                 return
             }
             _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
-            appManager.b.path.removeLast()
+            appManager.b.path.removeAll()
         } else if let zone {
             let address = UInt16(zone.zone) * 16 + 0xD000
             if let group = MeshNetworkManager.instance.meshNetwork!.group(withAddress: MeshAddress(address)) {
                 _ = try? MeshNetworkManager.instance.send(message, to: group)
             }
-            appManager.b.path.removeLast()
+            appManager.b.path.removeAll()
         } else {
             isPresented = true
+        }
+    }
+    
+    func executeNext() {
+        guard let task = taskManager.nextTask else {
+            completed()
+            return
+        }
+        taskManager.update(status: .inProgress)
+        let manager = MeshNetworkManager.instance
+        switch task {
+        case .deleteScene(_, let address):
+            _ = try? manager.send(task.message, to: address)
+        default: break
+        }
+    }
+    
+    func completed() {
+        Loading.hidden()
+        guard let scene else { return }
+        try? MeshNetworkManager.instance.meshNetwork?.remove(scene: scene.number)
+        MeshNetworkManager.instance.saveAll()
+        appManager.b.path.removeLast()
+    }
+}
+
+
+extension BSceneEditView: MeshMessageDelegate {
+    func meshNetworkManager(_ manager: NordicMesh.MeshNetworkManager, didReceiveMessage message: NordicMesh.MeshMessage, sentFrom source: NordicMesh.Address, to destination: NordicMesh.MeshAddress) {
+        if let task = taskManager.task,
+            message.opCode == task.message.responseOpCode {
+            if let status = message as? ConfigStatusMessage {
+                taskManager.update(status: .resultOf(status))
+            } else {
+                taskManager.update(status: .success)
+            }
+            executeNext()
         }
     }
 }

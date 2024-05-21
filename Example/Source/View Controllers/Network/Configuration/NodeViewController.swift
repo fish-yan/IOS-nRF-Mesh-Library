@@ -450,7 +450,7 @@ private extension NodeViewController {
     
     func configure() {
         if !node.isCompositionDataReceived {
-            needConfigMore = true
+            needConfigMore = false
             taskManager.append(.getCompositionData(page: 0))
         } else {
             configureMore()

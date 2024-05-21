@@ -320,9 +320,9 @@ extension SettingsViewController: UIDocumentPickerDelegate {
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            guard url.startAccessingSecurityScopedResource() else { // Notice this line right here
-                 return
-            }
+//            guard url.startAccessingSecurityScopedResource() else { // Notice this line right here
+//                 return
+//            }
             do {
                 let data = try Data(contentsOf: url)
                 let somejson = try JSONSerialization.jsonObject(with: data)

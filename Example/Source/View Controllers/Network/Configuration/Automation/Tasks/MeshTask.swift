@@ -59,6 +59,7 @@ enum MeshTask {
     case bind(_ applicationKey: ApplicationKey, to: Model)
     case subscribe(_ model: Model, to: Group)
     case setPublication(_ publish: Publish, to: Model)
+    case deleteScene(_ scene: SceneNumber, to: Address)
     case nodeReset
     
     var title: String {
@@ -113,6 +114,8 @@ enum MeshTask {
             return "Set Publication to \(model)"
         case .nodeReset:
             return "Reset Node"
+        case .deleteScene:
+            return "Delete Scene"
         }
     }
     
@@ -156,7 +159,7 @@ enum MeshTask {
         }
     }
     
-    var message: AcknowledgedConfigMessage {
+    var message: StaticAcknowledgedMeshMessage {
         switch self {
         case .getCompositionData(page: let page):
             return ConfigCompositionDataGet(page: page)
@@ -227,6 +230,8 @@ enum MeshTask {
             }
         case .nodeReset:
             return ConfigNodeReset()
+        case .deleteScene(let scene, let address):
+            return SceneDelete(scene)
         }
     }
 }

@@ -59,7 +59,7 @@ struct CLightView: View {
         .onAppear(perform: onAppear)
         .alert("Warning", isPresented: $isPresented) {
             Button("Cancel", role: .cancel) { }
-            Button("Confirm") {
+            Button("Turn off") {
                 isDynamicMode = false
                 pirOnOff(onOff: false)
             }
