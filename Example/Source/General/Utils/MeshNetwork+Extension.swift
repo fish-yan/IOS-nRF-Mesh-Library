@@ -246,3 +246,10 @@ public extension Scene {
         }
     }
 }
+
+extension Node: Identifiable, Hashable {
+    public var id: UUID { UUID() }
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(primaryUnicastAddress)
+    }
+}

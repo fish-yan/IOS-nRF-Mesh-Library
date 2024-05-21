@@ -90,16 +90,6 @@ class MessageDetailStore: NSObject, ObservableObject, Codable {
     
 }
 
-class GLMessageModel: ObservableObject {
-    @Published var type: MessageType
-    @Published var message: MeshMessage
-    
-    init(type: MessageType, message: MeshMessage) {
-        self.type = type
-        self.message = message
-    }
-}
-
 class GLZone: ObservableObject, Codable, Hashable {
     @Published var name: String = "Zone"
     @Published var zone: UInt8 = 0x0
