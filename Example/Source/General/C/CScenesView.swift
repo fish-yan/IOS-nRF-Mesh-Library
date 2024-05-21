@@ -130,7 +130,7 @@ extension CScenesView {
     }
 
     func sceneRecallSet() {
-        let message = SceneRecall(zone.store.selectedScene)
+        let message = SceneRecallUnacknowledged(zone.store.selectedScene)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
         MeshNetworkManager.instance.saveModel()
     }

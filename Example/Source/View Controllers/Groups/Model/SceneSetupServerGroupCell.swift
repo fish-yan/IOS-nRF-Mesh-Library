@@ -91,7 +91,7 @@ private extension SceneSetupServerGroupCell {
     /// - parameter scene: The Scene number to store.
     func sendSceneStore(_ scene: SceneNumber) {
         let label = "Storing scene..."
-        delegate?.send(SceneStore(scene),
+        delegate?.send(SceneStoreUnacknowledged(scene),
                        description: label, using: applicationKey)
     }
     

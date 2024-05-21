@@ -93,7 +93,7 @@ private extension SceneServerGroupCell {
     /// - parameter scene: The Scene number to recall.
     func sendSceneRecall(_ scene: SceneNumber) {
         let label = "Recalling scene..."
-        delegate?.send(SceneRecall(scene),
+        delegate?.send(SceneRecallUnacknowledged(scene),
                        description: label, using: applicationKey)
     }
     

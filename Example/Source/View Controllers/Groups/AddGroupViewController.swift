@@ -127,10 +127,6 @@ class AddGroupViewController: UITableViewController {
             presentGroupAddressDialog()
         }
     }
-    
-    func doneSave() {
-        save()
-    }
 
 }
 
@@ -170,12 +166,7 @@ private extension AddGroupViewController {
                     delegate?.groupChanged(group)
                 }
                 if MeshNetworkManager.instance.save() {
-                    if presentingViewController != nil {
-                        dismiss(animated: true)
-                    } else {
-                        navigationController?.popViewController(animated: true)
-                    }
-                    
+                    dismiss(animated: true)
                 } else {
                     presentAlert(title: "Error", message: "Mesh configuration could not be saved.")
                 }
