@@ -9,6 +9,11 @@
 import UIKit
 import NordicMesh
 
+struct MessageAction {
+    let message: String
+    let completion: Any
+}
+
 class MeshMessageManager {
     private var debouncer = Debouncer(interval: 100)
     private var isSending = false

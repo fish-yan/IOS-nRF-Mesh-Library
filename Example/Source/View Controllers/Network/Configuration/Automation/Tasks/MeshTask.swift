@@ -159,7 +159,7 @@ enum MeshTask {
         }
     }
     
-    var message: StaticAcknowledgedMeshMessage {
+    var message: AcknowledgedConfigMessage {
         switch self {
         case .getCompositionData(page: let page):
             return ConfigCompositionDataGet(page: page)
@@ -231,7 +231,7 @@ enum MeshTask {
         case .nodeReset:
             return ConfigNodeReset()
         case .deleteScene(let scene, let address):
-            return SceneDelete(scene)
+            return ConfigDefaultTtlGet()
         }
     }
 }

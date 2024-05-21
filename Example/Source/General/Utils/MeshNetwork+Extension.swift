@@ -50,17 +50,17 @@ extension MeshNetworkManager {
                         completion: completion)
     }
     
-    @discardableResult
-    func send(_ message: MeshMessage, to address: Address) throws -> MessageHandle {
-        guard let meshNetwork = meshNetwork,
-              let applicationKey = meshNetwork.applicationKey else {
-            print("Error: Model is not bound to any Application Key")
-            throw AccessError.modelNotBoundToAppKey
-        }
-        return try send(message, from: nil, to: MeshAddress(address),
-                        withTtl: nil, using: applicationKey,
-                        completion: nil)
-    }
+//    @discardableResult
+//    func send(_ message: MeshMessage, to address: Address) throws -> MessageHandle {
+//        guard let meshNetwork = meshNetwork,
+//              let applicationKey = meshNetwork.applicationKey else {
+//            print("Error: Model is not bound to any Application Key")
+//            throw AccessError.modelNotBoundToAppKey
+//        }
+//        return try send(message, from: nil, to: MeshAddress(address),
+//                        withTtl: nil, using: applicationKey,
+//                        completion: nil)
+//    }
     
     @discardableResult
     func send(_ message: MeshMessage, to model: Model) throws -> MessageHandle {
@@ -88,9 +88,7 @@ extension MeshNetworkManager {
             print("Error: Model is not bound to any Application Key")
             throw AccessError.modelNotBoundToAppKey
         }
-        return try send(message, from: localElement, to: group.address,
-                        withTtl: initialTtl, using: applicationKey,
-                        completion: completion)
+        return try send(message, from: localElement, to: group, withTtl: initialTtl, using: applicationKey, completion: completion)
     }
     
     static var defaultGroupAddresses: [Address] = [0xD000, 0xD001, 0xD002, 0xD003, 0xD004, 0xD005, 0xD006]

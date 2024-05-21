@@ -72,8 +72,7 @@ class ScannerTableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        discoveredPeripherals = []
-        tableView.reloadData()
+        
         // Scanner can also receive messages sent from nodes with
         // Remote Provisioning Server model.
         MeshNetworkManager.instance.delegate = self

@@ -181,8 +181,12 @@ private extension BSceneEditView {
         taskManager.update(status: .inProgress)
         let manager = MeshNetworkManager.instance
         switch task {
-        case .deleteScene(_, let address):
-            _ = try? manager.send(task.message, to: address)
+        case .deleteScene(let scene, let address):
+            guard let node = manager.meshNetwork!.node(withAddress: address),
+            let model = node.sceneSetupModel else {
+                return
+            }
+            _ = try? manager.send(SceneDelete(scene), to: model)
         default: break
         }
     }
@@ -199,13 +203,8 @@ private extension BSceneEditView {
 
 extension BSceneEditView: MeshMessageDelegate {
     func meshNetworkManager(_ manager: NordicMesh.MeshNetworkManager, didReceiveMessage message: NordicMesh.MeshMessage, sentFrom source: NordicMesh.Address, to destination: NordicMesh.MeshAddress) {
-        if let task = taskManager.task,
-            message.opCode == task.message.responseOpCode {
-            if let status = message as? ConfigStatusMessage {
-                taskManager.update(status: .resultOf(status))
-            } else {
-                taskManager.update(status: .success)
-            }
+        if let _ = taskManager.task {
+            taskManager.update(status: .success)
             executeNext()
         }
     }

@@ -290,6 +290,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             GLMeshNetworkModel.instance.zone.append(all)
             MeshNetworkManager.instance.saveModel()
         }
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        let nodes = meshNetwork.nodes
+        zones.first!.nodeAddresses = nodes.map({$0.primaryUnicastAddress})
+        MeshNetworkManager.instance.saveModel()
     }
     
     func createZone(name: String, zone: UInt8) -> GLZone {

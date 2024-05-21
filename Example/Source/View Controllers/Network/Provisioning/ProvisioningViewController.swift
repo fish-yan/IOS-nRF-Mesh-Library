@@ -1,39 +1,38 @@
 /*
- * Copyright (c) 2019, Nordic Semiconductor
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice, this
- *    list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice, this
- *    list of conditions and the following disclaimer in the documentation and/or
- *    other materials provided with the distribution.
- *
- * 3. Neither the name of the copyright holder nor the names of its contributors may
- *    be used to endorse or promote products derived from this software without
- *    specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
- * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
+* Copyright (c) 2019, Nordic Semiconductor
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without modification,
+* are permitted provided that the following conditions are met:
+*
+* 1. Redistributions of source code must retain the above copyright notice, this
+*    list of conditions and the following disclaimer.
+*
+* 2. Redistributions in binary form must reproduce the above copyright notice, this
+*    list of conditions and the following disclaimer in the documentation and/or
+*    other materials provided with the distribution.
+*
+* 3. Neither the name of the copyright holder nor the names of its contributors may
+*    be used to endorse or promote products derived from this software without
+*    specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+* IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+* INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+* NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+* PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
+*/
 
 import UIKit
 import NordicMesh
 
-class ProvisioningViewController: ProgressViewController {
+class ProvisioningViewController: UITableViewController {
     static let attentionTimer: UInt8 = 5
-    var node: Node?
     
     // MARK: - Outlets
     @IBOutlet weak var provisionButton: UIBarButtonItem!
@@ -75,8 +74,6 @@ class ProvisioningViewController: ProgressViewController {
     
     private var provisioningManager: ProvisioningManager!
     private var capabilitiesReceived = false
-    
-    private var connectBearDelegate = NetworkConnectDelegateObjc()
     
     private var alert: UIAlertController?
     
@@ -154,7 +151,7 @@ class ProvisioningViewController: ProgressViewController {
     }
     
     // MARK: - Table View Delegate
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -179,8 +176,8 @@ private extension ProvisioningViewController {
         presentTextAlert(title: "Device name", message: nil,
                          text: unprovisionedDevice.name, placeHolder: "Name",
                          type: .nameRequired, cancelHandler: nil) { newName in
-            self.unprovisionedDevice.name = newName
-            self.nameLabel.text = newName
+                            self.unprovisionedDevice.name = newName
+                            self.nameLabel.text = newName
         }
     }
     
@@ -198,15 +195,15 @@ private extension ProvisioningViewController {
         presentTextAlert(title: "Unicast address", message: "Hexadecimal value in Provisioner's range.",
                          text: manager.unicastAddress?.hex, placeHolder: "Address", type: .unicastAddressRequired,
                          option: action, cancelHandler: nil) { [weak self] text in
-            guard let self = self else { return }
-            manager.unicastAddress = Address(text, radix: 16)
-            self.unicastAddressLabel.text = manager.unicastAddress!.asString()
-            let deviceSupported = manager.isDeviceSupported == true
-            let addressValid = manager.isUnicastAddressValid == true
-            self.actionProvision.isEnabled = addressValid && deviceSupported
-            if !addressValid {
-                self.presentAlert(title: "Error", message: "Address is not available.")
-            }
+                            guard let self = self else { return }
+                            manager.unicastAddress = Address(text, radix: 16)
+                            self.unicastAddressLabel.text = manager.unicastAddress!.asString()
+                            let deviceSupported = manager.isDeviceSupported == true
+                            let addressValid = manager.isUnicastAddressValid == true
+                            self.actionProvision.isEnabled = addressValid && deviceSupported
+                            if !addressValid {
+                                self.presentAlert(title: "Error", message: "Address is not available.")
+                            }
         }
     }
     
@@ -256,7 +253,7 @@ private extension ProvisioningViewController {
     
 }
 
-private extension ProvisioningViewController {
+private extension ProvisioningViewController {    
     
     /// This method tries to open the bearer had it been closed when on this screen.
     func openBearer() {
@@ -364,7 +361,6 @@ extension ProvisioningViewController: GattBearerDelegate {
             let manager = MeshNetworkManager.instance
             if manager.save() {
                 let connection = MeshNetworkManager.bearer!
-                
                 func done(reconnect: Bool) {
                     if reconnect, let pbGattBearer = self.bearer as? PBGattBearer {
                         connection.disconnect()
@@ -374,23 +370,16 @@ extension ProvisioningViewController: GattBearerDelegate {
                         // the delegate.
                         manager.proxyFilter.proxyDidDisconnect()
                         manager.proxyFilter.clear()
+                        
                         let gattBearer = GattBearer(targetWithIdentifier: pbGattBearer.identifier)
                         connection.use(proxy: gattBearer)
-                        
+                    }
+                    self.dismiss(animated: true) {
                         guard let network = manager.meshNetwork else {
                             return
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            let node = network.node(for: self.unprovisionedDevice)
-                            let destination = UIStoryboard(name: "Network", bundle: nil).instantiateViewController(withIdentifier: "NodeViewController") as! NodeViewController
-                            destination.node = node
-                            
-                            self.navigationController?.pushViewController(destination, animated: true)
-                            CATransaction.setCompletionBlock {
-                                if let root = self.navigationController?.viewControllers.first {
-                                    self.navigationController?.viewControllers = [root, destination]
-                                }
-                            }
+                        if let node = network.node(for: self.unprovisionedDevice) {
+                            self.delegate?.provisionerDidProvisionNewDevice(node, whichReplaced: self.previousNode)
                         }
                     }
                 }
@@ -415,6 +404,7 @@ extension ProvisioningViewController: GattBearerDelegate {
             }
         }
     }
+    
 }
 
 extension ProvisioningViewController: ProvisioningDelegate {
@@ -439,12 +429,12 @@ extension ProvisioningViewController: ProvisioningDelegate {
                 
                 // This is needed to refresh constraints after filling new values.
                 self.tableView.reloadData()
-                
+    		            
                 // If the Unicast Address was set to automatic (nil), it should be
                 // set to the correct value by now, as we know the number of elements.
                 let addressValid = self.provisioningManager.isUnicastAddressValid == true
                 if !addressValid {
-                    self.provisioningManager.unicastAddress = nil
+                   self.provisioningManager.unicastAddress = nil
                 }
                 self.unicastAddressLabel.text = self.provisioningManager.unicastAddress?.asString() ?? "No address available"
                 self.actionProvision.isEnabled = addressValid
@@ -559,67 +549,6 @@ extension ProvisioningViewController: ProvisioningDelegate {
     
 }
 
-extension ProvisioningViewController: MeshNetworkDelegate {
-    
-    func meshNetworkManager(_ manager: MeshNetworkManager,
-                            didReceiveMessage message: MeshMessage,
-                            sentFrom source: Address, to destination: MeshAddress) {
-        // Has the Node been reset remotely.
-        guard !(message is ConfigNodeReset) else {
-            (UIApplication.shared.delegate as! AppDelegate).meshNetworkDidChange()
-            done {
-                self.navigationController?.popToRootViewController(animated: true)
-            }
-            return
-        }
-        // Is the message targeting the current Node?
-        guard node?.primaryUnicastAddress == source else {
-            return
-        }
-        
-        // Handle the message based on its type.
-        switch message {
-            
-        case is ConfigCompositionDataStatus:
-            // When the Composition Data are known, we can try to reconfigure the Node based on
-            // how it was configured before.
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-//        case is ConfigModelSubscriptionStatus:
-        case is ConfigModelAppStatus:
-            let destination = UIStoryboard(name: "Network", bundle: nil).instantiateViewController(withIdentifier: "NodeViewController") as! NodeViewController
-            destination.node = node
-            
-            self.navigationController?.pushViewController(destination, animated: true)
-            CATransaction.setCompletionBlock {
-                if let root = self.navigationController?.viewControllers.first {
-                    self.navigationController?.viewControllers = [root, destination]
-                }
-            }
-        default:
-            break
-        }
-        done()
-    }
-    
-    func meshNetworkManager(_ manager: MeshNetworkManager,
-                            failedToSendMessage message: MeshMessage,
-                            from localElement: Element, to destination: MeshAddress,
-                            error: Error) {
-        // Ignore messages sent using model publication.
-        guard message is ConfigMessage else {
-            return
-        }
-        done {
-            self.presentAlert(title: "Error", message: error.localizedDescription)
-            self.refreshControl?.endRefreshing()
-        }
-    }
-    
-}
-
-
 extension ProvisioningViewController: SelectionDelegate {
     
     func networkKeySelected(_ networkKey: NetworkKey?) {
@@ -653,15 +582,4 @@ private extension String {
         return replacingOccurrences(of: ", ", with: "\n")
     }
     
-}
-
-private class NetworkConnectDelegateObjc: NSObject, BearerDelegate {
-    var done: (() -> Void)?
-    func bearerDidOpen(_ bearer: NordicMesh.Bearer) {
-        done?()
-    }
-    
-    func bearer(_ bearer: NordicMesh.Bearer, didClose error: Error?) {
-        
-    }
 }
