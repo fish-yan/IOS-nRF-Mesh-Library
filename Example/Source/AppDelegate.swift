@@ -284,12 +284,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func addDefaultZone() {
-        let zones = GLMeshNetworkModel.instance.zone
+        var zones = GLMeshNetworkModel.instance.zone
         if zones.isEmpty {
             let all = createZone(name: "All", zone: 0x0)
             GLMeshNetworkModel.instance.zone.append(all)
             MeshNetworkManager.instance.saveModel()
         }
+        zones = GLMeshNetworkModel.instance.zone
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
         let nodes = meshNetwork.nodes
         zones.first!.nodeAddresses = nodes.map({$0.primaryUnicastAddress})
@@ -299,28 +300,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func createZone(name: String, zone: UInt8) -> GLZone {
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
         let zone = GLZone(name: name, zone: zone)
-        let nodes = meshNetwork.nodes
-        let scenes = nodes.flatMap({$0.scenes}).uniqued()
-        scenes.forEach { scene in
-            switch scene.number {
-            case 1:
-                scene.name = "Standard Mode"
-                scene.detail = "Suitable for daily use scenarios"
-            case 2:
-                scene.name = "Eco Mode"
-                scene.detail = "Reduced energy consumption"
-            case 3:
-                scene.name = "Comfort Mode"
-                scene.detail = "Comfortable lighting experience"
-            case 4:
-                scene.name = "Display Mode"
-                scene.detail = "Demonstrate functional use"
-            default:
-                scene.name = "Custom Mode \(scene.number)"
-                scene.detail = "Personalised Lighting Modes"
-            }
-        }
-        zone.nodeAddresses = nodes.map({$0.primaryUnicastAddress})
+        zone.nodeAddresses = meshNetwork.nodes.map({$0.primaryUnicastAddress})
         return zone
     }
 }

@@ -39,7 +39,7 @@ struct CScenesView: View {
                     .font(.title)
                     .foregroundStyle(Color.accent)
                 LazyVGrid(columns: columns) {
-                    ForEach(scenes, id: \.self) { model in
+                    ForEach(scenes, id: \.number) { model in
                         sceneItem(isSelected: zone.store.selectedScene == model.number, image: model.icon, title: model.name, des: model.detail) {
                             zone.store.selectedScene = model.number
                             sceneRecallSet()
@@ -124,6 +124,7 @@ extension CScenesView {
         messageManager.delegate = self
         scenes = zone.scenes()
         columns = scenes.count <= 2 ? [GridItem()] : [GridItem(.adaptive(minimum: 170, maximum: 200))]
+        sceneRegister()
     }
     
     func sceneRegister() {

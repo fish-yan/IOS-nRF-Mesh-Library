@@ -60,6 +60,7 @@ enum MeshTask {
     case subscribe(_ model: Model, to: Group)
     case setPublication(_ publish: Publish, to: Model)
     case deleteScene(_ scene: SceneNumber, to: Address)
+    case sceneRegisterGet
     case nodeReset
     
     var title: String {
@@ -116,6 +117,8 @@ enum MeshTask {
             return "Reset Node"
         case .deleteScene:
             return "Delete Scene"
+        case .sceneRegisterGet:
+            return "Scene Register Get"
         }
     }
     
@@ -230,7 +233,7 @@ enum MeshTask {
             }
         case .nodeReset:
             return ConfigNodeReset()
-        case .deleteScene(let scene, let address):
+        default:
             return ConfigDefaultTtlGet()
         }
     }

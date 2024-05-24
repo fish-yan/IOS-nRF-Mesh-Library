@@ -235,7 +235,7 @@ public extension Group {
 
 public extension Scene {
     var icon: String {
-        switch number {
+        return switch number {
         case 1: "ic_scene_standard"
         case 2: "ic_scene_eco"
         case 3: "ic_scene_comfort"

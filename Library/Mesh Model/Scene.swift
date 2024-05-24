@@ -30,6 +30,56 @@
 
 import Foundation
 
+
+enum DecaultSceneMode {
+    var rawValue: SceneNumber {
+        switch self {
+        case .standard: 1
+        case .eco: 2
+        case .comfort: 3
+        case .display: 4
+        case .other(let number): number
+        }
+    }
+    
+    case standard
+    case eco
+    case comfort
+    case display
+    case other(number: SceneNumber)
+        
+    var name: String {
+        switch self {
+        case .standard: "Standard Mode"
+        case .eco: "Eco Mode"
+        case .comfort: "Comfort Mode"
+        case .display: "Display Mode"
+        case .other(let number): "Custom Mode \(number)"
+        }
+    }
+    
+    var detail: String {
+        switch self {
+        case .standard: "Suitable for daily use scenarios"
+        case .eco: "Reduced energy consumption"
+        case .comfort: "Comfortable lighting experience"
+        case .display: "Demonstrate functional use"
+        default: "Personalised Lighting Modes"
+        }
+    }
+    
+    init(rawValue: SceneNumber) {
+        switch rawValue {
+        case 1: self = .standard
+        case 2: self = .eco
+        case 3: self = .comfort
+        case 4: self = .display
+        default: self = .other(number: rawValue)
+        }
+    }
+}
+
+
 /// A Scene represents a set of states stored with a Scene Number.
 ///
 /// A Scene is identified by a ``SceneNumber`` and may have a
@@ -53,10 +103,16 @@ public class Scene: Codable {
     /// Addresses of Elements whose Scene Register state contains this Scene.
     public internal(set) var addresses: [Address]
     
-    internal init(_ number: SceneNumber, name: String, detail: String = "Personalised Lighting Modes") {
+    internal init(_ number: SceneNumber, name: String = "", detail: String = "") {
+        if name.isEmpty {
+            let sceneCase = DecaultSceneMode(rawValue: number)
+            self.name = sceneCase.name
+            self.detail = sceneCase.detail
+        } else {
+            self.name = name
+            self.detail = detail
+        }
         self.number = number
-        self.name = name
-        self.detail = detail
         self.addresses = []
     }
     

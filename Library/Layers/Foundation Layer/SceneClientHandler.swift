@@ -85,8 +85,7 @@ private extension SceneClientHandler {
                 if let sceneObject = meshNetwork.scenes[status.scene] {
                     sceneObject.add(address: source)
                 } else {
-                    let sceneObject = Scene(status.scene,
-                                                  name: NSLocalizedString("New Scene", comment: ""))
+                    let sceneObject = Scene(status.scene)
                     sceneObject.add(address: source)
                     meshNetwork.add(scene: sceneObject)
                 }
@@ -97,8 +96,7 @@ private extension SceneClientHandler {
                     if let sceneObject = meshNetwork.scenes[targetScene] {
                         sceneObject.add(address: source)
                     } else {
-                        let sceneObject = Scene(targetScene,
-                                                      name: NSLocalizedString("New Scene", comment: ""))
+                        let sceneObject = Scene(targetScene)
                         sceneObject.add(address: source)
                         meshNetwork.add(scene: sceneObject)
                     }
@@ -114,8 +112,7 @@ private extension SceneClientHandler {
                 if let sceneObject = meshNetwork.scenes[scene] {
                     sceneObject.add(address: source)
                 } else {
-                    let sceneObject = Scene(scene,
-                                                  name: NSLocalizedString("New Scene", comment: ""))
+                    let sceneObject = Scene(scene)
                     sceneObject.add(address: source)
                     meshNetwork.add(scene: sceneObject)
                 }
