@@ -14,6 +14,7 @@ struct CScenesView: View {
     @State private var columns = [GridItem(.adaptive(minimum: 170, maximum: 200))]
     
     @State private var scenes: [NordicMesh.Scene] = []
+    private let messageManager = MeshMessageManager()
     
     var body: some View {
         ScrollView(.vertical) { 
@@ -119,12 +120,19 @@ struct CScenesView: View {
 extension CScenesView {
     
     func onAppera() {
+        messageManager.remove()
+        messageManager.delegate = self
         scenes = zone.scenes()
         columns = scenes.count <= 2 ? [GridItem()] : [GridItem(.adaptive(minimum: 170, maximum: 200))]
     }
     
+    func sceneRegister() {
+        let message = SceneRegisterGet()
+        _ = try? MeshNetworkManager.instance.send(message, to: D000)
+    }
+    
     func onOffSet(onOff: Bool, group: NordicMesh.Group) {
-        let message = GenericOnOffSet(onOff)
+        let message = GenericOnOffSetUnacknowledged(onOff)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
         MeshNetworkManager.instance.saveModel()
     }
@@ -137,6 +145,18 @@ extension CScenesView {
     
 }
 
+extension CScenesView: MeshMessageDelegate {
+    
+    func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
+        switch message {
+        case let status as SceneRegisterStatus:
+            if status.isSuccess {
+                scenes = zone.scenes()
+            }
+        default: break
+        }
+    }
+}
 
 #Preview {
     CScenesView(zone: GLZone(name: "All", zone: 0x0))

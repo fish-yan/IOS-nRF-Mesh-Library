@@ -22,7 +22,7 @@ struct CLightView: View {
     
     @State private var sliderType: MeshSliderType = .dim
     
-    @State private var messageManager = MeshMessageManager()
+    private let messageManager = MeshMessageManager()
     
     private let taskManager = MeshTaskManager()
     
@@ -207,7 +207,6 @@ struct CLightView: View {
 private extension CLightView {
 
     func onAppear() {
-        messageManager = MeshMessageManager()
         messageManager.remove()
         messageManager.delegate = self
         if isB {

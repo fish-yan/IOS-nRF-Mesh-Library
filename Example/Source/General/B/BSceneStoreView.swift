@@ -102,7 +102,7 @@ private extension BSceneStoreView {
     }
     
     func storeScene() {
-        let message = SceneStore(selectedScene)
+        let message = SceneStoreUnacknowledged(selectedScene)
         if let node {
             guard let sceneSetupModel = node.sceneSetupModel else {
                 return

@@ -216,6 +216,25 @@ internal class NetworkManager {
                 accessLayer.send(message, from: element, to: destination,
                                  withTtl: initialTtl, using: applicationKey,
                                  retransmit: false)
+                if !(message is AcknowledgedMeshMessage) {
+                    var count = 3
+                    if count > 0 {
+                        let interval: TimeInterval = Double(50) / 1000
+                        BackgroundTimer.scheduledTimer(withTimeInterval: interval,
+                                                       repeats: count > 0) { [weak self] timer in
+                            guard let self = self else {
+                                timer.invalidate()
+                                return
+                            }
+                            self.accessLayer.send(message, from: element, to: destination,
+                                                  withTtl: initialTtl, using: applicationKey, retransmit: true)
+                            count -= 1
+                            if count == 0 {
+                                timer.invalidate()
+                            }
+                        }
+                    }
+                }
             }
         } onCancel: {
             cancel(messageWithHandler: MessageHandle(for: message, sentFrom: element.unicastAddress,

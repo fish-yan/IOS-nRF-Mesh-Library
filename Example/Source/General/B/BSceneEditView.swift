@@ -155,7 +155,7 @@ private extension BSceneEditView {
     }
     
     func storeScene() {
-        let message = SceneStore(sceneNumber)
+        let message = SceneStoreUnacknowledged(sceneNumber)
         if let node {
             guard let sceneSetupModel = node.sceneSetupModel else {
                 return

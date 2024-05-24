@@ -233,7 +233,7 @@ private extension BZoneView {
     
     func levelSet(value: Double, group: NordicMesh.Group) {
         let level = Int16(min(32767, -32768 + 65536 * value)) // -32768...32767
-        let message = GenericLevelSet(level: level)
+        let message = GenericLevelSetUnacknowledged(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
         MeshNetworkManager.instance.saveModel()
     }
