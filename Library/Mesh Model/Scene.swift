@@ -31,8 +31,8 @@
 import Foundation
 
 
-enum DecaultSceneMode {
-    var rawValue: SceneNumber {
+public enum DefaultSceneMode {
+    public var rawValue: SceneNumber {
         switch self {
         case .standard: 1
         case .eco: 2
@@ -48,7 +48,7 @@ enum DecaultSceneMode {
     case display
     case other(number: SceneNumber)
         
-    var name: String {
+    public var name: String {
         switch self {
         case .standard: "Standard Mode"
         case .eco: "Eco Mode"
@@ -58,7 +58,7 @@ enum DecaultSceneMode {
         }
     }
     
-    var detail: String {
+    public var detail: String {
         switch self {
         case .standard: "Suitable for daily use scenarios"
         case .eco: "Reduced energy consumption"
@@ -68,7 +68,7 @@ enum DecaultSceneMode {
         }
     }
     
-    init(rawValue: SceneNumber) {
+    public init(rawValue: SceneNumber) {
         switch rawValue {
         case 1: self = .standard
         case 2: self = .eco
@@ -105,7 +105,7 @@ public class Scene: Codable {
     
     internal init(_ number: SceneNumber, name: String = "", detail: String = "") {
         if name.isEmpty {
-            let sceneCase = DecaultSceneMode(rawValue: number)
+            let sceneCase = DefaultSceneMode(rawValue: number)
             self.name = sceneCase.name
             self.detail = sceneCase.detail
         } else {

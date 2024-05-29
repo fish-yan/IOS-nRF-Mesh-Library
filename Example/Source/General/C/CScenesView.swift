@@ -28,7 +28,7 @@ struct CScenesView: View {
                         .frame(width: 1)
                     COnOffItemView(isSelected: zone.store.isOn == true, icon: .icAllOn, title: "Full Open") {
                         zone.store.isOn = true
-                        onOffSet(onOff: true, group: D004)
+                        onOffSet(onOff: true, group: D000)
                     }
                 }
                 .padding(20)
@@ -135,13 +135,11 @@ extension CScenesView {
     func onOffSet(onOff: Bool, group: NordicMesh.Group) {
         let message = GenericOnOffSetUnacknowledged(onOff)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
-        MeshNetworkManager.instance.saveModel()
     }
 
     func sceneRecallSet() {
         let message = SceneRecallUnacknowledged(zone.store.selectedScene)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
-        MeshNetworkManager.instance.saveModel()
     }
     
 }

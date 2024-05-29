@@ -251,15 +251,7 @@ private extension CLightView {
     }
     
     func levelSet() {
-        let level = Int16(min(32767, -32768 + 65536 * dim)) // -32768...32767
-//        let message: MeshMessage
-//        if fadeTime == 0 && runTime == 0 {
-//            message = GenericLevelSetUnacknowledged(level: level)
-//        } else {
-//            let transitionTime = TransitionTime(fadeTime)
-//            let delay = UInt8(runTime / 5)
-//            message = GenericLevelSetUnacknowledged(level: level, transitionTime: transitionTime, delay: delay)
-//        }
+        let level = Int16(min(32767, -32768 + 65536 * dim))
         let message = GenericLevelSetUnacknowledged(level: level)
         guard let levelModel = node.levelModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: levelModel)
@@ -297,7 +289,6 @@ private extension CLightView {
         let status = GLSimpleStatus(bool: onOff)
         let message = GLSensorMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
-        MeshNetworkManager.instance.saveModel()
         Task {
             try? await Task.sleep(nanoseconds: 6000000000)
             aiOnOff(onOff: onOff)
@@ -309,7 +300,6 @@ private extension CLightView {
         let status = GLSimpleStatus(bool: onOff)
         let message = GLAiMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: vendorModel)
-        MeshNetworkManager.instance.saveModel()
         Loading.hidden()
     }
 }

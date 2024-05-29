@@ -157,6 +157,8 @@ class NodeViewController: ProgressViewController {
             return IndexPath.detailsTitles.count
         case IndexPath.switchesSection:
             return IndexPath.switchesTitles.count
+        case IndexPath.zoneSection:
+            return IndexPath.zoneTitles.count
         case IndexPath.actionsSection:
             return IndexPath.actionsTitles.count
         default:
@@ -297,6 +299,10 @@ class NodeViewController: ProgressViewController {
             default:
                 break
             }
+        }
+        if indexPath.isZoneSection {
+            let cell = cell as! ZoneCell
+            cell.node = node
         }
         if indexPath.isActionsSection {
             let cell = cell as! ActionCell
@@ -486,7 +492,7 @@ private extension NodeViewController {
             }
         }
         // register scenes
-        taskManager.append(.sceneRegisterGet)
+//        taskManager.append(.sceneRegisterGet)
         
         _ = MeshNetworkManager.instance.save()
         
@@ -691,7 +697,8 @@ private extension IndexPath {
     static let elementsSection = 4
     static let compositionDataSection = 5
     static let switchesSection = 6 // 隐藏:2023-8-8
-    static let actionsSection = 7 // 7
+    static let zoneSection = 7
+    static let actionsSection = 8 // 7
     static let numberOfSections = IndexPath.actionsSection + 1
     
     static let titles = [
@@ -717,6 +724,9 @@ private extension IndexPath {
     static let actionsTitles = [
         "Reset Node", "Remove Node"
     ]
+    static let zoneTitles = [
+        "Set Zone"
+    ]
     static let actions = [
         "Reset", "Remove"
     ]
@@ -736,6 +746,9 @@ private extension IndexPath {
         }
         if isActionsSection {
             return "action"
+        }
+        if isZoneSection {
+            return "zone"
         }
         return "normal"
     }
@@ -758,6 +771,9 @@ private extension IndexPath {
         }
         if isSwitchesSection {
             return IndexPath.switchesTitles[row]
+        }
+        if isZoneSection {
+            return IndexPath.zoneTitles[row]
         }
         if isActionsSection {
             return IndexPath.actionsTitles[row]
@@ -835,6 +851,10 @@ private extension IndexPath {
     
     var isSwitchesSection: Bool {
         return section == IndexPath.switchesSection
+    }
+    
+    var isZoneSection: Bool {
+        return section == IndexPath.zoneSection
     }
     
     var isActionsSection: Bool {

@@ -293,7 +293,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         zones = GLMeshNetworkModel.instance.zone
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
         let nodes = meshNetwork.nodes
-        zones.first!.nodeAddresses = nodes.map({$0.primaryUnicastAddress})
+        if let all = zones.first(where: {$0.zone == 0}) {
+            all.nodeAddresses = nodes.map({$0.primaryUnicastAddress})
+        }
         MeshNetworkManager.instance.saveModel()
     }
     

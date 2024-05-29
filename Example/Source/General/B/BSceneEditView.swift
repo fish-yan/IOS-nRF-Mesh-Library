@@ -59,30 +59,31 @@ struct BSceneEditView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             })
             .disabled(nameText.isEmpty)
-            
-            Button(action: {
-                hideKeyboard()
-                if let scene {
-                    if scene.isUsed {
-                        isDeleteSceneAlert = true
+            if case .other = DefaultSceneMode(rawValue: sceneNumber) {
+                Button(action: {
+                    hideKeyboard()
+                    if let scene {
+                        if scene.isUsed {
+                            isDeleteSceneAlert = true
+                        } else {
+                            try? MeshNetworkManager.instance.meshNetwork?.remove(scene: scene.number)
+                            MeshNetworkManager.instance.saveAll()
+                            appManager.b.path.removeLast()
+                        }
                     } else {
-                        try? MeshNetworkManager.instance.meshNetwork?.remove(scene: scene.number)
-                        MeshNetworkManager.instance.saveAll()
                         appManager.b.path.removeLast()
                     }
-                } else {
-                    appManager.b.path.removeLast()
-                }
-            }, label: {
-                Text(scene == nil ? "Cancel" : "Delete")
-                    .foregroundStyle(scene == nil ? .black : .red)
-                    .frame(height: 50)
-                    .frame(maxWidth: .infinity)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke()
-                    }
-            })
+                }, label: {
+                    Text(scene == nil ? "Cancel" : "Delete")
+                        .foregroundStyle(scene == nil ? .black : .red)
+                        .frame(height: 50)
+                        .frame(maxWidth: .infinity)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke()
+                        }
+                })
+            }
             Spacer()
         }
         .padding(20)
@@ -164,9 +165,8 @@ private extension BSceneEditView {
             appManager.b.path.removeAll()
         } else if let zone {
             let address = UInt16(zone.zone) * 16 + 0xD000
-            if let group = MeshNetworkManager.instance.meshNetwork!.group(withAddress: MeshAddress(address)) {
-                _ = try? MeshNetworkManager.instance.send(message, to: group)
-            }
+            let group = try! NordicMesh.Group(name: "", address: MeshAddress(address))
+            _ = try? MeshNetworkManager.instance.send(message, to: group)
             appManager.b.path.removeAll()
         } else {
             isPresented = true

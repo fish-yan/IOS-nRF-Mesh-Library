@@ -18,9 +18,7 @@ struct BSceneStoreView: View {
     @State private var newScenes: [NordicMesh.Scene] = []
     
     @State private var selectedScene: SceneNumber = 0
-    
-    private var messageManager = MeshMessageManager()
-    
+        
     init(node: Node) {
         self.node = node
     }
@@ -92,13 +90,9 @@ private extension BSceneStoreView {
         if let node {
             storedScenes = node.scenes
         } else if let zone {
-            let address = UInt16(zone.zone) * 16 + 0xD000
-            if let group = meshNetwork.group(withAddress: MeshAddress(address)) {
-                storedScenes = group.scenes
-            }
+            storedScenes = zone.scenes()
         }
         newScenes = meshNetwork.customScenes.filter { !storedScenes.contains($0) }
-        messageManager.delegate = self
     }
     
     func storeScene() {
@@ -108,21 +102,12 @@ private extension BSceneStoreView {
                 return
             }
             _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
+            appManager.b.path.removeAll()
         } else if let zone {
             let address = UInt16(zone.zone) * 16 + 0xD000
-            if let group = MeshNetworkManager.instance.meshNetwork!.group(withAddress: MeshAddress(address)) {
-                _ = try? MeshNetworkManager.instance.send(message, to: group)
-            }
-        }
-    }
-}
-
-extension BSceneStoreView: MeshMessageDelegate {
-    func meshNetworkManager(_ manager: NordicMesh.MeshNetworkManager, didReceiveMessage message: NordicMesh.MeshMessage, sentFrom source: NordicMesh.Address, to destination: NordicMesh.MeshAddress) {
-        switch message {
-        case _ as SceneRegisterStatus:
+            let group = try! NordicMesh.Group(name: "", address: MeshAddress(address))
+            _ = try? MeshNetworkManager.instance.send(message, to: group)
             appManager.b.path.removeAll()
-        default: break
         }
     }
 }

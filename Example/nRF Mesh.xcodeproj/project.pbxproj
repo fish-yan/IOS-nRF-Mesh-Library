@@ -51,6 +51,7 @@
 		2CB6205C2BBC2C0E002804D3 /* MeshSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */; };
 		2CB620642BC57924002804D3 /* MeshTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620632BC57924002804D3 /* MeshTaskManager.swift */; };
 		2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */; };
+		2CC97AE82C06DBE700725E9A /* ZoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC97AE72C06DBE600725E9A /* ZoneCell.swift */; };
 		2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */; };
 		2CF4D0702BF2731200E89E5F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		2CFB58B52B6D18F400C42663 /* LaunchScreen1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */; };
@@ -308,6 +309,7 @@
 		2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSegmentView.swift; sourceTree = "<group>"; };
 		2CB620632BC57924002804D3 /* MeshTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshTaskManager.swift; sourceTree = "<group>"; };
 		2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshNetwork+Extension.swift"; sourceTree = "<group>"; };
+		2CC97AE72C06DBE600725E9A /* ZoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneCell.swift; sourceTree = "<group>"; };
 		2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAiMessage.swift; sourceTree = "<group>"; };
 		2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen1.storyboard; sourceTree = "<group>"; };
 		2CFCE59E2B48406B00CF2491 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
@@ -691,6 +693,7 @@
 				528445C824EEA765002168A1 /* HeartbeatSubscriptionCell.swift */,
 				52A8EA9324EE6D18004C14C7 /* HeartbeatSubscriptionPeriodCell.swift */,
 				521599D425E91F9300F602FA /* SensorValueCell.swift */,
+				2CC97AE72C06DBE600725E9A /* ZoneCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1548,6 +1551,7 @@
 				5288C2142371B32200321ED3 /* SimpleOnOffStatus.swift in Sources */,
 				5251498122E0E36600CBF1E3 /* AddGroupViewController.swift in Sources */,
 				2CFE86542AEAA1BC00A1CF7D /* GLBeaconRSSIMessage.swift in Sources */,
+				2CC97AE82C06DBE700725E9A /* ZoneCell.swift in Sources */,
 				2CB620222BB7BA13002804D3 /* Font+Mesh.swift in Sources */,
 				F09DE4D329E99A360073969A /* SelectGroupsViewController.swift in Sources */,
 				2CB6204E2BBA53CD002804D3 /* MeshApp.swift in Sources */,
@@ -1862,7 +1866,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 202405241159;
+				CURRENT_PROJECT_VERSION = 202405291652;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
@@ -1897,7 +1901,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 202405241159;
+				CURRENT_PROJECT_VERSION = 202405291652;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;

@@ -216,7 +216,6 @@ private extension BZoneView {
         let status = GLSimpleStatus(bool: onOff)
         let message = GLSensorMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
-        MeshNetworkManager.instance.saveModel()
         Task {
             try? await Task.sleep(nanoseconds: 6000000000)
             aiOnOff(onOff: onOff)
@@ -227,7 +226,6 @@ private extension BZoneView {
         let status = GLSimpleStatus(bool: onOff)
         let message = GLAiMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
-        MeshNetworkManager.instance.saveModel()
         Loading.hidden()
     }
     
@@ -235,7 +233,6 @@ private extension BZoneView {
         let level = Int16(min(32767, -32768 + 65536 * value)) // -32768...32767
         let message = GenericLevelSetUnacknowledged(level: level)
         _ = try? MeshNetworkManager.instance.send(message, to: group)
-        MeshNetworkManager.instance.saveModel()
     }
     
     func glLevelsSet() {
