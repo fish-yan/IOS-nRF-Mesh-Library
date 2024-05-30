@@ -15,7 +15,7 @@ class MessageDetailStore: NSObject, ObservableObject, Codable {
     
     @Published var isAi: Bool = true
     @Published var isSensor: Bool = true
-    @Published var emergencyOnOff: Bool = false
+    @Published var emergencyOnOff: Bool?
     
     @Published var level: Double = 0
     @Published var CCT: Double = 0
@@ -53,7 +53,7 @@ class MessageDetailStore: NSObject, ObservableObject, Codable {
         isOn = try? values.decode(Bool.self, forKey: .isOn)
         isAi = try values.decode(Bool.self, forKey: .isAi)
         isSensor = try values.decode(Bool.self, forKey: .isSensor)
-        emergencyOnOff = try values.decode(Bool.self, forKey: .emergencyOnOff)
+        emergencyOnOff = try? values.decode(Bool.self, forKey: .emergencyOnOff)
         level = try values.decode(Double.self, forKey: .level)
         CCT = try values.decode(Double.self, forKey: .CCT)
         angle = try values.decode(Double.self, forKey: .angle)

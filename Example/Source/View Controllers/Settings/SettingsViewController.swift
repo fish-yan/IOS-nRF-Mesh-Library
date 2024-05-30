@@ -183,7 +183,7 @@ extension SettingsViewController: WizardDelegate {
         }
         for i in 0..<scenes {
             if let sceneNumber = network.nextAvailableScene() {
-                _ = try? network.add(scene: sceneNumber, name: "Scene \(i + 1)")
+                _ = try? network.add(scene: sceneNumber)
             }
         }
         

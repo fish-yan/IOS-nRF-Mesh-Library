@@ -42,7 +42,7 @@ public extension MeshNetwork {
     ///   - name: The human-readable name of the Scene.
     /// - throws: This method throws an error if a Scene with the same number
     ///           already exists in the mesh network.
-    func add(scene: SceneNumber, name: String, detail: String = "Personalised Lighting Modes") throws {
+    func add(scene: SceneNumber, name: String = "", detail: String = "Personalised Lighting Modes") throws {
         guard scenes[scene] == nil else {
             throw MeshNetworkError.sceneAlreadyExists
         }

@@ -34,6 +34,22 @@ struct CScenesView: View {
                 .padding(20)
                 .background(Color.tertiaryBackground)
                 .clipShape(.rect(cornerRadius: 10))
+                HStack(spacing: 20) {
+                    COnOffItemView(isSelected: zone.store.emergencyOnOff == false, icon: .icAllOff, title: "OFF") {
+                        zone.store.emergencyOnOff = false
+                        onOffSet(onOff: false, group: D004)
+                    }
+                    Text("Emergency mode")
+                        .font(.label)
+                        .frame(width: 130)
+                    COnOffItemView(isSelected: zone.store.emergencyOnOff == true, icon: .icAllOn, title: "ON") {
+                        zone.store.emergencyOnOff = true
+                        onOffSet(onOff: true, group: D004)
+                    }
+                }
+                .padding(20)
+                .background(Color.tertiaryBackground)
+                .clipShape(.rect(cornerRadius: 10))
                 Text("Scene")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.title)

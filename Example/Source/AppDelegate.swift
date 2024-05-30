@@ -247,7 +247,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaultScenes: [SceneNumber] = MeshNetworkManager.defaultSceneAddresses
         let unAddScene = defaultScenes.filter {number in !network.scenes.contains(where: { $0.number == number }) }
         unAddScene.forEach { number in
-            try? network.add(scene: number, name: "Scene \(number)")
+            try? network.add(scene: number)
         }
         let _ = meshNetworkManager.save()
     }

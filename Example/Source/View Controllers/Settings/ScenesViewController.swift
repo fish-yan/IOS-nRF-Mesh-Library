@@ -48,7 +48,7 @@ class ScenesViewController: UITableViewController, Editable {
                     guard let scene = network.nextAvailableScene() else {
                         break
                     }
-                    try? network.add(scene: scene, name: "Scene \(scene)")
+                    try? network.add(scene: scene)
                 }
                 self.tableView.reloadData()
                 self.hideEmptyView()
