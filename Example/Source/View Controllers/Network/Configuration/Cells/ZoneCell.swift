@@ -27,19 +27,8 @@ class ZoneCell: UITableViewCell {
         var zones = GLMeshNetworkModel.instance.zone
         if let text = numberTF.text,
            let num = UInt8(text, radix: 16) {
-            for zone in zones where zone.zone != 0 {
-                zone.nodeAddresses.removeAll(where: {$0 == node.primaryUnicastAddress})
-            }
-            if let all = zones.first(where: {$0.zone == 0}) {
-                all.nodeAddresses.append(node.primaryUnicastAddress)
-            }
-            if let zone = zones.first(where: {$0.zone == num}) {
-                zone.nodeAddresses.append(node.primaryUnicastAddress)
-            } else {
-                let zone = GLZone(name: "Zone \(num)", zone: num)
-                zone.nodeAddresses.append(node.primaryUnicastAddress)
-                zones.append(zone)
-            }
+            let zone = zones.first(where: {$0.zone == num}) ?? GLZone(name: "Zone \(num)", zone: num)
+            zone.add(nodeAddress: node.primaryUnicastAddress)
         }
         GLMeshNetworkModel.instance.zone = zones
         MeshNetworkManager.instance.saveAll()

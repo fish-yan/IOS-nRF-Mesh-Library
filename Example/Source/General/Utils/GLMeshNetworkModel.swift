@@ -127,7 +127,10 @@ class GLZone: ObservableObject, Codable, Hashable {
         name = try values.decode(String.self, forKey: .name)
         zone = try values.decode(UInt8.self, forKey: .zone)
 //        store = try values.decode(MessageDetailStore.self, forKey: .store)
-        nodeAddresses = try values.decode([Address].self, forKey: .nodeAddresses)
+        
+        let addresses = try values.decode([Address].self, forKey: .nodeAddresses)
+        let allAddress = MeshNetworkManager.instance.meshNetwork?.nodes.map({$0.primaryUnicastAddress}) ?? []
+        nodeAddresses = addresses.filter({allAddress.contains($0)})
         anyCancellable = self.store.objectWillChange.sink {
             self.objectWillChange.send()
         }
@@ -137,8 +140,10 @@ class GLZone: ObservableObject, Codable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(zone, forKey: .zone)
+        let allAddress = MeshNetworkManager.instance.meshNetwork?.nodes.map({$0.primaryUnicastAddress}) ?? []
+        let addresses = nodeAddresses.filter({allAddress.contains($0)})
 //        try container.encode(store, forKey: .store)
-        try container.encode(nodeAddresses, forKey: .nodeAddresses)
+        try container.encode(addresses, forKey: .nodeAddresses)
     }
     
     func hash(into hasher: inout Hasher) {
@@ -147,6 +152,25 @@ class GLZone: ObservableObject, Codable, Hashable {
     
     static func == (lhs: GLZone, rhs: GLZone) -> Bool {
         lhs.hashValue == rhs.hashValue
+    }
+    
+    func add(nodeAddress: Address) {
+        let zones = GLMeshNetworkModel.instance.zone
+        for zone in zones where zone.zone != 0 {
+            zone.nodeAddresses.removeAll(where: {$0 == nodeAddress})
+        }
+        if let all = zones.first(where: {$0.zone == 0}) {
+            all.nodeAddresses.append(nodeAddress)
+            let allAddress = MeshNetworkManager.instance.meshNetwork?.nodes.map({$0.primaryUnicastAddress}) ?? []
+            all.nodeAddresses = all.nodeAddresses
+                .filter({allAddress.contains($0)})
+                .uniqued()
+        }
+        nodeAddresses.append(nodeAddress)
+        let allAddress = MeshNetworkManager.instance.meshNetwork?.nodes.map({$0.primaryUnicastAddress}) ?? []
+        nodeAddresses = nodeAddresses
+            .filter({allAddress.contains($0)})
+            .uniqued()
     }
 }
 
