@@ -35,10 +35,12 @@ struct BScenesView: View {
             }
         }
         .toolbar {
-            NavigationLink(value: NavPath.bSceneEditView(scene: nil)) {
-                Text("Add scene")
-                    .underline()
-                    .font(.label)
+            if scenes.count < 16 {
+                NavigationLink(value: NavPath.bSceneEditView(scene: nil)) {
+                    Text("Add scene")
+                        .underline()
+                        .font(.label)
+                }
             }
         }
         .navigationDestination(for: NavPath.self) { target in

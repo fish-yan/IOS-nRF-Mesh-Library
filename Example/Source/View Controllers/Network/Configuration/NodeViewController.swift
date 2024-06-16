@@ -500,13 +500,14 @@ private extension NodeViewController {
     }
     
     func executeNext() {
-
         // Are we done?
         guard let task = taskManager.nextTask else {
             completed()
             return
         }
-        
+        if !isHUDShow {
+            showHUD()
+        }
         // Display the title of the current task.
         taskManager.update(status: .inProgress)
                 
@@ -539,19 +540,13 @@ private extension NodeViewController {
             guard let address = model.parentElement?.parentNode?.primaryUnicastAddress else {
                 fallthrough
             }
-            start(task.title) {
-                return try manager.send(task.message, to: address)
-            }
+            _ = try? manager.send(task.message, to: address)
         case .sceneRegisterGet:
             let node = node!
-            start(task.title) {
-                return try manager.send(task.message, to: node)
-            }
+            _ = try? manager.send(task.message, to: node)
         default:
             let node = node!
-            start(task.title) {
-                return try manager.send(task.message, to: node.primaryUnicastAddress)
-            }
+            _ = try?  manager.send(task.message, to: node.primaryUnicastAddress)
         }
     }
     
@@ -563,7 +558,7 @@ private extension NodeViewController {
             configureMore()
             executeNext()
         } else {
-            done()
+            hidHUD()
         }
     }
     
@@ -692,13 +687,13 @@ extension NodeViewController: ModalNavigationControllerDelegate {
 private extension IndexPath {
     static let nameSection = 0
     static let nodeSection = 1
-    static let keysSection = 2
-    static let scenesSection = 3 // 隐藏:2023-8-8
-    static let elementsSection = 4
-    static let compositionDataSection = 5
-    static let switchesSection = 6 // 隐藏:2023-8-8
-    static let zoneSection = 7
-    static let actionsSection = 8 // 7
+    static let keysSection = -2 // 隐藏:2024-6-15
+    static let scenesSection = -3 // 隐藏:2024-6-15
+    static let elementsSection = 2
+    static let compositionDataSection = 3
+    static let switchesSection = -6 // 隐藏:2024-6-15
+    static let zoneSection = 4
+    static let actionsSection = 5 // 7
     static let numberOfSections = IndexPath.actionsSection + 1
     
     static let titles = [
@@ -868,6 +863,6 @@ private extension IndexPath {
 
 private extension IndexSet {
     
-    static let editableSections = IndexSet(integersIn: IndexPath.keysSection...IndexPath.compositionDataSection)
+    static let editableSections = IndexSet(integersIn: IndexPath.elementsSection...IndexPath.compositionDataSection)
     
 }

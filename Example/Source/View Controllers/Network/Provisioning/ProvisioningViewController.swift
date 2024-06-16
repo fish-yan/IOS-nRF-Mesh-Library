@@ -115,14 +115,14 @@ class ProvisioningViewController: UITableViewController {
         actionProvision.isEnabled = manager.meshNetwork!.localProvisioner != nil
         
         // We are now connected. Proceed by sending Provisioning Invite request.
-        presentStatusDialog(message: "Identifying...", animated: false) {
+//        presentStatusDialog(message: "Identifying...", animated: false) {
             do {
                 try self.provisioningManager.identify(andAttractFor: ProvisioningViewController.attentionTimer)
             } catch {
                 self.abort()
                 self.presentAlert(title: "Error", message: error.localizedDescription)
             }
-        }
+//        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -151,6 +151,10 @@ class ProvisioningViewController: UITableViewController {
     }
     
     // MARK: - Table View Delegate
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -257,15 +261,11 @@ private extension ProvisioningViewController {
     
     /// This method tries to open the bearer had it been closed when on this screen.
     func openBearer() {
-        presentStatusDialog(message: "Connecting...") { [weak self] in
-            guard let self = self else { return }
-            do {
-                try self.bearer.open()
-            } catch {
-                self.dismissStatusDialog() {
-                    self.presentAlert(title: "Error", message: error.localizedDescription)
-                }
-            }
+        showHUD()
+        do {
+            try self.bearer.open()
+        } catch {
+            showError(error.localizedDescription)
         }
     }
     
@@ -312,16 +312,14 @@ private extension ProvisioningViewController {
         }
         
         // Start provisioning.
-        presentStatusDialog(message: "Provisioning...") { [weak self] in
-            guard let self = self else { return }
-            do {
-                try self.provisioningManager.provision(usingAlgorithm:       capabilities.algorithms.strongest,
-                                                       publicKey:            self.publicKey!,
-                                                       authenticationMethod: self.authenticationMethod!)
-            } catch {
-                self.abort()
-                self.presentAlert(title: "Error", message: error.localizedDescription)
-            }
+        showHUD()
+        do {
+            try self.provisioningManager.provision(usingAlgorithm:       capabilities.algorithms.strongest,
+                                                   publicKey:            self.publicKey!,
+                                                   authenticationMethod: self.authenticationMethod!)
+        } catch {
+            self.abort()
+            showError(error)
         }
     }
     
@@ -329,79 +327,62 @@ private extension ProvisioningViewController {
 
 extension ProvisioningViewController: GattBearerDelegate {
     
-    func bearerDidConnect(_ bearer: Bearer) {
-        presentStatusDialog(message: "Discovering services...")
-    }
-    
-    func bearerDidDiscoverServices(_ bearer: Bearer) {
-        presentStatusDialog(message: "Initializing...")
-    }
-    
     func bearerDidOpen(_ bearer: Bearer) {
-        presentStatusDialog(message: "Identifying...") { [weak self] in
-            guard let self = self else { return }
-            do {
-                try self.provisioningManager!.identify(andAttractFor: ProvisioningViewController.attentionTimer)
-            } catch {
-                self.abort()
-                self.presentAlert(title: "Error", message: error.localizedDescription)
-            }
+        do {
+            try self.provisioningManager!.identify(andAttractFor: ProvisioningViewController.attentionTimer)
+        } catch {
+            self.abort()
+            showError(error.localizedDescription)
         }
     }
     
     func bearer(_ bearer: Bearer, didClose error: Error?) {
         guard case .complete = provisioningManager.state else {
-            dismissStatusDialog { [weak self] in
-                self?.presentAlert(title: "Status", message: "Device disconnected.")
-            }
+            showError("Device disconnected.")
             return
         }
-        dismissStatusDialog { [weak self] in
-            guard let self = self else { return }
-            let manager = MeshNetworkManager.instance
-            if manager.save() {
-                let connection = MeshNetworkManager.bearer!
-                func done(reconnect: Bool) {
-                    if reconnect, let pbGattBearer = self.bearer as? PBGattBearer {
-                        connection.disconnect()
-                        // The bearer has closed. Attempt to send a message
-                        // will fail, but the Proxy Filter will receive .bearerClosed
-                        // error, upon which it will clear the filter list and notify
-                        // the delegate.
-                        manager.proxyFilter.proxyDidDisconnect()
-                        manager.proxyFilter.clear()
-                        
-                        let gattBearer = GattBearer(targetWithIdentifier: pbGattBearer.identifier)
-                        connection.use(proxy: gattBearer)
+        let manager = MeshNetworkManager.instance
+        if manager.save() {
+            let connection = MeshNetworkManager.bearer!
+            func done(reconnect: Bool) {
+                if reconnect, let pbGattBearer = self.bearer as? PBGattBearer {
+                    connection.disconnect()
+                    // The bearer has closed. Attempt to send a message
+                    // will fail, but the Proxy Filter will receive .bearerClosed
+                    // error, upon which it will clear the filter list and notify
+                    // the delegate.
+                    manager.proxyFilter.proxyDidDisconnect()
+                    manager.proxyFilter.clear()
+                    
+                    let gattBearer = GattBearer(targetWithIdentifier: pbGattBearer.identifier)
+                    connection.use(proxy: gattBearer)
+                }
+                self.dismiss(animated: true) {
+                    guard let network = manager.meshNetwork else {
+                        return
                     }
-                    self.dismiss(animated: true) {
-                        guard let network = manager.meshNetwork else {
-                            return
-                        }
-                        if let node = network.node(for: self.unprovisionedDevice) {
-                            self.delegate?.provisionerDidProvisionNewDevice(node, whichReplaced: self.previousNode)
-                        }
+                    if let node = network.node(for: self.unprovisionedDevice) {
+                        self.delegate?.provisionerDidProvisionNewDevice(node, whichReplaced: self.previousNode)
                     }
                 }
-                let reconnectAction = UIAlertAction(title: "Yes", style: .default) { _ in
+            }
+            let reconnectAction = UIAlertAction(title: "Yes", style: .default) { _ in
+                done(reconnect: true)
+            }
+            let continueAction = UIAlertAction(title: "No", style: .cancel) { _ in
+                done(reconnect: false)
+            }
+            if connection.isConnected && bearer is PBGattBearer {
+                self.presentAlert(title: "Success",
+                                  message: "Provisioning complete.\n\nDo you want to connect to the new Node over GATT bearer?",
+                                  options: [reconnectAction, continueAction])
+            } else {
+                showSuccess() {
                     done(reconnect: true)
                 }
-                let continueAction = UIAlertAction(title: "No", style: .cancel) { _ in
-                    done(reconnect: false)
-                }
-                if connection.isConnected && bearer is PBGattBearer {
-                    self.presentAlert(title: "Success",
-                                      message: "Provisioning complete.\n\nDo you want to connect to the new Node over GATT bearer?",
-                                      options: [reconnectAction, continueAction])
-                } else {
-                    self.presentAlert(title: "Success",
-                                      message: "Provisioning complete.") { _ in
-                        done(reconnect: true)
-                    }
-                }
-            } else {
-                self.presentAlert(title: "Error", message: "Mesh configuration could not be saved.")
             }
+        } else {
+            showError("Mesh configuration could not be saved.")
         }
     }
     
@@ -414,8 +395,8 @@ extension ProvisioningViewController: ProvisioningDelegate {
             guard let self = self else { return }
             switch state {
                 
-            case .requestingCapabilities:
-                self.presentStatusDialog(message: "Identifying...")
+//            case .requestingCapabilities:
+//                self.presentStatusDialog(message: "Identifying...")
                 
             case .capabilitiesReceived(let capabilities):
                 self.elementsCountLabel.text = "\(capabilities.numberOfElements)"
@@ -444,40 +425,32 @@ extension ProvisioningViewController: ProvisioningDelegate {
                 
                 let deviceSupported = self.provisioningManager.isDeviceSupported == true
                 
-                self.dismissStatusDialog {
-                    if deviceSupported && addressValid {
-                        // If the device got disconnected after the capabilities were received
-                        // the first time, the app had to send invitation again.
-                        // This time we can just directly proceed with provisioning.
-                        if capabilitiesWereAlreadyReceived {
-                            self.startProvisioning()
-                        }
-                    } else {
-                        if !deviceSupported {
-                            self.presentAlert(title: "Error", message: "Selected device is not supported.")
-                            self.actionProvision.isEnabled = false
-                        } else if !addressValid {
-                            self.presentAlert(title: "Error", message: "No available Unicast Address in Provisioner's range.")
-                        }
+                if deviceSupported && addressValid {
+                    // If the device got disconnected after the capabilities were received
+                    // the first time, the app had to send invitation again.
+                    // This time we can just directly proceed with provisioning.
+                    if capabilitiesWereAlreadyReceived {
+                        self.startProvisioning()
+                    }
+                } else {
+                    if !deviceSupported {
+                        showError("Selected device is not supported.")
+                        self.actionProvision.isEnabled = false
+                    } else if !addressValid {
+                        showError("No available Unicast Address in Provisioner's range.")
                     }
                 }
                 
             case .complete:
-                self.presentStatusDialog(message: "Disconnecting...") {
-                    do {
-                        try self.bearer.close()
-                    } catch {
-                        self.dismissStatusDialog() {
-                            self.presentAlert(title: "Error", message: error.localizedDescription)
-                        }
-                    }
+                do {
+                    try self.bearer.close()
+                } catch {
+                    showError(error)
                 }
                 
             case let .failed(error):
-                self.dismissStatusDialog {
-                    self.presentAlert(title: "Error", message: error.localizedDescription)
-                    self.abort()
-                }
+                showError(error)
+                self.abort()
                 
             default:
                 break

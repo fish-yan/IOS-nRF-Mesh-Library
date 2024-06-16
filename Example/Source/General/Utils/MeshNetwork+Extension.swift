@@ -211,11 +211,10 @@ extension Node {
 
 extension Element {
     func filteredModels() -> [Model] {
-        let filterIds: [UInt16] = [.configurationClientModelId,
-                                   .genericOnOffServerModelId,
-                                   .genericOnOffClientModelId,
+        let filterIds: [UInt16] = [.genericOnOffServerModelId,
                                    .genericLevelServerModelId,
-                                   .genericLevelClientModelId]
+                                   .sceneSetupServerModelId,
+                                   .sceneServerModelId]
         return self.models.filter { filterIds.contains($0.modelIdentifier) || !$0.isBluetoothSIGAssigned}
     }
 }

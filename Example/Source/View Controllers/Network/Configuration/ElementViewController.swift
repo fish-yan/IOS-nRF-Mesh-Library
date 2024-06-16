@@ -47,7 +47,7 @@ class ElementViewController: UITableViewController {
         
         title = element.name ?? "Element \(element.index + 1)"
         
-        filterModels = element.models
+        filterModels = element.filteredModels()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -188,9 +188,9 @@ private extension ElementViewController {
 }
 
 private extension IndexPath {
-    static let nameSection    = 0
-    static let detailsSection = 1
-    static let modelsSection  = 2
+    static let nameSection    = -1
+    static let detailsSection = 0
+    static let modelsSection  = 1
     static let numberOfSection = IndexPath.modelsSection + 1
     
     static let titles = [

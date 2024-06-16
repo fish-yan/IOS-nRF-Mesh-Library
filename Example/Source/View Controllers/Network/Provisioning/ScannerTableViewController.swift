@@ -31,6 +31,7 @@
 import UIKit
 import CoreBluetooth
 import NordicMesh
+import ProgressHUD
 
 typealias DiscoveredPeripheral = (
     device: UnprovisionedDevice,
@@ -54,7 +55,6 @@ class ScannerTableViewController: UITableViewController {
     private var centralManager: CBCentralManager!
     private var discoveredPeripherals: [DiscoveredPeripheral] = []
 
-    private var alert: UIAlertController?
     private var selectedDevice: UnprovisionedDevice?
     private var previousNode: Node?
     
@@ -237,31 +237,11 @@ private extension ScannerTableViewController {
     
     func open(bearer: ProvisioningBearer) {
         bearer.delegate = self
-        
-        alert = UIAlertController(title: "Status", message: "Connecting...", preferredStyle: .alert)
-        alert!.addAction(UIAlertAction(title: "Cancel", style: .cancel) { [weak self] action in
-            guard let self = self else { return }
-            action.isEnabled = false
-            self.alert?.title   = "Aborting"
-            self.alert?.message = "Cancelling connection..."
-            do {
-                try bearer.close()
-            } catch {
-                self.alert?.dismiss(animated: true) {
-                    self.presentAlert(title: "Error", message: error.localizedDescription)
-                }
-                self.alert = nil
-            }
-        })
-        present(alert!, animated: true) {
-            do {
-                try bearer.open()
-            } catch {
-                self.alert?.dismiss(animated: true) {
-                    self.presentAlert(title: "Error", message: error.localizedDescription)
-                }
-                self.alert = nil
-            }
+        showHUD()
+        do {
+            try bearer.open()
+        } catch {
+            showError(error.localizedDescription)
         }
     }
     
@@ -377,31 +357,23 @@ extension ScannerTableViewController: CBCentralManagerDelegate {
 extension ScannerTableViewController: GattBearerDelegate {
     
     func bearerDidConnect(_ bearer: Bearer) {
-        DispatchQueue.main.async {
-            self.alert?.message = "Discovering services..."
-        }
+        
     }
     
     func bearerDidDiscoverServices(_ bearer: Bearer) {
-        DispatchQueue.main.async {
-            self.alert?.message = "Initializing..."
-        }
+        
     }
         
     func bearerDidOpen(_ bearer: Bearer) {
         DispatchQueue.main.async {
-            self.alert?.dismiss(animated: false) {
-                self.performSegue(withIdentifier: "identify", sender: bearer)
-            }
-            self.alert = nil
+            hidHUD()
+            self.performSegue(withIdentifier: "identify", sender: bearer)
         }
     }
     
     func bearer(_ bearer: Bearer, didClose error: Error?) {
         DispatchQueue.main.async {
-            self.alert?.dismiss(animated: true) {
-                self.presentAlert(title: "Status", message: error?.localizedDescription ?? "Device disconnected", cancelable: false)
-            }
+            showError(error?.localizedDescription ?? "Device disconnected")
             self.selectedDevice = nil
             self.startScanning()
         }

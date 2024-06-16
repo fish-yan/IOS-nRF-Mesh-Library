@@ -36,16 +36,7 @@ class SettingsViewController: UITableViewController {
     // MARK: - Outlets
     @IBOutlet weak var organizeButton: UIBarButtonItem!
     
-    @IBOutlet weak var networkNameLabel: UILabel!
     @IBOutlet weak var provisionersLabel: UILabel!
-    @IBOutlet weak var networkKeysLabel: UILabel!
-    @IBOutlet weak var appKeysLabel: UILabel!
-    @IBOutlet weak var scenesLabel: UILabel!
-    @IBOutlet weak var testModeSwitch: UISwitch!
-    @IBOutlet weak var lastModifiedLabel: UILabel!
-    @IBAction func testModeDidChange(_ sender: UISwitch) {
-        MeshNetworkManager.instance.networkParameters.ivUpdateTestMode = sender.isOn
-    }
     
     @IBOutlet weak var resetNetworkButton: UIButton!
     
@@ -98,24 +89,21 @@ class SettingsViewController: UITableViewController {
     
     // MARK: - Table view delegate
     
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case IndexPath.networkSection: return 1
+        case IndexPath.actionsSection: return 1
+        case IndexPath.aboutSection: return 2
+        case IndexPath.backToNewUI: return 1
+        default: return 0
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        if indexPath.isNetworkName {
-            presentNameDialog()
-        }
+
         if indexPath.isResetNetwork {
             presentResetConfirmation()
-        }
-        if indexPath.isLinkToGitHub {
-            if let url = URL(string: "https://github.com/NordicSemiconductor/IOS-nRF-Mesh-Library") {
-                UIApplication.shared.open(url)
-            }
-        }
-        if indexPath.isLinkToIssues {
-            if let url = URL(string: "https://github.com/NordicSemiconductor/IOS-nRF-Mesh-Library/issues") {
-                UIApplication.shared.open(url)
-            }
         }
         if indexPath.isBackToNewUI {
             let tabVC = self.tabBarController as? RootTabBarController
@@ -125,12 +113,6 @@ class SettingsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView,
                             accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        if indexPath.isIvUpdateTestMode {
-            presentAlert(title: "Info",
-                         message: "IV Update test mode allows to transition to the subsequent "
-                                + "IV Index without having to wait at least 96 hours. The "
-                                + "transition will be done upon receiving a valid Secure Network beacon.")
-        }
     }
     
 }
@@ -199,22 +181,6 @@ extension SettingsViewController: WizardDelegate {
 
 private extension SettingsViewController {
     
-    /// Presents a dialog to edit the network name.
-    func presentNameDialog() {
-        let network = MeshNetworkManager.instance.meshNetwork!
-        
-        presentTextAlert(title: "Network Name", message: nil, text: network.meshName,
-                         placeHolder: "E.g. My House", type: .nameRequired, cancelHandler: nil) { name in
-                            network.meshName = name
-                            
-                            if MeshNetworkManager.instance.save() {
-                                self.networkNameLabel.text = name
-                            } else {
-                                self.presentAlert(title: "Error", message: "Mesh configuration could not be saved.")
-                            }
-        }
-    }
-    
     /// Presents a dialog with resetting confirmation.
     func presentResetConfirmation() {
         let alert = UIAlertController(title: "Reset Network",
@@ -262,12 +228,7 @@ private extension SettingsViewController {
         guard let meshNetwork = MeshNetworkManager.instance.meshNetwork else {
             return
         }
-        networkNameLabel.text  = meshNetwork.meshName
         provisionersLabel.text = "\(meshNetwork.provisioners.count)"
-        networkKeysLabel.text  = "\(meshNetwork.networkKeys.count)"
-        appKeysLabel.text      = "\(meshNetwork.applicationKeys.count)"
-        scenesLabel.text       = "\(meshNetwork.scenes.count)"
-        lastModifiedLabel.text = dateFormatter.string(from: meshNetwork.timestamp)
         tableView.reloadData()
     }
      
@@ -275,7 +236,6 @@ private extension SettingsViewController {
         // IV Update Test Mode is not persistent and has to be set each time
         // the app is open or a network is imported.
         MeshNetworkManager.instance.networkParameters.ivUpdateTestMode = false
-        testModeSwitch.setOn(false, animated: true)
         
         // All tabs should be reset to the root view controller.
         parent?.parent?.children
@@ -434,43 +394,20 @@ extension SettingsViewController: UIDocumentPickerDelegate {
 }
 
 private extension IndexPath {
-    static let nameSection    = 0
-    static let networkSection = 1
-    static let dateSection    = 2
-    static let actionsSection = 3
-    static let aboutSection   = 4
-    static let backToNewUI    = 5
-    
-    /// Returns whether the IndexPath points to the mesh network name row.
-    var isNetworkName: Bool {
-        return section == IndexPath.nameSection && row == 0
-    }
-    
-    /// Returns whether the IndexPath points to the IV Update Test Mode switch row.
-    var isIvUpdateTestMode: Bool {
-        return section == IndexPath.networkSection && row == 4
-    }
+    static let networkSection = 0
+    static let actionsSection = 1
+    static let aboutSection   = 2
+    static let backToNewUI    = 3
     
     /// Returns whether the IndexPath points to the network resetting option.
     var isResetNetwork: Bool {
         return section == IndexPath.actionsSection && row == 0
     }
     
-    /// Returns whether the IndexPath points to the Source Code link.
-    var isLinkToGitHub: Bool {
-        return section == IndexPath.aboutSection && row == 2
-    }
-    
-    /// Returns whether the IndexPath points to the Issues on GitHub.
-    var isLinkToIssues: Bool {
-        return section == IndexPath.aboutSection && row == 3
-    }
-    
     var isBackToNewUI: Bool {
         return section == IndexPath.backToNewUI && row == 0
     }
-    
-    static let name = IndexPath(row: 0, section: IndexPath.nameSection)
+
 }
 
 private extension Array where Element == CodingKey {

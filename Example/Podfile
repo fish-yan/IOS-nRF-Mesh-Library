@@ -4,6 +4,7 @@ platform :ios, '13.0'
 
 target 'nRF Mesh' do
   pod 'nRFMeshProvision', :path => '../'
+  pod 'ProgressHUD'
   pod 'LookinServer', :configurations => ['Debug']
   target 'nRF Mesh Tests' do
     inherit! :search_paths

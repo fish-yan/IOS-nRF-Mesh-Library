@@ -5,15 +5,18 @@ PODS:
   - LookinServer/Core (1.2.7)
   - nRFMeshProvision (4.2.0):
     - CryptoSwift (= 1.8.1)
+  - ProgressHUD (14.1.1)
 
 DEPENDENCIES:
   - LookinServer
   - nRFMeshProvision (from `../`)
+  - ProgressHUD
 
 SPEC REPOS:
   trunk:
     - CryptoSwift
     - LookinServer
+    - ProgressHUD
 
 EXTERNAL SOURCES:
   nRFMeshProvision:
@@ -23,7 +26,8 @@ SPEC CHECKSUMS:
   CryptoSwift: b9c701d6f5011df23794dbf7f2e480a77835d83d
   LookinServer: 36f1a0ad280de34b9794cf8825867fcc2dd93e75
   nRFMeshProvision: 9940798d1d7df746380f92563caf64c75c1a1b24
+  ProgressHUD: abb9136ae23c85204236828562cb9a8ec98efb44
 
-PODFILE CHECKSUM: 9cb3532583456af1f016209c1df39e8e7fcfe553
+PODFILE CHECKSUM: 169c5f47d561b138de2f309abd47b02482208bec
 
 COCOAPODS: 1.13.0
