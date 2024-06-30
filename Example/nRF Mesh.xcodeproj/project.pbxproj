@@ -15,6 +15,8 @@
 		2C42B5032AE67003006887FF /* GLColorTemperatureMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */; };
 		2C42B5052AE676FC006887FF /* GLAngleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5042AE676FC006887FF /* GLAngleMessage.swift */; };
 		2C42B5072AE76BC7006887FF /* GLMessageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */; };
+		2C4D78172C2F98C800A67B96 /* ZoneHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4D78162C2F98C800A67B96 /* ZoneHostViewController.swift */; };
+		2C4D78192C2F9A3500A67B96 /* PZoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4D78182C2F9A3500A67B96 /* PZoneListView.swift */; };
 		2C71EA782C1D7B6A00493ED3 /* GLCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C71EA772C1D7B6A00493ED3 /* GLCommon.swift */; };
 		2C7BE3732B148F40006376F7 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */; };
 		2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C0C292ABF132800BC0156 /* ItemView.swift */; };
@@ -51,8 +53,16 @@
 		2CB620582BBC051A002804D3 /* COnOffItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620572BBC051A002804D3 /* COnOffItemView.swift */; };
 		2CB6205C2BBC2C0E002804D3 /* MeshSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */; };
 		2CB620642BC57924002804D3 /* MeshTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620632BC57924002804D3 /* MeshTaskManager.swift */; };
+		2CBB85D12C2FE90F00BFBEB6 /* PZoneDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85D02C2FE90F00BFBEB6 /* PZoneDetailView.swift */; };
+		2CBB85D32C2FEEB600BFBEB6 /* ZoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85D22C2FEEB600BFBEB6 /* ZoneCell.swift */; };
+		2CBB85D72C2FFE2000BFBEB6 /* Zone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CBB85D62C2FFE2000BFBEB6 /* Zone.storyboard */; };
+		2CBB85D92C30022900BFBEB6 /* PZoneListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85D82C30022900BFBEB6 /* PZoneListTableViewController.swift */; };
+		2CBB85DB2C3006D800BFBEB6 /* PZoneDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85DA2C3006D800BFBEB6 /* PZoneDetailViewController.swift */; };
+		2CBB85DD2C300FE500BFBEB6 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85DC2C300FE500BFBEB6 /* UIButton+Extension.swift */; };
+		2CBB85DF2C30E86600BFBEB6 /* PSelectZoneTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85DE2C30E86600BFBEB6 /* PSelectZoneTableViewController.swift */; };
+		2CBB85E12C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85E02C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift */; };
+		2CBB85E32C313C0B00BFBEB6 /* PChangePositionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85E22C313C0B00BFBEB6 /* PChangePositionTableViewController.swift */; };
 		2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */; };
-		2CC97AE82C06DBE700725E9A /* ZoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC97AE72C06DBE600725E9A /* ZoneCell.swift */; };
 		2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */; };
 		2CF4D0702BF2731200E89E5F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		2CFB58B52B6D18F400C42663 /* LaunchScreen1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */; };
@@ -274,6 +284,8 @@
 		2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLColorTemperatureMessage.swift; sourceTree = "<group>"; };
 		2C42B5042AE676FC006887FF /* GLAngleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAngleMessage.swift; sourceTree = "<group>"; };
 		2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMessageDelegate.swift; sourceTree = "<group>"; };
+		2C4D78162C2F98C800A67B96 /* ZoneHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneHostViewController.swift; sourceTree = "<group>"; };
+		2C4D78182C2F9A3500A67B96 /* PZoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PZoneListView.swift; sourceTree = "<group>"; };
 		2C71EA772C1D7B6A00493ED3 /* GLCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLCommon.swift; sourceTree = "<group>"; };
 		2C7BE3722B148F40006376F7 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		2C8C0C292ABF132800BC0156 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
@@ -310,8 +322,16 @@
 		2CB620572BBC051A002804D3 /* COnOffItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COnOffItemView.swift; sourceTree = "<group>"; };
 		2CB6205B2BBC2C0E002804D3 /* MeshSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSegmentView.swift; sourceTree = "<group>"; };
 		2CB620632BC57924002804D3 /* MeshTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshTaskManager.swift; sourceTree = "<group>"; };
+		2CBB85D02C2FE90F00BFBEB6 /* PZoneDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PZoneDetailView.swift; sourceTree = "<group>"; };
+		2CBB85D22C2FEEB600BFBEB6 /* ZoneCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoneCell.swift; sourceTree = "<group>"; };
+		2CBB85D62C2FFE2000BFBEB6 /* Zone.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Zone.storyboard; sourceTree = "<group>"; };
+		2CBB85D82C30022900BFBEB6 /* PZoneListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PZoneListTableViewController.swift; sourceTree = "<group>"; };
+		2CBB85DA2C3006D800BFBEB6 /* PZoneDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PZoneDetailViewController.swift; sourceTree = "<group>"; };
+		2CBB85DC2C300FE500BFBEB6 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		2CBB85DE2C30E86600BFBEB6 /* PSelectZoneTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSelectZoneTableViewController.swift; sourceTree = "<group>"; };
+		2CBB85E02C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNodeDetailTableViewController.swift; sourceTree = "<group>"; };
+		2CBB85E22C313C0B00BFBEB6 /* PChangePositionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PChangePositionTableViewController.swift; sourceTree = "<group>"; };
 		2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshNetwork+Extension.swift"; sourceTree = "<group>"; };
-		2CC97AE72C06DBE600725E9A /* ZoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneCell.swift; sourceTree = "<group>"; };
 		2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAiMessage.swift; sourceTree = "<group>"; };
 		2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen1.storyboard; sourceTree = "<group>"; };
 		2CFCE59E2B48406B00CF2491 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
@@ -569,6 +589,21 @@
 			path = Messages;
 			sourceTree = "<group>";
 		};
+		2C4D78152C2F987800A67B96 /* P */ = {
+			isa = PBXGroup;
+			children = (
+				2C4D78162C2F98C800A67B96 /* ZoneHostViewController.swift */,
+				2CBB85D82C30022900BFBEB6 /* PZoneListTableViewController.swift */,
+				2CBB85DA2C3006D800BFBEB6 /* PZoneDetailViewController.swift */,
+				2CBB85DE2C30E86600BFBEB6 /* PSelectZoneTableViewController.swift */,
+				2CBB85E02C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift */,
+				2CBB85E22C313C0B00BFBEB6 /* PChangePositionTableViewController.swift */,
+				2C4D78182C2F9A3500A67B96 /* PZoneListView.swift */,
+				2CBB85D02C2FE90F00BFBEB6 /* PZoneDetailView.swift */,
+			);
+			path = P;
+			sourceTree = "<group>";
+		};
 		2CA4D4F92BFCED100082A0FC /* General */ = {
 			isa = PBXGroup;
 			children = (
@@ -577,6 +612,7 @@
 				2CA679E72BE924DA00BA1596 /* CommonView */,
 				2CA679DA2BE906E900BA1596 /* B */,
 				2CB620232BB7BA47002804D3 /* C */,
+				2C4D78152C2F987800A67B96 /* P */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -592,6 +628,7 @@
 				2C93E3732ADE23EC00B392DB /* Debouncer.swift */,
 				2C93E3752ADF79A900B392DB /* GlobalConfig.swift */,
 				2C71EA772C1D7B6A00493ED3 /* GLCommon.swift */,
+				2CBB85DC2C300FE500BFBEB6 /* UIButton+Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -696,7 +733,7 @@
 				528445C824EEA765002168A1 /* HeartbeatSubscriptionCell.swift */,
 				52A8EA9324EE6D18004C14C7 /* HeartbeatSubscriptionPeriodCell.swift */,
 				521599D425E91F9300F602FA /* SensorValueCell.swift */,
-				2CC97AE72C06DBE600725E9A /* ZoneCell.swift */,
+				2CBB85D22C2FEEB600BFBEB6 /* ZoneCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -716,6 +753,7 @@
 				52A8EA9024ED35F4004C14C7 /* SetHeartbeatSubscription.storyboard */,
 				F085CA0029D1E0B900C2DF89 /* Subscribe.storyboard */,
 				52CD0A592330BF4800A9A181 /* Proxy.storyboard */,
+				2CBB85D62C2FFE2000BFBEB6 /* Zone.storyboard */,
 				5283524E227887970097B949 /* Settings.storyboard */,
 			);
 			path = UI;
@@ -1294,6 +1332,7 @@
 				52CD0A5B2330BF4800A9A181 /* Proxy.storyboard in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				A7B526A8277B210000F5C60D /* GenericPowerOnOffSetup.xib in Resources */,
+				2CBB85D72C2FFE2000BFBEB6 /* Zone.storyboard in Resources */,
 				52A9C1C62313D7D80036792A /* GenericLevel.xib in Resources */,
 				2CB620482BB946D5002804D3 /* Colors.xcassets in Resources */,
 				F085CA0229D1E0B900C2DF89 /* Subscribe.storyboard in Resources */,
@@ -1423,6 +1462,7 @@
 				52CD0A55232FC11700A9A181 /* AddressCell.swift in Sources */,
 				52313FEE22EAFB090074325A /* SubscribeViewController.swift in Sources */,
 				2CB620282BB7BCC6002804D3 /* CScenesView.swift in Sources */,
+				2C4D78192C2F9A3500A67B96 /* PZoneListView.swift in Sources */,
 				5212152B23152A450059FB3D /* SectionView.swift in Sources */,
 				5212152F231554190059FB3D /* ProgressCollectionViewController.swift in Sources */,
 				523F776A22C621F50030EA6A /* NodeAddNetworkKeyViewController.swift in Sources */,
@@ -1438,6 +1478,7 @@
 				52E54CDF23438D2600478F05 /* GenericOnOffServerDelegate.swift in Sources */,
 				5217D2E2250F7639004FDE79 /* GenericDefaultTransitionTimeClientDelegate.swift in Sources */,
 				5288C20823705C8D00321ED3 /* ProxyCell.swift in Sources */,
+				2CBB85D12C2FE90F00BFBEB6 /* PZoneDetailView.swift in Sources */,
 				52BC6F4824507A5400EBEEA4 /* DisconnectCell.swift in Sources */,
 				523F777B22CB86A00030EA6A /* ModelBindAppKeyViewController.swift in Sources */,
 				2CB6205C2BBC2C0E002804D3 /* MeshSegmentView.swift in Sources */,
@@ -1458,6 +1499,8 @@
 				5288C20423704EF300321ED3 /* ConnectionModeCell.swift in Sources */,
 				52547F28232A3F470002AA7B /* RangeView.swift in Sources */,
 				2CB620582BBC051A002804D3 /* COnOffItemView.swift in Sources */,
+				2CBB85D92C30022900BFBEB6 /* PZoneListTableViewController.swift in Sources */,
+				2CBB85DF2C30E86600BFBEB6 /* PSelectZoneTableViewController.swift in Sources */,
 				52314041230192C50074325A /* ModelViewCell.swift in Sources */,
 				2CA679E02BE911CD00BA1596 /* BSetView.swift in Sources */,
 				527596302A138ECC00B04C6F /* SelectPublicationDestintionsViewController.swift in Sources */,
@@ -1477,12 +1520,14 @@
 				52547F29232A3F470002AA7B /* FabView.swift in Sources */,
 				2C93E3762ADF79A900B392DB /* GlobalConfig.swift in Sources */,
 				F09DE4D729EEBEAD0073969A /* SelectModelsForSubscriptionViewController.swift in Sources */,
+				2CBB85E12C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift in Sources */,
 				2CA679E62BE91B7200BA1596 /* BZoneListView.swift in Sources */,
 				52A9C17D230EB9490036792A /* GenericOnOffViewCell.swift in Sources */,
 				5292F8A5250237A600EA0F2A /* NodeStoreSceneViewController.swift in Sources */,
 				52E54CD62343875400478F05 /* GenericLevelClientCell.swift in Sources */,
 				2CA67A152BEE6BFA00BA1596 /* BSceneStoreManager.swift in Sources */,
 				2CA67A082BECE54600BA1596 /* LevelPickerView.swift in Sources */,
+				2CBB85E32C313C0B00BFBEB6 /* PChangePositionTableViewController.swift in Sources */,
 				529B76492252499E008F1CE7 /* UIColor+Nordic.swift in Sources */,
 				2CFE86502AEA9CDC00A1CF7D /* GLFadeTimeMessage.swift in Sources */,
 				2CFE86602AEAA96A00A1CF7D /* GLRelayMessage.swift in Sources */,
@@ -1519,6 +1564,7 @@
 				523F776422C4EDD90030EA6A /* SwitchCell.swift in Sources */,
 				5292F8A7250652BB00EA0F2A /* SceneServerGroupCell.swift in Sources */,
 				522AFFDC22BBA34900521EDC /* ActionCell.swift in Sources */,
+				2CBB85DD2C300FE500BFBEB6 /* UIButton+Extension.swift in Sources */,
 				2C2C10E42B6A0757004507FE /* Loading.swift in Sources */,
 				2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */,
 				52E54CE72345EDA700478F05 /* GenericState.swift in Sources */,
@@ -1532,9 +1578,11 @@
 				52F6AD7622BA612900F0D7DF /* UIViewController+Toast.swift in Sources */,
 				5217D2E5250F90D8004FDE79 /* GenericDefaultTransitionTimeViewCell.swift in Sources */,
 				528445C924EEA765002168A1 /* HeartbeatSubscriptionCell.swift in Sources */,
+				2CBB85D32C2FEEB600BFBEB6 /* ZoneCell.swift in Sources */,
 				5231403F2301761C0074325A /* ConfigurationServerViewCell.swift in Sources */,
 				2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */,
 				52A8EA9624EE704A004C14C7 /* SetHeartbeatSubscriptionViewController.swift in Sources */,
+				2C4D78172C2F98C800A67B96 /* ZoneHostViewController.swift in Sources */,
 				52547EFB231800F30002AA7B /* GroupTargetModelsViewController.swift in Sources */,
 				5217D2E0250F522A004FDE79 /* GenericDefaultTransitionTimeServerDelegate.swift in Sources */,
 				F09DE4C729D771F20073969A /* Model+Name.swift in Sources */,
@@ -1554,7 +1602,6 @@
 				5288C2142371B32200321ED3 /* SimpleOnOffStatus.swift in Sources */,
 				5251498122E0E36600CBF1E3 /* AddGroupViewController.swift in Sources */,
 				2CFE86542AEAA1BC00A1CF7D /* GLBeaconRSSIMessage.swift in Sources */,
-				2CC97AE82C06DBE700725E9A /* ZoneCell.swift in Sources */,
 				2CB620222BB7BA13002804D3 /* Font+Mesh.swift in Sources */,
 				F09DE4D329E99A360073969A /* SelectGroupsViewController.swift in Sources */,
 				2CB6204E2BBA53CD002804D3 /* MeshApp.swift in Sources */,
@@ -1563,6 +1610,7 @@
 				2C71EA782C1D7B6A00493ED3 /* GLCommon.swift in Sources */,
 				F063C01D29C27EAB00A445A9 /* IntroViewController.swift in Sources */,
 				5292F8A325021B8F00EA0F2A /* ModelIdentifiers.swift in Sources */,
+				2CBB85DB2C3006D800BFBEB6 /* PZoneDetailViewController.swift in Sources */,
 				52835258227AEDA30097B949 /* DeviceCell.swift in Sources */,
 				2CA679FC2BEBC20900BA1596 /* BZoneView.swift in Sources */,
 				2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */,

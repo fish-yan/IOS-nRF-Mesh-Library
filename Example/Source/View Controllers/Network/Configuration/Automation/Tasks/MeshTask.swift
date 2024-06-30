@@ -62,6 +62,7 @@ enum MeshTask {
     case deleteScene(_ scene: SceneNumber, to: Address)
     case sceneRegisterGet
     case nodeReset
+    case coordinate(_ value: String)
     
     var title: String {
         switch self {
@@ -119,6 +120,8 @@ enum MeshTask {
             return "Delete Scene"
         case .sceneRegisterGet:
             return "Scene Register Get"
+        case .coordinate:
+            return "Set Coordinate"
         }
     }
     
@@ -162,7 +165,7 @@ enum MeshTask {
         }
     }
     
-    var message: AcknowledgedConfigMessage {
+    var message: MeshMessage {
         switch self {
         case .getCompositionData(page: let page):
             return ConfigCompositionDataGet(page: page)
@@ -233,8 +236,12 @@ enum MeshTask {
             }
         case .nodeReset:
             return ConfigNodeReset()
-        default:
-            return ConfigDefaultTtlGet()
+        case .sceneRegisterGet:
+            return SceneRegisterGet()
+        case .coordinate(let value):
+            return GLCoordinateMessage(coordinate: value)
+        case .deleteScene(let scene, to: let to):
+            return SceneDelete(scene)
         }
     }
 }

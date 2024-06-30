@@ -23,9 +23,7 @@ struct CLightView: View {
     @State private var sliderType: MeshSliderType = .dim
     
     private let messageManager = MeshMessageManager()
-    
-    private let taskManager = MeshTaskManager()
-    
+        
     let node: Node
     var isB = false
     var body: some View {

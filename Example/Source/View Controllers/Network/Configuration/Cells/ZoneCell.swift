@@ -12,8 +12,8 @@ import NordicMesh
 class ZoneCell: UITableViewCell {
     var node: Node! {
         didSet {
-            if let zone = GLMeshNetworkModel.instance.zone.first(where: {$0.nodeAddresses.contains(node.primaryUnicastAddress) && $0.zone != 0}) {
-                numberTF.text = String(zone.zone, radix: 16)
+            if let zone = GLMeshNetworkModel.instance.zones.first(where: {$0.nodeAddresses.contains(node.primaryUnicastAddress) && $0.number != 0}) {
+                numberTF.text = String(zone.number, radix: 16)
             }
             
         }
@@ -24,19 +24,19 @@ class ZoneCell: UITableViewCell {
         // Initialization code
     }
     @IBAction func saveAction(_ sender: UIButton) {
-        var zones = GLMeshNetworkModel.instance.zone
+        let zones = GLMeshNetworkModel.instance.zones
         if let text = numberTF.text,
            let num = UInt8(text, radix: 16) {
-            if let zone = zones.first(where: {$0.zone == num}) {
+            if let zone = zones.first(where: {$0.number == num}) {
                 zone.add(nodeAddress: node.primaryUnicastAddress)
             } else {
-                let zone = GLZone(name: "Zone \(num)", zone: num)
+                let zone = GLZone(name: "Zone \(num)", number: num)
                 zone.add(nodeAddress: node.primaryUnicastAddress)
-                zones.append(zone)
+                GLMeshNetworkModel.instance.add(zone)
             }
         }
-        GLMeshNetworkModel.instance.zone = zones
         MeshNetworkManager.instance.saveAll()
+        toast("save success")
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

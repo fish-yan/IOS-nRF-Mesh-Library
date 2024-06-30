@@ -194,17 +194,17 @@ struct BZoneView: View {
     }
     
     var D000: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD000
+        let address = UInt16(zone.number) * 16 + 0xD000
         return try! NordicMesh.Group(name: "", address: address)
     }
     
     var D001: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD001
+        let address = UInt16(zone.number) * 16 + 0xD001
         return try! NordicMesh.Group(name: "", address: address)
     }
     
     var D002: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD002
+        let address = UInt16(zone.number) * 16 + 0xD002
         return try! NordicMesh.Group(name: "", address: address)
     }
 }
@@ -254,5 +254,5 @@ private extension BZoneView {
 
 
 #Preview {
-    BZoneView(zone: GLMeshNetworkModel.instance.zone.first!)
+    BZoneView(zone: GLMeshNetworkModel.instance.zones.first!)
 }

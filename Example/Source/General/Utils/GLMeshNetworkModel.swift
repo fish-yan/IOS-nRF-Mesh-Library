@@ -92,7 +92,7 @@ class MessageDetailStore: NSObject, ObservableObject, Codable {
 
 class GLZone: ObservableObject, Codable, Hashable {
     @Published var name: String = "Zone"
-    @Published var zone: UInt8 = 0x0
+    @Published var number: UInt8 = 0x0
     @Published var nodeAddresses: [Address] = [] // 关联 node
     func scenes() -> [Scene] {
         let scenes = MeshNetworkManager.instance.meshNetwork?.nodes.filter({nodeAddresses.contains($0.primaryUnicastAddress)})
@@ -110,23 +110,22 @@ class GLZone: ObservableObject, Codable, Hashable {
     
     private var anyCancellable: AnyCancellable?
     
-    init(name: String, zone: UInt8) {
+    init(name: String, number: UInt8) {
         self.name = name
-        self.zone = zone
+        self.number = number
         anyCancellable = self.store.objectWillChange.sink {
             self.objectWillChange.send()
         }
     }
     
     enum CodingKeys: String, CodingKey {
-        case name, zone, nodeAddresses, store
+        case name, number, nodeAddresses, store
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         name = try values.decode(String.self, forKey: .name)
-        zone = try values.decode(UInt8.self, forKey: .zone)
-//        store = try values.decode(MessageDetailStore.self, forKey: .store)
+        number = try values.decode(UInt8.self, forKey: .number)
         
         let addresses = try values.decode([Address].self, forKey: .nodeAddresses)
         let allAddress = MeshNetworkManager.instance.meshNetwork?.nodes.map({$0.primaryUnicastAddress}) ?? []
@@ -139,15 +138,15 @@ class GLZone: ObservableObject, Codable, Hashable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
-        try container.encode(zone, forKey: .zone)
+        try container.encode(number, forKey: .number)
         let allAddress = MeshNetworkManager.instance.meshNetwork?.nodes.map({$0.primaryUnicastAddress}) ?? []
         let addresses = nodeAddresses.filter({allAddress.contains($0)})
-//        try container.encode(store, forKey: .store)
+        nodeAddresses = addresses
         try container.encode(addresses, forKey: .nodeAddresses)
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(zone)
+        hasher.combine(number)
     }
     
     static func == (lhs: GLZone, rhs: GLZone) -> Bool {
@@ -155,22 +154,27 @@ class GLZone: ObservableObject, Codable, Hashable {
     }
     
     func add(nodeAddress: Address) {
-        let zones = GLMeshNetworkModel.instance.zone
-        for zone in zones where zone.zone != 0 {
+        let zones = GLMeshNetworkModel.instance.zones
+        for zone in zones where zone.number != 0 {
             zone.nodeAddresses.removeAll(where: {$0 == nodeAddress})
         }
-        if let all = zones.first(where: {$0.zone == 0}) {
-            all.nodeAddresses.append(nodeAddress)
-            let allAddress = MeshNetworkManager.instance.meshNetwork?.nodes.map({$0.primaryUnicastAddress}) ?? []
-            all.nodeAddresses = all.nodeAddresses
-                .filter({allAddress.contains($0)})
-                .uniqued()
-        }
-        nodeAddresses.append(nodeAddress)
         let allAddress = MeshNetworkManager.instance.meshNetwork?.nodes.map({$0.primaryUnicastAddress}) ?? []
+        
+        let all = GLMeshNetworkModel.instance.allZone
+        all.nodeAddresses.append(nodeAddress)
+        all.nodeAddresses = all.nodeAddresses
+            .filter({allAddress.contains($0)})
+            .uniqued()
+        nodeAddresses.append(nodeAddress)
         nodeAddresses = nodeAddresses
             .filter({allAddress.contains($0)})
             .uniqued()
+    }
+    
+    func remove(nodeAddress: Address) {
+        let all = GLMeshNetworkModel.instance.allZone
+        all.nodeAddresses.removeAll(where: {$0 == nodeAddress})
+        nodeAddresses.removeAll(where: {$0 == nodeAddress})
     }
 }
 
@@ -178,33 +182,62 @@ class GLMeshNetworkModel: ObservableObject, Codable {
     static let instance: GLMeshNetworkModel = GLMeshNetworkModel()
     private init() { }
     
-    @Published var zone: [GLZone] = []
+    @Published fileprivate(set) var zones: [GLZone] = []
+    
+    @Published fileprivate var nodeCoordinates: [Address: String] = [:]
     
     enum CodingKeys: String, CodingKey {
-        case nodes, groups, scenes, drafts, zone
+        case nodes, groups, scenes, drafts, zones, nodeCoordinates
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        zone = try values.decode([GLZone].self, forKey: .zone)
+        zones = (try? values.decode([GLZone].self, forKey: .zones)) ?? []
+        nodeCoordinates = try values.decode([Address: String].self, forKey: .nodeCoordinates)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(zone, forKey: .zone)
+        try container.encode(zones, forKey: .zones)
+        try container.encode(nodeCoordinates, forKey: .nodeCoordinates)
     }
     
     func reset() {
-        zone.removeAll()
+        zones.removeAll()
     }
     
     func nextZone() -> UInt8 {
-        let sortedZone = zone.sorted(by: {$0.zone < $1.zone})
-        if let last = sortedZone.last {
-            return last.zone + 1
-        } else {
-            return 0
+        var next: UInt8 = 0
+        let sortedZone = zones.sorted(by: {$0.number < $1.number})
+        for zone in sortedZone {
+            if zone.number > next {
+                break
+            }
+            next += 1
         }
+        return next
+    }
+    
+    func zone(node: Node) -> GLZone {
+        if let zone = zones.first(where: {$0.nodeAddresses.contains(node.primaryUnicastAddress) && $0.number != 0}) {
+            return zone
+        }
+        return allZone
+    }
+    
+    var allZone: GLZone {
+        zones.first(where: {$0.number == 0}) ?? GLZone(name: "All", number: 0x0)
+    }
+    
+    func remove(_ zone: GLZone) {
+        zones.removeAll(where: { $0 == zone })
+    }
+    
+    func add(_ zone: GLZone) {
+        if zones.contains(zone) {
+            return
+        }
+        zones.append(zone)
     }
 }
 private let storage: Storage = LocalStorage(fileName: "GLModel.json")
@@ -223,7 +256,8 @@ extension MeshNetworkManager {
         decoder.dateDecodingStrategy = .iso8601
         if let data = storage.load(),
             let model = try? decoder.decode(GLMeshNetworkModel.self, from: data) {
-            GLMeshNetworkModel.instance.zone = model.zone
+            GLMeshNetworkModel.instance.zones = model.zones
+            GLMeshNetworkModel.instance.nodeCoordinates = model.nodeCoordinates
             print("model load success")
             return true
         }
@@ -257,7 +291,8 @@ extension MeshNetworkManager {
         }
         
         let model = try decoder.decode(GLMeshNetworkModel.self, from: data)
-        GLMeshNetworkModel.instance.zone = model.zone
+        GLMeshNetworkModel.instance.zones = model.zones
+        GLMeshNetworkModel.instance.nodeCoordinates = model.nodeCoordinates
         return model
     }
     
@@ -292,6 +327,21 @@ extension MeshNetworkManager {
     func clearModel() -> Bool {
         GLMeshNetworkModel.instance.reset()
         return saveModel()
+    }
+}
+
+extension Node {
+    var coordinate: String? {
+        get {
+            GLMeshNetworkModel.instance.nodeCoordinates[primaryUnicastAddress]
+        }
+        set {
+            if let newValue {
+                GLMeshNetworkModel.instance.nodeCoordinates[primaryUnicastAddress] = newValue
+            } else {
+                GLMeshNetworkModel.instance.nodeCoordinates.removeValue(forKey: primaryUnicastAddress)
+            }
+        }
     }
 }
 

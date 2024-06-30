@@ -35,21 +35,10 @@ class ProvisioningViewController: UITableViewController {
     static let attentionTimer: UInt8 = 5
     
     // MARK: - Outlets
-    @IBOutlet weak var provisionButton: UIBarButtonItem!
-    
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var unicastAddressLabel: UILabel!
-    @IBOutlet weak var networkKeyLabel: UILabel!
-    @IBOutlet weak var networkKeyCell: UITableViewCell!
-    
-    @IBOutlet weak var elementsCountLabel: UILabel!
-    @IBOutlet weak var supportedAlgorithmsLabel: UILabel!
-    @IBOutlet weak var publicKeyTypeLabel: UILabel!
-    @IBOutlet weak var oobTypeLabel: UILabel!
-    @IBOutlet weak var outputOobSizeLabel: UILabel!
-    @IBOutlet weak var supportedOutputOobActionsLabel: UILabel!
-    @IBOutlet weak var inputOobSizeLabel: UILabel!
-    @IBOutlet weak var supportedInputOobActionsLabel: UILabel!
+    @IBOutlet weak var zoneLabel: UILabel!
+    @IBOutlet weak var coordinateLabel: UILabel!
     
     // MARK: - Actions
     
@@ -73,7 +62,11 @@ class ProvisioningViewController: UITableViewController {
     private var authenticationMethod: AuthenticationMethod?
     
     private var provisioningManager: ProvisioningManager!
-    private var capabilitiesReceived = false
+    
+    private let taskManager = MeshTaskManager()
+    private var needConfigMore = false
+    private var node: Node!
+    private var zone: GLZone?
     
     private var alert: UIAlertController?
     
@@ -84,7 +77,7 @@ class ProvisioningViewController: UITableViewController {
         
         let manager = MeshNetworkManager.instance
         nameLabel.text = unprovisionedDevice.name
-        
+        actionProvision.isEnabled = false
         // Obtain the Provisioning Manager instance for the Unprovisioned Device.
         do {
             provisioningManager = try manager.provision(unprovisionedDevice: unprovisionedDevice, over: bearer)
@@ -107,22 +100,16 @@ class ProvisioningViewController: UITableViewController {
         
         // Unicast Address initially will be assigned automatically.
         unicastAddressLabel.text = "Automatic"
-        networkKeyLabel.text = provisioningManager.networkKey?.name ?? "New Network Key"
-        if provisioningManager.networkKey == nil {
-            networkKeyCell.selectionStyle = .none
-            networkKeyCell.accessoryType = .none
-        }
+        zoneLabel.text = "All"
         actionProvision.isEnabled = manager.meshNetwork!.localProvisioner != nil
         
         // We are now connected. Proceed by sending Provisioning Invite request.
-//        presentStatusDialog(message: "Identifying...", animated: false) {
-            do {
-                try self.provisioningManager.identify(andAttractFor: ProvisioningViewController.attentionTimer)
-            } catch {
-                self.abort()
-                self.presentAlert(title: "Error", message: error.localizedDescription)
-            }
-//        }
+        do {
+            try self.provisioningManager.identify(andAttractFor: ProvisioningViewController.attentionTimer)
+        } catch {
+            self.abort()
+            showError(error)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -142,19 +129,7 @@ class ProvisioningViewController: UITableViewController {
         return true
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "networkKey" {
-            let destination = segue.destination as! NetworkKeySelectionViewController
-            destination.selectedNetworkKey = provisioningManager.networkKey
-            destination.delegate = self
-        }
-    }
-    
     // MARK: - Table View Delegate
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -165,8 +140,20 @@ class ProvisioningViewController: UITableViewController {
         if indexPath.isUnicastAddress {
             presentUnicastAddressDialog()
         }
+        if indexPath.isCoordinate {
+            presentCoordinateDialog()
+        }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "selectZone" {
+            let vc = segue.destination as! PSelectZoneTableViewController
+            vc.callback = { [weak self] zone in
+                self?.zone = zone
+                self?.zoneLabel.text = zone.name
+            }
+        }
+    }
 }
 
 extension ProvisioningViewController: OobSelector {
@@ -211,6 +198,20 @@ private extension ProvisioningViewController {
         }
     }
     
+    /// Presents a dialog to edit the Provisioner name.
+    func presentCoordinateDialog() {
+        presentTextAlert(
+            title: "Coordinate",
+            message: "Enter the position coordinates of the light, e.g: 0101",
+            text: "",
+            placeHolder: "coordinate",
+            keyboardType: .numberPad,
+            type: .coordinateRequired, cancelHandler: nil
+        ) { coordinate in
+            self.coordinateLabel.text = coordinate
+        }
+    }
+    
     func presentStatusDialog(message: String, animated flag: Bool = true, completion: (() -> Void)? = nil) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -248,6 +249,7 @@ private extension ProvisioningViewController {
             do {
                 try self.bearer.close()
             } catch {
+                hidHUD()
                 self.dismissStatusDialog() {
                     self.presentAlert(title: "Error", message: error.localizedDescription)
                 }
@@ -255,6 +257,129 @@ private extension ProvisioningViewController {
         }
     }
     
+    func configureNode() {
+        MeshNetworkManager.instance.delegate = self
+        let localProvisioner = MeshNetworkManager.instance.meshNetwork?.localProvisioner
+        guard localProvisioner?.hasConfigurationCapabilities ?? false else {
+            // The Provisioner cannot sent or receive messages.
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.needConfigMore = true
+            self.taskManager.append(.getCompositionData(page: 0))
+            self.taskManager.append(.getDefaultTtl)
+            self.executeNext()
+        }
+    }
+    
+    func configureMore() {
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        guard let applicationKey = meshNetwork.applicationKey else {
+            return
+        }
+        
+        // add default applicationKey
+        if !node.knows(applicationKey: applicationKey) {
+            taskManager.append(.sendApplicationKey(applicationKey))
+        }
+        
+        // bind applicationKey
+        for model in node.usefulModels where !model.isBoundTo(applicationKey) {
+            taskManager.append(.bind(applicationKey, to: model))
+        }
+        if node.companyIdentifier == 0x004c {
+            needConfigMore = false
+            return
+        }
+        
+        // Subscriptions.
+        for group in meshNetwork.defaultGroups {
+            for model in node.usefulModels where !model.isSubscribed(to: group) {
+                model.subscribe(to: group)
+            }
+        }
+        // register scenes
+        taskManager.append(.sceneRegisterGet)
+        
+        var coordinate = ""
+        if let zone = zone?.number {
+            coordinate += String(format: "%02d", zone)
+        }
+        coordinate += coordinateLabel.text ?? "0000"
+        taskManager.append(.coordinate(coordinate))
+        
+        _ = MeshNetworkManager.instance.save()
+        
+        needConfigMore = false
+    }
+    
+    func executeNext() {
+        // Are we done?
+        guard let task = taskManager.nextTask else {
+            completed()
+            return
+        }
+        if !isHUDShow {
+            showHUD()
+        }
+        // Display the title of the current task.
+        taskManager.update(status: .inProgress)
+                
+        var skipped: Bool!
+        switch task {
+        // Skip application keys if a network key was not sent.
+        case .sendApplicationKey(let applicationKey):
+            skipped = !node.knows(networkKey: applicationKey.boundNetworkKey)
+        // Skip binding models to Application Keys not known to the Node.
+        case .bind(let applicationKey, to: _):
+            skipped = !node.knows(applicationKey: applicationKey)
+        // Skip publication with keys that failed to be sent.
+        case .setPublication(let publish, to: _):
+            skipped = !node.knows(applicationKeyIndex: publish.index)
+        default:
+            skipped = false
+        }
+        
+        guard !skipped else {
+            taskManager.update(status: .skipped)
+            executeNext()
+            return
+        }
+        
+        // Send the message.
+        let manager = MeshNetworkManager.instance
+        switch task.message {
+        case let message as AcknowledgedConfigMessage:
+            _ = try?  manager.send(message, to: node!.primaryUnicastAddress)
+        case let message as GLMessage:
+            guard let model = node.vendorModel else {
+                return
+            }
+            _ = try? manager.send(message, to: model)
+        case let message as SceneRegisterGet:
+            guard let model = node.sceneModel else {
+                return
+            }
+            _ = try? manager.send(message, to: model)
+        default: break
+        }
+    }
+    
+    func completed() {
+        if needConfigMore {
+            configureMore()
+            executeNext()
+        } else {
+            let saveZone = zone ?? GLMeshNetworkModel.instance.allZone
+            saveZone.add(nodeAddress: node.primaryUnicastAddress)
+            node.coordinate = coordinateLabel.text
+            MeshNetworkManager.instance.saveAll()
+            showSuccess() {
+                self.delegate?.provisionerDidProvisionNewDevice(self.node, whichReplaced: self.previousNode)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
 }
 
 private extension ProvisioningViewController {    
@@ -272,6 +397,12 @@ private extension ProvisioningViewController {
     /// Starts provisioning process of the device.
     func startProvisioning() {
         guard let capabilities = provisioningManager.provisioningCapabilities else {
+            return
+        }
+        
+        guard let text = coordinateLabel.text,
+                !text.isEmpty, text != "Unknown" else {
+            showToast("coordinate cannot be unknown")
             return
         }
         
@@ -293,7 +424,7 @@ private extension ProvisioningViewController {
         let inputOobSupported  = !capabilities.inputOobActions.isEmpty
         let anyOobSupported = staticOobSupported || outputOobSupported || inputOobSupported
         guard !anyOobSupported || authenticationMethod != nil else {
-            presentOobOptionsDialog(for: provisioningManager, from: provisionButton) { [weak self] method in
+            presentOobOptionsDialog(for: provisioningManager, from: actionProvision) { [weak self] method in
                 guard let self = self else { return }
                 self.authenticationMethod = method
                 self.startProvisioning()
@@ -314,9 +445,11 @@ private extension ProvisioningViewController {
         // Start provisioning.
         showHUD()
         do {
-            try self.provisioningManager.provision(usingAlgorithm:       capabilities.algorithms.strongest,
-                                                   publicKey:            self.publicKey!,
-                                                   authenticationMethod: self.authenticationMethod!)
+            try self.provisioningManager.provision(
+                usingAlgorithm: capabilities.algorithms.strongest,
+                publicKey:self.publicKey!,
+                authenticationMethod: self.authenticationMethod!
+            )
         } catch {
             self.abort()
             showError(error)
@@ -357,13 +490,12 @@ extension ProvisioningViewController: GattBearerDelegate {
                     let gattBearer = GattBearer(targetWithIdentifier: pbGattBearer.identifier)
                     connection.use(proxy: gattBearer)
                 }
-                self.dismiss(animated: true) {
-                    guard let network = manager.meshNetwork else {
-                        return
-                    }
-                    if let node = network.node(for: self.unprovisionedDevice) {
-                        self.delegate?.provisionerDidProvisionNewDevice(node, whichReplaced: self.previousNode)
-                    }
+                guard let network = manager.meshNetwork else {
+                    return
+                }
+                if let node = network.node(for: self.unprovisionedDevice) {
+                    self.node = node
+                    self.configureNode()
                 }
             }
             let reconnectAction = UIAlertAction(title: "Yes", style: .default) { _ in
@@ -377,9 +509,7 @@ extension ProvisioningViewController: GattBearerDelegate {
                                   message: "Provisioning complete.\n\nDo you want to connect to the new Node over GATT bearer?",
                                   options: [reconnectAction, continueAction])
             } else {
-                showSuccess() {
-                    done(reconnect: true)
-                }
+                done(reconnect: true)
             }
         } else {
             showError("Mesh configuration could not be saved.")
@@ -394,23 +524,7 @@ extension ProvisioningViewController: ProvisioningDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             switch state {
-                
-//            case .requestingCapabilities:
-//                self.presentStatusDialog(message: "Identifying...")
-                
-            case .capabilitiesReceived(let capabilities):
-                self.elementsCountLabel.text = "\(capabilities.numberOfElements)"
-                self.supportedAlgorithmsLabel.text = "\(capabilities.algorithms)".toLines
-                self.publicKeyTypeLabel.text = "\(capabilities.publicKeyType)"
-                self.oobTypeLabel.text = "\(capabilities.oobType)".toLines
-                self.outputOobSizeLabel.text = "\(capabilities.outputOobSize)"
-                self.supportedOutputOobActionsLabel.text = "\(capabilities.outputOobActions)"
-                self.inputOobSizeLabel.text = "\(capabilities.inputOobSize)"
-                self.supportedInputOobActionsLabel.text = "\(capabilities.inputOobActions)"
-                
-                // This is needed to refresh constraints after filling new values.
-                self.tableView.reloadData()
-    		            
+            case .capabilitiesReceived:
                 // If the Unicast Address was set to automatic (nil), it should be
                 // set to the correct value by now, as we know the number of elements.
                 let addressValid = self.provisioningManager.isUnicastAddressValid == true
@@ -419,26 +533,13 @@ extension ProvisioningViewController: ProvisioningDelegate {
                 }
                 self.unicastAddressLabel.text = self.provisioningManager.unicastAddress?.asString() ?? "No address available"
                 self.actionProvision.isEnabled = addressValid
-                
-                let capabilitiesWereAlreadyReceived = self.capabilitiesReceived
-                self.capabilitiesReceived = true
-                
+                                
                 let deviceSupported = self.provisioningManager.isDeviceSupported == true
-                
-                if deviceSupported && addressValid {
-                    // If the device got disconnected after the capabilities were received
-                    // the first time, the app had to send invitation again.
-                    // This time we can just directly proceed with provisioning.
-                    if capabilitiesWereAlreadyReceived {
-                        self.startProvisioning()
-                    }
-                } else {
-                    if !deviceSupported {
-                        showError("Selected device is not supported.")
-                        self.actionProvision.isEnabled = false
-                    } else if !addressValid {
-                        showError("No available Unicast Address in Provisioner's range.")
-                    }
+                if !deviceSupported {
+                    showError("Selected device is not supported.")
+                    self.actionProvision.isEnabled = false
+                } else if !addressValid {
+                    showError("No available Unicast Address in Provisioner's range.")
                 }
                 
             case .complete:
@@ -522,11 +623,55 @@ extension ProvisioningViewController: ProvisioningDelegate {
     
 }
 
+
+extension ProvisioningViewController: MeshNetworkDelegate {
+    
+    func meshNetworkManager(_ manager: MeshNetworkManager,
+                            didReceiveMessage message: MeshMessage,
+                            sentFrom source: Address, to destination: MeshAddress) {
+        // Is the message targeting the current Node?
+        guard node.primaryUnicastAddress == source else {
+            return
+        }
+        
+        // Handle the message based on its type.
+        if let task = taskManager.task {
+            var valid = true
+            if let taskMessage = task.message as? AcknowledgedMeshMessage {
+                valid = message.opCode == taskMessage.responseOpCode
+            }
+            if valid {
+                if let status = message as? ConfigStatusMessage {
+                    taskManager.update(status: .resultOf(status))
+                } else {
+                    taskManager.update(status: .success)
+                }
+                executeNext()
+            }
+        }
+    }
+    
+    func meshNetworkManager(_ manager: MeshNetworkManager,
+                            failedToSendMessage message: MeshMessage,
+                            from localElement: Element, to destination: MeshAddress,
+                            error: Error) {
+        taskManager.update(status: .failed(error))
+        completed()
+        // Ignore messages sent using model publication.
+        guard message is ConfigMessage else {
+            return
+        }
+        showError(error)
+    }
+    
+}
+
+
 extension ProvisioningViewController: SelectionDelegate {
     
     func networkKeySelected(_ networkKey: NetworkKey?) {
         self.provisioningManager.networkKey = networkKey
-        self.networkKeyLabel.text = networkKey?.name ?? "New Network Key"
+        self.zoneLabel.text = networkKey?.name ?? "New Network Key"
     }
     
 }
@@ -535,12 +680,20 @@ private extension IndexPath {
     
     /// Returns whether the IndexPath points the Device Name.
     var isDeviceName: Bool {
-        return section == 0 && row == 0
+        return row == 0
     }
     
     /// Returns whether the IndexPath point to the Unicast Address settings.
     var isUnicastAddress: Bool {
-        return section == 1 && row == 0
+        return row == 1
+    }
+    
+    var isZone: Bool {
+        return row == 2
+    }
+    
+    var isCoordinate: Bool {
+        return row == 3
     }
     
 }

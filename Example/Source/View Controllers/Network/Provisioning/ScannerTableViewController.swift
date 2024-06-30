@@ -76,7 +76,8 @@ class ScannerTableViewController: UITableViewController {
         // Scanner can also receive messages sent from nodes with
         // Remote Provisioning Server model.
         MeshNetworkManager.instance.delegate = self
-        
+        discoveredPeripherals.removeAll()
+        tableView.reloadData()
         if centralManager.state == .poweredOn {
             startScanning()
         }

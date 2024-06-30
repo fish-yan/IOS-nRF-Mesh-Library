@@ -63,6 +63,7 @@ private struct Section {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> NodeViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "node", for: indexPath) as! NodeViewCell
         cell.node = nodes[indexPath.row]
+        cell.icon.image = type == .thisProvisioner ? UIImage(resource: .ipNodeThisProvisioner) : UIImage(resource: .ipNodeLogo)
         return cell
     }
 }
@@ -116,7 +117,7 @@ class NetworkViewController: UITableViewController, UISearchBarDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
+        switch segue.identifier {
         case "provision":
             let destination = segue.destination as! UINavigationController
             let scannerViewController = destination.topViewController! as! ScannerTableViewController
@@ -130,6 +131,10 @@ class NetworkViewController: UITableViewController, UISearchBarDelegate {
             let cell = sender as! NodeViewCell
             let destination = segue.destination as! NodeViewController
             destination.node = cell.node
+        case "nodeDetail":
+            let cell = sender as! NodeViewCell
+            let vc = segue.destination as! PNodeDetailTableViewController
+            vc.node = cell.node
         default:
             break
         }
@@ -234,7 +239,8 @@ private extension NetworkViewController {
 extension NetworkViewController: ProvisioningViewDelegate {
     
     func provisionerDidProvisionNewDevice(_ node: Node, whichReplaced previousNode: Node?) {
-        performSegue(withIdentifier: "configure", sender: (node, previousNode))
+        reloadData()
+//        performSegue(withIdentifier: "configure", sender: (node, previousNode))
     }
     
 }

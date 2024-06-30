@@ -35,6 +35,7 @@ extension Selector {
     
     static let name = #selector(UIViewController.nameOptional(_:))
     static let nameRequired = #selector(UIViewController.nameRequired(_:))
+    static let coordinateRequired = #selector(UIViewController.coordinateRequired(_:))
     static let numberRequired = #selector(UIViewController.numberRequired(_:))
     static let unsignedNumberRequired = #selector(UIViewController.unsignedNumberRequired(_:))
     static let validAddressRequired = #selector(UIViewController.validAddressRequired(_:))
@@ -185,7 +186,7 @@ extension UIViewController {
     ///   - action:        An optional additional action.
     ///   - cancelHandler: The Cancel button handler.
     ///   - handler:       The OK button handler.
-    func presentTextAlert(title: String?, message: String?, text: String? = "", placeHolder: String? = "",
+    func presentTextAlert(title: String?, message: String?, text: String? = "", placeHolder: String? = "", keyboardType: UIKeyboardType = .alphabet,
                           type selector: Selector? = nil, option action: UIAlertAction? = nil,
                           cancelHandler: (() -> Void)? = nil, handler: ((String) -> Void)? = nil) {
         DispatchQueue.main.async { [weak self] in
@@ -196,7 +197,7 @@ extension UIViewController {
                 textField.placeholder            = placeHolder
                 textField.clearButtonMode        = .whileEditing
                 textField.returnKeyType          = .done
-                textField.keyboardType           = .alphabet
+                textField.keyboardType           = keyboardType
                 
                 if let selector = selector {
                     textField.addTarget(self, action: selector, for: .editingChanged)
@@ -299,6 +300,18 @@ extension UIViewController {
     @objc func nameRequired(_ textField: UITextField) {
         let alert = getAlert(from: textField)
         alert.setValid(textField.text != "")
+    }
+    
+    @objc func coordinateRequired(_ textField: UITextField) {
+        let alert = getAlert(from: textField)
+        if let text = textField.text, text.count == 4,
+           let h = UInt(text.prefix(2)),
+           let v = UInt(text.suffix(2)),
+           h > 0, v > 0 {
+            alert.setValid(true)
+        } else {
+            alert.setValid(false)
+        }
     }
     
     @objc func unicastAddressOptional(_ textField: UITextField) {

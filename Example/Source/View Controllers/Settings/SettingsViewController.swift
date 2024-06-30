@@ -91,7 +91,7 @@ class SettingsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case IndexPath.networkSection: return 1
+        case IndexPath.networkSection: return 2
         case IndexPath.actionsSection: return 1
         case IndexPath.aboutSection: return 2
         case IndexPath.backToNewUI: return 1

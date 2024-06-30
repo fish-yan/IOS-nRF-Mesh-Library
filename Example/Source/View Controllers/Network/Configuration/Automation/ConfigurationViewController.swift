@@ -497,15 +497,16 @@ private extension ConfigurationViewController {
         // Send the message.
         do {
             let manager = MeshNetworkManager.instance
+            let message = task.message as! AcknowledgedConfigMessage
             switch task {
             // Publication Set message can be sent to a different node in some cases.
             case .setPublication(_, to: let model):
                 guard let address = model.parentElement?.parentNode?.primaryUnicastAddress else {
                     fallthrough
                 }
-                handler = try manager.send(task.message, to: address)
+                handler = try manager.send(message, to: address)
             default:
-                handler = try manager.send(task.message, to: node.primaryUnicastAddress)
+                handler = try manager.send(message, to: node.primaryUnicastAddress)
             }
         } catch {
             reload(taskAt: current, with: .failed(error))
@@ -539,25 +540,29 @@ extension ConfigurationViewController: MeshNetworkDelegate {
                             sentFrom source: Address,
                             to destination: MeshAddress) {
         let current = current
-        if current >= 0 && current < tasks.count &&
-           message.opCode == tasks[current].message.responseOpCode {
-            if let status = message as? ConfigStatusMessage {
-                reload(taskAt: current, with: .resultOf(status))
-                DispatchQueue.main.async {
-                    if status.isSuccess {
+        if current >= 0 && current < tasks.count {
+            var valid = true
+            if let taskMessage = tasks[current].message as? AcknowledgedMeshMessage {
+                valid = message.opCode == taskMessage.responseOpCode
+            }
+            if valid {
+                if let status = message as? ConfigStatusMessage {
+                    reload(taskAt: current, with: .resultOf(status))
+                    DispatchQueue.main.async {
+                        if status.isSuccess {
+                            self.progress.addSuccess()
+                        } else {
+                            self.progress.addFail()
+                        }
+                    }
+                } else {
+                    self.reload(taskAt: current, with: .success)
+                    DispatchQueue.main.async {
                         self.progress.addSuccess()
-                    } else {
-                        self.progress.addFail()
                     }
                 }
-            } else {
-                self.reload(taskAt: current, with: .success)
-                DispatchQueue.main.async {
-                    self.progress.addSuccess()
-                }
+                executeNext()
             }
-            
-            executeNext()
         }
     }
     

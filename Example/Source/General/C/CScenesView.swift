@@ -97,37 +97,37 @@ struct CScenesView: View {
     
     
     var D000: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD000
+        let address = UInt16(zone.number) * 16 + 0xD000
         return try! NordicMesh.Group(name: "", address: address)
     }
     
     var D001: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD001
+        let address = UInt16(zone.number) * 16 + 0xD001
         return try! NordicMesh.Group(name: "", address: address)
     }
     
     var D002: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD002
+        let address = UInt16(zone.number) * 16 + 0xD002
         return try! NordicMesh.Group(name: "", address: address)
     }
     
     var D003: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD003
+        let address = UInt16(zone.number) * 16 + 0xD003
         return try! NordicMesh.Group(name: "", address: address)
     }
     
     var D004: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD004
+        let address = UInt16(zone.number) * 16 + 0xD004
         return try! NordicMesh.Group(name: "", address: address)
     }
     
     var D005: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD005
+        let address = UInt16(zone.number) * 16 + 0xD005
         return try! NordicMesh.Group(name: "", address: address)
     }
     
     var D006: NordicMesh.Group {
-        let address = UInt16(zone.zone) * 16 + 0xD006
+        let address = UInt16(zone.number) * 16 + 0xD006
         return try! NordicMesh.Group(name: "", address: address)
     }
 }
@@ -174,5 +174,5 @@ extension CScenesView: MeshMessageDelegate {
 }
 
 #Preview {
-    CScenesView(zone: GLZone(name: "All", zone: 0x0))
+    CScenesView(zone: GLZone(name: "All", number: 0x0))
 }

@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         ProgressHUD.colorAnimation = .black
+        ProgressHUD.colorHUD = .white
         // Create the main MeshNetworkManager instance and customize
         // configuration values.
         meshNetworkManager = MeshNetworkManager()
@@ -120,6 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.overrideUserInterfaceStyle = .light
         let rootVC = UIHostingController(rootView: RootView())
+//        let rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
         window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
         
@@ -229,6 +231,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let netowrkKey = network.networkKeys.first {
             try? key.bind(to: netowrkKey)
         }
+        guard let node = network.localProvisioner?.node else {
+            return
+        }
+        node.defaultTTL = 5
+        node.elements.forEach { element in
+            element.models.forEach { mode in
+                mode.bind(applicationKeyWithIndex: 0)
+            }
+        }
         let _ = meshNetworkManager.save()
     }
     
@@ -286,24 +297,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func addDefaultZone() {
-        var zones = GLMeshNetworkModel.instance.zone
-        if zones.isEmpty {
-            let all = createZone(name: "All", zone: 0x0)
-            GLMeshNetworkModel.instance.zone.append(all)
+        if GLMeshNetworkModel.instance.zones.isEmpty {
+            let all = createZone(name: "All", number: 0x0)
+            GLMeshNetworkModel.instance.add(all)
             MeshNetworkManager.instance.saveModel()
         }
-        zones = GLMeshNetworkModel.instance.zone
-        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-        let nodes = meshNetwork.nodes
-        if let all = zones.first(where: {$0.zone == 0}) {
-            all.nodeAddresses = nodes.map({$0.primaryUnicastAddress})
-        }
-        MeshNetworkManager.instance.saveModel()
     }
     
-    func createZone(name: String, zone: UInt8) -> GLZone {
+    func createZone(name: String, number: UInt8) -> GLZone {
         let meshNetwork = MeshNetworkManager.instance.meshNetwork!
-        let zone = GLZone(name: name, zone: zone)
+        let zone = GLZone(name: name, number: number)
         zone.nodeAddresses = meshNetwork.nodes.map({$0.primaryUnicastAddress})
         return zone
     }

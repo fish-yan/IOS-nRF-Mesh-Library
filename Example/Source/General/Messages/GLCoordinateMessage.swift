@@ -18,8 +18,8 @@ public struct GLCoordinateMessage: GLMessage {
         
     public var parameters: Data?
     
-    init(coordinate: (z: UInt8, x: UInt8, y: UInt8)) {
-        self.parameters = Data() + coordinate.z + coordinate.x + coordinate.y
+    init(coordinate: String) {
+        self.parameters = Data(hex: coordinate)
     }
 }
 
@@ -28,10 +28,10 @@ public struct GLCoordinateStatus: GLResponse {
     
     public var parameters: Data?
     
-    public let coordinate: (z: UInt8, x: UInt8, y: UInt8)
+    public let coordinate: String
     
     public init?(parameters: Data) {
         self.parameters = parameters
-        coordinate = (z: parameters.read(fromOffset: 0), x: parameters.read(fromOffset: 1), y: parameters.read(fromOffset: 2))
+        coordinate = parameters.toHexString()
     }
 }

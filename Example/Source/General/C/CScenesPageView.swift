@@ -54,7 +54,7 @@ struct CScenesPageView: View {
 
 private extension CScenesPageView {
     func onAppera() {
-        zones = GLMeshNetworkModel.instance.zone
+        zones = GLMeshNetworkModel.instance.zones.filter({!$0.nodeAddresses.isEmpty})
     }
 }
 

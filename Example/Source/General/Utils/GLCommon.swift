@@ -22,7 +22,7 @@ public func toast(_ text: String) {
 public func showHUD(_ text: String? = nil) {
     ProgressHUD.animate(text, .semiRingRotation, interaction: false)
     isHUDShow = true
-    DispatchQueue.main.asyncAfter(deadline: .now() + 60) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
         if isHUDShow {
             showError("Time out")
         }
@@ -35,7 +35,7 @@ public func hidHUD() {
 }
 
 public func showError(_ text: String? = nil) {
-    ProgressHUD.failed(text, delay: 2)
+    ProgressHUD.failed(text, interaction: false, delay: 2)
     isHUDShow = true
     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
         isHUDShow = false
@@ -47,7 +47,7 @@ public func showError(_ error: Error) {
 }
 
 public func showSuccess(_ text: String? = nil, completion: @escaping  () -> Void = {}) {
-    ProgressHUD.succeed(text, delay: 2)
+    ProgressHUD.succeed(text, interaction: false, delay: 2)
     isHUDShow = true
     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
         isHUDShow = false

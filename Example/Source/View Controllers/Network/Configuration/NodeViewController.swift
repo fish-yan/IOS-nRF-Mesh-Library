@@ -389,7 +389,7 @@ private extension NodeViewController {
                             
                             if MeshNetworkManager.instance.save() {
                                 self.title = self.node.name ?? "Unknown device"
-                                self.tableView.reloadRows(at: [.name], with: .automatic)
+//                                self.tableView.reloadRows(at: [.name], with: .automatic)
                             } else {
                                 self.presentAlert(title: "Error", message: "Mesh configuration could not be saved.")
                             }
@@ -534,19 +534,20 @@ private extension NodeViewController {
         
         // Send the message.
         let manager = MeshNetworkManager.instance
-        switch task {
-            // Publication Set message can be sent to a different node in some cases.
-        case .setPublication(_, to: let model):
-            guard let address = model.parentElement?.parentNode?.primaryUnicastAddress else {
-                fallthrough
+        switch task.message {
+        case let message as AcknowledgedConfigMessage:
+            _ = try?  manager.send(message, to: node!.primaryUnicastAddress)
+        case let message as GLMessage:
+            guard let model = node.vendorModel else {
+                return
             }
-            _ = try? manager.send(task.message, to: address)
-        case .sceneRegisterGet:
-            let node = node!
-            _ = try? manager.send(task.message, to: node)
-        default:
-            let node = node!
-            _ = try?  manager.send(task.message, to: node.primaryUnicastAddress)
+            _ = try? manager.send(message, to: model)
+        case let message as SceneRegisterGet:
+            guard let model = node.sceneModel else {
+                return
+            }
+            _ = try? manager.send(message, to: model)
+        default: break
         }
     }
     
@@ -631,7 +632,7 @@ extension NodeViewController: MeshNetworkDelegate {
             }
             
         case is ConfigDefaultTtlStatus:
-            self.tableView.reloadRows(at: [.ttl], with: .automatic)
+//            self.tableView.reloadRows(at: [.ttl], with: .automatic)
             self.refreshControl?.endRefreshing()
             self.configureButton.isEnabled = true
             
@@ -647,14 +648,19 @@ extension NodeViewController: MeshNetworkDelegate {
         default:
             break
         }
-        if let task = taskManager.task,
-            message.opCode == task.message.responseOpCode {
-            if let status = message as? ConfigStatusMessage {
-                taskManager.update(status: .resultOf(status))
-            } else {
-                taskManager.update(status: .success)
+        if let task = taskManager.task {
+            var valid = true
+            if let taskMessage = task.message as? AcknowledgedMeshMessage {
+                valid = message.opCode == taskMessage.responseOpCode
             }
-            executeNext()
+            if valid {
+                if let status = message as? ConfigStatusMessage {
+                    taskManager.update(status: .resultOf(status))
+                } else {
+                    taskManager.update(status: .success)
+                }
+                executeNext()
+            }
         }
     }
     
@@ -685,16 +691,16 @@ extension NodeViewController: ModalNavigationControllerDelegate {
 }
 
 private extension IndexPath {
-    static let nameSection = 0
-    static let nodeSection = 1
+    static let nameSection = -1
+    static let nodeSection = -1
     static let keysSection = -2 // 隐藏:2024-6-15
     static let scenesSection = -3 // 隐藏:2024-6-15
-    static let elementsSection = 2
-    static let compositionDataSection = 3
+    static let elementsSection = 0
+    static let compositionDataSection = 1
     static let switchesSection = -6 // 隐藏:2024-6-15
-    static let zoneSection = 4
-    static let actionsSection = 5 // 7
-    static let numberOfSections = IndexPath.actionsSection + 1
+    static let zoneSection = -1
+    static let actionsSection = -1 // 7
+    static let numberOfSections = IndexPath.compositionDataSection + 1
     
     static let titles = [
         "Name"

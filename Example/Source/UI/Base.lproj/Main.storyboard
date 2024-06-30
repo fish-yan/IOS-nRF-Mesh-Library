@@ -3,8 +3,6 @@
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,13 +11,19 @@
             <objects>
                 <tabBarController storyboardIdentifier="RootTabBarController" title="Tab Bar Controller" id="BYb-mK-mH5" customClass="RootTabBarController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="uit-TO-OCn"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ig6-ap-aTu">
+                    <tabBar key="tabBar" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ig6-ap-aTu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="23"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
                         <segue destination="zgn-Sh-bkR" kind="relationship" relationship="viewControllers" id="bML-n5-Lan"/>
-                        <segue destination="z61-cg-pzs" kind="relationship" relationship="viewControllers" id="iOB-SD-m7V"/>
+                        <segue destination="tke-eF-Ai0" kind="relationship" relationship="viewControllers" id="kOm-AT-bFC"/>
                         <segue destination="bcv-6V-ztb" kind="relationship" relationship="viewControllers" id="Ld5-du-qiy"/>
                     </connections>
                 </tabBarController>
@@ -37,22 +41,15 @@
             </objects>
             <point key="canvasLocation" x="140" y="140"/>
         </scene>
-        <!--Light-->
-        <scene sceneID="IAL-eD-dR7">
+        <!--Zone-->
+        <scene sceneID="Nm3-rR-Mmf">
             <objects>
-                <viewController id="W6Q-vA-YUh" customClass="LightHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
-                    <containerView key="view" opaque="NO" contentMode="scaleToFill" id="6vb-95-LSQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <connections>
-                            <segue destination="Ql6-UC-4GU" kind="embed" destinationCreationSelector="showLightsView:" id="sKv-7B-q2f"/>
-                        </connections>
-                    </containerView>
-                    <tabBarItem key="tabBarItem" title="Light" image="tab_control_outline_black_24pt" id="5eQ-mw-WFR"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="n2Z-5D-6p3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="Zone" id="tke-eF-Ai0" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="cxT-Ml-ave"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J8I-q3-XXh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="430" y="531"/>
+            <point key="canvasLocation" x="134" y="214"/>
         </scene>
         <!--Groups-->
         <scene sceneID="0BM-mh-7CO">
@@ -94,128 +91,13 @@
             </objects>
             <point key="canvasLocation" x="169" y="-256"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="gXY-i3-V6d">
-            <objects>
-                <viewController id="Ql6-UC-4GU" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="og8-ed-HOp">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="0tb-3q-95E"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="QAg-8h-s2p" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="431" y="1270"/>
-        </scene>
-        <!--Control-->
-        <scene sceneID="6Ie-es-WDS">
-            <objects>
-                <viewController id="V9C-H5-0cM" customClass="ScenesHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
-                    <containerView key="view" opaque="NO" contentMode="scaleToFill" id="kEM-r8-s7D">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <connections>
-                            <segue destination="bXY-Rz-Hwi" kind="embed" destinationCreationSelector="showLightsView:" id="0VD-T1-UOb"/>
-                        </connections>
-                    </containerView>
-                    <tabBarItem key="tabBarItem" title="Control" image="ic_scenes_24pt" id="kK1-m1-dCz"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bAE-Fu-Y1b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1362" y="531"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="kZe-0b-NOP">
-            <objects>
-                <viewController id="bXY-Rz-Hwi" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Zgc-tW-jbk">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="Sby-q9-Y5A"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Qoc-1N-eR5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1362" y="1269"/>
-        </scene>
-        <!--Settings-->
-        <scene sceneID="cgS-8d-492">
-            <objects>
-                <viewController id="yRV-vY-cAo" customClass="SettingsHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
-                    <containerView key="view" opaque="NO" contentMode="scaleToFill" id="Udk-uI-NOg">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <connections>
-                            <segue destination="6da-ec-RDE" kind="embed" destinationCreationSelector="showLightsView:" id="Mbt-Ye-XFA"/>
-                        </connections>
-                    </containerView>
-                    <tabBarItem key="tabBarItem" title="Settings" image="tab_settings_outline_black_24pt" id="RuF-mn-xPb"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZTI-AD-ST5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2324" y="531"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="59S-gE-D09">
-            <objects>
-                <viewController id="6da-ec-RDE" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="6Gm-G0-a0e">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="QWI-aZ-Xc8"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Yu9-Ns-axY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2324" y="1269"/>
-        </scene>
-        <!--Groups-->
-        <scene sceneID="Dym-Ve-krs">
-            <objects>
-                <viewController id="EAb-g1-fOy" customClass="GroupsHostViewController" customModule="nRF_Mesh" customModuleProvider="target" sceneMemberID="viewController">
-                    <containerView key="view" opaque="NO" contentMode="scaleToFill" id="rIS-zE-E5X">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <connections>
-                            <segue destination="tpt-Ck-wxN" kind="embed" destinationCreationSelector="showLightsView:" id="nzS-S1-wTF"/>
-                        </connections>
-                    </containerView>
-                    <tabBarItem key="tabBarItem" title="Groups" image="tab_groups_outline_black_24pt" id="hih-t1-fxC"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="H4O-4f-Zdo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3254" y="531"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="u1u-Oq-rqK">
-            <objects>
-                <viewController id="tpt-Ck-wxN" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="yU7-Uu-DrY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="975-Or-e4D"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KVk-FE-bWr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3254" y="1269"/>
-        </scene>
     </scenes>
     <color key="tintColor" red="0.0" green="0.46666666670000001" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
     <resources>
-        <image name="ic_scenes_24pt" width="24" height="24"/>
         <image name="tab_control_outline_black_24pt" width="24" height="24"/>
         <image name="tab_filter_outline_black_24pt" width="24" height="24"/>
         <image name="tab_groups_outline_black_24pt" width="24" height="24"/>
         <image name="tab_network_outline_black_24pt" width="24" height="24"/>
         <image name="tab_settings_outline_black_24pt" width="24" height="24"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

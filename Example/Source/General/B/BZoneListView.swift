@@ -20,7 +20,7 @@ struct BZoneListView: View {
                     Text(zone.name)
                         .font(.labelTitle)
                         .foregroundStyle(Color.accent)
-                    Text("Address: 0x\(String(zone.zone, radix: 16))")
+                    Text("Address: 0x\(String(zone.number, radix: 16))")
                         .font(.secondaryLabel)
                         .foregroundColor(Color.secondaryLabel)
                 }
@@ -39,7 +39,7 @@ struct BZoneListView: View {
 
 private extension BZoneListView {
     func onAppera() {
-        zones = GLMeshNetworkModel.instance.zone
+        zones = GLMeshNetworkModel.instance.zones
     }
 }
 

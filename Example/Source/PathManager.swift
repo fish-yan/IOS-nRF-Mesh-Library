@@ -13,6 +13,7 @@ import Combine
 class AppManager: Observable, ObservableObject {
     @Published var c = CPathManager()
     @Published var b = CPathManager()
+    @Published var p = CPathManager()
     @Published var userRole: UserRole = .normal
     
     private var anyCancellable: AnyCancellable?
@@ -36,6 +37,11 @@ class BPathManager: Observable, ObservableObject {
     @Published var selectedTab: Int = 0
 }
 
+class PPathManager: Observable, ObservableObject {
+    @Published var path: [NavPath] = []
+    @Published var selectedTab: Int = 0
+}
+
 enum NavPath: Hashable {
     case cLightView(node: Node)
     case bZoneView(zone: GLZone)
@@ -43,6 +49,7 @@ enum NavPath: Hashable {
     case bSceneStoreNodeView(node: Node)
     case bSceneStoreZoneView(zone: GLZone)
     case bStoreSceneEditView(node: Node?, group: GLZone?)
+    case pZoneDetail(zone: GLZone?)
 }
 
 func hideKeyboard() {

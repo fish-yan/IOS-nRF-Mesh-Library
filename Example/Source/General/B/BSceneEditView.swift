@@ -164,7 +164,7 @@ private extension BSceneEditView {
             _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
             appManager.b.path.removeAll()
         } else if let zone {
-            let address = UInt16(zone.zone) * 16 + 0xD000
+            let address = UInt16(zone.number) * 16 + 0xD000
             let group = try! NordicMesh.Group(name: "", address: MeshAddress(address))
             _ = try? MeshNetworkManager.instance.send(message, to: group)
             appManager.b.path.removeAll()
