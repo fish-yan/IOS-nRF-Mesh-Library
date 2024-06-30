@@ -303,7 +303,7 @@ extension SettingsViewController: UIDocumentPickerDelegate {
                 }
                 if let sequence = json["sequence"] as? UInt32 {
                     if let element = manager.meshNetwork?.localProvisioner?.node?.primaryElement {
-                        manager.setSequenceNumber(sequence + 10, forLocalElement: element)
+                        manager.setSequenceNumber(sequence + 300, forLocalElement: element)
                     }
                 }
                 if !isImport {
