@@ -47,8 +47,6 @@ struct BSceneStoreView: View {
                 }
             } header: {
                 Text("New Scenes")
-            } footer: {
-                Text("Each node may store up to 16 scenes")
             }
             
             Section {
@@ -67,8 +65,6 @@ struct BSceneStoreView: View {
                 }
             } header: {
                 Text("Stored")
-            } footer: {
-                Text("Selecting a scene from above will overwrite its previously associated state")
             }
         }
         .navigationTitle("Store Scene")
@@ -79,6 +75,7 @@ struct BSceneStoreView: View {
         .toolbar {
             Button("Save", action: storeScene)
             .disabled(selectedScene < 1)
+            .underline()
         }
         .navigationBarBackButtonHidden()
     }

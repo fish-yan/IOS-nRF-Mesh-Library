@@ -25,7 +25,7 @@ class PZoneDetailViewController: UIViewController {
         saveBtn.setBackgroundColor(color: .accent, forState: .normal)
         saveBtn.setBackgroundColor(color: UIColor(white: 0.7, alpha: 1), forState: .disabled)
         if let zone {
-            title = "Modifying zone"
+            title = zone.name
             nameTF.text = zone.name
             numberTF.text = "0x" + String(zone.number, radix: 16)
             cancelBtn.setTitle("Delete", for: .normal)

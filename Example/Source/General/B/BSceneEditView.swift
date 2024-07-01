@@ -33,7 +33,7 @@ struct BSceneEditView: View {
         self.scene = scene
         self.zone = zone
         self.node = node
-        title = scene == nil ? "New Scene" : "Modifying Scene"
+        title = scene?.name ?? "New Scene"
     }
     
     var body: some View {

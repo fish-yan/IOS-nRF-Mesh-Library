@@ -84,7 +84,7 @@ struct BZoneView: View {
             })
             .presentationDetents([.height(275)])
         }
-        .navigationTitle("Zone")
+        .navigationTitle(zone.name)
         .toolbar {
             TooBarBackItem()
         }

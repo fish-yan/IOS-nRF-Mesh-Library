@@ -78,28 +78,29 @@ class ProxyViewController: ProgressViewController, Editable {
         switch section {
         case IndexPath.statusSection:
             return 3
-        case IndexPath.proxyTypeSection:
-            return 1
+//        case IndexPath.proxyTypeSection:
+//            return 1
         default:
-            return MeshNetworkManager.instance.proxyFilter.addresses.count
+            return 0
+//            return MeshNetworkManager.instance.proxyFilter.addresses.count
         }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == IndexPath.proxyTypeSection {
-            return "Proxy Filter"
-        }
+//        if section == IndexPath.proxyTypeSection {
+//            return "Proxy Filter"
+//        }
         return nil
     }
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if section == IndexPath.proxyTypeSection {
-            if MeshNetworkManager.instance.proxyFilter.type == .rejectList {
-                return "The reject list filter accepts all destination addresses except those that have been added to the list."
-            } else {
-                return "The accept list filter blocks all destination addresses except those that have been added to the list."
-            }
-        }
+//        if section == IndexPath.proxyTypeSection {
+//            if MeshNetworkManager.instance.proxyFilter.type == .rejectList {
+//                return "The reject list filter accepts all destination addresses except those that have been added to the list."
+//            } else {
+//                return "The accept list filter blocks all destination addresses except those that have been added to the list."
+//            }
+//        }
         return nil
     }
 
@@ -129,13 +130,13 @@ class ProxyViewController: ProgressViewController, Editable {
                                              !bearer.isConnectionModeAutomatic
             return cell
         }
-        if indexPath == .control {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "type", for: indexPath) as! FilterTypeCell
-            cell.delegate = self
-            cell.type = proxyFilter.type
-            cell.filterTypeControl.isEnabled = MeshNetworkManager.bearer.isOpen
-            return cell
-        }
+//        if indexPath == .control {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "type", for: indexPath) as! FilterTypeCell
+//            cell.delegate = self
+//            cell.type = proxyFilter.type
+//            cell.filterTypeControl.isEnabled = MeshNetworkManager.bearer.isOpen
+//            return cell
+//        }
         let cell = tableView.dequeueReusableCell(withIdentifier: "subtitle", for: indexPath) as! AddressCell
         let addresses = proxyFilter.addresses.sorted()
         guard addresses.count > indexPath.row else {
@@ -150,9 +151,9 @@ class ProxyViewController: ProgressViewController, Editable {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.section == IndexPath.addressesSection
-    }
+//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        return indexPath.section == IndexPath.addressesSection
+//    }
     
     override func tableView(_ tableView: UITableView,
                             commit editingStyle: UITableViewCell.EditingStyle,
@@ -168,7 +169,7 @@ extension ProxyViewController: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         MeshNetworkManager.instance.proxyFilter.delegate = self
-        tableView.reloadSections(.addresses, with: .automatic)
+//        tableView.reloadSections(.addresses, with: .automatic)
     }
     
 }
@@ -177,7 +178,7 @@ extension ProxyViewController: BearerDelegate {
     
     func bearerDidOpen(_ bearer: Bearer) {
         addButton.isEnabled = true
-        tableView.reloadRows(at: [.status, .action, .control], with: .automatic)
+//        tableView.reloadRows(at: [.status, .action, .control], with: .automatic)
     }
     
     func bearer(_ bearer: Bearer, didClose error: Error?) {
@@ -273,16 +274,16 @@ private extension ProxyViewController {
 
 private extension IndexPath {
     static let statusSection = 0
-    static let proxyTypeSection = 1
-    static let addressesSection = 2
+//    static let proxyTypeSection = 1
+//    static let addressesSection = 2
     
     static let mode    = IndexPath(row: 0, section: IndexPath.statusSection)
     static let status  = IndexPath(row: 1, section: IndexPath.statusSection)
     static let action  = IndexPath(row: 2, section: IndexPath.statusSection)
-    static let control = IndexPath(row: 0, section: IndexPath.proxyTypeSection)
+//    static let control = IndexPath(row: 0, section: IndexPath.proxyTypeSection)
 }
 
 private extension IndexSet {
     static let details   = IndexSet(integer: IndexPath.statusSection)
-    static let addresses = IndexSet(integer: IndexPath.addressesSection)
+//    static let addresses = IndexSet(integer: IndexPath.addressesSection)
 }
