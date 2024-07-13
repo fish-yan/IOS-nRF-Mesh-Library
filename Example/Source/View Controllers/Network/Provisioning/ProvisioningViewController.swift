@@ -175,16 +175,16 @@ private extension ProvisioningViewController {
     /// Presents a dialog to edit or unbind the Provisioner Unicast Address.
     func presentUnicastAddressDialog() {
         let manager = self.provisioningManager!
-        let action = UIAlertAction(title: "Automatic", style: .default) { [weak self] _ in
+        let action = UIAlertAction(title: Localized("Automatic"), style: .default) { [weak self] _ in
             guard let self = self else { return }
             manager.unicastAddress = manager.suggestedUnicastAddress
-            self.unicastAddressLabel.text = manager.unicastAddress?.asString() ?? "Automatic"
+            self.unicastAddressLabel.text = manager.unicastAddress?.asString() ?? Localized("Automatic")
             let deviceSupported = manager.isDeviceSupported == true
             let addressValid = manager.isUnicastAddressValid == true
             self.actionProvision.isEnabled = addressValid && deviceSupported
         }
-        presentTextAlert(title: "Unicast address", message: "Hexadecimal value in Provisioner's range.",
-                         text: manager.unicastAddress?.hex, placeHolder: "Address", type: .unicastAddressRequired,
+        presentTextAlert(title: Localized("Unicast Address"), message: "Hexadecimal value in Provisioner's range.",
+                         text: manager.unicastAddress?.hex, placeHolder: Localized("Address"), type: .unicastAddressRequired,
                          option: action, cancelHandler: nil) { [weak self] text in
                             guard let self = self else { return }
                             manager.unicastAddress = Address(text, radix: 16)
@@ -201,10 +201,10 @@ private extension ProvisioningViewController {
     /// Presents a dialog to edit the Provisioner name.
     func presentCoordinateDialog() {
         presentTextAlert(
-            title: "Coordinate",
-            message: "Enter the position coordinates of the light, e.g: 0101",
+            title: Localized("Coordinate"),
+            message: Localized("Enter the position coordinates of the light, e.g: 0101"),
             text: "",
-            placeHolder: "coordinate",
+            placeHolder: Localized("Coordinate"),
             keyboardType: .numberPad,
             type: .coordinateRequired, cancelHandler: nil
         ) { coordinate in
@@ -302,7 +302,7 @@ private extension ProvisioningViewController {
         taskManager.append(.sceneRegisterGet)
         
         var coordinate = ""
-        if let zone = zone?.number {
+        if let zone = zone?.number, zone != 0 {
             coordinate += String(format: "%02d", zone)
         }
         coordinate += coordinateLabel.text ?? "0000"

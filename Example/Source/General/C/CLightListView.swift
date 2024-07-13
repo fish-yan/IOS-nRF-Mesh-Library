@@ -29,7 +29,8 @@ struct CLightListView: View {
                         Text(node.name ?? "Unknow")
                             .font(.labelTitle)
                             .foregroundStyle(Color.accent)
-                        Text("Address: 0x\(node.primaryUnicastAddress.hex)")
+                        (Text("Address") +
+                        Text(": 0x\(node.primaryUnicastAddress.hex)"))
                             .font(.secondaryLabel)
                             .foregroundColor(Color.secondaryLabel)
                     }

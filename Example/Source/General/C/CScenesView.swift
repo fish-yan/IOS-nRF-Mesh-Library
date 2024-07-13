@@ -20,13 +20,13 @@ struct CScenesView: View {
         ScrollView(.vertical) { 
             VStack(spacing: 10) {
                 HStack(spacing: 40) {
-                    COnOffItemView(isSelected: zone.store.isOn == false, icon: .icAllOff, title: "All Close") {
+                    COnOffItemView(isSelected: zone.store.isOn == false, icon: .icAllOff, title: "Close") {
                         zone.store.isOn = false
                         onOffSet(onOff: false, group: D000)
                     }
                     Color.accent
                         .frame(width: 1)
-                    COnOffItemView(isSelected: zone.store.isOn == true, icon: .icAllOn, title: "Full Open") {
+                    COnOffItemView(isSelected: zone.store.isOn == true, icon: .icAllOn, title: "Open") {
                         zone.store.isOn = true
                         onOffSet(onOff: true, group: D000)
                     }

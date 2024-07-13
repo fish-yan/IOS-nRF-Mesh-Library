@@ -15,9 +15,19 @@ class AppManager: Observable, ObservableObject {
     @Published var b = CPathManager()
     @Published var p = CPathManager()
     @Published var userRole: UserRole = .normal
+    private static var defaultLanguage: AppLanguage {
+        if let lan = Locale.preferredLanguages.first {
+            return AppLanguage(rawValue: lan)
+        }
+        return .en
+    }
+    @AppStorage("AppLanguage") var language = AppManager.defaultLanguage
     
     private var anyCancellable: AnyCancellable?
-    init() {
+    
+    static let manager = AppManager()
+    
+    private init() {
         anyCancellable = self.c.objectWillChange.sink {
             self.objectWillChange.send()
         }

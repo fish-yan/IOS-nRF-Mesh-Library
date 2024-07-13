@@ -20,7 +20,8 @@ struct BZoneListView: View {
                     Text(zone.name)
                         .font(.labelTitle)
                         .foregroundStyle(Color.accent)
-                    Text("Address: 0x\(String(zone.number, radix: 16))")
+                    (Text("Address") +
+                    Text(": 0x\(String(zone.number, radix: 16))"))
                         .font(.secondaryLabel)
                         .foregroundColor(Color.secondaryLabel)
                 }

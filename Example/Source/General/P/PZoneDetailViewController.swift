@@ -28,12 +28,12 @@ class PZoneDetailViewController: UIViewController {
             title = zone.name
             nameTF.text = zone.name
             numberTF.text = "0x" + String(zone.number, radix: 16)
-            cancelBtn.setTitle("Delete", for: .normal)
+            cancelBtn.setTitle(Localized("Delete"), for: .normal)
             cancelBtn.setTitleColor(UIColor.red, for: .normal)
             cancelBtn.isHidden = zone.number == 0
         } else {
             saveBtn.isEnabled = false
-            title = "New zone"
+            title = Localized("Create a new zone")
             nextZoneNumber = GLMeshNetworkModel.instance.nextZone()
             numberTF.text = "0x" + String(nextZoneNumber, radix: 16)
         }
@@ -50,7 +50,7 @@ class PZoneDetailViewController: UIViewController {
         }
         MeshNetworkManager.instance.saveAll()
         if callback != nil,
-           let vc = navigationController?.viewControllers.first(where: {$0 is ProvisioningViewController}) {
+           let vc = navigationController?.viewControllers.first(where: {$0 is ProvisioningViewController || $0 is PNodeDetailTableViewController}) {
             navigationController?.popToViewController(vc, animated: true)
         } else {
             navigationController?.popViewController(animated: true)

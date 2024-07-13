@@ -34,7 +34,7 @@ class PChangePositionTableViewController: UITableViewController {
             return
         }
         var coordinate = ""
-        if let zone = zone?.number {
+        if let zone = zone?.number, zone != 0 {
             coordinate += String(format: "%02d", zone)
         }
         coordinate += coordinateLab.text ?? "0000"

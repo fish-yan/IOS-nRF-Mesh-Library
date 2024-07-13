@@ -34,7 +34,7 @@ struct BTabView: View {
                 .ignoresSafeArea()
             HStack {
                 tabItem(title: "Scene", image: .icTabMainNormal, selectedImage :.icTabMainSelected, tag: 0)
-                tabItem(title: "Set", image: .icTabLightsNormal, selectedImage: .icTabLightsSelected, tag: 1)
+                tabItem(title: "Settings", image: .icTabLightsNormal, selectedImage: .icTabLightsSelected, tag: 1)
             }
         }
         .frame(height: 48)

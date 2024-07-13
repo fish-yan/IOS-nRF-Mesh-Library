@@ -41,12 +41,48 @@ enum UserRole: Int, CaseIterable {
     case normal = 0
     case supervisor = 1
     case commissioner = 2
+    case empty = -1
     
     var string: String {
         switch self {
         case .normal: "normal"
         case .supervisor: "supervisor"
         case .commissioner: "commissioner"
+        case .empty: "empty"
         }
     }
+}
+
+enum AppLanguage: String, CaseIterable {
+    case en
+    case zhHans = "zh-Hans"
+    case zhHant = "zh-Hant"
+    case ja
+    case es
+    case pt
+    
+    init(rawValue: String) {
+        self = if rawValue.hasPrefix("en") { .en }
+        else if rawValue.hasPrefix("zh-Hans") { .zhHans }
+        else if rawValue.hasPrefix("zh-Hant") { .zhHant }
+        else if rawValue.hasPrefix("ja") { .ja }
+        else if rawValue.hasPrefix("es") { .es }
+        else if rawValue.hasPrefix("pt") { .pt }
+        else { .en }
+    }
+    
+    var name: String {
+        switch self {
+        case .en: "English"
+        case .zhHans: "中文"
+        case .zhHant: "繁體中文"
+        case .ja: "日本語"
+        case .es: "español"
+        case .pt: "Português"
+        }
+    }
+}
+
+extension Notification.Name {
+    static let languageChanged = NSNotification.Name("appLanguageChanged") 
 }

@@ -218,7 +218,7 @@ extension UIViewController {
                     }
                 }
             }
-            alert!.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            alert!.addAction(UIAlertAction(title: Localized("OK"), style: .default) { _ in
                 if let text = alert?.textFields![0].text {
                     handler?(text)
                 }
@@ -227,7 +227,7 @@ extension UIViewController {
             if let action = action {
                 alert!.addAction(action)
             }
-            alert!.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            alert!.addAction(UIAlertAction(title: Localized("Cancel"), style: .cancel) { _ in
                 cancelHandler?()
             })
             self.present(alert!, animated: true)

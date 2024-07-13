@@ -300,8 +300,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if GLMeshNetworkModel.instance.zones.isEmpty {
             let all = createZone(name: "All", number: 0x0)
             GLMeshNetworkModel.instance.add(all)
-            MeshNetworkManager.instance.saveModel()
+            MeshNetworkManager.instance.saveAll()
         }
+        let meshNetwork = MeshNetworkManager.instance.meshNetwork!
+        let all = GLMeshNetworkModel.instance.allZone
+        all.nodeAddresses = meshNetwork.nodes.map({$0.primaryUnicastAddress})
+        MeshNetworkManager.instance.saveAll()
     }
     
     func createZone(name: String, number: UInt8) -> GLZone {

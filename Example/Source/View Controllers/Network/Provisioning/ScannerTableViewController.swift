@@ -138,7 +138,7 @@ class ScannerTableViewController: UITableViewController {
                 self.previousNode = oldNode
                 self.provision(selectedPeripheral)
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+            let cancelAction = UIAlertAction(title: Localized("Cancel"), style: .cancel)
             presentAlert(title: "Warning",
                          message: "A node with the same UUID already exists in the network and will be removed.\n\nDo you want to reprovision it and apply the same configuration?\n\nNote that the node will be provisioned with a new unicast address. All nodes that were configured to publish to any of the unicast addresses assigned to the old node will be reconfigured.",
                          options: [removeAction, reconfigureAction, cancelAction])
@@ -228,7 +228,7 @@ private extension ScannerTableViewController {
                     self.open(bearer: bearer)
                 }
             }
-            let cancelOption = UIAlertAction(title: "Cancel", style: .cancel)
+            let cancelOption = UIAlertAction(title: Localized("Cancel"), style: .cancel)
             presentAlert(title: "Choose bearer",
                          message: "Selected device can be provisioned using any of the bearers below:",
                          options: bearerOptions + [cancelOption],

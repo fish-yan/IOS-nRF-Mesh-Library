@@ -16,8 +16,14 @@ struct MeshApp: App {
     }
 }
 
+extension Text {
+    init(_ key: String) {
+        self.init(LocalizedStringKey(key))
+    }
+}
+
 struct RootView: View {
-    @StateObject var appManager = AppManager()
+    @StateObject var appManager = AppManager.manager
     var body: some View {
         Group {
             switch appManager.userRole {
@@ -31,10 +37,27 @@ struct RootView: View {
                 PRootView()
                     .ignoresSafeArea()
                     .transition(.opacity)
+            case .empty:
+                EmptyView()
+                    .loadingable()
+                    .onAppear {
+                        Loading.show()
+                    }
             }
         }
         .animation(.spring, value: appManager.userRole)
         .environment(appManager)
+        .environment(\.locale, .init(identifier: appManager.language.rawValue))
+        .onAppear {
+            NotificationCenter.default.addObserver(forName: .languageChanged, object: nil, queue: .main) { no in
+                appManager.userRole = .empty
+                Task {
+                    try? await Task.sleep(nanoseconds:1000_000_000)
+                    appManager.userRole = .commissioner
+                }
+//                appManager.userRole = .commissioner
+            }
+        }
     }
 }
 

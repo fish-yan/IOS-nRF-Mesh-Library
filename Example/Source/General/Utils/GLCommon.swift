@@ -54,3 +54,15 @@ public func showSuccess(_ text: String? = nil, completion: @escaping  () -> Void
         completion()
     }
 }
+
+func Localized(_ key: String) -> String {
+    if let path = Bundle.main.path(forResource: AppManager.manager.language.rawValue, ofType: "lproj"),
+       let str = Bundle(path: path)?.localizedString(forKey: key, value: nil, table: "Localizable") {
+        return str
+    } else if let path = Bundle.main.path(forResource: "en", ofType: "lproj"),
+              let str = Bundle(path: path)?.localizedString(forKey: key, value: nil, table: "Localizable") {
+        return str
+    } else {
+        return key
+    }
+}

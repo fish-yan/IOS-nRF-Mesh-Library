@@ -84,7 +84,7 @@ class ExportViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return full ? 1 : IndexPath.numberOfSections
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -148,7 +148,7 @@ class ExportViewController: UITableViewController {
         switch indexPath.section {
         case IndexPath.configSection:
             let cell = tableView.dequeueReusableCell(withIdentifier: "switch", for: indexPath) as! SwitchCell
-            cell.title.text = IndexPath.configurationTitles[indexPath.row]
+            cell.title.text = full ? "Export To Arcosense" : "Export To nRF Mesh"
             cell.title.isEnabled = true
             cell.switch.isOn = full
             cell.switch.isEnabled = true
@@ -243,15 +243,16 @@ private extension ExportViewController {
     
     @objc func modeDidChange(_ control: UISwitch) {
         full = control.isOn
-        tableView.beginUpdates()
-        tableView.reloadSections(.config, with: .automatic)
-        if full {
-            tableView.deleteSections(.all, with: .fade)
-        } else {
-            tableView.insertSections(.all, with: .fade)
-        }
-        tableView.endUpdates()
-        doneButton.isEnabled = full || (!selectedProvisioners.isEmpty && !selectedNetworkKeys.isEmpty)
+        tableView.reloadData()
+//        tableView.beginUpdates()
+//        tableView.reloadSections(.config, with: .automatic)
+//        if full {
+//            tableView.deleteSections(.all, with: .fade)
+//        } else {
+//            tableView.insertSections(.all, with: .fade)
+//        }
+//        tableView.endUpdates()
+//        doneButton.isEnabled = full || (!selectedProvisioners.isEmpty && !selectedNetworkKeys.isEmpty)
     }
     
     @objc func exportDeviceKeysDidChange(_ control: UISwitch) {
@@ -270,22 +271,26 @@ private extension ExportViewController {
             let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(name).json")
             
             do {
-                let meshData = manager.export(exportConfiguration)
-                let meshJson = try JSONSerialization.jsonObject(with: meshData)
-                
-                let glData = manager.exportGLModel()
-                let glJson = try JSONSerialization.jsonObject(with: glData)
-                var sequence: UInt32 = 0
-                if let element = manager.meshNetwork?.localProvisioner?.node?.primaryElement,
-                   let localSequence = manager.getSequenceNumber(ofLocalElement: element) {
-                    sequence = localSequence
+                if case .full = exportConfiguration {
+                    let meshData = manager.export(.full)
+                    let meshJson = try JSONSerialization.jsonObject(with: meshData)
+                    
+                    let glData = manager.exportGLModel()
+                    let glJson = try JSONSerialization.jsonObject(with: glData)
+                    var sequence: UInt32 = 0
+                    if let element = manager.meshNetwork?.localProvisioner?.node?.primaryElement,
+                       let localSequence = manager.getSequenceNumber(ofLocalElement: element) {
+                        sequence = localSequence
+                    }
+                    
+                    let newJson = ["meshData": meshJson, "glData": glJson, "sequence": sequence]
+                    let data = try JSONSerialization.data(withJSONObject: newJson)
+                    
+                    try data.write(to: fileURL)
+                } else {
+                    let data = manager.export(.full)
+                    try data.write(to: fileURL)
                 }
-                
-                let newJson = ["meshData": meshJson, "glData": glJson, "sequence": sequence]
-                let data = try JSONSerialization.data(withJSONObject: newJson)
-                
-                try data.write(to: fileURL)
-                
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     let controller = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
@@ -327,7 +332,7 @@ private extension IndexPath {
     static let numberOfSections = optionsSection + 1
     
     static let configurationTitles = [
-        "Export Everything"
+        "Export To Arcosense"
     ]
     
     static let detailsTitles = [

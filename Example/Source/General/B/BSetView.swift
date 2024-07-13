@@ -37,7 +37,7 @@ struct BSetView: View {
                 .scrollDisabled(true)
             }
         }
-        .navigationTitle("Scene settings")
+        .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Button {

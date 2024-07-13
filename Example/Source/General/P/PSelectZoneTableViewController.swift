@@ -37,7 +37,7 @@ class PSelectZoneTableViewController: UITableViewController {
             let cell = UITableViewCell()
             cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
             cell.accessoryType = .disclosureIndicator
-            cell.textLabel?.text = "Create new zone"
+            cell.textLabel?.text = Localized("Create a new zone")
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Subtitle", for: indexPath)

@@ -15,7 +15,7 @@ struct BSceneEditView: View {
     
     private let scene: NordicMesh.Scene?
     @State private var nameText: String = ""
-    @State private var describeText: String = "Personalised Lighting Modes"
+    @State private var describeText: String = ""
     @State private var numberText: String = ""
     
     private var title: String = ""
@@ -33,7 +33,7 @@ struct BSceneEditView: View {
         self.scene = scene
         self.zone = zone
         self.node = node
-        title = scene?.name ?? "New Scene"
+        title = scene?.name ?? "Add scene"
     }
     
     var body: some View {
@@ -41,7 +41,7 @@ struct BSceneEditView: View {
             InputItemView(title: "Name", placehoder: "Scene name", text: $nameText)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-            InputItemView(title: "Decribe", placehoder: "Scene description", text: $describeText)
+            InputItemView(title: "Description", placehoder: "Scene description", text: $describeText)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             InputItemView(title: "Number", placehoder: "Scene number", text: $numberText)

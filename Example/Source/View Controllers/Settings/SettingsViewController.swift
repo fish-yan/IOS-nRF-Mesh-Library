@@ -42,7 +42,7 @@ class SettingsViewController: UITableViewController {
     
     @IBOutlet weak var appVersionLabel: UILabel!
     @IBOutlet weak var appBuildNumberLabel: UILabel!
-    
+    @IBOutlet weak var languageLabel: UILabel!
     // MARK: - Actions
     
     @IBAction func organizeTapped(_ sender: UIBarButtonItem) {
@@ -64,6 +64,8 @@ class SettingsViewController: UITableViewController {
         // Load versions.
         appVersionLabel.text = AppInfo.version
         appBuildNumberLabel.text = AppInfo.buildNumber
+        
+        languageLabel.text = AppManager.manager.language.name
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,17 +90,7 @@ class SettingsViewController: UITableViewController {
     }
     
     // MARK: - Table view delegate
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case IndexPath.networkSection: return 2
-        case IndexPath.actionsSection: return 1
-        case IndexPath.aboutSection: return 2
-        case IndexPath.backToNewUI: return 1
-        default: return 0
-        }
-    }
-    
+ 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
@@ -108,6 +100,20 @@ class SettingsViewController: UITableViewController {
         if indexPath.isBackToNewUI {
             let tabVC = self.tabBarController as? RootTabBarController
             tabVC?.backCallback?()
+        }
+        if indexPath.isLanguage {
+            let alert = UIAlertController(title: Localized("Language"), message: nil, preferredStyle: .actionSheet)
+            for lan in AppLanguage.allCases {
+                let action = UIAlertAction(title: lan.name, style: .default) { _ in
+                    AppManager.manager.language = lan
+                    self.languageLabel.text = lan.name
+                    NotificationCenter.default.post(name: .languageChanged, object: nil)
+                }
+                alert.addAction(action)
+            }
+            let cancel = UIAlertAction(title: Localized("Cancel"), style: .cancel)
+            alert.addAction(cancel)
+            self.present(alert, animated: true)
         }
     }
     
@@ -200,13 +206,13 @@ private extension SettingsViewController {
     
     /// Displays the Import / Export action sheet.
     func displayImportExportOptions() {
-        let alert = UIAlertController(title: "Organize",
-                                      message: "Importing network will override your existing settings.\n"
-                                             + "Make sure you exported it first.",
+        let alert = UIAlertController(title: Localized("Organize"),
+                                      message: Localized("Importing network will override you existing settings.") + "\n"
+                                             + Localized("Make sure you exported it first"),
                                       preferredStyle: .actionSheet)
-        let exportAction = UIAlertAction(title: "Export", style: .default) { [weak self] _ in self?.exportNetwork() }
-        let importAction = UIAlertAction(title: "Import", style: .destructive) { [weak self] _ in self?.importNetwork() }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let exportAction = UIAlertAction(title: Localized("Export"), style: .default) { [weak self] _ in self?.exportNetwork() }
+        let importAction = UIAlertAction(title: Localized("Import"), style: .destructive) { [weak self] _ in self?.importNetwork() }
+        let cancelAction = UIAlertAction(title: Localized("Cancel"), style: .cancel)
         alert.addAction(exportAction)
         alert.addAction(importAction)
         alert.addAction(cancelAction)
@@ -395,9 +401,10 @@ extension SettingsViewController: UIDocumentPickerDelegate {
 
 private extension IndexPath {
     static let networkSection = 0
-    static let actionsSection = 1
-    static let aboutSection   = 2
-    static let backToNewUI    = 3
+    static let languageSection = 1
+    static let actionsSection = 2
+    static let aboutSection   = 3
+    static let backToNewUI    = 4
     
     /// Returns whether the IndexPath points to the network resetting option.
     var isResetNetwork: Bool {
@@ -408,6 +415,9 @@ private extension IndexPath {
         return section == IndexPath.backToNewUI && row == 0
     }
 
+    var isLanguage: Bool {
+        return section == IndexPath.languageSection && row == 0
+    }
 }
 
 private extension Array where Element == CodingKey {

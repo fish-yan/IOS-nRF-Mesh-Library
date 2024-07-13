@@ -124,7 +124,7 @@ struct BZoneView: View {
             if isDynamicMode != false {
                 Divider()
                 HStack {
-                    Text("Level")
+                    Text("Levels")
                         .font(.secondaryLabel)
                     Spacer()
                     Button {
@@ -178,7 +178,7 @@ struct BZoneView: View {
     
     func sliderView(title: String, value: Binding<Double>, in range: ClosedRange<Double>, onEnded: @escaping (Double) -> Void) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("\(title): \(Int(value.wrappedValue))s")
+            (Text(title) + Text("\(Int(value.wrappedValue))"))
                 .font(.secondaryLabel)
             Spacer()
                 .frame(height: 3)

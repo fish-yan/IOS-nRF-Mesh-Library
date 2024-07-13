@@ -64,7 +64,7 @@ public enum DefaultSceneMode {
         case .eco: "Reduced energy consumption"
         case .comfort: "Comfortable lighting experience"
         case .display: "Demonstrate functional use"
-        default: "Personalised Lighting Modes"
+        default: "Personalised Lighting Mode"
         }
     }
     
@@ -147,7 +147,7 @@ public class Scene: Codable {
         }
         self.number = number
         self.name = try container.decode(String.self, forKey: .name)
-        self.detail = (try? container.decode(String.self, forKey: .detail)) ?? "Personalised Lighting Modes"
+        self.detail = (try? container.decode(String.self, forKey: .detail)) ?? DefaultSceneMode.other(number: 99).detail
         self.addresses = []
         let addressesStrings = try container.decode([String].self, forKey: .addresses)
         try addressesStrings.forEach {

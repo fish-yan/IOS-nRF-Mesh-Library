@@ -178,7 +178,7 @@ private extension NetworkViewController {
     
     func createSearchBar() {
         searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.placeholder = "Name, Unicast Address"
+        searchController.searchBar.placeholder = Localized("Name") + ", " + Localized("Unicast Address")
         searchController.searchBar.delegate = self
         searchController.searchBar.isTranslucent = false
         if #available(iOS 13.0, *) {
