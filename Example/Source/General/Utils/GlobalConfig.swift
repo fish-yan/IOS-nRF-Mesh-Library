@@ -57,17 +57,17 @@ enum AppLanguage: String, CaseIterable {
     case en
     case zhHans = "zh-Hans"
     case zhHant = "zh-Hant"
-    case ja
-    case es
-    case pt
+//    case ja
+//    case es
+//    case pt
     
     init(rawValue: String) {
         self = if rawValue.hasPrefix("en") { .en }
         else if rawValue.hasPrefix("zh-Hans") { .zhHans }
         else if rawValue.hasPrefix("zh-Hant") { .zhHant }
-        else if rawValue.hasPrefix("ja") { .ja }
-        else if rawValue.hasPrefix("es") { .es }
-        else if rawValue.hasPrefix("pt") { .pt }
+//        else if rawValue.hasPrefix("ja") { .ja }
+//        else if rawValue.hasPrefix("es") { .es }
+//        else if rawValue.hasPrefix("pt") { .pt }
         else { .en }
     }
     
@@ -76,9 +76,9 @@ enum AppLanguage: String, CaseIterable {
         case .en: "English"
         case .zhHans: "中文"
         case .zhHant: "繁體中文"
-        case .ja: "日本語"
-        case .es: "español"
-        case .pt: "Português"
+//        case .ja: "日本語"
+//        case .es: "español"
+//        case .pt: "Português"
         }
     }
 }

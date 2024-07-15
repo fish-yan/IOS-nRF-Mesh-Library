@@ -226,7 +226,10 @@ private extension BZoneView {
         let status = GLSimpleStatus(bool: onOff)
         let message = GLAiMessage(status: status)
         _ = try? MeshNetworkManager.instance.send(message, to: D000)
-        Loading.hidden()
+        Task {
+            try? await Task.sleep(nanoseconds: 2000000000)
+            Loading.hidden()
+        }
     }
     
     func levelSet(value: Double, group: NordicMesh.Group) {
