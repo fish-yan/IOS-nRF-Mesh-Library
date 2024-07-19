@@ -48,7 +48,7 @@ struct BSceneStoreView: View {
             } header: {
                 Text("New Scenes")
             }
-            
+            storedScenes.isEmpty ? nil :
             Section {
                 ForEach(storedScenes, id: \.number) { scene in
                     HStack {
@@ -99,12 +99,12 @@ private extension BSceneStoreView {
                 return
             }
             _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
-            appManager.b.path.removeAll()
+            appManager.b.popToRoot()
         } else if let zone {
             let address = UInt16(zone.number) * 16 + 0xD000
             let group = try! NordicMesh.Group(name: "", address: MeshAddress(address))
             _ = try? MeshNetworkManager.instance.send(message, to: group)
-            appManager.b.path.removeAll()
+            appManager.b.popToRoot()
         }
     }
 }

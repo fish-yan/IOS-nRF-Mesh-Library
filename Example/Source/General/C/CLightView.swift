@@ -22,6 +22,8 @@ struct CLightView: View {
     
     @State private var sliderType: MeshSliderType = .dim
     
+    @State private var isDisappear = false
+    
     private let messageManager = MeshMessageManager()
         
     let node: Node
@@ -55,6 +57,9 @@ struct CLightView: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear(perform: onAppear)
+        .onDisappear(perform: {
+            isDisappear = true
+        })
         .alert("Warning", isPresented: $isPresented) {
             Button("Cancel", role: .cancel) { }
             Button("Turn off") {
@@ -205,6 +210,7 @@ struct CLightView: View {
 private extension CLightView {
 
     func onAppear() {
+        isDisappear = false
         messageManager.remove()
         messageManager.delegate = self
         if isB {
@@ -306,6 +312,7 @@ private extension CLightView {
 extension CLightView: MeshMessageDelegate {
     
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
+        if isDisappear { return }
         switch message {
         case let status as GenericOnOffStatus:
             switch source {

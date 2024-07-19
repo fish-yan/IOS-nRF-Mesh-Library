@@ -304,14 +304,15 @@ extension UIViewController {
     
     @objc func coordinateRequired(_ textField: UITextField) {
         let alert = getAlert(from: textField)
-        if let text = textField.text, text.count == 4,
-           let h = UInt(text.prefix(2)),
-           let v = UInt(text.suffix(2)),
-           h > 0, v > 0 {
-            alert.setValid(true)
-        } else {
-            alert.setValid(false)
-        }
+        alert.setValid(textField.text != "")
+//        if let text = textField.text, text.count == 4,
+//           let h = UInt(text.prefix(2)),
+//           let v = UInt(text.suffix(2)),
+//           h > 0, v > 0 {
+//            alert.setValid(true)
+//        } else {
+//            alert.setValid(false)
+//        }
     }
     
     @objc func unicastAddressOptional(_ textField: UITextField) {

@@ -52,17 +52,18 @@ class PNodeDetailTableViewController: UITableViewController {
                          type: .nameRequired, cancelHandler: nil) { newName in
             self.node.name = newName
             self.nameLab.text = newName
+            self.title = newName
             MeshNetworkManager.instance.saveAll()
         }
     }
     
     /// Presents a dialog with resetting confirmation.
     func presentResetConfirmation() {
-        let alert = UIAlertController(title: "Reset Node",
-                                      message: "Resetting the node will change its state back to unprovisioned state and remove it from the local database.",
+        let alert = UIAlertController(title: Localized("Reset Node"),
+                                      message: Localized("Resetting the node will change its state back to unprovisioned state and remove it from the local database."),
                                       preferredStyle: .actionSheet)
-        let resetAction = UIAlertAction(title: "Reset", style: .destructive) { [weak self] _ in self?.resetNode() }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let resetAction = UIAlertAction(title: Localized("Reset"), style: .destructive) { [weak self] _ in self?.resetNode() }
+        let cancelAction = UIAlertAction(title: Localized("Cancel"), style: .cancel)
         alert.addAction(resetAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)

@@ -234,7 +234,6 @@
 		52E54CE72345EDA700478F05 /* GenericState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E54CE62345EDA700478F05 /* GenericState.swift */; };
 		52F6AD6C22B78F3000F0D7DF /* CompositionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F6AD6B22B78F3000F0D7DF /* CompositionData.swift */; };
 		52F6AD7622BA612900F0D7DF /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F6AD7522BA612900F0D7DF /* UIViewController+Toast.swift */; };
-		582D3427AEC67A6269423CFA /* Pods_nRF_Mesh_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57EEAABA13E16EBDF1CADFD /* Pods_nRF_Mesh_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		A7A59BD5277225A70045A8ED /* GenericPowerOnOff.xib in Resources */ = {isa = PBXBuildFile; fileRef = A7A59BD4277225A70045A8ED /* GenericPowerOnOff.xib */; };
@@ -351,10 +350,8 @@
 		2CFE865D2AEAA91B00A1CF7D /* GLGlobalOnOffMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLGlobalOnOffMessage.swift; sourceTree = "<group>"; };
 		2CFE865F2AEAA96A00A1CF7D /* GLRelayMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLRelayMessage.swift; sourceTree = "<group>"; };
 		3089BC9F2099CA4900E30192 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		3440420687768FA73DB8A905 /* Pods-nRF Mesh Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nRF Mesh Tests.debug.xcconfig"; path = "Target Support Files/Pods-nRF Mesh Tests/Pods-nRF Mesh Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		41E003FABAE6DD367FEC93B5 /* Pods_nRF_Mesh.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_nRF_Mesh.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4973E9CDA09CE2398E5C269A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		4A1A469C2CCA6F730EFD3B60 /* Pods-nRF Mesh Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nRF Mesh Tests.release.xcconfig"; path = "Target Support Files/Pods-nRF Mesh Tests/Pods-nRF Mesh Tests.release.xcconfig"; sourceTree = "<group>"; };
 		520A7D6624F3E05A00BF370A /* RightActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightActionCell.swift; sourceTree = "<group>"; };
 		5211EAD4250777E100089FF2 /* SceneServerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneServerDelegate.swift; sourceTree = "<group>"; };
 		5211EADA25090DB000089FF2 /* SceneSetupServerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSetupServerDelegate.swift; sourceTree = "<group>"; };
@@ -546,7 +543,6 @@
 		F0FB18F52B8E90CF00683C3F /* LightLCViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightLCViewCell.swift; sourceTree = "<group>"; };
 		F0FB18F62B8E90CF00683C3F /* LightLC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LightLC.xib; sourceTree = "<group>"; };
 		F0FB18F92B8E919C00683C3F /* LightLCClientDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightLCClientDelegate.swift; sourceTree = "<group>"; };
-		F57EEAABA13E16EBDF1CADFD /* Pods_nRF_Mesh_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_nRF_Mesh_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -563,7 +559,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				582D3427AEC67A6269423CFA /* Pods_nRF_Mesh_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -687,8 +682,6 @@
 			children = (
 				62E57B0980FA0DB98C344CBB /* Pods-nRF Mesh.debug.xcconfig */,
 				2A5BED1139337A6A368C8D2E /* Pods-nRF Mesh.release.xcconfig */,
-				3440420687768FA73DB8A905 /* Pods-nRF Mesh Tests.debug.xcconfig */,
-				4A1A469C2CCA6F730EFD3B60 /* Pods-nRF Mesh Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1168,7 +1161,6 @@
 			children = (
 				2CFCE59E2B48406B00CF2491 /* UniformTypeIdentifiers.framework */,
 				41E003FABAE6DD367FEC93B5 /* Pods_nRF_Mesh.framework */,
-				F57EEAABA13E16EBDF1CADFD /* Pods_nRF_Mesh_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1251,7 +1243,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "nRF Mesh Tests" */;
 			buildPhases = (
-				8C0D39DFAEC21F633888D03F /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
@@ -1413,28 +1404,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-nRF Mesh/Pods-nRF Mesh-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8C0D39DFAEC21F633888D03F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-nRF Mesh Tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EF3706B9E18059282D7AB039 /* [CP] Check Pods Manifest.lock */ = {
@@ -1931,7 +1900,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 202407131722;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
@@ -1952,9 +1921,11 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1968,7 +1939,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 202407131722;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
@@ -1990,15 +1961,16 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3440420687768FA73DB8A905 /* Pods-nRF Mesh Tests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = P3R8YQEV4L;
@@ -2031,7 +2003,6 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4A1A469C2CCA6F730EFD3B60 /* Pods-nRF Mesh Tests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = P3R8YQEV4L;

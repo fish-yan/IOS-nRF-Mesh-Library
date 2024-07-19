@@ -90,7 +90,7 @@ class SettingsViewController: UITableViewController {
     }
     
     // MARK: - Table view delegate
- 
+    private var touchCount = 0
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
@@ -114,6 +114,19 @@ class SettingsViewController: UITableViewController {
             let cancel = UIAlertAction(title: Localized("Cancel"), style: .cancel)
             alert.addAction(cancel)
             self.present(alert, animated: true)
+        }
+        
+        if indexPath.section == IndexPath.aboutSection, indexPath.row == 0 {
+            touchCount += 1
+            if touchCount >= 5 {
+                // 测试crash
+                let arr = [String]()
+                print(arr[1])
+            }
+            Task {
+                try? await Task.sleep(nanoseconds:1_000_000_000)
+                touchCount = 0
+            }
         }
     }
     
@@ -226,7 +239,11 @@ private extension SettingsViewController {
     }
     
     func openNewNetworkWizard() {
-        performSegue(withIdentifier: "wizard", sender: nil)
+        _ = MeshNetworkManager.instance.clearAll()
+        (UIApplication.shared.delegate as! AppDelegate).createNewMeshNetwork()
+        reload()
+        resetViews()
+//        performSegue(withIdentifier: "wizard", sender: nil)
     }
     
     /// Reloads network data.
@@ -418,7 +435,7 @@ private extension IndexPath {
     var isLanguage: Bool {
         return section == IndexPath.languageSection && row == 0
     }
-}
+    }
 
 private extension Array where Element == CodingKey {
     

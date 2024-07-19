@@ -50,7 +50,7 @@ class PZoneDetailViewController: UIViewController {
         }
         MeshNetworkManager.instance.saveAll()
         if callback != nil,
-           let vc = navigationController?.viewControllers.first(where: {$0 is ProvisioningViewController || $0 is PNodeDetailTableViewController}) {
+           let vc = navigationController?.viewControllers.first(where: {$0 is ProvisioningViewController || $0 is PChangePositionTableViewController}) {
             navigationController?.popToViewController(vc, animated: true)
         } else {
             navigationController?.popViewController(animated: true)

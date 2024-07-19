@@ -57,10 +57,10 @@ struct PZoneDetailView: View {
                         } else {
                             GLMeshNetworkModel.instance.remove(zone)
                             MeshNetworkManager.instance.saveAll()
-                            appManager.p.path.removeLast()
+                            appManager.p.pop()
                         }
                     } else {
-                        appManager.p.path.removeLast()
+                        appManager.p.pop()
                     }
                 }, label: {
                     Text(zone == nil ? "Cancel" : "Delete")
@@ -85,7 +85,7 @@ struct PZoneDetailView: View {
                 if let zone {
                     GLMeshNetworkModel.instance.remove(zone)
                     MeshNetworkManager.instance.saveAll()
-                    appManager.p.path.removeLast()
+                    appManager.p.pop()
                 }
             } label: {
                 Text("Delete")
@@ -118,7 +118,7 @@ private extension PZoneDetailView {
             GLMeshNetworkModel.instance.add(zone)
         }
         MeshNetworkManager.instance.saveAll()
-        appManager.p.path.removeLast()
+        appManager.p.pop()
     }
 }
 

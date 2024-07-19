@@ -301,12 +301,15 @@ private extension ProvisioningViewController {
         // register scenes
         taskManager.append(.sceneRegisterGet)
         
-        var coordinate = ""
-        if let zone = zone?.number, zone != 0 {
-            coordinate += String(format: "%02d", zone)
+        if let text = coordinateLabel.text,
+                !text.isEmpty, text != "Unknown" {
+            var coordinate = ""
+            if let zone = zone?.number, zone != 0 {
+                coordinate += String(format: "%02d", zone)
+            }
+            coordinate += coordinateLabel.text ?? "0000"
+            taskManager.append(.coordinate(coordinate))
         }
-        coordinate += coordinateLabel.text ?? "0000"
-        taskManager.append(.coordinate(coordinate))
         
         _ = MeshNetworkManager.instance.save()
         
@@ -397,12 +400,6 @@ private extension ProvisioningViewController {
     /// Starts provisioning process of the device.
     func startProvisioning() {
         guard let capabilities = provisioningManager.provisioningCapabilities else {
-            return
-        }
-        
-        guard let text = coordinateLabel.text,
-                !text.isEmpty, text != "Unknown" else {
-            showToast("coordinate cannot be unknown")
             return
         }
         

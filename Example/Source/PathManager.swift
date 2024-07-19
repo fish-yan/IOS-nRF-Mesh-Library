@@ -11,9 +11,9 @@ import NordicMesh
 import Combine
 
 class AppManager: Observable, ObservableObject {
-    @Published var c = CPathManager()
-    @Published var b = CPathManager()
-    @Published var p = CPathManager()
+    @Published var c = PathManager()
+    @Published var b = PathManager()
+    @Published var p = PathManager()
     @Published var userRole: UserRole = .normal
     private static var defaultLanguage: AppLanguage {
         if let lan = Locale.preferredLanguages.first {
@@ -37,19 +37,23 @@ class AppManager: Observable, ObservableObject {
     }
 }
 
-class CPathManager: Observable, ObservableObject {
+class PathManager: Observable, ObservableObject {
     @Published var path: [NavPath] = []
     @Published var selectedTab: Int = 0
-}
-
-class BPathManager: Observable, ObservableObject {
-    @Published var path: [NavPath] = []
-    @Published var selectedTab: Int = 0
-}
-
-class PPathManager: Observable, ObservableObject {
-    @Published var path: [NavPath] = []
-    @Published var selectedTab: Int = 0
+    
+    func pop() {
+        if path.isEmpty {
+            return
+        }
+        path.removeLast()
+    }
+    
+    func popToRoot() {
+        if path.isEmpty {
+            return
+        }
+        path.removeAll()
+    }
 }
 
 enum NavPath: Hashable {

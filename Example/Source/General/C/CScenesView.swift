@@ -15,6 +15,7 @@ struct CScenesView: View {
     
     @State private var scenes: [NordicMesh.Scene] = []
     private let messageManager = MeshMessageManager()
+    @State private var isDisappear = false
     
     var body: some View {
         ScrollView(.vertical) { 
@@ -67,6 +68,9 @@ struct CScenesView: View {
         }
         .scrollIndicators(.hidden)
         .onAppear(perform: onAppera)
+        .onDisappear(perform: {
+            isDisappear = true
+        })
     }
     
     func sceneItem(isSelected: Bool, image: String, title: String, des: String, action: @escaping () -> Void) -> some View {
@@ -136,6 +140,7 @@ struct CScenesView: View {
 extension CScenesView {
     
     func onAppera() {
+        isDisappear = false
         messageManager.remove()
         messageManager.delegate = self
         scenes = zone.scenes()
@@ -163,6 +168,7 @@ extension CScenesView {
 extension CScenesView: MeshMessageDelegate {
     
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
+        if isDisappear { return }
         switch message {
         case let status as SceneRegisterStatus:
             if status.isSuccess {

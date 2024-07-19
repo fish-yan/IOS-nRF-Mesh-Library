@@ -25,6 +25,7 @@ struct BSceneEditView: View {
     @State private var isDeleteSceneAlert: Bool = false
     private var messageManager = MeshMessageManager()
     private let taskManager = MeshTaskManager()
+    @State private var isDisappear = false
     
     var zone: GLZone?
     var node: Node?
@@ -68,10 +69,10 @@ struct BSceneEditView: View {
                         } else {
                             try? MeshNetworkManager.instance.meshNetwork?.remove(scene: scene.number)
                             MeshNetworkManager.instance.saveAll()
-                            appManager.b.path.removeLast()
+                            appManager.b.pop()
                         }
                     } else {
-                        appManager.b.path.removeLast()
+                        appManager.b.pop()
                     }
                 }, label: {
                     Text(scene == nil ? "Cancel" : "Delete")
@@ -96,12 +97,12 @@ struct BSceneEditView: View {
         .ignoresSafeArea(.keyboard)
         .alert("Remind", isPresented: $isPresented, actions: {
             Button(role: .cancel) {
-                appManager.b.path.removeLast()
+                appManager.b.pop()
             } label: {
                 Text("Cancel")
             }
             Button("Continue") {
-                appManager.b.path.removeAll()
+                appManager.b.popToRoot()
                 appManager.b.selectedTab = 1
             }
         }, message: {
@@ -124,12 +125,16 @@ struct BSceneEditView: View {
             Text("This scene is in use, delete or not?")
         })
         .onAppear(perform: onAppear)
+        .onDisappear(perform: {
+            isDisappear = true
+        })
         .loadingable()
     }
 }
 
 private extension BSceneEditView {
     func onAppear() {
+        isDisappear = false
         if let scene {
             nameText = scene.name
             describeText = scene.detail
@@ -162,12 +167,12 @@ private extension BSceneEditView {
                 return
             }
             _ = try? MeshNetworkManager.instance.send(message, to: sceneSetupModel)
-            appManager.b.path.removeAll()
+            appManager.b.popToRoot()
         } else if let zone {
             let address = UInt16(zone.number) * 16 + 0xD000
             let group = try! NordicMesh.Group(name: "", address: MeshAddress(address))
             _ = try? MeshNetworkManager.instance.send(message, to: group)
-            appManager.b.path.removeAll()
+            appManager.b.popToRoot()
         } else {
             isPresented = true
         }
@@ -196,13 +201,14 @@ private extension BSceneEditView {
         guard let scene else { return }
         try? MeshNetworkManager.instance.meshNetwork?.remove(scene: scene.number)
         MeshNetworkManager.instance.saveAll()
-        appManager.b.path.removeLast()
+        appManager.b.pop()
     }
 }
 
 
 extension BSceneEditView: MeshMessageDelegate {
     func meshNetworkManager(_ manager: NordicMesh.MeshNetworkManager, didReceiveMessage message: NordicMesh.MeshMessage, sentFrom source: NordicMesh.Address, to destination: NordicMesh.MeshAddress) {
+        if isDisappear { return }
         if let _ = taskManager.task {
             taskManager.update(status: .success)
             executeNext()
