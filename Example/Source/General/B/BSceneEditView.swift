@@ -128,6 +128,7 @@ struct BSceneEditView: View {
         .onDisappear(perform: {
             isDisappear = true
         })
+        .toolbar(.hidden, for: .tabBar)
         .loadingable()
     }
 }

@@ -23,15 +23,20 @@ class AppManager: Observable, ObservableObject {
     }
     @AppStorage("AppLanguage") var language = AppManager.defaultLanguage
     
-    private var anyCancellable: AnyCancellable?
+    private var canyCancellable: AnyCancellable?
+    private var banyCancellable: AnyCancellable?
+    private var panyCancellable: AnyCancellable?
     
     static let manager = AppManager()
     
     private init() {
-        anyCancellable = self.c.objectWillChange.sink {
+        canyCancellable = self.c.objectWillChange.sink {
             self.objectWillChange.send()
         }
-        anyCancellable = self.b.objectWillChange.sink {
+        banyCancellable = self.b.objectWillChange.sink {
+            self.objectWillChange.send()
+        }
+        panyCancellable = self.p.objectWillChange.sink {
             self.objectWillChange.send()
         }
     }

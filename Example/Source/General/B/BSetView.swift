@@ -14,7 +14,7 @@ struct BSetView: View {
     @State private var proxy: ScrollViewProxy?
     
     var body: some View {
-        VStack {
+        NavigationStack(path: $appManager.b.path) {
             ScrollViewReader { proxy in
                 HStack(spacing: 0) {
                     item(text: "Lights", tag: 0, proxy: proxy)
@@ -36,29 +36,30 @@ struct BSetView: View {
                 .scrollIndicators(.hidden)
                 .scrollDisabled(true)
             }
-        }
-        .navigationTitle("Settings")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            Button {
-                appManager.userRole = .commissioner
-            } label: {
-                Image(.icSetting)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button {
+                    appManager.userRole = .commissioner
+                } label: {
+                    Image(.icSetting)
+                }
             }
-        }
-        .navigationDestination(for: NavPath.self) { target in
-            switch target {
-            case .bZoneView(let zone):
-                BZoneView(zone: zone)
-            case .bSceneStoreZoneView(let zone):
-                BSceneStoreView(zone: zone)
-            case .cLightView(let node):
-                CLightView(node: node, isB: true)
-            case .bSceneStoreNodeView(let node):
-                BSceneStoreView(node: node)
-            case .bStoreSceneEditView(let node, let zone):
-                BSceneEditView(scene: nil, node: node, zone: zone)
-            default: Text("")
+            .background(Color.groupedBackground)
+            .navigationDestination(for: NavPath.self) { target in
+                switch target {
+                case .bZoneView(let zone):
+                    BZoneView(zone: zone)
+                case .bSceneStoreZoneView(let zone):
+                    BSceneStoreView(zone: zone)
+                case .cLightView(let node):
+                    CLightView(node: node, isB: true)
+                case .bSceneStoreNodeView(let node):
+                    BSceneStoreView(node: node)
+                case .bStoreSceneEditView(let node, let zone):
+                    BSceneEditView(scene: nil, node: node, zone: zone)
+                default: Text("")
+                }
             }
         }
     }

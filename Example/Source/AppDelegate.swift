@@ -124,7 +124,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
         window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
-        
+        let appearance = UITabBarAppearance()
+        appearance.shadowColor = nil
+        appearance.shadowImage = UIImage()
+        appearance.backgroundColor = .clear
+        appearance.backgroundImage = UIImage(resource: .bgTab)
+        appearance.backgroundEffect = nil
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().layer.cornerRadius = 25
+        UITabBar.appearance().layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return true
     }
     
@@ -140,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                       allocatedUnicastRange: [AddressRange(0x0001...0x199A)],
                                       allocatedGroupRange:   [AddressRange(0xD000...0xDC9A)],
                                       allocatedSceneRange:   [SceneRange(0x0001...0x3333)])
-        let network = meshNetworkManager.createNewMeshNetwork(withName: "nRF Mesh Network", by: provisioner)
+        let network = meshNetworkManager.createNewMeshNetwork(withName: "Arcosense Network", by: provisioner)
         _ = meshNetworkManager.save()
         
         meshNetworkDidChange()

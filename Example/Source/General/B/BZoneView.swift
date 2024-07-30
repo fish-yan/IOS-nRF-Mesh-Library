@@ -95,6 +95,7 @@ struct BZoneView: View {
                     .font(.label)
             }
         }
+        .toolbar(.hidden, for: .tabBar)
         .navigationBarBackButtonHidden(true)
         .loadingable()
     }

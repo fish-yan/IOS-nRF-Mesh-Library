@@ -15,40 +15,43 @@ struct BScenesView: View {
     @State private var scenes: [NordicMesh.Scene] = []
     
     var body: some View {
-        ScrollView(.vertical) {
-            LazyVGrid(columns: columns) {
-                ForEach(scenes, id: \.self) { model in
-                    NavigationLink(value: NavPath.bSceneEditView(scene: model)) {
-                        sceneItem(image: model.icon, title: model.name, des: model.detail)
+        NavigationStack(path: $appManager.b.path) {
+            ScrollView(.vertical) {
+                LazyVGrid(columns: columns) {
+                    ForEach(scenes, id: \.self) { model in
+                        NavigationLink(value: NavPath.bSceneEditView(scene: model)) {
+                            sceneItem(image: model.icon, title: model.name, des: model.detail)
+                        }
+                    }
+                }
+                .padding(EdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20))
+            }
+            .navigationTitle("Scenes")
+            .navigationBarTitleDisplayMode(.inline)
+            .scrollIndicators(.hidden)
+            .onAppear(perform: onAppera)
+            .toolbar {
+                TooBarBackItem() {
+                    appManager.userRole = .normal
+                }
+            }
+            .toolbar {
+                if scenes.count < 16 {
+                    NavigationLink(value: NavPath.bSceneEditView(scene: nil)) {
+                        Text("Add scene")
+                            .underline()
+                            .font(.label)
                     }
                 }
             }
-            .padding(EdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20))
-        }
-        .navigationTitle("Scenes")
-        .navigationBarTitleDisplayMode(.inline)
-        .scrollIndicators(.hidden)
-        .onAppear(perform: onAppera)
-        .toolbar {
-            TooBarBackItem() {
-                appManager.userRole = .normal
-            }
-        }
-        .toolbar {
-            if scenes.count < 16 {
-                NavigationLink(value: NavPath.bSceneEditView(scene: nil)) {
-                    Text("Add scene")
-                        .underline()
-                        .font(.label)
+            .navigationDestination(for: NavPath.self) { target in
+                switch target {
+                case .bSceneEditView(let scene):
+                    BSceneEditView(scene: scene)
+                default: Text("")
                 }
             }
-        }
-        .navigationDestination(for: NavPath.self) { target in
-            switch target {
-            case .bSceneEditView(let scene):
-                BSceneEditView(scene: scene)
-            default: Text("")
-            }
+            .background(Color.groupedBackground)
         }
     }
     

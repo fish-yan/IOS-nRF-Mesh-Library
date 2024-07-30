@@ -291,7 +291,10 @@ private extension ProvisioningViewController {
             needConfigMore = false
             return
         }
-        
+        guard let isLight = node.productType?.isLight, isLight else {
+            needConfigMore = false
+            return
+        }
         // Subscriptions.
         for group in meshNetwork.defaultGroups {
             for model in node.usefulModels where !model.isSubscribed(to: group) {

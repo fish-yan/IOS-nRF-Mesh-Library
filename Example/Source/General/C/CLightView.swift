@@ -166,6 +166,7 @@ struct CLightView: View {
                 .fill(Color.tertiaryBackground)
                 .ignoresSafeArea()
         )
+        .toolbar(.hidden, for: .tabBar)
     }
     
     func item(image: ImageResource, title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {

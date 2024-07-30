@@ -46,17 +46,17 @@ class NodeViewCell: UITableViewCell {
             nodeName.text = node.name ?? "Unknown Device"
             address.text = node.primaryUnicastAddress.asString()
             elements.text = "\(node.elements.count)"
-            
-            if let companyIdentifier = node.companyIdentifier {
-                company.text = CompanyIdentifier.name(for: companyIdentifier) ?? "Unknown"
-                let modelCount = node.elements.reduce(0, { (result, element) -> Int in
-                    result + element.models.count
-                })
-                models.text = "\(modelCount)"
+            if let coordinate = node.coordinate {
+                let zone = GLMeshNetworkModel.instance.zone(node: node)
+                company.text = "0x\(String(zone.number, radix: 16))\(coordinate)"
+                
             } else {
                 company.text = "Unknown"
-                models.text = "Configuration not complete"
             }
+            let modelCount = node.elements.reduce(0, { (result, element) -> Int in
+                result + element.models.count
+            })
+            models.text = "\(modelCount)"
         }
     }
     

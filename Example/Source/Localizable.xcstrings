@@ -17,6 +17,16 @@
         }
       }
     },
+    ": 0x%@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : ": 0x%1$@%2$@"
+          }
+        }
+      }
+    },
     "%@" : {
       "localizations" : {
         "en" : {
@@ -58,6 +68,7 @@
       }
     },
     "a" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

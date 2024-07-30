@@ -13,27 +13,39 @@ struct BZoneListView: View {
     @State var zones: [GLZone] = []
     @State private var isShowSetting = false
     @State var selectedZone: GLZone?
+    @State private var searchText = ""
+    
+    var filterZones: [GLZone] {
+        if searchText.isEmpty {
+            zones
+        } else {
+            zones.filter({$0.name.lowercased().contains(searchText.lowercased()) || $0.number == UInt8(searchText)})
+        }
+    }
     var body: some View {
-        List(zones, id: \.self, selection: $selectedZone) { zone in
-            NavigationLink(value: NavPath.bZoneView(zone: zone)) {
-                VStack(alignment: .leading, spacing: 13) {
-                    Text(zone.name)
-                        .font(.labelTitle)
-                        .foregroundStyle(Color.accent)
-                    (Text("Address") +
-                    Text(": 0x\(String(zone.number, radix: 16))"))
+        VStack {
+            SearchBar(text: $searchText, prompt: Localized("Name") + "," + Localized("Address"))
+            List(filterZones, id: \.self, selection: $selectedZone) { zone in
+                NavigationLink(value: NavPath.bZoneView(zone: zone)) {
+                    VStack(alignment: .leading, spacing: 13) {
+                        Text(zone.name)
+                            .font(.labelTitle)
+                            .foregroundStyle(Color.accent)
+                        (Text("Address") +
+                         Text(": 0x\(String(zone.number, radix: 16))"))
                         .font(.secondaryLabel)
                         .foregroundColor(Color.secondaryLabel)
+                    }
                 }
+                .listRowSeparator(.hidden)
+                .listSectionSpacing(0)
+                .listRowBackground(
+                    Color.tertiaryBackground
+                )
             }
-            .listRowSeparator(.hidden)
-            .listSectionSpacing(0)
-            .listRowBackground(
-                Color.tertiaryBackground
-            )
+            .listRowSpacing(10)
+            .contentMargins(.top, 10)
         }
-        .listRowSpacing(10)
-        .contentMargins(.top, 10)
         .onAppear(perform: onAppera)
     }
 }
