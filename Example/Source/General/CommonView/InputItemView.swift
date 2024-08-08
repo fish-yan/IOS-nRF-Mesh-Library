@@ -21,7 +21,7 @@ struct InputItemView: View {
     var body: some View {
         HStack {
             Text(title)
-                .frame(width: 72, alignment: .leading)
+                .frame(width: 85, alignment: .leading)
                 .multilineTextAlignment(.leading)
             Divider()
                 .padding(10)
