@@ -48,7 +48,7 @@ class NodeViewCell: UITableViewCell {
             elements.text = "\(node.elements.count)"
             if let coordinate = node.coordinate {
                 let zone = GLMeshNetworkModel.instance.zone(node: node)
-                company.text = "0x\(String(zone.number, radix: 16))\(coordinate)"
+                company.text = "0x\(String(zone.number, radix: 16))\(coordinate.replacingOccurrences(of: "Unknown", with: ""))"
                 
             } else {
                 company.text = "Unknown"

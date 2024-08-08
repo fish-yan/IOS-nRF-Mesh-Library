@@ -21,7 +21,7 @@ struct CScenesPageView: View {
         VStack(spacing: 15) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
-                    Text("hi,lynn")
+                    Text("hi,Arco")
                         .font(.secondaryLabel)
                         .foregroundStyle(Color.secondaryLabel)
                     Spacer()

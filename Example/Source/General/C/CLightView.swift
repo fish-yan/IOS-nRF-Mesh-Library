@@ -103,13 +103,13 @@ struct CLightView: View {
                 }
             } else {
                 HStack(spacing: 40) {
-                    COnOffItemView(isSelected: isOn == false, icon: .icAllOff, title: "Close") {
+                    COnOffItemView(isSelected: isOn == false, icon: .icAllOff, title: "OFF") {
                         isOn = false
                         onOffSet(isOn: false)
                     }
                     Color.accent
                         .frame(width: 1)
-                    COnOffItemView(isSelected: isOn == true, icon: .icAllOn, title: "Open") {
+                    COnOffItemView(isSelected: isOn == true, icon: .icAllOn, title: "ON") {
                         isOn = true
                         onOffSet(isOn: true)
                     }

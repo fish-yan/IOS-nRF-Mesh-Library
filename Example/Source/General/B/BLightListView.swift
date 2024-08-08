@@ -38,7 +38,7 @@ struct BLightListView: View {
                         if let coordinate = node.coordinate {
                             let zone = GLMeshNetworkModel.instance.zone(node: node)
                             (Text("Position") +
-                             Text(": 0x\(String(zone.number, radix: 16))\(coordinate)"))
+                             Text(": 0x\(String(zone.number, radix: 16))\(coordinate.replacingOccurrences(of: "Unknown", with: ""))"))
                             .font(.secondaryLabel)
                             .foregroundColor(Color.secondaryLabel)
                         }
