@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     ": 0x%@" : {
       "localizations" : {
         "en" : {
@@ -48,6 +51,7 @@
       }
     },
     "%@%" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1070,6 +1074,9 @@
         }
       }
     },
+    "Level %@" : {
+
+    },
     "Levels" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2022,9 +2029,6 @@
           }
         }
       }
-    },
-    "Unknow" : {
-
     },
     "Warning" : {
       "extractionState" : "manual",

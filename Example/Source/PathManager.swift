@@ -23,6 +23,8 @@ class AppManager: Observable, ObservableObject {
     }
     @AppStorage("AppLanguage") var language = AppManager.defaultLanguage
     
+    @AppStorage("MeshAngleConfigs") var angleConfigs: [Double] = [13.3, 18.1, 24.3, 30.3, 36.4, 42, 52.5]
+    
     private var canyCancellable: AnyCancellable?
     private var banyCancellable: AnyCancellable?
     private var panyCancellable: AnyCancellable?

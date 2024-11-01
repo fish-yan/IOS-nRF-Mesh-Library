@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C01E2702CD4A0CF00FE1D3A /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C01E26F2CD4A0CF00FE1D3A /* Array+Extension.swift */; };
+		2C01E2722CD4A2B000FE1D3A /* AnglesConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C01E2712CD4A2B000FE1D3A /* AnglesConfigurationView.swift */; };
 		2C09F2562C38EEED00FAA1BF /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2C09F2552C38EEED00FAA1BF /* Localizable.xcstrings */; };
 		2C18503A2AF7C3FE00900348 /* GLRelayViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1850392AF7C3FE00900348 /* GLRelayViewCell.swift */; };
 		2C18503D2AF7C4A800900348 /* VendorModelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C18503C2AF7C4A800900348 /* VendorModelViewCell.swift */; };
@@ -279,6 +281,8 @@
 
 /* Begin PBXFileReference section */
 		2A5BED1139337A6A368C8D2E /* Pods-nRF Mesh.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nRF Mesh.release.xcconfig"; path = "Target Support Files/Pods-nRF Mesh/Pods-nRF Mesh.release.xcconfig"; sourceTree = "<group>"; };
+		2C01E26F2CD4A0CF00FE1D3A /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		2C01E2712CD4A2B000FE1D3A /* AnglesConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnglesConfigurationView.swift; sourceTree = "<group>"; };
 		2C09F2552C38EEED00FAA1BF /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2C1850382AF7C3C300900348 /* GLRelay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GLRelay.xib; sourceTree = "<group>"; };
 		2C1850392AF7C3FE00900348 /* GLRelayViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLRelayViewCell.swift; sourceTree = "<group>"; };
@@ -605,6 +609,7 @@
 				2CBB85E22C313C0B00BFBEB6 /* PChangePositionTableViewController.swift */,
 				2C4D78182C2F9A3500A67B96 /* PZoneListView.swift */,
 				2CBB85D02C2FE90F00BFBEB6 /* PZoneDetailView.swift */,
+				2C01E2712CD4A2B000FE1D3A /* AnglesConfigurationView.swift */,
 			);
 			path = P;
 			sourceTree = "<group>";
@@ -637,6 +642,7 @@
 				2CAE35A02C57C5E8005B5601 /* GLProductType.swift */,
 				2CBB85DC2C300FE500BFBEB6 /* UIButton+Extension.swift */,
 				2C71A5AF2C42233500117BA1 /* Localized+Extension.swift */,
+				2C01E26F2CD4A0CF00FE1D3A /* Array+Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1503,6 +1509,7 @@
 				5215600929FBFD230048B2D2 /* WizardViewController.swift in Sources */,
 				528AB9F8228D847C000BE9DC /* NetworkViewController.swift in Sources */,
 				2CFE864C2AEA962300A1CF7D /* GLLevelMessage.swift in Sources */,
+				2C01E2722CD4A2B000FE1D3A /* AnglesConfigurationView.swift in Sources */,
 				2CB620442BB943F3002804D3 /* MeshSliderView.swift in Sources */,
 				523F778722CCDE250030EA6A /* SetPublicationViewController.swift in Sources */,
 				52CD0A622330DCFF00A9A181 /* CustomAddressCell.swift in Sources */,
@@ -1645,6 +1652,7 @@
 				5283528222806D7C0097B949 /* NetworkKeySelectionViewController.swift in Sources */,
 				522AFFDE22BBBC6400521EDC /* NodeFeaturesCell.swift in Sources */,
 				523F776E22C63EAD0030EA6A /* NodeAddAppKeyViewController.swift in Sources */,
+				2C01E2702CD4A0CF00FE1D3A /* Array+Extension.swift in Sources */,
 				2CB620642BC57924002804D3 /* MeshTaskManager.swift in Sources */,
 				2C18503A2AF7C3FE00900348 /* GLRelayViewCell.swift in Sources */,
 				529B7643225222E8008F1CE7 /* Address+String.swift in Sources */,
@@ -1912,7 +1920,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 202411011448;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
@@ -1951,7 +1959,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 202411011448;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;

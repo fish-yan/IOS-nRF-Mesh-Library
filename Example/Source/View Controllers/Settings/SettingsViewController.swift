@@ -30,6 +30,7 @@
 
 import UIKit
 import NordicMesh
+import SwiftUI
 
 class SettingsViewController: UITableViewController {
     
@@ -99,6 +100,10 @@ class SettingsViewController: UITableViewController {
         if indexPath.isBackToNewUI {
             let tabVC = self.tabBarController as? RootTabBarController
             tabVC?.backCallback?()
+        }
+        if indexPath.isConfiguration {
+            let vc = UIHostingController(rootView: AnglesConfigurationView())
+            navigationController?.pushViewController(vc, animated: true)
         }
         if indexPath.isLanguage {
             let alert = UIAlertController(title: Localized("Language"), message: nil, preferredStyle: .actionSheet)
@@ -404,10 +409,11 @@ extension SettingsViewController: UIDocumentPickerDelegate {
 
 private extension IndexPath {
     static let networkSection = 0
-    static let languageSection = 1
-    static let actionsSection = 2
-    static let aboutSection   = 3
-    static let backToNewUI    = 4
+    static let configurationSection = 1
+    static let languageSection = 2
+    static let actionsSection = 3
+    static let aboutSection   = 4
+    static let backToNewUI    = 5
     
     /// Returns whether the IndexPath points to the network resetting option.
     var isResetNetwork: Bool {
@@ -421,7 +427,11 @@ private extension IndexPath {
     var isLanguage: Bool {
         return section == IndexPath.languageSection && row == 0
     }
+    
+    var isConfiguration: Bool {
+        return section == IndexPath.configurationSection && row == 0
     }
+}
 
 private extension Array where Element == CodingKey {
     

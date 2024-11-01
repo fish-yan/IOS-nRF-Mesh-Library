@@ -54,8 +54,29 @@ enum MeshSliderType {
         }
     }
     
+    var originValues: [Double]? {
+        switch self {
+        case .angle: AppManager.manager.angleConfigs
+        default: nil
+        }
+    }
+    
+    var values: [Double]? {
+        originValues?.map { (10 + (($0 - 10) * 1.8)) / 100 }
+    }
+    
     var normalColor: Color {
         Color.primary
+    }
+    
+    func formatText(value: Double) -> String {
+        switch self {
+        case .angle:
+            let newValue = (value * 100 - 10) / 1.8 + 10
+            return newValue.formatted(.number2) + "°"
+        default:
+            return (value * 100).formatted(.number2) + "%"
+        }
     }
 }
 
@@ -65,6 +86,7 @@ struct MeshSliderView: View {
     @State private var startLocation: CGPoint = .zero
     private let type: MeshSliderType
     private var onChange: (() -> Void) = {}
+    private var onEnded: (() -> Void) = {}
     
     init(value: Binding<Double>, type: MeshSliderType, onChange: @escaping () -> Void = {}) {
         self.type = type
@@ -93,7 +115,7 @@ struct MeshSliderView: View {
                         .fill(.whiteLabel)
                         .frame(width: 4, height: 20)
                         .position(CGPoint(x: width - 7, y: thumbY))
-                    Text("\(Int(value.wrappedValue * 100))%")
+                    Text(type.formatText(value: value.wrappedValue))
                         .position(CGPoint(x: 30.0, y: 18.0))
                         .foregroundStyle(color)
                         .shadow(color: color.invert.opacity(0.5), radius: 0.5, x: 1, y: 0)
@@ -106,9 +128,17 @@ struct MeshSliderView: View {
                                 startValue = value.wrappedValue
                             }
                             let v = dragValue.translation.width/reader.size.width + startValue
-                            value.wrappedValue = max(min(v, 1), 0)
+                            let newValue = correct(max(min(v, 1), 0))
+                            if newValue != value.wrappedValue {
+                                value.wrappedValue = newValue
+                                debouncer.call {
+                                    onChange()
+                                }
+                            }
+                        })
+                        .onEnded({ dragValue in
                             debouncer.call {
-                                onChange()
+                                onEnded()
                             }
                         })
                 )
@@ -117,10 +147,39 @@ struct MeshSliderView: View {
             .clipShape(.rect(cornerRadius: 18))
         }
     }
+    
+    func correct(_ value: Double) -> Double {
+        if let values = type.values,
+           let newValue = values.min(by: { abs($0 - value) < abs($1 - value) }) {
+            return newValue
+        } else {
+            return value
+        }
+    }
 }
 
 #Preview {
-    @State var value = 0.0
+    @Previewable @State var value = 0.0
     return MeshSliderView(value: $value, type: .angle)
         .padding()
+}
+
+struct Number2Format: FormatStyle {
+    func format(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        return (formatter.string(from: NSNumber(value: value)) ?? "0")
+    }
+    
+    typealias FormatInput = Double
+    
+    typealias FormatOutput = String
+    
+}
+
+extension FormatStyle where Self == Number2Format {
+    static var number2: Number2Format {
+        return Number2Format()
+    }
 }
