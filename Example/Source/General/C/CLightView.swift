@@ -13,8 +13,8 @@ struct CLightView: View {
     
     @State var isOn: Bool?
     @State var dim: Double = 1
-    @State var cct: Double = 0.5
-    @State var angle: Double = 0.5
+    @State var cct: Double = 1
+    @State var angle: Double = 4/7
     @State var runTime: Double = 0
     @State var fadeTime: Double = 0
     @State var isDynamicMode: Bool?
@@ -36,7 +36,11 @@ struct CLightView: View {
                         .resizable()
                         .frame(width: 245, height: 245)
                         .position(x: reader.size.width / 2, y: 50)
-                    BeamShapeView(angle: $angle, hue: cct, brightness: dim)
+                    BeamShapeView(angle: $angle, hue: cct, brightness: $dim) {
+                        angleSet()
+                    } onBrightnessChange: {
+                        levelSet()
+                    }
                 }
             }
             controlView
@@ -256,6 +260,7 @@ private extension CLightView {
     }
     
     func levelSet() {
+        print("setLevel: \(dim)")
         let level = Int16(min(32767, -32768 + 65536 * dim))
         let message = GenericLevelSetUnacknowledged(level: level)
         guard let levelModel = node.levelModel else { return }
@@ -263,6 +268,7 @@ private extension CLightView {
     }
     
     func cctSet() {
+        print("setCCT: \(cct)")
         let level = Int16(min(32767, -32768 + 65536 * cct)) // -32768...32767
         let message = GenericLevelSetUnacknowledged(level: level)
         guard let cctModel = node.cctModel else { return }
@@ -270,7 +276,10 @@ private extension CLightView {
     }
     
     func angleSet() {
-        let level = Int16(min(32767, -32768 + 65536 * (1 - angle))) // -32768...32767
+        let index = Int(round(angle * 7)) - 1
+        let percent = appManager.anglePercents[index]
+        print("setAngle: \(percent)")
+        let level = Int16(min(32767, -32768 + 65536 * (1 - percent))) // -32768...32767
         let message = GenericLevelSetUnacknowledged(level: level)
         guard let angleModel = node.angleModel else { return }
         _ = try? MeshNetworkManager.instance.send(message, to: angleModel)

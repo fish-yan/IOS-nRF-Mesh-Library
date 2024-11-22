@@ -54,29 +54,15 @@ enum MeshSliderType {
         }
     }
     
-    var originValues: [Double]? {
+    var values: [Double]? {
         switch self {
-        case .angle: AppManager.manager.angleConfigs
+        case .angle: [1/7.0, 2/7.0, 3/7.0, 4/7.0, 5/7.0, 6/7.0, 7/7.0]
         default: nil
         }
     }
     
-    var values: [Double]? {
-        originValues?.map { (10 + (($0 - 10) * 1.8)) / 100 }
-    }
-    
     var normalColor: Color {
         Color.primary
-    }
-    
-    func formatText(value: Double) -> String {
-        switch self {
-        case .angle:
-            let newValue = (value * 100 - 10) / 1.8 + 10
-            return newValue.formatted(.number2) + "°"
-        default:
-            return (value * 100).formatted(.number2) + "%"
-        }
     }
 }
 
@@ -86,7 +72,6 @@ struct MeshSliderView: View {
     @State private var startLocation: CGPoint = .zero
     private let type: MeshSliderType
     private var onChange: (() -> Void) = {}
-    private var onEnded: (() -> Void) = {}
     
     init(value: Binding<Double>, type: MeshSliderType, onChange: @escaping () -> Void = {}) {
         self.type = type
@@ -111,11 +96,13 @@ struct MeshSliderView: View {
                             Color.white
                                 .frame(width: width)
                         }
+                        .animation(.default, value: width)
                     RoundedRectangle(cornerRadius: 2)
                         .fill(.whiteLabel)
                         .frame(width: 4, height: 20)
                         .position(CGPoint(x: width - 7, y: thumbY))
-                    Text(type.formatText(value: value.wrappedValue))
+                        .animation(.default, value: width)
+                    Text(valueText())
                         .position(CGPoint(x: 30.0, y: 18.0))
                         .foregroundStyle(color)
                         .shadow(color: color.invert.opacity(0.5), radius: 0.5, x: 1, y: 0)
@@ -136,11 +123,6 @@ struct MeshSliderView: View {
                                 }
                             }
                         })
-                        .onEnded({ dragValue in
-                            debouncer.call {
-                                onEnded()
-                            }
-                        })
                 )
             }
             .frame(height: 36)
@@ -154,6 +136,17 @@ struct MeshSliderView: View {
             return newValue
         } else {
             return value
+        }
+    }
+    
+    func valueText() -> String {
+        if type == .angle {
+            let value = correct(value.wrappedValue)
+            let index = Int(round(value * 7)) - 1
+            let angles = AppManager.manager.angles[index]
+            return "\(angles)°"
+        } else {
+            return "\(Int(value.wrappedValue * 100))%"
         }
     }
 }

@@ -44,9 +44,6 @@ platform :ios do
 
   lane :package do |options|
     puts "*************| 开始打包... |*************"
-    increment_build_number(
-      build_number: Time.now.strftime("%Y%m%d%H%M")
-    )
     gym(
       scheme: scheme, #改为你项目的scheme
       workspace: "#{scheme}.xcworkspace", #如果项目使用CocoaPods需要加上
