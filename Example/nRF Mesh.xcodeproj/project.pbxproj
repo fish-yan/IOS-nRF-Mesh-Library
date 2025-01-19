@@ -15,6 +15,7 @@
 		2C2C10E42B6A0757004507FE /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2C10E32B6A0757004507FE /* Loading.swift */; };
 		2C31774A2B02224C007964C2 /* VendorModel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C18503B2AF7C47A00900348 /* VendorModel.xib */; };
 		2C32D7372ADAE2E600915E1D /* MeshMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */; };
+		2C3F24272D39002F00F2D6DE /* GLBK06ZoneMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F24262D39002F00F2D6DE /* GLBK06ZoneMessage.swift */; };
 		2C42B5032AE67003006887FF /* GLColorTemperatureMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */; };
 		2C42B5052AE676FC006887FF /* GLAngleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5042AE676FC006887FF /* GLAngleMessage.swift */; };
 		2C42B5072AE76BC7006887FF /* GLMessageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */; };
@@ -290,6 +291,7 @@
 		2C18503C2AF7C4A800900348 /* VendorModelViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorModelViewCell.swift; sourceTree = "<group>"; };
 		2C2C10E32B6A0757004507FE /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessageManager.swift; sourceTree = "<group>"; };
+		2C3F24262D39002F00F2D6DE /* GLBK06ZoneMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLBK06ZoneMessage.swift; sourceTree = "<group>"; };
 		2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLColorTemperatureMessage.swift; sourceTree = "<group>"; };
 		2C42B5042AE676FC006887FF /* GLAngleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAngleMessage.swift; sourceTree = "<group>"; };
 		2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMessageDelegate.swift; sourceTree = "<group>"; };
@@ -587,6 +589,7 @@
 				2CFE864D2AEA9B2E00A1CF7D /* GLRunTimeMessage.swift */,
 				2CFE864F2AEA9CDC00A1CF7D /* GLFadeTimeMessage.swift */,
 				2CFE86592AEAA49C00A1CF7D /* GLCoordinateMessage.swift */,
+				2C3F24262D39002F00F2D6DE /* GLBK06ZoneMessage.swift */,
 				2CFE865B2AEAA84F00A1CF7D /* GLSceneRecallMessage.swift */,
 				2CFE865D2AEAA91B00A1CF7D /* GLGlobalOnOffMessage.swift */,
 				2CFE865F2AEAA96A00A1CF7D /* GLRelayMessage.swift */,
@@ -1590,6 +1593,7 @@
 				2CA679DC2BE90A9D00BA1596 /* BScenesView.swift in Sources */,
 				2C93E3742ADE23EC00B392DB /* Debouncer.swift in Sources */,
 				52E54CD42343874000478F05 /* GenericOnOffServerCell.swift in Sources */,
+				2C3F24272D39002F00F2D6DE /* GLBK06ZoneMessage.swift in Sources */,
 				52547F24232A3F470002AA7B /* RangeCell.swift in Sources */,
 				5231404D230AC4680074325A /* GLCoordinateCell.swift in Sources */,
 				529B758622428A45008F1CE7 /* UIViewController+Alert.swift in Sources */,

@@ -63,6 +63,7 @@ enum MeshTask {
     case sceneRegisterGet
     case nodeReset
     case coordinate(_ value: String)
+    case bk06Zone(_ value: UInt8)
     
     var title: String {
         switch self {
@@ -122,6 +123,8 @@ enum MeshTask {
             return "Scene Register Get"
         case .coordinate:
             return "Set Coordinate"
+        case .bk06Zone:
+            return "Set Zone"
         }
     }
     
@@ -242,6 +245,8 @@ enum MeshTask {
             return GLCoordinateMessage(coordinate: value)
         case .deleteScene(let scene, to: let to):
             return SceneDelete(scene)
+        case .bk06Zone(let zone):
+            return GLBK06ZoneMessage(zone: zone)
         }
     }
 }

@@ -130,7 +130,7 @@ class ProvisioningViewController: UITableViewController {
     }
     
     // MARK: - Table View Delegate
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -291,27 +291,30 @@ private extension ProvisioningViewController {
             needConfigMore = false
             return
         }
-        guard let isLight = node.productType?.isLight, isLight else {
-            needConfigMore = false
-            return
-        }
-        // Subscriptions.
-        for group in meshNetwork.defaultGroups {
-            for model in node.usefulModels where !model.isSubscribed(to: group) {
-                model.subscribe(to: group)
-            }
-        }
-        // register scenes
-        taskManager.append(.sceneRegisterGet)
         
-        if let text = coordinateLabel.text,
-                !text.isEmpty, text != "Unknown" {
-            var coordinate = ""
-            if let zone = zone?.number, zone != 0 {
-                coordinate += String(format: "%02d", zone)
+        // 增加bk-06的指令0x14--00D000
+        if node.productType == .sceneTouchPad {
+            let zone = zone?.number ?? 0
+            taskManager.append(.bk06Zone(zone))
+        } else if node.productType?.isLight == true {
+            // Subscriptions.
+            for group in meshNetwork.defaultGroups {
+                for model in node.usefulModels where !model.isSubscribed(to: group) {
+                    model.subscribe(to: group)
+                }
             }
-            coordinate += coordinateLabel.text ?? "0000"
-            taskManager.append(.coordinate(coordinate))
+            // register scenes
+            taskManager.append(.sceneRegisterGet)
+            
+            if let text = coordinateLabel.text,
+                    !text.isEmpty, text != "Unknown" {
+                var coordinate = ""
+                if let zone = zone?.number, zone != 0 {
+                    coordinate += String(format: "%02d", zone)
+                }
+                coordinate += coordinateLabel.text ?? "0000"
+                taskManager.append(.coordinate(coordinate))
+            }
         }
         
         _ = MeshNetworkManager.instance.save()

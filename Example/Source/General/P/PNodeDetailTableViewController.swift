@@ -13,9 +13,11 @@ class PNodeDetailTableViewController: UITableViewController {
     @IBOutlet weak var nameLab: UILabel!
     @IBOutlet weak var addressLab: UILabel!
     @IBOutlet weak var zoneLab: UILabel!
-    
+    @IBOutlet weak var bk06zoneLab: UILabel!
     
     var node: Node!
+    private var zone: GLZone!
+    private let messageManager = MeshMessageManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,15 +25,28 @@ class PNodeDetailTableViewController: UITableViewController {
         nameLab.text = node.name ?? "Unknown"
         addressLab.text = node.primaryUnicastAddress.asString()
         zoneLab.text = GLMeshNetworkModel.instance.zone(node: node).name
+        bk06zoneLab.text = GLMeshNetworkModel.instance.zone(node: node).name
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        MeshNetworkManager.instance.delegate = self
+        messageManager.delegate = self
         zoneLab.text = GLMeshNetworkModel.instance.zone(node: node).name
+        bk06zoneLab.text = GLMeshNetworkModel.instance.zone(node: node).name
     }
 
     // MARK: - Table view data source
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let isBk06 = node.productType == .sceneTouchPad
+        if indexPath == .zoneNode {
+            return isBk06 ? 0 : UITableView.automaticDimension
+        }
+        if indexPath == .bk06ZoneNode {
+            return isBk06 ? UITableView.automaticDimension : 0
+        }
+        return UITableView.automaticDimension
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath {
@@ -107,22 +122,42 @@ class PNodeDetailTableViewController: UITableViewController {
         } else if segue.identifier == "more" {
             let vc = segue.destination as! NodeViewController
             vc.node = node
+        } else if segue.identifier == "bk06Zone" {
+            let vc = segue.destination as! PSelectZoneTableViewController
+            vc.callback = { [weak self] zone in
+                guard let self else { return }
+                self.zone = zone
+                self.bk06zoneLab.text = zone.name
+                let message = GLBK06ZoneMessage(zone: zone.number)
+                guard let model = self.node.vendorModel else {
+                    return
+                }
+                showHUD()
+                _ = try? MeshNetworkManager.instance.send(message, to: model)
+            }
         }
     }
 
 }
 
-extension PNodeDetailTableViewController: MeshNetworkDelegate {
+extension PNodeDetailTableViewController: MeshMessageDelegate {
     
     func meshNetworkManager(_ manager: MeshNetworkManager,
                             didReceiveMessage message: MeshMessage,
                             sentFrom source: Address, to destination: MeshAddress) {
-        node.coordinate = nil
-        let zone = GLMeshNetworkModel.instance.zone(node: node)
-        zone.remove(nodeAddress: node.primaryUnicastAddress)
-        MeshNetworkManager.instance.saveAll()
-        hidHUD()
-        navigationController?.popToRootViewController(animated: true)
+        if message is ConfigNodeResetStatus {
+            node.coordinate = nil
+            let zone = GLMeshNetworkModel.instance.zone(node: node)
+            zone.remove(nodeAddress: node.primaryUnicastAddress)
+            MeshNetworkManager.instance.saveAll()
+            hidHUD()
+            navigationController?.popToRootViewController(animated: true)
+        } else if message is GLBK06ZoneStatus {
+            let saveZone = self.zone ?? GLMeshNetworkModel.instance.allZone
+            saveZone.add(nodeAddress: self.node.primaryUnicastAddress)
+            MeshNetworkManager.instance.saveAll()
+            showSuccess()
+        }
     }
     
     func meshNetworkManager(_ manager: MeshNetworkManager,
@@ -136,6 +171,8 @@ extension PNodeDetailTableViewController: MeshNetworkDelegate {
 
 extension IndexPath {
     static let nameNode = IndexPath(row: 0, section: 0)
+    static let zoneNode = IndexPath(row: 2, section: 0)
+    static let bk06ZoneNode = IndexPath(row: 3, section: 0)
     static let resetNode = IndexPath(row: 0, section: 2)
     static let removeNode = IndexPath(row: 1, section: 2)
 }
