@@ -256,6 +256,8 @@ public class Node: Codable {
     /// receiving of periodical Heartbeat transport control messages.
     public internal(set) var heartbeatSubscription: HeartbeatSubscription?
     
+    public var isUpdating = false
+    
     /// A constructor needed only for testing.
     internal init(name: String?, unicastAddress: Address, elements: UInt8) {
         self.uuid = UUID()
@@ -475,6 +477,7 @@ public class Node: Codable {
         case heartbeatSubscription = "heartbeatSub"
         // Legacy keys, deprecated in nRF Mesh Provision library in version 3.0.
         case legacyIsBlacklisted = "blacklisted" // replaced with "excluded"
+        case isUpdating
     }
     
     public required init(from decoder: Decoder) throws {
@@ -613,7 +616,7 @@ public class Node: Codable {
         }
         self.heartbeatSubscription = try container.decodeIfPresent(HeartbeatSubscription.self,
                                                                    forKey: .heartbeatSubscription)
-        
+        self.isUpdating = try container.decodeIfPresent(Bool.self, forKey: .isUpdating) ?? false
         elements.forEach {
             $0.parentNode = self
         }
@@ -642,6 +645,7 @@ public class Node: Codable {
         try container.encode(isExcluded, forKey: .isExcluded)
         try container.encodeIfPresent(heartbeatPublication, forKey: .heartbeatPublication)
         try container.encodeIfPresent(heartbeatSubscription, forKey: .heartbeatSubscription)
+        try container.encodeIfPresent(isUpdating, forKey: .isUpdating)
     }
 }
 

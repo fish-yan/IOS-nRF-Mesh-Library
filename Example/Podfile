@@ -5,4 +5,5 @@ platform :ios, '13.0'
 target 'nRF Mesh' do
   pod 'nRFMeshProvision', :path => '../'
   pod 'ProgressHUD'
+  pod 'IQKeyboardManagerSwift'
 end

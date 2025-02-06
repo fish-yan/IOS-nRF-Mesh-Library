@@ -16,6 +16,12 @@
 		2C31774A2B02224C007964C2 /* VendorModel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C18503B2AF7C47A00900348 /* VendorModel.xib */; };
 		2C32D7372ADAE2E600915E1D /* MeshMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */; };
 		2C3F24272D39002F00F2D6DE /* GLBK06ZoneMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F24262D39002F00F2D6DE /* GLBK06ZoneMessage.swift */; };
+		2C3F24292D3CAE1A00F2D6DE /* PK9DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F24282D3CAE1A00F2D6DE /* PK9DetailViewController.swift */; };
+		2C3F242B2D3CAE3700F2D6DE /* PK9ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F242A2D3CAE3700F2D6DE /* PK9ListViewController.swift */; };
+		2C3F242D2D3E2E9000F2D6DE /* GLK9ConnectMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F242C2D3E2E9000F2D6DE /* GLK9ConnectMessage.swift */; };
+		2C3F242F2D3E2E9C00F2D6DE /* GLK9ControlMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F242E2D3E2E9C00F2D6DE /* GLK9ControlMessage.swift */; };
+		2C3F24312D3E2EA700F2D6DE /* GLK9OptionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F24302D3E2EA700F2D6DE /* GLK9OptionMessage.swift */; };
+		2C3F24332D3E305500F2D6DE /* GLUpdateMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F24322D3E305500F2D6DE /* GLUpdateMessage.swift */; };
 		2C42B5032AE67003006887FF /* GLColorTemperatureMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */; };
 		2C42B5052AE676FC006887FF /* GLAngleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5042AE676FC006887FF /* GLAngleMessage.swift */; };
 		2C42B5072AE76BC7006887FF /* GLMessageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */; };
@@ -292,6 +298,12 @@
 		2C2C10E32B6A0757004507FE /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		2C32D7362ADAE2E600915E1D /* MeshMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessageManager.swift; sourceTree = "<group>"; };
 		2C3F24262D39002F00F2D6DE /* GLBK06ZoneMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLBK06ZoneMessage.swift; sourceTree = "<group>"; };
+		2C3F24282D3CAE1A00F2D6DE /* PK9DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PK9DetailViewController.swift; sourceTree = "<group>"; };
+		2C3F242A2D3CAE3700F2D6DE /* PK9ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PK9ListViewController.swift; sourceTree = "<group>"; };
+		2C3F242C2D3E2E9000F2D6DE /* GLK9ConnectMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLK9ConnectMessage.swift; sourceTree = "<group>"; };
+		2C3F242E2D3E2E9C00F2D6DE /* GLK9ControlMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLK9ControlMessage.swift; sourceTree = "<group>"; };
+		2C3F24302D3E2EA700F2D6DE /* GLK9OptionMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLK9OptionMessage.swift; sourceTree = "<group>"; };
+		2C3F24322D3E305500F2D6DE /* GLUpdateMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLUpdateMessage.swift; sourceTree = "<group>"; };
 		2C42B5022AE67003006887FF /* GLColorTemperatureMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLColorTemperatureMessage.swift; sourceTree = "<group>"; };
 		2C42B5042AE676FC006887FF /* GLAngleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAngleMessage.swift; sourceTree = "<group>"; };
 		2C42B5062AE76BC7006887FF /* GLMessageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMessageDelegate.swift; sourceTree = "<group>"; };
@@ -597,6 +609,10 @@
 				2CFE86552AEAA2A200A1CF7D /* GLBeaconTimeIntervalMessage.swift */,
 				2CFE86532AEAA1BC00A1CF7D /* GLBeaconRSSIMessage.swift */,
 				2CFE86572AEAA32700A1CF7D /* GLBeaconUUIDSetMessage.swift */,
+				2C3F242C2D3E2E9000F2D6DE /* GLK9ConnectMessage.swift */,
+				2C3F242E2D3E2E9C00F2D6DE /* GLK9ControlMessage.swift */,
+				2C3F24302D3E2EA700F2D6DE /* GLK9OptionMessage.swift */,
+				2C3F24322D3E305500F2D6DE /* GLUpdateMessage.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -610,6 +626,8 @@
 				2CBB85DE2C30E86600BFBEB6 /* PSelectZoneTableViewController.swift */,
 				2CBB85E02C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift */,
 				2CBB85E22C313C0B00BFBEB6 /* PChangePositionTableViewController.swift */,
+				2C3F242A2D3CAE3700F2D6DE /* PK9ListViewController.swift */,
+				2C3F24282D3CAE1A00F2D6DE /* PK9DetailViewController.swift */,
 				2C4D78182C2F9A3500A67B96 /* PZoneListView.swift */,
 				2CBB85D02C2FE90F00BFBEB6 /* PZoneDetailView.swift */,
 				2C01E2712CD4A2B000FE1D3A /* AnglesConfigurationView.swift */,
@@ -1463,6 +1481,7 @@
 				52313FEE22EAFB090074325A /* SubscribeViewController.swift in Sources */,
 				2CB620282BB7BCC6002804D3 /* CScenesView.swift in Sources */,
 				2C4D78192C2F9A3500A67B96 /* PZoneListView.swift in Sources */,
+				2C3F242B2D3CAE3700F2D6DE /* PK9ListViewController.swift in Sources */,
 				5212152B23152A450059FB3D /* SectionView.swift in Sources */,
 				5212152F231554190059FB3D /* ProgressCollectionViewController.swift in Sources */,
 				523F776A22C621F50030EA6A /* NodeAddNetworkKeyViewController.swift in Sources */,
@@ -1501,6 +1520,7 @@
 				2CB620582BBC051A002804D3 /* COnOffItemView.swift in Sources */,
 				2CBB85D92C30022900BFBEB6 /* PZoneListTableViewController.swift in Sources */,
 				2CBB85DF2C30E86600BFBEB6 /* PSelectZoneTableViewController.swift in Sources */,
+				2C3F242F2D3E2E9C00F2D6DE /* GLK9ControlMessage.swift in Sources */,
 				52314041230192C50074325A /* ModelViewCell.swift in Sources */,
 				2CA679E02BE911CD00BA1596 /* BSetView.swift in Sources */,
 				527596302A138ECC00B04C6F /* SelectPublicationDestintionsViewController.swift in Sources */,
@@ -1519,6 +1539,7 @@
 				52A8EA8F24EBF099004C14C7 /* SetHeartbeatPublicationDestinationsViewController.swift in Sources */,
 				5288C2122371B16500321ED3 /* SimpleOnOffSetUnacknowledged.swift in Sources */,
 				52547F29232A3F470002AA7B /* FabView.swift in Sources */,
+				2C3F24292D3CAE1A00F2D6DE /* PK9DetailViewController.swift in Sources */,
 				2C93E3762ADF79A900B392DB /* GlobalConfig.swift in Sources */,
 				F09DE4D729EEBEAD0073969A /* SelectModelsForSubscriptionViewController.swift in Sources */,
 				2CBB85E12C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift in Sources */,
@@ -1561,6 +1582,7 @@
 				2CA679DE2BE90B2A00BA1596 /* BTabView.swift in Sources */,
 				522AFFE022C2376C00521EDC /* ElementViewController.swift in Sources */,
 				5288C20E2371A91900321ED3 /* SimpleOnOffSet.swift in Sources */,
+				2C3F24312D3E2EA700F2D6DE /* GLK9OptionMessage.swift in Sources */,
 				523F779722CE2BF60030EA6A /* SetPublicationDestinationsViewController.swift in Sources */,
 				2C32D7372ADAE2E600915E1D /* MeshMessageManager.swift in Sources */,
 				52E54CD023437D3D00478F05 /* ModelControlCell.swift in Sources */,
@@ -1640,6 +1662,7 @@
 				5292F8A1250137DC00EA0F2A /* NodeScenesViewController.swift in Sources */,
 				2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */,
 				2CB620432BB943F3002804D3 /* CLightView.swift in Sources */,
+				2C3F242D2D3E2E9000F2D6DE /* GLK9ConnectMessage.swift in Sources */,
 				526021F62343660200E88F06 /* ControlViewController.swift in Sources */,
 				5245737B2500E10800CF8500 /* ScenesViewController.swift in Sources */,
 				F085C9FB29C496AB00C2DF89 /* SelectModelsForBindingViewController.swift in Sources */,
@@ -1660,6 +1683,7 @@
 				2CB620642BC57924002804D3 /* MeshTaskManager.swift in Sources */,
 				2C18503A2AF7C3FE00900348 /* GLRelayViewCell.swift in Sources */,
 				529B7643225222E8008F1CE7 /* Address+String.swift in Sources */,
+				2C3F24332D3E305500F2D6DE /* GLUpdateMessage.swift in Sources */,
 				52248CDC251E21F000B10250 /* ExportViewController.swift in Sources */,
 				5288C2062370571100321ED3 /* ProxySelectorViewController.swift in Sources */,
 				2CA67A172BEF065D00BA1596 /* BSceneStoreView.swift in Sources */,

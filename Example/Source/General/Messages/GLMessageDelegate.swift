@@ -67,5 +67,8 @@ let jlResponseTypes: [GLResponse.Type] = [
     GLBeaconTimeIntervalStatus.self,
     GLBeaconRSSIStatus.self,
     GLBeaconUUIDSetStatus.self,
-    GLBK06ZoneStatus.self
+    GLControlStatus.self,
+    GLK9ControlStatus.self,
+    GLK9OptionStatus.self,
+    GLUpdateStatus.self
 ]

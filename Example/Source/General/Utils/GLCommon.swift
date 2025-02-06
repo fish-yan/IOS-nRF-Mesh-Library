@@ -8,6 +8,8 @@
 
 import ProgressHUD
 
+private let hudDebouncer = Debouncer(label: "hud", interval: 500)
+
 private(set) var isHUDShow = false
 
 private var workItem: DispatchWorkItem?
@@ -43,12 +45,14 @@ public func hidHUD() {
 }
 
 public func showError(_ text: String? = nil) {
-    ProgressHUD.failed(text, interaction: false, delay: 2)
-    workItem?.cancel()
-    workItem = nil
-    isHUDShow = true
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+    hudDebouncer.call {
+        ProgressHUD.failed(text, interaction: false, delay: 2)
         workItem?.cancel()
+        workItem = nil
+        isHUDShow = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            workItem?.cancel()
+        }
     }
 }
 

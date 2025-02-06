@@ -178,32 +178,89 @@ class GLZone: ObservableObject, Codable, Hashable {
     }
 }
 
+class GLK9: ObservableObject, Codable, Hashable {
+    @Published var name: String = "K9"
+    @Published var number: UInt8 = 0x0
+    @Published var nodeAddress: Address = 0x0
+    @Published var zone: UInt8 = 0x0
+    @Published var option: UInt8 = 0x0
+    @Published var control: UInt8 = 0x0
+    @Published var target: UInt8 = 0x0
+    
+    init(name: String, number: UInt8, nodeAddress: Address) {
+        self.name = name
+        self.number = number
+        self.nodeAddress = nodeAddress
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case name, number, nodeAddress, zone, option, control, target
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        name = try values.decode(String.self, forKey: .name)
+        number = try values.decode(UInt8.self, forKey: .number)
+        zone = try values.decode(UInt8.self, forKey: .zone)
+        option = try values.decode(UInt8.self, forKey: .option)
+        control = try values.decode(UInt8.self, forKey: .control)
+        target = try values.decode(UInt8.self, forKey: .target)
+        nodeAddress = try values.decode(Address.self, forKey: .nodeAddress)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(number, forKey: .number)
+        try container.encode(zone, forKey: .zone)
+        try container.encode(option, forKey: .option)
+        try container.encode(control, forKey: .control)
+        try container.encode(target, forKey: .target)
+        try container.encode(nodeAddress, forKey: .nodeAddress)
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(number)
+        hasher.combine(nodeAddress)
+    }
+    
+    static func == (lhs: GLK9, rhs: GLK9) -> Bool {
+        lhs.hashValue == rhs.hashValue
+    }
+}
+
 class GLMeshNetworkModel: ObservableObject, Codable {
     static let instance: GLMeshNetworkModel = GLMeshNetworkModel()
     private init() { }
     
     @Published fileprivate(set) var zones: [GLZone] = []
     
+    @Published fileprivate(set) var k9s: [GLK9] = []
+    
     @Published fileprivate var nodeCoordinates: [Address: String] = [:]
     
     enum CodingKeys: String, CodingKey {
-        case nodes, groups, scenes, drafts, zones, nodeCoordinates
+        case nodes, groups, scenes, drafts, zones, nodeCoordinates, k9s
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         zones = (try? values.decode([GLZone].self, forKey: .zones)) ?? []
+        k9s = (try? values.decode([GLK9].self, forKey: .k9s)) ?? []
         nodeCoordinates = try values.decode([Address: String].self, forKey: .nodeCoordinates)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(zones, forKey: .zones)
+        try container.encode(k9s, forKey: .k9s)
         try container.encode(nodeCoordinates, forKey: .nodeCoordinates)
     }
     
     func reset() {
         zones.removeAll()
+        k9s.removeAll()
+        nodeCoordinates.removeAll()
     }
     
     func nextZone() -> UInt8 {
@@ -239,6 +296,18 @@ class GLMeshNetworkModel: ObservableObject, Codable {
         }
         zones.append(zone)
     }
+    
+    func add(k9: GLK9) {
+        if k9s.contains(k9) {
+            return
+        }
+        k9s.append(k9)
+    }
+    
+    func remove(k9: GLK9) {
+        k9s.removeAll(where: { $0 == k9 })
+    }
+    
 }
 private let storage: Storage = LocalStorage(fileName: "GLModel.json")
 extension MeshNetworkManager {
@@ -258,6 +327,7 @@ extension MeshNetworkManager {
             let model = try? decoder.decode(GLMeshNetworkModel.self, from: data) {
             GLMeshNetworkModel.instance.zones = model.zones
             GLMeshNetworkModel.instance.nodeCoordinates = model.nodeCoordinates
+            GLMeshNetworkModel.instance.k9s = model.k9s
             print("model load success")
             return true
         }
@@ -293,6 +363,7 @@ extension MeshNetworkManager {
         let model = try decoder.decode(GLMeshNetworkModel.self, from: data)
         GLMeshNetworkModel.instance.zones = model.zones
         GLMeshNetworkModel.instance.nodeCoordinates = model.nodeCoordinates
+        GLMeshNetworkModel.instance.k9s = model.k9s
         return model
     }
     

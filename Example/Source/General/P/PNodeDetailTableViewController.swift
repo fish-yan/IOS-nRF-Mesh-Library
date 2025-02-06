@@ -14,6 +14,7 @@ class PNodeDetailTableViewController: UITableViewController {
     @IBOutlet weak var addressLab: UILabel!
     @IBOutlet weak var zoneLab: UILabel!
     @IBOutlet weak var bk06zoneLab: UILabel!
+    @IBOutlet weak var updateSwitch: UISwitch!
     
     var node: Node!
     private var zone: GLZone!
@@ -26,6 +27,7 @@ class PNodeDetailTableViewController: UITableViewController {
         addressLab.text = node.primaryUnicastAddress.asString()
         zoneLab.text = GLMeshNetworkModel.instance.zone(node: node).name
         bk06zoneLab.text = GLMeshNetworkModel.instance.zone(node: node).name
+        updateSwitch.isOn = node.isUpdating
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -43,6 +45,9 @@ class PNodeDetailTableViewController: UITableViewController {
         }
         if indexPath == .bk06ZoneNode {
             return isBk06 ? UITableView.automaticDimension : 0
+        }
+        if indexPath == .k9Node {
+            return isBk06 ? 0 : UITableView.automaticDimension
         }
         return UITableView.automaticDimension
     }
@@ -96,6 +101,14 @@ class PNodeDetailTableViewController: UITableViewController {
         present(alert, animated: true)
     }
     
+    @IBAction func updateAction(_ sender: UISwitch) {
+        let message = GLUpdateMessage(value: sender.isOn)
+        guard let model = node.vendorModel else { return }
+        _ = try? MeshNetworkManager.instance.send(message, to: model)
+        node.isUpdating = sender.isOn
+        MeshNetworkManager.instance.saveAll()
+    }
+    
     /// Sends a message to the node that will reset its state to unprovisioned.
     func resetNode() {
         showHUD()
@@ -135,6 +148,9 @@ class PNodeDetailTableViewController: UITableViewController {
                 showHUD()
                 _ = try? MeshNetworkManager.instance.send(message, to: model)
             }
+        } else if segue.identifier == "k9List" {
+            let vc = segue.destination as! PK9ListViewController
+            vc.node = node
         }
     }
 
@@ -149,10 +165,13 @@ extension PNodeDetailTableViewController: MeshMessageDelegate {
             node.coordinate = nil
             let zone = GLMeshNetworkModel.instance.zone(node: node)
             zone.remove(nodeAddress: node.primaryUnicastAddress)
+            GLMeshNetworkModel.instance.k9s
+                .filter {$0.nodeAddress == node.primaryUnicastAddress}
+                .forEach { GLMeshNetworkModel.instance.remove(k9: $0) }
             MeshNetworkManager.instance.saveAll()
             hidHUD()
             navigationController?.popToRootViewController(animated: true)
-        } else if message is GLBK06ZoneStatus {
+        } else if message is GLControlStatus {
             let saveZone = self.zone ?? GLMeshNetworkModel.instance.allZone
             saveZone.add(nodeAddress: self.node.primaryUnicastAddress)
             MeshNetworkManager.instance.saveAll()
@@ -173,6 +192,7 @@ extension IndexPath {
     static let nameNode = IndexPath(row: 0, section: 0)
     static let zoneNode = IndexPath(row: 2, section: 0)
     static let bk06ZoneNode = IndexPath(row: 3, section: 0)
+    static let k9Node = IndexPath(row: 4, section: 0)
     static let resetNode = IndexPath(row: 0, section: 2)
     static let removeNode = IndexPath(row: 1, section: 2)
 }

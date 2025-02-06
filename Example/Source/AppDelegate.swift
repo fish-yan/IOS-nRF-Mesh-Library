@@ -33,6 +33,8 @@ import os.log
 import NordicMesh
 import SwiftUI
 import ProgressHUD
+import IQKeyboardManagerSwift
+import IQKeyboardToolbarManager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -45,6 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         ProgressHUD.colorAnimation = .black
         ProgressHUD.colorHUD = .white
+        IQKeyboardToolbarManager.shared.isEnabled = true
+        IQKeyboardManager.shared.resignOnTouchOutside = true
         // Create the main MeshNetworkManager instance and customize
         // configuration values.
         meshNetworkManager = MeshNetworkManager()

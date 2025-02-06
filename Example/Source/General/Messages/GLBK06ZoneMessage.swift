@@ -11,7 +11,7 @@ import NordicMesh
 
 class GLBK06ZoneMessage: GLMessage {
     public static var responseType: NordicMesh.StaticMeshResponse.Type {
-        return GLBK06ZoneStatus.self
+        return GLControlStatus.self
     }
     
     public static var code: UInt32 = 0x14
@@ -24,15 +24,15 @@ class GLBK06ZoneMessage: GLMessage {
     }
 }
 
-public struct GLBK06ZoneStatus: GLResponse {
+public struct GLControlStatus: GLResponse {
     public static var code: UInt32 = 0x14
     
     public var parameters: Data?
     
-    public let zone: UInt8
+    public let value: String
     
     public init?(parameters: Data) {
         self.parameters = parameters
-        zone = parameters.asUInt8
+        value = parameters.toHexString()
     }
 }
