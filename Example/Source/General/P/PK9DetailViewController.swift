@@ -67,6 +67,8 @@ class PK9DetailViewController: UIViewController {
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var optionsTF: UITextField!
     @IBOutlet weak var controlTF: UITextField!
+    @IBOutlet weak var targetView: UIStackView!
+    @IBOutlet weak var targetArrowImageView: UIImageView!
     
     @IBOutlet weak var regionTF: UITextField!
     var callback: ((GLK9) -> Void)?
@@ -110,10 +112,8 @@ class PK9DetailViewController: UIViewController {
         } else {
             saveBtn.isEnabled = false
             title = Localized("Create a new K9")
-            let k9Number = GLMeshNetworkModel.instance.k9s
-                .filter{$0.nodeAddress == node.primaryUnicastAddress }
-                .max(by: {$0.number < $1.number})?.number
-            numberTF.text = "\(k9Number ?? 1)"
+            let k9Number = GLMeshNetworkModel.instance.nextK9Number(nodeAddress: node.primaryUnicastAddress)
+            numberTF.text = "\(k9Number)"
             option = .onOff
             control = .click
             region = .light
@@ -121,6 +121,9 @@ class PK9DetailViewController: UIViewController {
             tasks.updateValue(control, forKey: .control)
             tasks.updateValue(option, forKey: .option)
         }
+        let isEmergency = numberTF.text == "5"
+        targetView.isUserInteractionEnabled = !isEmergency
+        targetArrowImageView.isHidden = isEmergency
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -216,6 +219,11 @@ class PK9DetailViewController: UIViewController {
             saveBtn.isEnabled = false
         }
         tasks[K9TaskType.connect] = true
+        tasks.updateValue(option, forKey: .option)
+        let isEmergency = sender.text == "5"
+        region = isEmergency ? .zone : .light
+        targetView.isUserInteractionEnabled = !isEmergency
+        targetArrowImageView.isHidden = isEmergency
     }
     
     private func doTasks() {
@@ -253,7 +261,7 @@ class PK9DetailViewController: UIViewController {
                 doTasks()
             }
             print("aaa: \(value)")
-        } else if let option = tasks[K9TaskType.option] as? K9OptionsType {
+        } else if let _ = tasks[K9TaskType.option] as? K9OptionsType {
             guard let k9 else { return }
             var regionValue = ""
             if region == .light {
@@ -261,6 +269,7 @@ class PK9DetailViewController: UIViewController {
             } else {
                 regionValue = String(format: "D%02d", zone.number)
             }
+            let option: K9OptionsType = k9.number == 5 ? .emergency : .onOff
             let value = String(format: "0x%02d%@%d", k9.number, regionValue, option.rawValue)
             let message = GLK9OptionMessage(value: value)
             _ = try? MeshNetworkManager.instance.send(message, to: model)

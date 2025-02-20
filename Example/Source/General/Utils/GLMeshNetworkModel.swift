@@ -308,6 +308,16 @@ class GLMeshNetworkModel: ObservableObject, Codable {
         k9s.removeAll(where: { $0 == k9 })
     }
     
+    func nextK9Number(nodeAddress: Address) -> UInt8 {
+        let k9Numbers = GLMeshNetworkModel.instance.k9s
+            .filter{$0.nodeAddress == nodeAddress }
+        for i in 1...5 {
+            if !k9Numbers.contains(where: {$0.number == i}) {
+                return UInt8(i)
+            }
+        }
+        return 1
+    }
 }
 private let storage: Storage = LocalStorage(fileName: "GLModel.json")
 extension MeshNetworkManager {

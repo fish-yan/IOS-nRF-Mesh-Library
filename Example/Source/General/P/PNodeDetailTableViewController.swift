@@ -193,6 +193,6 @@ extension IndexPath {
     static let zoneNode = IndexPath(row: 2, section: 0)
     static let bk06ZoneNode = IndexPath(row: 3, section: 0)
     static let k9Node = IndexPath(row: 4, section: 0)
-    static let resetNode = IndexPath(row: 0, section: 2)
-    static let removeNode = IndexPath(row: 1, section: 2)
+    static let resetNode = IndexPath(row: 1, section: 2)
+    static let removeNode = IndexPath(row: 2, section: 2)
 }
