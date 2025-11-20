@@ -59,7 +59,7 @@ struct BLightListView: View {
 
 private extension BLightListView {
     func onAppera() {
-        nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner && $0.productType?.isLight == true}
+        nodes = MeshNetworkManager.instance.meshNetwork!.nodes.filter { !$0.isProvisioner && $0.isLight }
         //        selectedNode = nodes.first
     }
 }

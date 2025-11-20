@@ -296,7 +296,7 @@ private extension ProvisioningViewController {
         if node.productType == .sceneTouchPad {
             let zone = zone?.number ?? 0
             taskManager.append(.bk06Zone(zone))
-        } else if node.productType?.isLight == true {
+        } else if node.isLight {
             // Subscriptions.
             for group in meshNetwork.defaultGroups {
                 for model in node.usefulModels where !model.isSubscribed(to: group) {

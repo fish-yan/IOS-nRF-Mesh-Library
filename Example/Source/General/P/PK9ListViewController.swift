@@ -13,7 +13,6 @@ class PK9ListViewController: UITableViewController {
     
     var k9s: [GLK9] = []
     var node: Node!
-    private var messageManager = MeshMessageManager()
 
     @IBOutlet weak var addK9: UIBarButtonItem!
     
@@ -32,7 +31,6 @@ class PK9ListViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        messageManager.delegate = self
     }
     
     @IBAction func createK9Action(_ sender: Any) {
@@ -43,14 +41,28 @@ class PK9ListViewController: UITableViewController {
         let alert = UIAlertController(title: "Warning", message: "Do you confirm delete?", preferredStyle: .alert)
         let action1 = UIAlertAction(title: "Cancel", style: .cancel)
         let action2 = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            guard let model = self?.node.vendorModel else { return }
-            let message = GLK9ConnectMessage(number: 0)
-            _ = try? MeshNetworkManager.instance.send(message, to: model)
-            showHUD()
+            self?.unbindK9s()
         }
         alert.addAction(action1)
         alert.addAction(action2)
         present(alert, animated: true)
+    }
+    
+    func unbindK9s() {
+        guard let model = node.vendorModel else { return }
+        let message = GLK9ConnectMessage(number: 0)
+        _ = try? MeshNetworkManager.instance.send(message, to: model)
+        showHUD()
+        Task {
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            k9s.forEach {
+                GLMeshNetworkModel.instance.remove(k9: $0)
+            }
+            k9s.removeAll()
+            MeshNetworkManager.instance.saveAll()
+            tableView.reloadData()
+            showSuccess()
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,30 +91,5 @@ class PK9ListViewController: UITableViewController {
             vc?.k9 = sender as? GLK9
             vc?.node = node
         }
-    }
-
-}
-
-extension PK9ListViewController: MeshMessageDelegate {
-    
-    func meshNetworkManager(_ manager: MeshNetworkManager,
-                            didReceiveMessage message: MeshMessage,
-                            sentFrom source: Address, to destination: MeshAddress) {
-        if message is GLControlStatus {
-            k9s.forEach {
-                GLMeshNetworkModel.instance.remove(k9: $0)
-            }
-            k9s.removeAll()
-            MeshNetworkManager.instance.saveAll()
-            tableView.reloadData()
-            showSuccess()
-        }
-    }
-    
-    func meshNetworkManager(_ manager: MeshNetworkManager,
-                            failedToSendMessage message: MeshMessage,
-                            from localElement: Element, to destination: MeshAddress,
-                            error: Error) {
-        showError(error)
     }
 }

@@ -277,8 +277,7 @@ private extension CLightView {
     
     func angleSet() {
         let index = Int(round(angle * 7)) - 1
-        let percent = appManager.anglePercents[index]
-        print("setAngle: \(percent)")
+        let percent = [0, 0.57, 0.69, 0.74, 0.79, 0.85, 0.93][index]
         let level = Int16(min(32767, -32768 + 65536 * (1 - percent))) // -32768...32767
         let message = GenericLevelSetUnacknowledged(level: level)
         guard let angleModel = node.angleModel else { return }

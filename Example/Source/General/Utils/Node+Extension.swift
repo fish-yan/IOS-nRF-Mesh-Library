@@ -99,6 +99,10 @@ extension Node {
         }
         return nil
     }
+    
+    var isLight: Bool {
+        return onOffModel != nil && levelModel != nil
+    }
 }
 
 extension Node: Identifiable, Hashable {

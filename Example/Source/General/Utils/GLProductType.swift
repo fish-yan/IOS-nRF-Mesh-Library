@@ -24,8 +24,6 @@ enum GLProductType: UInt16 {
     case arcoSpace = 0x12 // ArcoSpace
     case arcoSpaceABC = 0x13 // ArcoSpace ABC
     case arcoSpaceRGBW = 0x14 // ArcoSpace RGBW
-    
-    var isLight: Bool {
-        rawValue >= 0x10 && rawValue <= 0x14
-    }
+    case arcoSpaceOnOff = 0x15 // ArcoSpace On Off
+    case arcoSpace5638 = 0x16 // ArcoSense_5638
 }

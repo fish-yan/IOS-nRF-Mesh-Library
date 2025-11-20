@@ -8,6 +8,7 @@
 
 import UIKit
 import NordicMesh
+import CryptoSwift
 
 public struct GLLevelMessage: GLMessage {
     public static var responseType: NordicMesh.StaticMeshResponse.Type {

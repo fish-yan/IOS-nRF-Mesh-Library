@@ -118,7 +118,7 @@ class PK9DetailViewController: UIViewController {
             control = .click
             region = .light
             tasks.updateValue(true, forKey: .connect)
-            tasks.updateValue(control, forKey: .control)
+//            tasks.updateValue(control, forKey: .control)
             tasks.updateValue(option, forKey: .option)
         }
         let isEmergency = numberTF.text == "5"
@@ -249,18 +249,18 @@ class PK9DetailViewController: UIViewController {
 //                doTasks()
 //            }
 //            print("aaa: \(k9Number)")
-        } else if let control = tasks[K9TaskType.control] as? K9ControlType {
-            guard let k9 else { return }
-            let value = String(format: "0x%02d%02d", k9.number, control.rawValue)
-            let message = GLK9ControlMessage(value: value)
-            _ = try? MeshNetworkManager.instance.send(message, to: model)
-            k9.control = control.rawValue
-            tasks[K9TaskType.control] = nil
-            Task {
-                try? await Task.sleep(nanoseconds: 500_000_000)
-                doTasks()
-            }
-            print("aaa: \(value)")
+//        } else if let control = tasks[K9TaskType.control] as? K9ControlType {
+//            guard let k9 else { return }
+//            let value = String(format: "0x%02d%02d", k9.number, control.rawValue)
+//            let message = GLK9ControlMessage(value: value)
+//            _ = try? MeshNetworkManager.instance.send(message, to: model)
+//            k9.control = control.rawValue
+//            tasks[K9TaskType.control] = nil
+//            Task {
+//                try? await Task.sleep(nanoseconds: 500_000_000)
+//                doTasks()
+//            }
+//            print("aaa: \(value)")
         } else if let _ = tasks[K9TaskType.option] as? K9OptionsType {
             guard let k9 else { return }
             var regionValue = ""

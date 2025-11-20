@@ -101,10 +101,6 @@ class SettingsViewController: UITableViewController {
             let tabVC = self.tabBarController as? RootTabBarController
             tabVC?.backCallback?()
         }
-        if indexPath.isConfiguration {
-            let vc = UIHostingController(rootView: AnglesConfigurationView())
-            navigationController?.pushViewController(vc, animated: true)
-        }
         if indexPath.isLanguage {
             let alert = UIAlertController(title: Localized("Language"), message: nil, preferredStyle: .actionSheet)
             for lan in AppLanguage.allCases {
@@ -409,11 +405,10 @@ extension SettingsViewController: UIDocumentPickerDelegate {
 
 private extension IndexPath {
     static let networkSection = 0
-    static let configurationSection = 1
-    static let languageSection = 2
-    static let actionsSection = 3
-    static let aboutSection   = 4
-    static let backToNewUI    = 5
+    static let languageSection = 1
+    static let actionsSection = 2
+    static let aboutSection   = 3
+    static let backToNewUI    = 4
     
     /// Returns whether the IndexPath points to the network resetting option.
     var isResetNetwork: Bool {
@@ -426,10 +421,6 @@ private extension IndexPath {
 
     var isLanguage: Bool {
         return section == IndexPath.languageSection && row == 0
-    }
-    
-    var isConfiguration: Bool {
-        return section == IndexPath.configurationSection && row == 0
     }
 }
 
