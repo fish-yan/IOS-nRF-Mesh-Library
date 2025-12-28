@@ -49,7 +49,7 @@ struct ProSettingView: View {
                         }
                 }
                 Section {
-                    Button("重置", role: .destructive) {
+                    Button("重置网络", role: .destructive) {
                         presentRestAlert = true
                     }
                 }
@@ -57,12 +57,12 @@ struct ProSettingView: View {
             .navigationTitle("设置")
             .alert("警告", isPresented: $presentRestAlert) {
                 Button("取消", role: .cancel) { }
-                Button("重置", role: .destructive) {
+                Button("重置网络", role: .destructive) {
                     _ = MeshNetworkManager.instance.clearAll()
                     self.openNewNetworkWizard()
                 }
             } message: {
-                Text("是否充值当前网络？重置后会丢失所有本地数据。请确定是否已经备份数据。")
+                Text("是否重置当前网络？重置后会丢失所有本地数据。请确定是否已经备份数据。")
             }
         }
     }

@@ -24,6 +24,9 @@ struct ProLightView: View {
     @State private var sliderType: MeshSliderType = .dim
     
     @State private var isDisappear = false
+    @State private var name: String = ""
+    @State private var showNameAlert: Bool = false
+    @State private var isOnline: Bool = false
     
     private let messageManager = MeshMessageManager()
         
@@ -46,11 +49,21 @@ struct ProLightView: View {
             }
             controlView
         }
-        .navigationTitle(node.name ?? "Unknown")
         .toolbar {
-            TooBarBackItem()
+            ToolbarItem(placement: .principal) {
+                Button(action: {
+                    showNameAlert = true
+                }) {
+                    HStack {
+                        Text(name)
+                            .font(.headline)
+                        Image(systemName: "pencil")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.white)
+                }
+            }
         }
-        .navigationBarBackButtonHidden()
         .background(.black)
         .toolbar {
             Button(role: .destructive) {
@@ -61,7 +74,10 @@ struct ProLightView: View {
                     .font(.label)
                     .foregroundStyle(.red)
             }
+            .disabled(!isOnline)
+            .opacity(isOnline ? 1 : 0.3)
         }
+        .toolbarColorScheme(.dark, for: .navigationBar)
         .onAppear(perform: onAppear)
         .onDisappear(perform: {
             isDisappear = true
@@ -73,6 +89,16 @@ struct ProLightView: View {
             }
         } message: {
             Text("重置灯具，并将本地数据删除")
+        }
+        .alert("修改名称", isPresented: $showNameAlert) {
+            TextField("Name", text: $name)
+            Button("取消", role: .cancel) {
+                name = node.name ?? "Unknow"
+            }
+            Button("确认", role: .destructive) {
+                node.name = name
+                MeshNetworkManager.instance.saveAll()
+            }
         }
         .loadingable()
     }
@@ -187,6 +213,7 @@ struct ProLightView: View {
 private extension ProLightView {
 
     func onAppear() {
+        name = node.name ?? "Unknow"
         isDisappear = false
         messageManager.remove()
         messageManager.delegate = self
@@ -263,6 +290,7 @@ private extension ProLightView {
 extension ProLightView: MeshMessageDelegate {
     
     func meshNetworkManager(_ manager: MeshNetworkManager, didReceiveMessage message: MeshMessage, sentFrom source: Address, to destination: MeshAddress) {
+        isOnline = true
         if isDisappear { return }
         switch message {
         case let status as GenericOnOffStatus:
@@ -289,7 +317,7 @@ extension ProLightView: MeshMessageDelegate {
                 }
             default: break
             }
-        case let status as ConfigNodeResetStatus:
+        case _ as ConfigNodeResetStatus:
             node.coordinate = nil
             let zone = GLMeshNetworkModel.instance.zone(node: node)
             zone.remove(nodeAddress: node.primaryUnicastAddress)

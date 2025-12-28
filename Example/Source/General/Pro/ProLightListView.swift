@@ -133,12 +133,12 @@ struct ProLightListView: View {
                     .rotationEffect(expanded.contains(group.prefix) ? .degrees(90) : .degrees(0))
             }
         }
-        .frame(height: 50)
     }
 }
 
 private extension ProLightListView {
     func onAppera() {
+        list = []
         list = ProGroupManager.shared.loadGroups()
     }
 }
