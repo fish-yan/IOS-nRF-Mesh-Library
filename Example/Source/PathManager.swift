@@ -14,6 +14,7 @@ class AppManager: Observable, ObservableObject {
     @Published var c = PathManager()
     @Published var b = PathManager()
     @Published var p = PathManager()
+    @Published var pro = PathManager()
     @Published var userRole: UserRole = .normal
     private static var defaultLanguage: AppLanguage {
         if let lan = Locale.preferredLanguages.first {
@@ -30,6 +31,7 @@ class AppManager: Observable, ObservableObject {
     private var canyCancellable: AnyCancellable?
     private var banyCancellable: AnyCancellable?
     private var panyCancellable: AnyCancellable?
+    private var proanyCancellable: AnyCancellable?
     
     static let manager = AppManager()
     
@@ -41,6 +43,9 @@ class AppManager: Observable, ObservableObject {
             self.objectWillChange.send()
         }
         panyCancellable = self.p.objectWillChange.sink {
+            self.objectWillChange.send()
+        }
+        proanyCancellable = self.pro.objectWillChange.sink {
             self.objectWillChange.send()
         }
     }
@@ -73,6 +78,9 @@ enum NavPath: Hashable {
     case bSceneStoreZoneView(zone: GLZone)
     case bStoreSceneEditView(node: Node?, group: GLZone?)
     case pZoneDetail(zone: GLZone?)
+    case proGroupListView(group: ProGroup?)
+    case proScanner(group: ProGroup?)
+    case proLightView(node: Node)
 }
 
 func hideKeyboard() {

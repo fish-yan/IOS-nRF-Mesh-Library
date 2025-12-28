@@ -25,26 +25,8 @@ extension Text {
 struct RootView: View {
     @StateObject var appManager = AppManager.manager
     var body: some View {
-        Group {
-            switch appManager.userRole {
-            case .normal:
-                CTabView()
-                    .transition(.opacity)
-            case .supervisor:
-                BTabView()
-                    .transition(.opacity)
-            case .commissioner:
-                PRootView()
-                    .ignoresSafeArea()
-                    .transition(.opacity)
-            case .empty:
-                EmptyView()
-                    .loadingable()
-                    .onAppear {
-                        Loading.show()
-                    }
-            }
-        }
+        ProTabView()
+            .tint(Color.primary)
         .animation(.spring, value: appManager.userRole)
         .environment(appManager)
         .environment(\.locale, .init(identifier: appManager.language.rawValue))

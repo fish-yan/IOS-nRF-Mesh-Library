@@ -17,17 +17,17 @@ struct TooBarBackItem: ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             HStack {
                 Image(systemName: "chevron.left")
+                    .foregroundStyle(.white)
                 if let title {
                     Text(title)
                 }
             }
             .font(.labelTitle)
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-            .background(
-                Color.tertiaryBackground
-                    .clipShape(.rect(bottomTrailingRadius: 16, topTrailingRadius: 16))
-            )
-            .offset(x: -15)
+//            .background(
+//                Color.tertiaryBackground
+//                    .clipShape(.rect(bottomTrailingRadius: 16, topTrailingRadius: 16))
+//            )
             .onTapGesture(perform: backCallback ?? backAction)
         }
     }

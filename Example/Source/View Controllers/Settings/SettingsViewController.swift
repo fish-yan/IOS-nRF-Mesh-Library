@@ -424,7 +424,7 @@ private extension IndexPath {
     }
 }
 
-private extension Array where Element == CodingKey {
+extension Array where Element == CodingKey {
     
     var path: String {
         return reduce("root") { (result, node) -> String in

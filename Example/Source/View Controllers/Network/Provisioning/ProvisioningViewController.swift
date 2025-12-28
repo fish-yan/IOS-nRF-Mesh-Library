@@ -30,6 +30,7 @@
 
 import UIKit
 import NordicMesh
+import SwiftUI
 
 class ProvisioningViewController: UITableViewController {
     static let attentionTimer: UInt8 = 5
@@ -69,6 +70,7 @@ class ProvisioningViewController: UITableViewController {
     private var zone: GLZone?
     
     private var alert: UIAlertController?
+    var proGroup: ProGroup?
     
     // MARK: - View Controller
     
@@ -76,6 +78,11 @@ class ProvisioningViewController: UITableViewController {
         super.viewDidLoad()
         
         let manager = MeshNetworkManager.instance
+        
+        if let proGroup {
+            unprovisionedDevice.name = "\(proGroup.prefix)-\(proGroup.number)"
+        }
+        
         nameLabel.text = unprovisionedDevice.name
         actionProvision.isEnabled = false
         // Obtain the Provisioning Manager instance for the Unprovisioned Device.
@@ -385,7 +392,16 @@ private extension ProvisioningViewController {
             MeshNetworkManager.instance.saveAll()
             showSuccess() {
                 self.delegate?.provisionerDidProvisionNewDevice(self.node, whichReplaced: self.previousNode)
-                self.navigationController?.popViewController(animated: true)
+                let vc = UIHostingController(rootView: ProLightView(node: self.node))
+                self.navigationController?.pushViewController(vc, animated: true)
+                CATransaction.setCompletionBlock {
+                    let root = self.navigationController!.viewControllers.first!
+                    self.navigationController?.viewControllers = [root, vc]
+                }
+                if let proGroup = self.proGroup {
+                    proGroup.number += 1
+                    ProGroupManager.shared.add(proGroup)
+                }
             }
         }
     }

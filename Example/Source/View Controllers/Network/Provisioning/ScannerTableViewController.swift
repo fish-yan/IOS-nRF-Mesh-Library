@@ -58,6 +58,8 @@ class ScannerTableViewController: UITableViewController {
     private var selectedDevice: UnprovisionedDevice?
     private var previousNode: Node?
     
+    var proGroup: ProGroup?
+    
     // MARK: - UIViewController
     
     override func viewDidLoad() {
@@ -93,6 +95,7 @@ class ScannerTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "identify" {
             let destination = segue.destination as! ProvisioningViewController
+            destination.proGroup = proGroup
             destination.unprovisionedDevice = selectedDevice
             destination.bearer = sender as? ProvisioningBearer
             destination.previousNode = previousNode

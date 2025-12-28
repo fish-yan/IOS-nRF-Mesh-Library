@@ -10,12 +10,14 @@ import SwiftUI
 struct InputItemView: View {
     private let title: String
     private let placehoder: String
+    private let keyboardType: UIKeyboardType
     @State private var text: Binding<String>
     
-    init(title: String, placehoder: String, text: Binding<String>) {
+    init(title: String, placehoder: String, text: Binding<String>, keyboardType: UIKeyboardType = .default) {
         self.title = title
         self.placehoder = placehoder
         self.text = text
+        self.keyboardType = keyboardType
     }
     
     var body: some View {
@@ -27,6 +29,7 @@ struct InputItemView: View {
                 .padding(10)
                 .frame(width: 1)
             TextField(placehoder, text: text)
+                .keyboardType(keyboardType)
         }
         .font(.label)
         .padding(9)

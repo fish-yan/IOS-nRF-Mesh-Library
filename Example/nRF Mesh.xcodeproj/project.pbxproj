@@ -77,6 +77,13 @@
 		2CBB85E12C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85E02C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift */; };
 		2CBB85E32C313C0B00BFBEB6 /* PChangePositionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB85E22C313C0B00BFBEB6 /* PChangePositionTableViewController.swift */; };
 		2CC875AA2B0B056200A83812 /* MeshNetwork+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */; };
+		2CE069A42EFF71C2005E8D11 /* ProTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE069A32EFF71C2005E8D11 /* ProTabView.swift */; };
+		2CE069A62EFF7252005E8D11 /* ProLightListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE069A52EFF7252005E8D11 /* ProLightListView.swift */; };
+		2CE069A82EFF74A8005E8D11 /* ProAddGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE069A72EFF74A8005E8D11 /* ProAddGroupView.swift */; };
+		2CE069AA2EFF7A41005E8D11 /* ProGroupList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE069A92EFF7A41005E8D11 /* ProGroupList.swift */; };
+		2CE069AC2EFFD5AD005E8D11 /* ProScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE069AB2EFFD5AD005E8D11 /* ProScannerView.swift */; };
+		2CE069AE2EFFDBAC005E8D11 /* ProLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE069AD2EFFDBAC005E8D11 /* ProLightView.swift */; };
+		2CE069B02F00D1D3005E8D11 /* ProSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE069AF2F00D1D3005E8D11 /* ProSettingView.swift */; };
 		2CE6DA8E2AE81C5F003BC7AF /* GLAiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */; };
 		2CF4D0702BF2731200E89E5F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		2CFB58B52B6D18F400C42663 /* LaunchScreen1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */; };
@@ -359,6 +366,13 @@
 		2CBB85E02C30F74C00BFBEB6 /* PNodeDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNodeDetailTableViewController.swift; sourceTree = "<group>"; };
 		2CBB85E22C313C0B00BFBEB6 /* PChangePositionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PChangePositionTableViewController.swift; sourceTree = "<group>"; };
 		2CC875A92B0B056200A83812 /* MeshNetwork+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshNetwork+Extension.swift"; sourceTree = "<group>"; };
+		2CE069A32EFF71C2005E8D11 /* ProTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProTabView.swift; sourceTree = "<group>"; };
+		2CE069A52EFF7252005E8D11 /* ProLightListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProLightListView.swift; sourceTree = "<group>"; };
+		2CE069A72EFF74A8005E8D11 /* ProAddGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProAddGroupView.swift; sourceTree = "<group>"; };
+		2CE069A92EFF7A41005E8D11 /* ProGroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProGroupList.swift; sourceTree = "<group>"; };
+		2CE069AB2EFFD5AD005E8D11 /* ProScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProScannerView.swift; sourceTree = "<group>"; };
+		2CE069AD2EFFDBAC005E8D11 /* ProLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProLightView.swift; sourceTree = "<group>"; };
+		2CE069AF2F00D1D3005E8D11 /* ProSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProSettingView.swift; sourceTree = "<group>"; };
 		2CE6DA8D2AE81C5F003BC7AF /* GLAiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLAiMessage.swift; sourceTree = "<group>"; };
 		2CFB58B42B6D18F400C42663 /* LaunchScreen1.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen1.storyboard; sourceTree = "<group>"; };
 		2CFCE59E2B48406B00CF2491 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
@@ -638,6 +652,7 @@
 		2CA4D4F92BFCED100082A0FC /* General */ = {
 			isa = PBXGroup;
 			children = (
+				2CE069A22EFF71A3005E8D11 /* Pro */,
 				2CA4D4FC2BFCEF770082A0FC /* Utils */,
 				2C42B5012AE66EA1006887FF /* Messages */,
 				2CA679E72BE924DA00BA1596 /* CommonView */,
@@ -711,6 +726,20 @@
 				2CB620402BB943F2002804D3 /* CLightView.swift */,
 			);
 			path = C;
+			sourceTree = "<group>";
+		};
+		2CE069A22EFF71A3005E8D11 /* Pro */ = {
+			isa = PBXGroup;
+			children = (
+				2CE069A32EFF71C2005E8D11 /* ProTabView.swift */,
+				2CE069AF2F00D1D3005E8D11 /* ProSettingView.swift */,
+				2CE069A52EFF7252005E8D11 /* ProLightListView.swift */,
+				2CE069AB2EFFD5AD005E8D11 /* ProScannerView.swift */,
+				2CE069A72EFF74A8005E8D11 /* ProAddGroupView.swift */,
+				2CE069A92EFF7A41005E8D11 /* ProGroupList.swift */,
+				2CE069AD2EFFDBAC005E8D11 /* ProLightView.swift */,
+			);
+			path = Pro;
 			sourceTree = "<group>";
 		};
 		3B91DB027C0AE9896666D139 /* Pods */ = {
@@ -1416,9 +1445,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-nRF Mesh/Pods-nRF Mesh-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-nRF Mesh/Pods-nRF Mesh-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1433,9 +1466,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-nRF Mesh/Pods-nRF Mesh-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-nRF Mesh/Pods-nRF Mesh-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1481,6 +1518,7 @@
 				52313FEE22EAFB090074325A /* SubscribeViewController.swift in Sources */,
 				2CB620282BB7BCC6002804D3 /* CScenesView.swift in Sources */,
 				2C4D78192C2F9A3500A67B96 /* PZoneListView.swift in Sources */,
+				2CE069AA2EFF7A41005E8D11 /* ProGroupList.swift in Sources */,
 				2C3F242B2D3CAE3700F2D6DE /* PK9ListViewController.swift in Sources */,
 				5212152B23152A450059FB3D /* SectionView.swift in Sources */,
 				5212152F231554190059FB3D /* ProgressCollectionViewController.swift in Sources */,
@@ -1511,6 +1549,7 @@
 				2CA679F02BEA5A6F00BA1596 /* InputItemView.swift in Sources */,
 				52DF5D8C228DAA0500C297C1 /* NodeViewCell.swift in Sources */,
 				52CD0A50232FA6CD00A9A181 /* ProxyViewController.swift in Sources */,
+				2CE069AE2EFFDBAC005E8D11 /* ProLightView.swift in Sources */,
 				2CA679FA2BEB195A00BA1596 /* CustomSlider.swift in Sources */,
 				528AB9FA228D856C000BE9DC /* ProvisioningViewDelegate.swift in Sources */,
 				2CB620502BBA542B002804D3 /* CTabView.swift in Sources */,
@@ -1550,6 +1589,7 @@
 				2CA67A152BEE6BFA00BA1596 /* BSceneStoreManager.swift in Sources */,
 				2C71A5B02C42233500117BA1 /* Localized+Extension.swift in Sources */,
 				2CAE35A12C57C5E8005B5601 /* GLProductType.swift in Sources */,
+				2CE069A62EFF7252005E8D11 /* ProLightListView.swift in Sources */,
 				2CA67A082BECE54600BA1596 /* LevelPickerView.swift in Sources */,
 				2CBB85E32C313C0B00BFBEB6 /* PChangePositionTableViewController.swift in Sources */,
 				529B76492252499E008F1CE7 /* UIColor+Nordic.swift in Sources */,
@@ -1589,6 +1629,7 @@
 				523F776422C4EDD90030EA6A /* SwitchCell.swift in Sources */,
 				5292F8A7250652BB00EA0F2A /* SceneServerGroupCell.swift in Sources */,
 				522AFFDC22BBA34900521EDC /* ActionCell.swift in Sources */,
+				2CE069A42EFF71C2005E8D11 /* ProTabView.swift in Sources */,
 				2CBB85DD2C300FE500BFBEB6 /* UIButton+Extension.swift in Sources */,
 				2C2C10E42B6A0757004507FE /* Loading.swift in Sources */,
 				2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */,
@@ -1599,6 +1640,7 @@
 				52DF5D8A228DA78A00C297C1 /* NodeViewController.swift in Sources */,
 				521215292315290F0059FB3D /* GroupControlViewController.swift in Sources */,
 				52A8EA8824E6946D004C14C7 /* HeartbeatPublicationCell.swift in Sources */,
+				2CE069A82EFF74A8005E8D11 /* ProAddGroupView.swift in Sources */,
 				2C18503D2AF7C4A800900348 /* VendorModelViewCell.swift in Sources */,
 				52F6AD7622BA612900F0D7DF /* UIViewController+Toast.swift in Sources */,
 				2CAE35A32C57C757005B5601 /* Node+Extension.swift in Sources */,
@@ -1606,6 +1648,7 @@
 				528445C924EEA765002168A1 /* HeartbeatSubscriptionCell.swift in Sources */,
 				2CBB85D32C2FEEB600BFBEB6 /* ZoneCell.swift in Sources */,
 				5231403F2301761C0074325A /* ConfigurationServerViewCell.swift in Sources */,
+				2CE069AC2EFFD5AD005E8D11 /* ProScannerView.swift in Sources */,
 				2C8C0C2A2ABF132800BC0156 /* ItemView.swift in Sources */,
 				52A8EA9624EE704A004C14C7 /* SetHeartbeatSubscriptionViewController.swift in Sources */,
 				2C4D78172C2F98C800A67B96 /* ZoneHostViewController.swift in Sources */,
@@ -1618,6 +1661,7 @@
 				2C3F24272D39002F00F2D6DE /* GLBK06ZoneMessage.swift in Sources */,
 				52547F24232A3F470002AA7B /* RangeCell.swift in Sources */,
 				5231404D230AC4680074325A /* GLCoordinateCell.swift in Sources */,
+				2CE069B02F00D1D3005E8D11 /* ProSettingView.swift in Sources */,
 				529B758622428A45008F1CE7 /* UIViewController+Alert.swift in Sources */,
 				2CB620452BB943F3002804D3 /* CLightListView.swift in Sources */,
 				2CFE864E2AEA9B2E00A1CF7D /* GLRunTimeMessage.swift in Sources */,
@@ -1964,7 +2008,7 @@
 				MARKETING_VERSION = 1.0.2;
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.generalLuminare.meshapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.generalLuminare.meshapp.pro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2004,7 +2048,7 @@
 				MARKETING_VERSION = 1.0.2;
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.generalLuminare.meshapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.generalLuminare.meshapp.pro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

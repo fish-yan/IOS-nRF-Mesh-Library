@@ -128,16 +128,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
         window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
-        let appearance = UITabBarAppearance()
-        appearance.shadowColor = nil
-        appearance.shadowImage = UIImage()
-        appearance.backgroundColor = .clear
-        appearance.backgroundImage = UIImage(resource: .bgTab)
-        appearance.backgroundEffect = nil
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
-        UITabBar.appearance().layer.cornerRadius = 25
-        UITabBar.appearance().layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+//        let appearance = UITabBarAppearance()
+//        appearance.shadowColor = nil
+//        appearance.shadowImage = UIImage()
+//        appearance.backgroundColor = .clear
+//        appearance.backgroundImage = UIImage(resource: .bgTab)
+//        appearance.backgroundEffect = nil
+//        UITabBar.appearance().standardAppearance = appearance
+//        UITabBar.appearance().scrollEdgeAppearance = appearance
+//        UITabBar.appearance().layer.cornerRadius = 25
+//        UITabBar.appearance().layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return true
     }
     
