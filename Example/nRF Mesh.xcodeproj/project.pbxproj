@@ -52,6 +52,7 @@
 		2CAC28A52AECE55000315F73 /* GLMeshNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */; };
 		2CAE35A12C57C5E8005B5601 /* GLProductType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAE35A02C57C5E8005B5601 /* GLProductType.swift */; };
 		2CAE35A32C57C757005B5601 /* Node+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAE35A22C57C757005B5601 /* Node+Extension.swift */; };
+		2CB1AAF32F0B9967006A25BF /* ProLightListSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB1AAF22F0B9967006A25BF /* ProLightListSearchView.swift */; };
 		2CB620202BB7B30C002804D3 /* Color+Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */; };
 		2CB620222BB7BA13002804D3 /* Font+Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620212BB7BA13002804D3 /* Font+Mesh.swift */; };
 		2CB620282BB7BCC6002804D3 /* CScenesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB620272BB7BCC6002804D3 /* CScenesView.swift */; };
@@ -341,6 +342,7 @@
 		2CAC28A42AECE55000315F73 /* GLMeshNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLMeshNetworkModel.swift; sourceTree = "<group>"; };
 		2CAE35A02C57C5E8005B5601 /* GLProductType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLProductType.swift; sourceTree = "<group>"; };
 		2CAE35A22C57C757005B5601 /* Node+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Node+Extension.swift"; sourceTree = "<group>"; };
+		2CB1AAF22F0B9967006A25BF /* ProLightListSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProLightListSearchView.swift; sourceTree = "<group>"; };
 		2CB6201F2BB7B30C002804D3 /* Color+Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Mesh.swift"; sourceTree = "<group>"; };
 		2CB620212BB7BA13002804D3 /* Font+Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Mesh.swift"; sourceTree = "<group>"; };
 		2CB620272BB7BCC6002804D3 /* CScenesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CScenesView.swift; sourceTree = "<group>"; };
@@ -738,6 +740,7 @@
 				2CE069A72EFF74A8005E8D11 /* ProAddGroupView.swift */,
 				2CE069A92EFF7A41005E8D11 /* ProGroupList.swift */,
 				2CE069AD2EFFDBAC005E8D11 /* ProLightView.swift */,
+				2CB1AAF22F0B9967006A25BF /* ProLightListSearchView.swift */,
 			);
 			path = Pro;
 			sourceTree = "<group>";
@@ -1643,6 +1646,7 @@
 				2CE069A82EFF74A8005E8D11 /* ProAddGroupView.swift in Sources */,
 				2C18503D2AF7C4A800900348 /* VendorModelViewCell.swift in Sources */,
 				52F6AD7622BA612900F0D7DF /* UIViewController+Toast.swift in Sources */,
+				2CB1AAF32F0B9967006A25BF /* ProLightListSearchView.swift in Sources */,
 				2CAE35A32C57C757005B5601 /* Node+Extension.swift in Sources */,
 				5217D2E5250F90D8004FDE79 /* GenericDefaultTransitionTimeViewCell.swift in Sources */,
 				528445C924EEA765002168A1 /* HeartbeatSubscriptionCell.swift in Sources */,
@@ -1992,7 +1996,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
@@ -2005,7 +2009,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LINK_WITH_STANDARD_LIBRARIES = YES;
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.generalLuminare.meshapp.pro;
@@ -2031,7 +2035,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "nRF Mesh.entitlements";
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PRPAPS6GFA;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
@@ -2045,7 +2049,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LINK_WITH_STANDARD_LIBRARIES = YES;
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.generalLuminare.meshapp.pro;

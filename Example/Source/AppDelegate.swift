@@ -47,8 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         ProgressHUD.colorAnimation = .black
         ProgressHUD.colorHUD = .white
-        IQKeyboardToolbarManager.shared.isEnabled = true
-        IQKeyboardManager.shared.resignOnTouchOutside = true
+//        IQKeyboardToolbarManager.shared.isEnabled = true
+//        IQKeyboardManager.shared.resignOnTouchOutside = true
         // Create the main MeshNetworkManager instance and customize
         // configuration values.
         meshNetworkManager = MeshNetworkManager()

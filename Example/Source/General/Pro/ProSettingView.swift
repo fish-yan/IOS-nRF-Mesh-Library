@@ -14,7 +14,7 @@ struct ProSettingView: View {
     @State private var showingImporter: Bool = false
     @State private var showingExporter: Bool = false
     @State private var presentRestAlert: Bool = false
-    @State private var document: JSONDocument?
+    @State private var fileUrl: URL?
     var body: some View {
         NavigationStack {
             List {
@@ -36,17 +36,11 @@ struct ProSettingView: View {
                             }
                             
                         }
-                    Button("导出") {
-                        document = JSONDocument()
-                        showingExporter = true
-                    }
-                    .fileExporter(
-                        isPresented: $showingExporter,
-                        document: document,
-                        contentType: .json,
-                        defaultFilename: "Arcosense.json") { result in
-                            handleExportResult(result)
+                    if let fileUrl {
+                        ShareLink(item: fileUrl) {
+                            Text("导出")
                         }
+                    }
                 }
                 Section {
                     Button("重置网络", role: .destructive) {
@@ -59,10 +53,18 @@ struct ProSettingView: View {
                 Button("取消", role: .cancel) { }
                 Button("重置网络", role: .destructive) {
                     _ = MeshNetworkManager.instance.clearAll()
+                    ProGroupManager.shared.clearAll()
                     self.openNewNetworkWizard()
                 }
             } message: {
                 Text("是否重置当前网络？重置后会丢失所有本地数据。请确定是否已经备份数据。")
+            }
+            .onAppear {
+                do {
+                    fileUrl = try export()
+                } catch {
+                    
+                }
             }
         }
     }
@@ -99,13 +101,17 @@ extension ProSettingView {
                         manager.setSequenceNumber(sequence + 300, forLocalElement: element)
                     }
                 }
+                if let proGroupJson = json["proGroups"] {
+                    let proGroup = try JSONSerialization.data(withJSONObject: proGroupJson)
+                    ProGroupManager.shared.importProGroup(proGroup)
+                }
                 if !isImport {
                     isImport = true
                     meshNetwork = try manager.import(from: data)
                 }
                 manager.saveAll()
                 manager.loadAll()
-                guard let meshNetwork else { return }
+                guard meshNetwork != nil else { return }
                 // Try restoring the Provisioner used last time on this device.
                 self.saveAndReload()
             } catch let DecodingError.dataCorrupted(context) {
@@ -182,21 +188,8 @@ extension ProSettingView {
         _ = MeshNetworkManager.instance.clearAll()
         (UIApplication.shared.delegate as! AppDelegate).createNewMeshNetwork()
     }
-}
-
-struct JSONDocument: FileDocument {
-    static var readableContentTypes: [UTType] { [.json] }
     
-    init(){}
-    
-    init(configuration: ReadConfiguration) throws {
-        guard let data = configuration.file.regularFileContents else {
-            throw CocoaError(.fileReadCorruptFile)
-        }
-//        person = try JSONDecoder().decode(Person.self, from: data)
-    }
-    
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+    func export() throws -> URL {
         let manager = MeshNetworkManager.instance
         let meshData = manager.export(.full)
         let meshJson = try JSONSerialization.jsonObject(with: meshData)
@@ -209,9 +202,17 @@ struct JSONDocument: FileDocument {
             sequence = localSequence
         }
         
-        let newJson = ["meshData": meshJson, "glData": glJson, "sequence": sequence]
+        let proGroup = ProGroupManager.shared.exportProGroup()
+        let groupJson = try JSONSerialization.jsonObject(with: proGroup)
+        
+        let newJson = ["meshData": meshJson, "glData": glJson, "sequence": sequence, "proGroups": groupJson]
         let data = try JSONSerialization.data(withJSONObject: newJson)
-        return FileWrapper(regularFileWithContents: data)
+        let fileName = "Arcosence Pro.json"
+        let fileURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(fileName)
+        
+        try data.write(to: fileURL, options: .atomic)
+        return fileURL
     }
 }
 

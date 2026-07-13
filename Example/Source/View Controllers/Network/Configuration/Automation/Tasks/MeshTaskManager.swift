@@ -14,6 +14,10 @@ class MeshTaskManager {
     var current: Int = -1
     var tasks: [MeshTaskType] = []
     
+    func append(_ tasks: [MeshTask]) {
+        self.tasks += tasks.map({($0, .pending)})
+    }
+    
     func append(_ task: MeshTask) {
         tasks.append((task, .pending))
     }

@@ -80,7 +80,7 @@ enum NavPath: Hashable {
     case pZoneDetail(zone: GLZone?)
     case proGroupListView(group: ProGroup?)
     case proScanner(group: ProGroup?)
-    case proLightView(node: Node)
+    case proLightView(node: Node, group: ProGroup)
 }
 
 func hideKeyboard() {

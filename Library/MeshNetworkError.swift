@@ -84,6 +84,8 @@ public enum MeshNetworkError: Error {
     /// Thrown when setting too small IV Index. The new IV Index must be greater than
     /// or equal to the previous one.
     case ivIndexTooSmall
+    
+    case noModel
 }
 
 extension MeshNetworkError: LocalizedError {
@@ -111,6 +113,7 @@ extension MeshNetworkError: LocalizedError {
         case .noApplicationKey:                return NSLocalizedString("No Application Key.", comment: "")
         case .noNetwork:                       return NSLocalizedString("Mesh Network not created.", comment: "")
         case .ivIndexTooSmall:                 return NSLocalizedString("IV Index too small", comment: "")
+        case .noModel:                         return NSLocalizedString("No Model.", comment: "")
         }
     }
     

@@ -14,6 +14,10 @@ struct ProAddGroupView: View {
     @State private var prefixText: String = "0"
     @State private var maxNumberText: String = ""
     @State private var numberText: String = "1"
+    
+    @State private var dim: Bool = false
+    @State private var cct: Bool = false
+    @State private var angle: Bool = false
     private var group: ProGroup?
     
     init(group: ProGroup? = nil) {
@@ -30,6 +34,21 @@ struct ProAddGroupView: View {
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             InputItemView(title: "最大值", placehoder: "输入编号最大值", text: $maxNumberText, keyboardType: .numberPad)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            Toggle("亮度", isOn: $dim)
+                .padding(9)
+                .frame(height: 52)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            Toggle("色温", isOn: $cct)
+                .padding(9)
+                .frame(height: 52)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            Toggle("角度", isOn: $angle)
+                .padding(9)
+                .frame(height: 52)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             Spacer()
@@ -61,8 +80,6 @@ struct ProAddGroupView: View {
         .background(Color.secondaryBackground)
         .ignoresSafeArea(.keyboard)
         .onAppear(perform: onAppear)
-        .toolbar(.hidden, for: .tabBar)
-        .loadingable()
     }
 }
 
@@ -73,6 +90,9 @@ private extension ProAddGroupView {
             prefixText = group.prefix
             numberText = "\(group.number)"
             maxNumberText = "\(group.maxNumber)"
+            dim = group.dim
+            cct = group.cct
+            angle = group.angle
         }
     }
     
@@ -89,9 +109,12 @@ private extension ProAddGroupView {
             return
         }
         
-        let newGroup = group ?? ProGroup(prefix: prefixText, number: number, maxNumber: maxNumber)
+        let newGroup = group ?? ProGroup(prefix: prefixText)
         newGroup.number = number
         newGroup.maxNumber = maxNumber
+        newGroup.dim = dim
+        newGroup.cct = cct
+        newGroup.angle = angle
         ProGroupManager.shared.add(newGroup)
         appManager.pro.pop()
     }

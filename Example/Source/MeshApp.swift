@@ -26,7 +26,6 @@ struct RootView: View {
     @StateObject var appManager = AppManager.manager
     var body: some View {
         ProTabView()
-            .tint(Color.primary)
         .animation(.spring, value: appManager.userRole)
         .environment(appManager)
         .environment(\.locale, .init(identifier: appManager.language.rawValue))

@@ -22,7 +22,7 @@ struct ProLightListView: View {
             list
         } else {
             list.compactMap { group in
-                let newGroup = ProGroup(prefix: group.prefix, number: group.number, maxNumber: group.maxNumber)
+                let newGroup = group.copy()
                 let filterNodes = group.nodes.filter({(($0.name ?? "").lowercased().contains(searchText.lowercased()) == true) || $0.primaryUnicastAddress == UInt16(searchText, radix: 16)})
                 newGroup.nodes = filterNodes
                 print(filterNodes)
@@ -55,13 +55,13 @@ struct ProLightListView: View {
             .onAppear(perform: onAppera)
             .navigationDestination(for: NavPath.self) { target in
                 switch target {
-                case .proLightView(let node):
-                    ProLightView(node: node)
+                case .proLightView(let node, let group):
+                    ProLightView(node: node, group: group)
                 case .proGroupListView(let group):
                     ProAddGroupView(group: group)
                 case .proScanner(let group):
                     ProScannerView(group: group) { node in
-                        appManager.pro.path.append(.proLightView(node: node))
+                        appManager.pro.path.append(.proLightView(node: node, group: group!))
                     }
                 default: Text("")
                 }
@@ -71,7 +71,7 @@ struct ProLightListView: View {
     
     private func sectionItems(for group: ProGroup) -> some View {
         ForEach(group.nodes, id: \.self) { node in
-            NavigationLink(value: NavPath.proLightView(node: node)) {
+            NavigationLink(value: NavPath.proLightView(node: node, group: group)) {
                 VStack(alignment: .leading, spacing: 13) {
                     Text(node.name ?? "Unknow")
                         .font(.labelTitle)
@@ -105,32 +105,36 @@ struct ProLightListView: View {
                 }
             }
         } label: {
-            HStack {
-                Text("\(group.prefix)")
-                Text("最大：\(group.maxNumber)")
-                    .font(.subheadline)
-                    .foregroundStyle(Color.secondaryLabel)
-                Spacer()
-                if group.prefix != "未分类" {
-                    NavigationLink(value: NavPath.proGroupListView(group: group)) {
-                        Image(systemName: "pencil.line")
-                    }
-                    Spacer()
-                        .frame(width: 20)
-                    Button {
-                        if group.number > group.maxNumber {
-                            showError("该系列已到最大数量")
-                        } else {
-                            appManager.pro.path.append(.proScanner(group: group))
+            VStack {
+                HStack {
+                    Text("\(group.prefix)")
+                    if group.prefix != "未分类" {
+                        Text("最大：\(group.maxNumber)")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.secondaryLabel)
+                        Spacer()
+                        NavigationLink(value: NavPath.proGroupListView(group: group)) {
+                            Image(systemName: "pencil.line")
                         }
-                    } label: {
-                        Image(systemName: "plus")
+                        Spacer()
+                            .frame(width: 20)
+                        Button {
+                            if group.number > group.maxNumber {
+                                showError("该系列已到最大数量")
+                            } else {
+                                appManager.pro.path.append(.proScanner(group: group))
+                            }
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                        Spacer()
+                            .frame(width: 20)
+                    } else {
+                        Spacer()
                     }
-                    Spacer()
-                        .frame(width: 20)
+                    Image(systemName: "chevron.right")
+                        .rotationEffect(expanded.contains(group.prefix) ? .degrees(90) : .degrees(0))
                 }
-                Image(systemName: "chevron.right")
-                    .rotationEffect(expanded.contains(group.prefix) ? .degrees(90) : .degrees(0))
             }
         }
     }

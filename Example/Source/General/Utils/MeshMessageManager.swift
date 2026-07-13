@@ -11,6 +11,7 @@ import NordicMesh
 
 struct MessageAction {
     let message: String
+    let duration: TimeInterval
     let completion: Any
 }
 
@@ -37,7 +38,7 @@ class MeshMessageManager {
             return
         }
         self.isSending = true
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + messageAction.duration) {
             switch messageAction.completion {
             case let callback as (() throws -> MessageHandle?):
                 do {
@@ -62,8 +63,8 @@ class MeshMessageManager {
     }
     
     @discardableResult
-    func add(_ completion: @escaping () throws -> MessageHandle?) -> Self {
-        let messageAction = MessageAction(message: "", completion: completion)
+    func add(duration: TimeInterval = 0, _ completion: @escaping () throws -> MessageHandle?) -> Self {
+        let messageAction = MessageAction(message: "", duration: duration, completion: completion)
         self.messageQueue.append(messageAction)
         sendNext()
         return self
@@ -71,7 +72,7 @@ class MeshMessageManager {
     
     @discardableResult
     func addWithoutHandle(_ completion: @escaping () -> Void) -> Self {
-        let messageAction = MessageAction(message: "", completion: completion)
+        let messageAction = MessageAction(message: "", duration: 0, completion: completion)
         messageQueue.append(messageAction)
         sendNext()
         return self
@@ -121,11 +122,13 @@ extension MeshMessageManager: MeshNetworkDelegate {
                             from localElement: Element, to destination: MeshAddress) {
         delegate?.meshNetworkManager(manager, didSendMessage: message, from: localElement, to: destination)
         let isAckExpected = message is AcknowledgedMeshMessage || message is StaticVendorMessage
-        if !isAckExpected {
-            done()
-        }
-        if message is GLRunTimeMessage {
-            done()
+        debouncer.call {
+            if !isAckExpected {
+                self.done()
+            }
+            if message is GLRunTimeMessage {
+                self.done()
+            }
         }
     }
     

@@ -64,6 +64,15 @@ enum MeshTask {
     case nodeReset
     case coordinate(_ value: String)
     case bk06Zone(_ value: UInt8)
+    case onOffGet
+    case cctGet
+    case angleGet
+    case dimGet
+    case onOffSet(_ isOn: Bool)
+    case cctSet(_ value: Double)
+    case angleSet(_ value: Double)
+    case dimSet (_ value: Double)
+    
     
     var title: String {
         switch self {
@@ -125,6 +134,22 @@ enum MeshTask {
             return "Set Coordinate"
         case .bk06Zone:
             return "Set Zone"
+        case .onOffGet:
+            return "Get ON/OFF"
+        case .angleGet:
+            return "Get Angle"
+        case .cctGet:
+            return "Get Color Temperature"
+        case .dimGet:
+            return "Get Dim"
+        case .onOffSet(let isOn):
+            return isOn ? "Set ON" : "Set OFF"
+        case .angleSet(let level):
+            return "Set Angle to \(level)"
+        case .cctSet(let temperature):
+            return "Set Color Temperature to \(temperature)"
+        case .dimSet(let dim):
+            return "Set Dim to \(dim)"
         }
     }
     
@@ -243,10 +268,31 @@ enum MeshTask {
             return SceneRegisterGet()
         case .coordinate(let value):
             return GLCoordinateMessage(coordinate: value)
-        case .deleteScene(let scene, to: let to):
+        case .deleteScene(let scene, to: _):
             return SceneDelete(scene)
         case .bk06Zone(let zone):
             return GLBK06ZoneMessage(zone: zone)
+        case .onOffGet:
+            return GenericOnOffGet()
+        case .cctGet:
+            return GenericLevelGet()
+        case .angleGet:
+            return GenericLevelGet()
+        case .dimGet:
+            return GenericLevelGet()
+        case .onOffSet(let isOn):
+            return GenericOnOffSetUnacknowledged(isOn)
+        case .cctSet(let value):
+            let level = Int16(min(32767, -32768 + 65536 * value)) // -32768...32767
+            return GenericLevelSetUnacknowledged(level: level)
+        case .angleSet(let value):
+            let index = Int(round(value * 7)) - 1
+            let percent = [0, 0.57, 0.69, 0.74, 0.79, 0.85, 0.93][index]
+            let level = Int16(min(32767, -32768 + 65536 * (1 - percent))) // -32768...32767
+            return GenericLevelSetUnacknowledged(level: level)
+        case .dimSet(let value):
+            let level = Int16(min(32767, -32768 + 65536 * value))
+            return GenericLevelSetUnacknowledged(level: level)
         }
     }
 }

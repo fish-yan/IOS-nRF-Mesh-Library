@@ -71,6 +71,21 @@ class ProvisioningViewController: UITableViewController {
     
     private var alert: UIAlertController?
     var proGroup: ProGroup?
+        
+    var canProvision: Bool = false {
+        didSet {
+            actionProvision.isEnabled = canProvision
+            guard bearer.isOpen else {
+                openBearer()
+                return
+            }
+            if canProvision {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.startProvisioning()
+                }
+            }
+        }
+    }
     
     // MARK: - View Controller
     
@@ -84,7 +99,7 @@ class ProvisioningViewController: UITableViewController {
         }
         
         nameLabel.text = unprovisionedDevice.name
-        actionProvision.isEnabled = false
+        canProvision = false
         // Obtain the Provisioning Manager instance for the Unprovisioned Device.
         do {
             provisioningManager = try manager.provision(unprovisionedDevice: unprovisionedDevice, over: bearer)
@@ -108,8 +123,7 @@ class ProvisioningViewController: UITableViewController {
         // Unicast Address initially will be assigned automatically.
         unicastAddressLabel.text = "Automatic"
         zoneLabel.text = "All"
-        actionProvision.isEnabled = manager.meshNetwork!.localProvisioner != nil
-        
+//        canProvision = manager.meshNetwork!.localProvisioner != nil
         // We are now connected. Proceed by sending Provisioning Invite request.
         do {
             try self.provisioningManager.identify(andAttractFor: ProvisioningViewController.attentionTimer)
@@ -188,7 +202,7 @@ private extension ProvisioningViewController {
             self.unicastAddressLabel.text = manager.unicastAddress?.asString() ?? Localized("Automatic")
             let deviceSupported = manager.isDeviceSupported == true
             let addressValid = manager.isUnicastAddressValid == true
-            self.actionProvision.isEnabled = addressValid && deviceSupported
+            canProvision = addressValid && deviceSupported
         }
         presentTextAlert(title: Localized("Unicast Address"), message: "Hexadecimal value in Provisioner's range.",
                          text: manager.unicastAddress?.hex, placeHolder: Localized("Address"), type: .unicastAddressRequired,
@@ -198,7 +212,7 @@ private extension ProvisioningViewController {
                             self.unicastAddressLabel.text = manager.unicastAddress!.asString()
                             let deviceSupported = manager.isDeviceSupported == true
                             let addressValid = manager.isUnicastAddressValid == true
-                            self.actionProvision.isEnabled = addressValid && deviceSupported
+                            self.canProvision = addressValid && deviceSupported
                             if !addressValid {
                                 self.presentAlert(title: "Error", message: "Address is not available.")
                             }
@@ -390,18 +404,17 @@ private extension ProvisioningViewController {
             saveZone.add(nodeAddress: node.primaryUnicastAddress)
             node.coordinate = coordinateLabel.text
             MeshNetworkManager.instance.saveAll()
-            showSuccess() {
-                self.delegate?.provisionerDidProvisionNewDevice(self.node, whichReplaced: self.previousNode)
-                let vc = UIHostingController(rootView: ProLightView(node: self.node))
+            self.delegate?.provisionerDidProvisionNewDevice(self.node, whichReplaced: self.previousNode)
+            hidHUD()
+            if let proGroup = self.proGroup {
+                let vc = UIHostingController(rootView: ProLightView(node: self.node, group: proGroup))
                 self.navigationController?.pushViewController(vc, animated: true)
                 CATransaction.setCompletionBlock {
                     let root = self.navigationController!.viewControllers.first!
                     self.navigationController?.viewControllers = [root, vc]
                 }
-                if let proGroup = self.proGroup {
-                    proGroup.number += 1
-                    ProGroupManager.shared.add(proGroup)
-                }
+                proGroup.number += 1
+                ProGroupManager.shared.add(proGroup)
             }
         }
     }
@@ -460,7 +473,6 @@ private extension ProvisioningViewController {
             let networkKey = try! network.add(networkKey: Data.random128BitKey(), name: "Primary Network Key")
             provisioningManager.networkKey = networkKey
         }
-        
         // Start provisioning.
         showHUD()
         do {
@@ -551,12 +563,12 @@ extension ProvisioningViewController: ProvisioningDelegate {
                    self.provisioningManager.unicastAddress = nil
                 }
                 self.unicastAddressLabel.text = self.provisioningManager.unicastAddress?.asString() ?? "No address available"
-                self.actionProvision.isEnabled = addressValid
+                self.canProvision = addressValid
                                 
                 let deviceSupported = self.provisioningManager.isDeviceSupported == true
                 if !deviceSupported {
                     showError("Selected device is not supported.")
-                    self.actionProvision.isEnabled = false
+                    self.canProvision = false
                 } else if !addressValid {
                     showError("No available Unicast Address in Provisioner's range.")
                 }
